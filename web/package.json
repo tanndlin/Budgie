@@ -6,7 +6,8 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "nodemon server.js",
-        "deploy": "cd .. && git subtree push --prefix web heroku master && cd web/frontend && firebase deploy"
+        "deploy": "cd .. && git subtree push --prefix web heroku master && cd web/frontend && firebase deploy",
+        "lint": "eslint . --ext .js"
     },
     "author": "",
     "license": "ISC",
@@ -16,5 +17,14 @@
         "express": "^4.18.1",
         "mongodb": "^4.10.0",
         "nodemon": "^2.0.20"
-    }
+    },
+    "devDependencies": {
+        "eslint": "^8.25.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "prettier": "^2.7.1"
+    },
+    "eslintIgnore": [
+        "frontend/build/*"
+    ]
 }

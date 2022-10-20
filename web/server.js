@@ -16,42 +16,22 @@ app.use((req, res, next) => {
         'Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept, Authorization'
     );
-    res.setHeader(
-        'Access-Control-Allow-Methods',
-        'GET, POST, PATCH, DELETE, OPTIONS'
-    );
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
     next();
 });
 
-app.post('/api/addcard', async (req, res, next) => {
-    // incoming: userId, color
-    // outgoing: error
-    const { userId, card } = req.body;
-    const newCard = { Card: card, UserId: userId };
-    var error = '';
-    try {
-        const db = client.db('COP4331Cards');
-        const result = db.collection('Cards').insertOne(newCard);
-    }
-    catch (e) {
-        error = e.toString();
-    }
-    cardList.push(card);
-    var ret = { error: error };
-    res.status(200).json(ret);
-});
-
-app.post('/api/login', async (req, res, next) => {
+app.post('/api/login', async (req, res) => {
     // incoming: login, password
     // outgoing: id, firstName, lastName, error
-    var error = '';
     const { login, password } = req.body;
     const db = client.db('COP4331Cards');
-    const results = await
-        db.collection('Users').find({ Login: login, Password: password }).toArray();
-    var id = -1;
-    var fn = '';
-    var ln = '';
+    const results = await db
+        .collection('Users')
+        .find({ Login: login, Password: password })
+        .toArray();
+    let id = -1;
+    let fn = '';
+    let ln = '';
     if (results.length > 0) {
         id = results[0].UserId;
         fn = results[0].FirstName;
@@ -60,26 +40,29 @@ app.post('/api/login', async (req, res, next) => {
 
     console.log(id);
 
-    var ret = { id: id, firstName: fn, lastName: ln, error: '' };
+    const ret = { id: id, firstName: fn, lastName: ln, error: '' };
     res.status(200).json(ret);
 });
 
-app.post('/api/searchcards', async (req, res, next) => {
+app.post('/api/searchcards', async (req, res) => {
     // incoming: userId, search
     // outgoing: results[], error
-    var error = '';
+    const error = '';
     const { userId, search } = req.body;
-    var _search = search.trim();
+    const _search = search.trim();
 
     const db = client.db('COP4331Cards');
-    const results = await db.collection('Cards').find({ 'Card': { $regex: _search + '.*', $options: 'r' } }).toArray();
+    const results = await db
+        .collection('Cards')
+        .find({ Card: { $regex: _search + '.*', $options: 'r' } })
+        .toArray();
 
-    var ret = {
-        results: results.filter(c => c.UserId == userId).map(c => c.Card),
-        error: error
+    const ret = {
+        results: results.filter((c) => c.UserId === userId).map((c) => c.Card),
+        error: error,
     };
 
     res.status(200).json(ret);
 });
 
-app.listen(process.env.PORT || 5000)
+app.listen(process.env.PORT || 5000);

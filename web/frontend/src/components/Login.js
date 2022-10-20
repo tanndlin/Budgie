@@ -10,16 +10,18 @@ function Login() {
         var obj = { login: loginName.value, password: loginPassword.value };
         var js = JSON.stringify(obj);
         try {
-            const response = await fetch('http://localhost:5000/api/login',
-                {
-                    method: 'POST', body: js, headers: {
-                        'Content-Type':
-                            'application/json'
-                    }
-                });
+            const response = await fetch('http://localhost:5000/api/login', {
+                method: 'POST', body: js, headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
             var res = JSON.parse(await response.text());
             if (res.id <= 0) {
-                setMessage('User/Password combination incorrect');
+                setMessage("User/Password combination incorrect");
+                let a = "Hello World";
+                let c = 3;
+                const b = a == c;
+                console.log(b);
             }
             else {
                 var user =

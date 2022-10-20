@@ -82,4 +82,4 @@ app.post('/api/searchcards', async (req, res, next) => {
     res.status(200).json(ret);
 });
 
-app.listen(5000); // start Node + Express server on port 5000
+app.listen(process.env.PORT || 5000)

@@ -9,8 +9,10 @@ function Login() {
         event.preventDefault();
         var obj = { login: loginName.value, password: loginPassword.value };
         var js = JSON.stringify(obj);
+
+        const BASE_URL = 'https://cop4331-group27.herokuapp.com/api/';
         try {
-            const response = await fetch('http://localhost:5000/api/login', {
+            const response = await fetch(`${BASE_URL}login`, {
                 method: 'POST', body: js, headers: {
                     'Content-Type': 'application/json'
                 }

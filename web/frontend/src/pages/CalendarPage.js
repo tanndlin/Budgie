@@ -18,7 +18,7 @@ function CalendarPage() {
     return (
         <div className='h-screen'>
             <Header />
-            <main className='bg-orange-200 h-9/10'>
+            <main className='bg-orange-200 h-minus-header'>
                 <BigCalendar
                     events={events}
                     modifyEvents={modifyEvents}

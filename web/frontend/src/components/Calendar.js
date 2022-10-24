@@ -91,7 +91,7 @@ function BigCalendar(props) {
     }
 
     return (
-        <div className='flex h-9/10'>
+        <div className='flex h-9/10 mb-5'>
 
             <Modal
                 isOpen={modalIsOpen}
@@ -112,7 +112,7 @@ function BigCalendar(props) {
                 />
             </Modal>
 
-            <div className='grid container m-auto h-4/5 flex-1'>
+            <div className='grid container m-auto h-calendar flex-1'>
                 <section className='flex flex-col'>
                     <CalendarControls
                         createBill={createNew}

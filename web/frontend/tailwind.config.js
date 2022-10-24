@@ -16,6 +16,7 @@ module.exports = {
                 '8/10': '80%',
                 '9/10': '90%',
                 'minus-header': 'calc(100% - 4rem)',
+                'calendar': 'calc((100vh - 4rem) * 9/10 * 4/5)',
             },
             width: {
                 '1/10': '10%',
@@ -34,6 +35,7 @@ module.exports = {
                 '1/4': '25%',
                 '1/5': '20%',
                 '9/10': '90%',
+                'minus-header': 'calc(100% - 4rem)',
             }
         },
     },

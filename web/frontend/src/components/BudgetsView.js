@@ -2,6 +2,10 @@ import React from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
+
+// TOOD: Change color of progress bar based on percentage
+// TODO: Add ability to add/sub from spent budget
+// TODO: Dynamically add progress bar components based on number of budgets
 function BudgetsView() {
     return (
         <article className='m-auto container bg-yellow-200 p-3 mb-5 rounded-md'>

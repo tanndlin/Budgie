@@ -20,6 +20,7 @@ function BudgetsView() {
 }
 
 
+    // eslint-disable-next-line no-unused-vars
     const [budgets, setBudgets] = React.useState([
         {
             name: "Clothes",

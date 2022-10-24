@@ -36,7 +36,7 @@ function Login() {
     };
 
     return (
-        <main className='flex bg-orange-200 h-9/10'>
+        <main className='flex bg-orange-200 h-minus-header'>
             <div className='grid container m-auto min-h-1/3 bg-yellow-200 place-items-center flex-1'
                 id='loginDiv'>
                 <form onSubmit={doLogin}>

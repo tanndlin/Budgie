@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../components/Header';
 import BigCalendar from '../components/Calendar';
+import BudgetsView from '../components/BudgetsView';
 
 function CalendarPage() {
     const [events, setEvents] = React.useState([]);
@@ -18,11 +19,13 @@ function CalendarPage() {
     return (
         <div className='h-screen'>
             <Header />
-            <main className='bg-orange-200 h-9/10'>
+            <main className='bg-orange-200 min-h-minus-header'>
                 <BigCalendar
                     events={events}
                     modifyEvents={modifyEvents}
                 />
+
+                <BudgetsView />
             </main>
         </div>
     );

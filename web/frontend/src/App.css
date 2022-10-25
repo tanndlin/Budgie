@@ -28,3 +28,11 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, 200px);
 }
+
+.unpaid {
+    background-color: #f74f31 !important;
+}
+
+.paid {
+    background-color: #7aff75 !important;
+}

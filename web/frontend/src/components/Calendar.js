@@ -90,6 +90,14 @@ function BigCalendar(props) {
         setCurrentEvent(null);
     }
 
+    function eventStyleGetter(event, start, end, isSelected) {
+        const classNames = ['unpaid'];
+
+        return {
+            className: classNames.join(' '),
+        };
+    }
+
     return (
         <div className='flex h-9/10 mb-5'>
 
@@ -125,6 +133,7 @@ function BigCalendar(props) {
                             events={props.events}
                             startAccessor="start"
                             endAccessor="end"
+                            eventPropGetter={(eventStyleGetter)}
                         />
                     </span>
                 </section>

@@ -18,12 +18,27 @@ function BudgetsView() {
             spent: 80,
             total: 100,
         },
+        {
+            name: "Fuck You",
+            spent: 100,
+            total: 100,
+        },
+        {
+            name: "Fuck You",
+            spent: 100,
+            total: 100,
+        },
+        {
+            name: "Fuck You",
+            spent: 100,
+            total: 100,
+        },
     ]);
 
     return (
         <article className='m-auto container bg-yellow-200 p-3 mb-5 rounded-md'>
             <h1 className='text-2xl font-bold border-black border-b-2 p-1'>Budgets</h1>
-            <section className='flex flex-cols gap-x-16 p-16'>
+            <section id='budgetView' className='grid gap-16 justify-center p-16'>
                 {
                     budgets.map((budget) =>
                         <Budget

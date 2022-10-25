@@ -91,10 +91,8 @@ function BigCalendar(props) {
     }
 
     function eventStyleGetter(event, start, end, isSelected) {
-        const classNames = ['unpaid'];
-
         return {
-            className: classNames.join(' '),
+            className: event.resources.paid ? 'paid' : 'unpaid',
         };
     }
 

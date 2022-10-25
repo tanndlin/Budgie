@@ -31,8 +31,10 @@
 
 .unpaid {
     background-color: #f74f31 !important;
+    color: white !important;
 }
 
 .paid {
     background-color: #7aff75 !important;
+    color: black !important;
 }

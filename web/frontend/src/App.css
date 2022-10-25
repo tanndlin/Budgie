@@ -23,3 +23,8 @@
     border-radius: 5px;
     font-weight: normal;
 }
+
+#budgetView {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 200px);
+}

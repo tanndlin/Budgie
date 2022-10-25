@@ -2,6 +2,7 @@
 import React from 'react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import EdittableText from './EdittableText';
 
 
 // TODO: Add ability to add/sub from spent budget
@@ -61,10 +62,25 @@ function BudgetsView() {
                                 <span style={{ width: 200, height: 200 }}>
                                     <CircularProgressbar styles={buildStyles({ pathColor: color })} value={percent} text={`${percent}%`} />
                                 </span>
-                                <span className='m-auto flex gap-1'>
-                                    <h3 className='font-bold'>{`$${budget.spent}`}</h3>
-                                    <p>out of</p>
-                                    <h3 className='font-bold'>{`$${budget.total}`}</h3>
+                                <span className='m-auto flex'>
+                                    <h3 className='font-bold'>$</h3>
+                                    <EdittableText
+                                        value={budget.spent}
+                                        max={budget.total}
+                                        onChange={(e) => {
+                                            budget.spent = e.target.value;
+                                            setBudgets([...budgets]);
+                                        }}
+                                    />
+                                    <p className='mx-1 my-px p-0'>out of</p>
+                                    <h3 className='font-bold'>$</h3>
+                                    <EdittableText
+                                        value={budget.total}
+                                        onChange={(e) => {
+                                            budget.total = e.target.value;
+                                            setBudgets([...budgets]);
+                                        }}
+                                    />
                                 </span>
                             </div>
                         );

@@ -4,7 +4,6 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import EdittableText from './EdittableText';
 
-// TODO: Add ability to add/sub from spent budget
 function BudgetsView() {
     function lerpColor(a, b, amount) {
         var ah = parseInt(a.replace(/#/g, ''), 16),

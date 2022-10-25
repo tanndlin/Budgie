@@ -3,6 +3,8 @@ import Header from '../components/Header';
 import BigCalendar from '../components/Calendar';
 import BudgetsView from '../components/BudgetsView';
 
+// TODO: Calendar overflows onto budget on differnet views
+
 function CalendarPage() {
     const [events, setEvents] = React.useState([]);
 

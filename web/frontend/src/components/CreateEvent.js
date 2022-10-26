@@ -8,6 +8,9 @@ function CreateEvent(props) {
             title: props.title,
             start: props.start,
             end: props.start,
+            resources: {
+                paid: Math.random() < 0.5,
+            }
         });
 
         props.closeModal();

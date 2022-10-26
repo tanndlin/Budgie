@@ -1,4 +1,5 @@
 .rbc-calendar {
+    min-height: 500px;
     height: 100%;
     width: 100%;
     background-color: white;

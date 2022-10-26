@@ -111,23 +111,21 @@ function BigCalendar(props) {
                 />
             </Modal>
 
-            <div className="grid container m-auto h-calendar min-h-500 flex-1">
-                <section className="flex flex-col">
-                    <CalendarControls createBill={createNew} events={props.events} />
-                    <span
-                        className="grid container m-auto h-4/5 flex-1 bg-yellow-200 p-3 rounded-md"
-                        onClick={handleCalendarClick}
-                    >
-                        <Calendar
-                            localizer={localizer}
-                            events={props.events}
-                            startAccessor="start"
-                            endAccessor="end"
-                            eventPropGetter={eventStyleGetter}
-                        />
-                    </span>
-                </section>
-            </div>
+            <section className="flex flex-col container m-auto">
+                <CalendarControls createBill={createNew} events={props.events} />
+                <span
+                    className="container m-auto min-h-500 bg-yellow-200 p-3 rounded-md"
+                    onClick={handleCalendarClick}
+                >
+                    <Calendar
+                        localizer={localizer}
+                        events={props.events}
+                        startAccessor="start"
+                        endAccessor="end"
+                        eventPropGetter={eventStyleGetter}
+                    />
+                </span>
+            </section>
         </div>
     );
 }

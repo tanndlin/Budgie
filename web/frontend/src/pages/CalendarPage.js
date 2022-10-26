@@ -8,29 +8,25 @@ import BudgetsView from '../components/BudgetsView';
 function CalendarPage() {
     const [events, setEvents] = React.useState([]);
 
-
     // Does both operations because 2 setstates overwrite each other
     function modifyEvents(add, remove) {
         if (remove) {
-            setEvents([...events.filter(e => e !== remove), add]);
+            setEvents([...events.filter((e) => e !== remove), add]);
         } else {
             setEvents([...events, add]);
         }
     }
 
     return (
-        <div className='h-screen'>
+        <div className="h-screen">
             <Header />
-            <main className='bg-orange-200 min-h-minus-header'>
-                <BigCalendar
-                    events={events}
-                    modifyEvents={modifyEvents}
-                />
+            <main className="bg-orange-200 min-h-minus-header">
+                <BigCalendar events={events} modifyEvents={modifyEvents} />
 
                 <BudgetsView />
             </main>
         </div>
     );
-};
+}
 
 export default CalendarPage;

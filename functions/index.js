@@ -11,17 +11,16 @@ Create and deploy your first cloud functions
 https://firebase.google.com/docs/functions/write-firebase-functions
 */
 
-//Basic hello world function
+/*Basic hello world function
 exports.helloWorld = functions.https.onRequest((_request, response) => {
    response.send("Hello from Firebase!");
 });
-
-exports.api = functions.https.onRequest(app);
+*/
 
 /*
 Take the text parameter passed to this HTTP endpoint and insert it into 
 Firestore under the path /messages/:documentId/original
-*/
+
 exports.addMessage = functions.https.onRequest(async (req, res) => {
     // Grab the text parameter.
     const original = req.query.text;
@@ -30,10 +29,11 @@ exports.addMessage = functions.https.onRequest(async (req, res) => {
     // Send back a message that we've successfully written the message
     res.json({result: `Message with ID: ${writeResult.id} added.`});
 });
+*/
 
 /*Listens for new messages added to /messages/:documentId/original and creates an
 uppercase version of the message to /messages/:documentId/uppercase
-*/
+
 exports.makeUppercase = functions.firestore.document('/messages/{documentId}')
 .onCreate((snap, context) => {
     // Grab the current value of what was written to Firestore.
@@ -49,12 +49,15 @@ exports.makeUppercase = functions.firestore.document('/messages/{documentId}')
     // Setting an 'uppercase' field in Firestore document returns a Promise.
     return snap.ref.set({uppercase}, {merge: true});
 });
+*/
 
-app.post('/login', (req, res) => {
-    
-});
+exports.login = functions.https.onRequest((_request, response) => {
+    response.send("login user");
+ });
 
-app.post('/register', (req, res) => {
-    
-});
+ exports.register = functions.https.onRequest((_request, response) => {
+    response.send("register user");
+ });
+
+
 

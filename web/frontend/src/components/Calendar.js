@@ -15,7 +15,7 @@ function BigCalendar(props) {
     const [isEdit, setIsEdit] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [start, setStart] = React.useState(formatDate(new Date()));
-    const [currentEvent, setCurrentEvent] = React.useState(null);
+    const [currentBill, setCurrentBill] = React.useState(null);
 
     function formatDate(date) {
         // return date.toISOString().split('T')[0];
@@ -55,7 +55,7 @@ function BigCalendar(props) {
         setIsEdit(false);
         setTitle('');
         setStart(formatDate(new Date()));
-        setCurrentEvent(null);
+        setCurrentBill(null);
     }
 
     function createEdit(event) {
@@ -65,7 +65,7 @@ function BigCalendar(props) {
 
         setTitle(event.title);
         setStart(formatDate(event.start));
-        setCurrentEvent(event);
+        setCurrentBill(event);
 
         openModal();
     }
@@ -74,14 +74,14 @@ function BigCalendar(props) {
         setIsEdit(false);
         setTitle('');
         setStart(formatDate(new Date()));
-        setCurrentEvent(null);
+        setCurrentBill(null);
 
         openModal();
     }
 
     function pushEvent(event) {
-        props.modifyEvents(event, currentEvent);
-        setCurrentEvent(null);
+        props.modifyEvents(event, currentBill);
+        setCurrentBill(null);
     }
 
     function eventStyleGetter(event, start, end, isSelected) {
@@ -112,14 +112,14 @@ function BigCalendar(props) {
             </Modal>
 
             <section className="flex flex-col container m-auto">
-                <CalendarControls createBill={createNew} events={props.events} />
+                <CalendarControls createBill={createNew} bills={props.bills} />
                 <span
                     className="container m-auto min-h-500 bg-yellow-200 p-3 rounded-md"
                     onClick={handleCalendarClick}
                 >
                     <Calendar
                         localizer={localizer}
-                        events={props.events}
+                        events={props.bills}
                         startAccessor="start"
                         endAccessor="end"
                         eventPropGetter={eventStyleGetter}

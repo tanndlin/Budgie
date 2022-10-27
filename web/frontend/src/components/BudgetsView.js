@@ -7,7 +7,11 @@ function BudgetsView(props) {
             <h1 className="text-2xl font-bold border-black border-b-2 p-1">Budgets</h1>
             <section id="budgetView" className="grid gap-16 justify-center p-16">
                 {props.budgets.map((budget) => (
-                    <Budget budget={budget} budgets={props.budgets} setBudgets={props.setBudgets} />
+                    <Budget
+                        budget={budget}
+                        budgets={props.budgets}
+                        setBudgets={props.setBudgets}
+                    />
                 ))}
             </section>
         </article>

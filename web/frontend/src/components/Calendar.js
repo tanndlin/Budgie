@@ -61,8 +61,6 @@ function BigCalendar(props) {
     function createEdit(event) {
         setIsEdit(true);
 
-        console.log(event);
-
         setTitle(event.title);
         setStart(formatDate(event.start));
         setCurrentBill(event);

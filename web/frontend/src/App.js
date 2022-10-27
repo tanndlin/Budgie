@@ -46,28 +46,32 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        <Route path="/" element={<LoginPage
-          user={user}
-          setUser={setUser}
-        />} />
+        <Route path="/" element={<LoginPage {...{
+          user,
+          setUser,
+          bills,
+          setBills,
+          budgets,
+          setBudgets,
+        }} />} />
 
-        <Route path="/calendar" element={<CalendarPage
-          user={user}
-          setUser={setUser}
-          bills={bills}
-          setBills={setBills}
-          budgets={budgets}
-          setBudgets={setBudgets}
-        />} />
+        <Route path="/calendar" element={<CalendarPage {...{
+          user,
+          setUser,
+          bills,
+          setBills,
+          budgets,
+          setBudgets,
+        }} />} />
 
-        <Route path="/list" element={<ListPage
-          user={user}
-          setUser={setUser}
-          bills={bills}
-          setBills={setBills}
-          budgets={budgets}
-          setBudgets={setBudgets}
-        />} />
+        <Route path="/list" element={<ListPage {...{
+          user,
+          setUser,
+          bills,
+          setBills,
+          budgets,
+          setBudgets,
+        }} />} />
 
       </Routes>
     </BrowserRouter>

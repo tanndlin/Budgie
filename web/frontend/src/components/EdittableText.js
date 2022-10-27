@@ -20,8 +20,6 @@ function EdittableText(props) {
 
         if (!e.target.value.length)
             e.target.value = 0;
-
-        console.log(e.target.value);
     }
 
     return (

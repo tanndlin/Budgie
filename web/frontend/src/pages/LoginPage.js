@@ -2,10 +2,17 @@ import React from 'react';
 import Header from '../components/Header';
 import Login from '../components/Login';
 
-const LoginPage = () => {
+const LoginPage = (props) => {
     return (
         <div className='h-screen'>
-            <Header />
+            <Header
+                user={props.user}
+                setUser={props.setUser}
+                bills={props.bills}
+                setBills={props.setBills}
+                budgets={props.budgets}
+                setBudgets={props.setBudgets}
+            />
             <Login />
         </div>
     );

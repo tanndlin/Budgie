@@ -10,7 +10,8 @@ function CreateEvent(props) {
             end: props.start,
             resources: {
                 paid: Math.random() < 0.5,
-            }
+            },
+            amount: 500,
         });
 
         props.closeModal();
@@ -18,7 +19,6 @@ function CreateEvent(props) {
 
     function titleChange(e) {
         props.setTitle(e.target.value);
-        console.log(e.target.value);
     }
 
     // Time zones are fucking cringe, the whole world needs to be on UTC

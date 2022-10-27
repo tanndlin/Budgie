@@ -13,7 +13,7 @@ module.exports = {
                 '7/10': '70%',
                 '8/10': '80%',
                 '9/10': '90%',
-                'minus-header': 'calc(100% - 4rem)',
+                'minus-header': 'calc(100vh - 4rem)',
                 calendar: 'calc((100vh - 4rem) * 9/10 * 4/5)',
             },
             width: {

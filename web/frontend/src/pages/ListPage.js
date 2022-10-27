@@ -13,7 +13,7 @@ function ListPage(props) {
                 budgets={props.budgets}
                 setBudgets={props.setBudgets}
             />
-            <main className='bg-orange-200 min-h-minus-header'>
+            <main className='bg-orange-200 min-h-minus-header h-1'>
                 <ListView
                     bills={props.bills}
                     setBills={props.setBills}

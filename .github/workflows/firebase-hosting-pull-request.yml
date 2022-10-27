@@ -12,20 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: cd web/frontend
-      - run: npm ci
-      - run: npm run build
+      - run: cd web/frontend && npm ci && npm run build
   lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: cd web/frontend
-      - run: npm ci
-      - run: npm run lint
+      - run: cd web/frontend && npm ci && npm run lint
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: cd web/frontend
-      - run: npm ci
-      - run: npm run test
+      - run: cd web/frontend && npm ci && npm run test

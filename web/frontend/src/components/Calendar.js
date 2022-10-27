@@ -98,7 +98,7 @@ function BigCalendar(props) {
                 ariaHideApp={false}
             >
                 <CreateEvent
-                    events={props.events}
+                    events={props.bills}
                     edit={isEdit}
                     title={title}
                     start={start}

@@ -26,8 +26,8 @@ function BigCalendar(props) {
     function handleCalendarClick(e) {
         e.preventDefault();
         if (e.target.classList.contains('rbc-event-content')) {
-            const event = props.events.find((event) => event.title === e.target.innerHTML);
-            createEdit(event);
+            const bill = props.bills.find((bill) => bill.title === e.target.innerHTML);
+            createEdit(bill);
         }
     }
 

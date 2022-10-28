@@ -23,7 +23,7 @@ function Bill(props) {
         <div className={className}>
             <h1 className="text-2xl font-bold">{props.bill.title}</h1>
             <p className="text-xl font-bold">${props.bill.amount}</p>
-            <p className="text-xl font-bold">{getDayString(props.bill.start.getDay())}</p>
+            <p className="text-xl font-bold">{getDayString(props.bill.start.getDate())}</p>
         </div>
     );
 }

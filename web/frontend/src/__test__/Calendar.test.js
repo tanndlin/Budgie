@@ -3,7 +3,7 @@ import BigCalendar from '../components/Calendar';
 
 test('Events red on unpaid', () => {
     render(<BigCalendar
-        events={[{
+        bills={[{
             title: 'Hello World',
             start: new Date(),
             end: new Date(),
@@ -12,13 +12,13 @@ test('Events red on unpaid', () => {
         }]}
     />);
 
-    const event = screen.getByText(/Hello World/i);
-    expect(event).toHaveStyle('background-color: #f74f31 !important')
+    const event = screen.getByText(/Hello World/);
+    expect(event).toHaveStyle('background-color: rgb(248 113 113) !important');
 });
 
 test('Events green on paid', () => {
     render(<BigCalendar
-        events={[{
+        bills={[{
             title: 'Hello World',
             start: new Date(),
             end: new Date(),
@@ -27,6 +27,6 @@ test('Events green on paid', () => {
         }]}
     />);
 
-    const event = screen.getByText(/Hello World/i);
-    expect(event).toHaveStyle('background-color: #7aff75 !important')
+    const event = screen.getByText(/Hello World/);
+    expect(event).toHaveStyle('background-color: rgb(74 222 128) !important');
 });

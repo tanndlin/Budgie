@@ -1,18 +1,11 @@
 import React from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import Modal from 'react-modal';
+import Bill from './Bill';
 import CreateEvent from './CreateEvent';
+import Modal from 'react-modal';
 import CalendarControls from './CalendarControls';
 
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import '../App.css';
-
-const localizer = momentLocalizer(moment);
-
-function BigCalendar(props) {
+function ListView(props) {
     const [modalIsOpen, setIsOpen] = React.useState(false);
-    const [isEdit, setIsEdit] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [start, setStart] = React.useState(formatDate(new Date()));
     const [currentBill, setCurrentBill] = React.useState(null);
@@ -21,14 +14,6 @@ function BigCalendar(props) {
         // return date.toISOString().split('T')[0];
         // return date;
         return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    }
-
-    function handleCalendarClick(e) {
-        e.preventDefault();
-        if (e.target.classList.contains('rbc-event-content')) {
-            const bill = props.bills.find((bill) => bill.title === e.target.innerHTML);
-            createEdit(bill);
-        }
     }
 
     const customStyles = {
@@ -52,27 +37,13 @@ function BigCalendar(props) {
     function closeModal() {
         setIsOpen(false);
 
-        setIsEdit(false);
         setTitle('');
         setStart(formatDate(new Date()));
-        setCurrentBill(null);
-    }
-
-    function createEdit(event) {
-        setIsEdit(true);
-
-        setTitle(event.title);
-        setStart(formatDate(event.start));
-        setCurrentBill(event);
-
-        openModal();
     }
 
     function createNew() {
-        setIsEdit(false);
         setTitle('');
         setStart(formatDate(new Date()));
-        setCurrentBill(null);
 
         openModal();
     }
@@ -82,14 +53,8 @@ function BigCalendar(props) {
         setCurrentBill(null);
     }
 
-    function eventStyleGetter(event, start, end, isSelected) {
-        return {
-            className: event.resources.paid ? 'paid' : 'unpaid',
-        };
-    }
-
     return (
-        <div className="flex min-h-9/10 mb-5">
+        <div className="flex h-full">
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
@@ -99,7 +64,6 @@ function BigCalendar(props) {
             >
                 <CreateEvent
                     events={props.bills}
-                    edit={isEdit}
                     title={title}
                     start={start}
                     setTitle={setTitle}
@@ -109,22 +73,20 @@ function BigCalendar(props) {
                 />
             </Modal>
 
-            <section className="flex flex-col container m-auto">
+
+            <div className="flex flex-col container m-auto">
                 <CalendarControls createBill={createNew} bills={props.bills} />
-                <span
-                    className="container m-auto min-h-500 bg-yellow-200 p-3 rounded-md"
-                    onClick={handleCalendarClick}
-                >
-                    <Calendar
-                        localizer={localizer}
-                        events={props.bills}
-                        startAccessor="start"
-                        endAccessor="end"
-                        eventPropGetter={eventStyleGetter}
-                    />
-                </span>
-            </section>
+                <article className="container m-auto min-h-500 bg-yellow-200 p-3 rounded-md">
+                    <h1 className="text-2xl font-bold border-black border-b-2 p-1">List</h1>
+                    <section id="listView" className="grid gap-16 p-16">
+                        {props.bills.map((bill) => (
+                            <Bill bill={bill} />
+                        ))}
+                    </section>
+                </article>
+            </div>
         </div>
     );
 }
-export default BigCalendar;
+
+export default ListView;

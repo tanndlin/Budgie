@@ -1,11 +1,9 @@
 import React from 'react';
-import Header from '../components/Header';
 import Login from '../components/Login';
 
-const LoginPage = () => {
+const LoginPage = (props) => {
     return (
         <div className='h-screen'>
-            <Header />
             <Login />
         </div>
     );

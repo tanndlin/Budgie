@@ -1,63 +1,143 @@
-const functions = require("firebase-functions");
+const functions = require('firebase-functions');
+const firebase = require('firebase');
+//const express = require('express')();
 
-const admin = require('firebase-admin');
-admin.initializeApp();
+// your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyC7OHvwvqRgrOvgYoy2C5sgnXSZ02xLZPc",
+  authDomain: "cop4331-large-project-27.firebaseapp.com",
+  databaseURL: "https://cop4331-large-project-27-default-rtdb.firebaseio.com",
+  projectId: "cop4331-large-project-27",
+  storageBucket: "cop4331-large-project-27.appspot.com",
+  messagingSenderId: "426012497735",
+  appId: "1:426012497735:web:7ed50d80324be477535e62"
+};
 
-const express = require('express');
-const app = express();
+//initialize Firebase
+firebase.app.initializeApp(firebaseConfig);
 
-/*
-Create and deploy your first cloud functions
-https://firebase.google.com/docs/functions/write-firebase-functions
-*/
+const auth = firebase.auth();
+const database = firebase.database();
 
-/*Basic hello world function
-exports.helloWorld = functions.https.onRequest((_request, response) => {
-   response.send("Hello from Firebase!");
+function register() {
+     
+    //collect user registration input
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    //create user
+    auth.createUserWithEmailAndPassword(email, password, confirmPassword)
+        .then(() => {
+            var user = auth.currentUser;
+
+            var databaseRef = database.ref();
+
+            if((validateEmail(email) == false) || validateField(email)) { res.status(500).send('Email is not valid'); }
+            if((validatePassword(password) == false) || validateField(password)) { res.status(500).send('Password is not valid'); }
+            if((confirmPassword(password, confirmPassword) == false) || validateField(confirmPassword)) { res.status(500).send('Passwords do not match'); }
+
+            const newUser = {
+                email: email,
+                password: password,
+                lastLogin: Date.now()
+            };
+
+            databaseRef.child('users/' + user.uid).set(newUser);
+        })
+        .catch(err => {
+            var errorCode = err.code;
+            var errorMessage = err.message;
+
+            res.status(500).json({error: errorCode, message: errorMessage})
+            console.error()
+        })
+}
+
+exports.register = functions.https.onRequest((req, res) => {
+    register();
 });
-*/
 
-/*
-Take the text parameter passed to this HTTP endpoint and insert it into 
-Firestore under the path /messages/:documentId/original
+function login() {
+    //collect user registration input
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-exports.addMessage = functions.https.onRequest(async (req, res) => {
-    // Grab the text parameter.
-    const original = req.query.text;
-    // Push the new message into Firestore using the Firebase Admin SDK.
-    const writeResult = await admin.firestore().collection('messages').add({original: original});
-    // Send back a message that we've successfully written the message
-    res.json({result: `Message with ID: ${writeResult.id} added.`});
+    //create user
+    auth.loginUserWithEmailAndPassword(email, password)
+        .then(() => {
+            var user = auth.currentUser;
+
+            var databaseRef = database.ref();
+
+            if((validateEmail(email) == false) || validateField(email) /*&& ()*/) { res.status(500).send('Email is not valid'); }
+            if(validateField(password) /*|| ()*/) { res.status(500).send('Password is not valid'); }
+
+            const curUser = {
+                lastLogin: Date.now()
+            };
+
+            databaseRef.child('users/' + user.uid).update(curUser);
+        })
+        .catch(err => {
+            var errorCode = err.code;
+            var errorMessage = err.message;
+
+            res.status(500).json({error: errorCode, message: errorMessage})
+            console.error()
+        })
+}
+
+exports.login = functions.https.onRequest((req, res) => {
+    login();
 });
-*/
 
-/*Listens for new messages added to /messages/:documentId/original and creates an
-uppercase version of the message to /messages/:documentId/uppercase
+function validateEmail(email) {
+    const expression = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    if (expression.test(email) == true) {
+        
+        //email is good
+        return true;
+      } 
+      else {
 
-exports.makeUppercase = functions.firestore.document('/messages/{documentId}')
-.onCreate((snap, context) => {
-    // Grab the current value of what was written to Firestore.
-    const original = snap.data().original;
+        //email is not good
+        return false;
+      }
+}
 
-    // Access the parameter `{documentId}` with `context.params`
-    functions.logger.log('Uppercasing', context.params.documentId, original);
-    
-    const uppercase = original.toUpperCase();
-    
-    // You must return a Promise when performing asynchronous tasks inside a Functions such as
-    // writing to Firestore.
-    // Setting an 'uppercase' field in Firestore document returns a Promise.
-    return snap.ref.set({uppercase}, {merge: true});
-});
-*/
+function validatePassword(password) {
+    var pw = /^(?=.*\d)(?=.*[!@#$%^&*()_-+=~`,.:;])(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+    if (pw.test(password) == true) {
 
-exports.login = functions.https.onRequest((_request, response) => {
-    response.send("login user");
- });
+        //password is good
+        return true;
+      } 
+      else {
 
- exports.register = functions.https.onRequest((_request, response) => {
-    response.send("register user");
- });
+        //password is not good
+        return false;
+      }
+}
 
+function confirmPassword(password, confirmPassword) {
+    if (password == confirmPassword) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 
+function validateField(field) {
+    if (field == null) {
+        return false;
+    }
 
+    if (field.length <= 0) {
+        return false;
+    } 
+    else {
+        return true;
+    }
+}

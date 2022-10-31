@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../components/Header';
 import BigCalendar from '../components/Calendar';
 import BudgetsView from '../components/BudgetsView';
 
@@ -15,14 +14,6 @@ function CalendarPage(props) {
 
     return (
         <div className="h-screen">
-            <Header
-                user={props.user}
-                setUser={props.setUser}
-                bills={props.bills}
-                setBills={props.setBills}
-                budgets={props.budgets}
-                setBudgets={props.setBudgets}
-            />
             <main className="bg-orange-200 min-h-minus-header">
                 <BigCalendar bills={props.bills} modifyEvents={modifyEvents} />
 

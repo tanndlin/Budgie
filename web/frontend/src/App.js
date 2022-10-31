@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from './pages/LoginPage';
 import CalendarPage from './pages/CalendarPage';
 import ListPage from './pages/ListPage';
+import Header from './components/Header';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -44,36 +45,49 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
+      <div>
+        <Header
+          {...{
+            user,
+            setUser,
+            bills,
+            setBills,
+            budgets,
+            setBudgets,
+          }}
+        >
+        </Header>
 
-        <Route path="/" element={<LoginPage {...{
-          user,
-          setUser,
-          bills,
-          setBills,
-          budgets,
-          setBudgets,
-        }} />} />
+        <Routes>
+          <Route path="/" element={<LoginPage {...{
+            user,
+            setUser,
+            bills,
+            setBills,
+            budgets,
+            setBudgets,
+          }} />} />
 
-        <Route path="/calendar" element={<CalendarPage {...{
-          user,
-          setUser,
-          bills,
-          setBills,
-          budgets,
-          setBudgets,
-        }} />} />
+          <Route path="/calendar" element={<CalendarPage {...{
+            user,
+            setUser,
+            bills,
+            setBills,
+            budgets,
+            setBudgets,
+          }} />} />
 
-        <Route path="/list" element={<ListPage {...{
-          user,
-          setUser,
-          bills,
-          setBills,
-          budgets,
-          setBudgets,
-        }} />} />
+          <Route path="/list" element={<ListPage {...{
+            user,
+            setUser,
+            bills,
+            setBills,
+            budgets,
+            setBudgets,
+          }} />} />
 
-      </Routes>
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }

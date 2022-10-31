@@ -3,7 +3,7 @@ import App from '../App';
 
 test('renders header', () => {
   render(<App />);
-  const header = screen.getByText(/Bill Tracker/i);
+  const header = screen.getByText(/Budgie/i);
   expect(header).toBeInTheDocument();
 });
 

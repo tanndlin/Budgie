@@ -1,4 +1,5 @@
 import React from 'react';
+import BudgetsView from '../components/BudgetsView';
 import ListView from '../components/ListView';
 
 function ListPage(props) {
@@ -19,6 +20,11 @@ function ListPage(props) {
                     budgets={props.budgets}
                     setBudgets={props.setBudgets}
                     modifyEvents={modifyEvents}
+                />
+
+                <BudgetsView
+                    budgets={props.budgets}
+                    setBudgets={props.setBudgets}
                 />
             </main>
         </div>

@@ -10,38 +10,7 @@ import Header from './components/Header';
 function App() {
   const [user, setUser] = React.useState(null);
   const [bills, setBills] = React.useState([]);
-  const [budgets, setBudgets] = React.useState([
-    {
-      name: 'Clothes',
-      spent: 10,
-      total: 200,
-    },
-    {
-      name: 'Groceries',
-      spent: 100,
-      total: 200,
-    },
-    {
-      name: 'Gas',
-      spent: 80,
-      total: 100,
-    },
-    {
-      name: 'Fuck You',
-      spent: 100,
-      total: 100,
-    },
-    {
-      name: 'Fuck You',
-      spent: 100,
-      total: 100,
-    },
-    {
-      name: 'Fuck You',
-      spent: 100,
-      total: 100,
-    },
-  ]);
+  const [budgets, setBudgets] = React.useState([]);
 
   return (
     <BrowserRouter>

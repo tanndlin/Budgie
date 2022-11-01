@@ -33,6 +33,7 @@ function Budget(props) {
     return (
         <div className='grid grid-cols-1'>
             <EdittableText
+                type='text'
                 value={budget.name}
                 onChange={(e) => {
                     budget.name = e.target.value;
@@ -45,6 +46,7 @@ function Budget(props) {
             <span className='m-auto flex'>
                 <h3 className='font-bold'>$</h3>
                 <EdittableText
+                    type='number'
                     value={budget.spent}
                     max={budget.total}
                     onChange={(e) => {
@@ -55,6 +57,7 @@ function Budget(props) {
                 <p className='mx-1 my-px p-0'>out of</p>
                 <h3 className='font-bold'>$</h3>
                 <EdittableText
+                    type='number'
                     value={budget.total}
                     onChange={(e) => {
                         budget.total = e.target.value;

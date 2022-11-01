@@ -9,16 +9,19 @@ function EdittableText(props) {
         }
 
         props.onChange(e);
+    }
 
-        // Set the size of the input to the size of the text
-        e.target.style.width = `${Math.max(1, value.length)}ch`;
+    function onBlur(e) {
+        if (!e.target.value)
+            e.target.value = '0';
     }
 
     return (
         <input
             onChange={onChange}
+            onBlur={onBlur}
             className='font-bold editable'
-            type="text"
+            type={props.type}
             value={props.value}
             style={{ width: `${Math.max(1, props.value.length)}ch` }}
         />

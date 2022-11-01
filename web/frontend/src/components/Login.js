@@ -14,14 +14,12 @@ function Login() {
                 id='loginDiv'>
                 <form onSubmit={doLogin}>
                     <span id='inner-title'>Please Log In</span><br />
-                    <input className='mt-5 px-2' type='text' id='loginName' placeholder='Username'
-                        ref={(c) => loginName = c} /><br />
-                    <input className='mt-5 mb-5 px-2' type='password' id='loginPassword' placeholder='Password'
-                        ref={(c) => loginPassword = c} /><br />
+                    <input className='mt-5 px-2' type='text' id='loginName' placeholder='Username' /><br />
+                    <input className='mt-5 mb-5 px-2' type='password' id='loginPassword' placeholder='Password' /><br />
                     <input type='submit' id='loginButton' className='w-40 bg-red-500' value='Log in'
                         onClick={doLogin} />
                 </form>
-                <span id='loginResult'>{message}</span>
+                <span id='loginResult'></span>
             </div>
         </main>
     );

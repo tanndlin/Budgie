@@ -32,7 +32,13 @@ function Budget(props) {
 
     return (
         <div className='grid grid-cols-1'>
-            <h2 className='text-xl font-bold'>{budget.name}</h2>
+            <EdittableText
+                value={budget.name}
+                onChange={(e) => {
+                    budget.name = e.target.value;
+                    props.setBudgets([...props.budgets]);
+                }}
+            />
             <span style={{ width: 200, height: 200 }}>
                 <CircularProgressbar styles={buildStyles({ pathColor: color })} value={percent} text={`${percent}%`} />
             </span>

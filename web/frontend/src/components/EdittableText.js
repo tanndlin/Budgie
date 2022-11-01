@@ -14,21 +14,13 @@ function EdittableText(props) {
         e.target.style.width = `${Math.max(1, value.length)}ch`;
     }
 
-    function onBlur(e) {
-        if (!e.max)
-            return
-
-        if (!e.target.value.length)
-            e.target.value = 0;
-    }
-
     return (
         <input
-            onBlur={onBlur}
             onChange={onChange}
             className='font-bold editable'
             type="text"
             value={props.value}
+            style={{ width: `${Math.max(1, props.value.length)}ch` }}
         />
     );
 

@@ -78,7 +78,7 @@ function ListView(props) {
 
             <div className="flex flex-col container m-auto mb-16">
                 <CalendarControls createBill={createNew} bills={props.bills} />
-                <article className="container p-4 m-auto min-h-500 max-h-3/4screen bg-yellow-200 p-3 rounded-md overflow-y-scroll">
+                <article className="container p-4 m-auto min-h-500 max-h-3/4screen bg-yellow-200 p-3 rounded-md overflow-y-auto">
                     <span className='font-bold border-black border-b-2 flex flex-row justify-between'>
                         <h1 className="text-2xl">List</h1>
                         <h2 className='text-xl'>{

@@ -80,7 +80,7 @@ function ListView(props) {
                 <CalendarControls createBill={createNew} bills={props.bills} />
                 <article className="container p-4 m-auto min-h-500 max-h-3/4screen bg-yellow-200 p-3 rounded-md overflow-y-auto">
                     <span className='font-bold border-black border-b-2 flex flex-row justify-between'>
-                        <h1 className="text-2xl">List</h1>
+                        <h1 className="text-2xl">Bills</h1>
                         <h2 className='text-xl'>{
                             `$${Object.entries(props.bills)
                                 .reduce((acc, [key, bill]) =>
@@ -90,7 +90,12 @@ function ListView(props) {
                     </span>
                     <section id="listView" className="grid gap-4 p-4">
                         {props.bills.map((bill) => (
-                            <Bill bill={bill} />
+                            <Bill
+                                bill={bill}
+                                bills={props.bills}
+                                setBills={props.setBills}
+
+                            />
                         ))}
                     </section>
                 </article>

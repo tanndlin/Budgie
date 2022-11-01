@@ -26,11 +26,37 @@ function BigCalendar(props) {
 
     function handleCalendarClick(e) {
         e.preventDefault();
-        if (e.target.classList.contains('rbc-event-content')) {
-            const bill = props.bills.find((bill) => bill.title === e.target.innerHTML);
-            createEdit(bill);
+        if (!e.target.classList.contains('rbc-event-content'))
+            return;
+
+        if (e.ctrlKey) {
+            const bill = props.bills.find(bill => bill.title === e.target.innerHTML);
+            bill.resources.paid = !bill.resources.paid;
+
+            const editState = () => {
+                const newState = props.bills.map(b => {
+                    if (b.title === bill.title)
+                        return {
+                            ...b, resources: {
+                                paid: !b.resources.paid
+                            }
+                        };
+
+                    return b;
+
+                });
+
+                props.setBills(newState);
+            };
+            editState();
+            return;
         }
+
+        const bill = props.bills.find((bill) => bill.title === e.target.innerHTML);
+        createEdit(bill);
     }
+
+
 
     const customStyles = {
         overlay: {

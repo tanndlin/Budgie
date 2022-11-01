@@ -1,38 +1,11 @@
 import React, { useState } from 'react';
+import { sendRequest } from '../common/Requests';
 
 function Login() {
-    var loginName;
-    var loginPassword;
-    const [message, setMessage] = useState('');
-
     const doLogin = async event => {
-        event.preventDefault();
-        var obj = { login: loginName.value, password: loginPassword.value };
-        var js = JSON.stringify(obj);
-
-        const BASE_URL = 'https://cop4331-group27.herokuapp.com/api/';
-        try {
-            const response = await fetch(`${BASE_URL}login`, {
-                method: 'POST', body: js, headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            var res = JSON.parse(await response.text());
-            if (res.id <= 0) {
-                setMessage('User/Password combination incorrect');
-            }
-            else {
-                var user =
-                    { firstName: res.firstName, lastName: res.lastName, id: res.id }
-                localStorage.setItem('user_data', JSON.stringify(user));
-                setMessage('');
-                window.location.href = '/calendar';
-            }
-        }
-        catch (e) {
-            alert(e.toString());
-            return;
-        }
+        sendRequest('login', (res) => {
+            console.log(res);
+        });
     };
 
     return (

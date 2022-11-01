@@ -3,10 +3,10 @@ import React from 'react';
 function EdittableText(props) {
 
     function onChange(e) {
-        const value = e.target.value;
-        if (value > props.max) {
-            e.target.value = props.max;
-        }
+        // const value = e.target.value;
+        // if (value > props.max) {
+        //     e.target.value = props.max;
+        // }
 
         props.onChange(e);
     }

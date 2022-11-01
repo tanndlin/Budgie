@@ -15,6 +15,7 @@ function BigCalendar(props) {
     const [isEdit, setIsEdit] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [start, setStart] = React.useState(formatDate(new Date()));
+    const [amount, setAmount] = React.useState(0);
     const [currentBill, setCurrentBill] = React.useState(null);
 
     function formatDate(date) {
@@ -52,8 +53,13 @@ function BigCalendar(props) {
     function closeModal() {
         setIsOpen(false);
 
+        resetAllValues();
+    }
+
+    function resetAllValues() {
         setIsEdit(false);
         setTitle('');
+        setAmount(0);
         setStart(formatDate(new Date()));
         setCurrentBill(null);
     }
@@ -69,10 +75,7 @@ function BigCalendar(props) {
     }
 
     function createNew() {
-        setIsEdit(false);
-        setTitle('');
-        setStart(formatDate(new Date()));
-        setCurrentBill(null);
+        resetAllValues();
 
         openModal();
     }
@@ -102,6 +105,8 @@ function BigCalendar(props) {
                     edit={isEdit}
                     title={title}
                     start={start}
+                    amount={amount}
+                    setAmount={setAmount}
                     setTitle={setTitle}
                     setStart={setStart}
                     closeModal={closeModal}

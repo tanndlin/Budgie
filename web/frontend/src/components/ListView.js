@@ -8,6 +8,7 @@ function ListView(props) {
     const [modalIsOpen, setIsOpen] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [start, setStart] = React.useState(formatDate(new Date()));
+    const [amount, setAmount] = React.useState(0);
     const [currentBill, setCurrentBill] = React.useState(null);
 
     function formatDate(date) {
@@ -66,6 +67,8 @@ function ListView(props) {
                     events={props.bills}
                     title={title}
                     start={start}
+                    amount={amount}
+                    setAmount={setAmount}
                     setTitle={setTitle}
                     setStart={setStart}
                     closeModal={closeModal}
@@ -73,12 +76,11 @@ function ListView(props) {
                 />
             </Modal>
 
-
-            <div className="flex flex-col container m-auto">
+            <div className="flex flex-col container m-auto mb-16">
                 <CalendarControls createBill={createNew} bills={props.bills} />
-                <article className="container m-auto min-h-500 bg-yellow-200 p-3 rounded-md">
+                <article className="container p-4 m-auto min-h-500 max-h-3/4screen bg-yellow-200 p-3 rounded-md overflow-y-scroll">
                     <h1 className="text-2xl font-bold border-black border-b-2 p-1">List</h1>
-                    <section id="listView" className="grid gap-16 p-16">
+                    <section id="listView" className="grid gap-4 p-4">
                         {props.bills.map((bill) => (
                             <Bill bill={bill} />
                         ))}

@@ -3,6 +3,7 @@ import Bill from './Bill';
 import CreateEvent from './CreateEvent';
 import Modal from 'react-modal';
 import CalendarControls from './CalendarControls';
+import ModalStyles from '../common/ModalStyles';
 
 function ListView(props) {
     const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -16,20 +17,6 @@ function ListView(props) {
         // return date;
         return new Date(date.getFullYear(), date.getMonth(), date.getDate());
     }
-
-    const customStyles = {
-        overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
-            display: 'flex',
-            zIndex: '1000',
-        },
-        content: {
-            width: '50%',
-            height: '50%',
-            margin: 'auto',
-            display: 'flex',
-        },
-    };
 
     function openModal() {
         setIsOpen(true);
@@ -59,7 +46,7 @@ function ListView(props) {
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
-                style={customStyles}
+                style={ModalStyles}
                 contentLabel="Example Modal"
                 ariaHideApp={false}
             >

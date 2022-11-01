@@ -7,6 +7,7 @@ import CalendarControls from './CalendarControls';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../App.css';
+import ModalStyles from '../common/ModalStyles';
 
 const localizer = momentLocalizer(moment);
 
@@ -55,22 +56,6 @@ function BigCalendar(props) {
         const bill = props.bills.find((bill) => bill.title === e.target.innerHTML);
         createEdit(bill);
     }
-
-
-
-    const customStyles = {
-        overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
-            display: 'flex',
-            zIndex: '1000',
-        },
-        content: {
-            width: '50%',
-            height: '50%',
-            margin: 'auto',
-            display: 'flex',
-        },
-    };
 
     function openModal() {
         setIsOpen(true);
@@ -122,7 +107,7 @@ function BigCalendar(props) {
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
-                style={customStyles}
+                style={ModalStyles}
                 contentLabel="Example Modal"
                 ariaHideApp={false}
             >

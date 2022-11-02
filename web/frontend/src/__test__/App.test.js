@@ -9,6 +9,6 @@ test('renders header', () => {
 
 test('renders login page', () => {
   render(<App />);
-  const h1 = screen.getByText(/Please Log In/i);
+  const h1 = screen.getByText(/Username/i);
   expect(h1).toBeInTheDocument();
 });

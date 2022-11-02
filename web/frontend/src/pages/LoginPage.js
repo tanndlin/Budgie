@@ -9,9 +9,6 @@ const LoginPage = (props) => {
             <Login />
             <SignUp />
             <Divider />
-            {/* <div className='absolute right-0'>
-                <Divider />
-            </div> */}
         </div>
     );
 };

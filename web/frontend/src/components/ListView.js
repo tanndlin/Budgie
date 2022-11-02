@@ -3,11 +3,13 @@ import Bill from './Bill';
 import CreateEvent from './CreateEvent';
 import Modal from 'react-modal';
 import CalendarControls from './CalendarControls';
+import ModalStyles from '../common/ModalStyles';
 
 function ListView(props) {
     const [modalIsOpen, setIsOpen] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [start, setStart] = React.useState(formatDate(new Date()));
+    const [amount, setAmount] = React.useState(0);
     const [currentBill, setCurrentBill] = React.useState(null);
 
     function formatDate(date) {
@@ -15,20 +17,6 @@ function ListView(props) {
         // return date;
         return new Date(date.getFullYear(), date.getMonth(), date.getDate());
     }
-
-    const customStyles = {
-        overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
-            display: 'flex',
-            zIndex: '1000',
-        },
-        content: {
-            width: '50%',
-            height: '50%',
-            margin: 'auto',
-            display: 'flex',
-        },
-    };
 
     function openModal() {
         setIsOpen(true);
@@ -58,7 +46,7 @@ function ListView(props) {
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
-                style={customStyles}
+                style={ModalStyles}
                 contentLabel="Example Modal"
                 ariaHideApp={false}
             >
@@ -66,6 +54,8 @@ function ListView(props) {
                     events={props.bills}
                     title={title}
                     start={start}
+                    amount={amount}
+                    setAmount={setAmount}
                     setTitle={setTitle}
                     setStart={setStart}
                     closeModal={closeModal}
@@ -73,14 +63,26 @@ function ListView(props) {
                 />
             </Modal>
 
-
-            <div className="flex flex-col container m-auto">
+            <div className="flex flex-col container m-auto mb-16">
                 <CalendarControls createBill={createNew} bills={props.bills} />
-                <article className="container m-auto min-h-500 bg-yellow-200 p-3 rounded-md">
-                    <h1 className="text-2xl font-bold border-black border-b-2 p-1">List</h1>
-                    <section id="listView" className="grid gap-16 p-16">
+                <article className="container p-4 m-auto min-h-500 max-h-3/4screen bg-yellow-200 p-3 rounded-md overflow-y-auto">
+                    <span className='font-bold border-black border-b-2 flex flex-row justify-between'>
+                        <h1 className="text-2xl">Bills</h1>
+                        <h2 className='text-xl'>{
+                            `$${Object.entries(props.bills)
+                                .reduce((acc, [key, bill]) =>
+                                    acc + Number(bill.amount), 0)}
+                                 / month`
+                        }</h2>
+                    </span>
+                    <section id="listView" className="grid gap-4 p-4">
                         {props.bills.map((bill) => (
-                            <Bill bill={bill} />
+                            <Bill
+                                bill={bill}
+                                bills={props.bills}
+                                setBills={props.setBills}
+
+                            />
                         ))}
                     </section>
                 </article>

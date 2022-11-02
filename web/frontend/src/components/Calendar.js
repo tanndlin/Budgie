@@ -7,6 +7,7 @@ import CalendarControls from './CalendarControls';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../App.css';
+import ModalStyles from '../common/ModalStyles';
 
 const localizer = momentLocalizer(moment);
 
@@ -15,6 +16,7 @@ function BigCalendar(props) {
     const [isEdit, setIsEdit] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [start, setStart] = React.useState(formatDate(new Date()));
+    const [amount, setAmount] = React.useState(0);
     const [currentBill, setCurrentBill] = React.useState(null);
 
     function formatDate(date) {
@@ -25,25 +27,35 @@ function BigCalendar(props) {
 
     function handleCalendarClick(e) {
         e.preventDefault();
-        if (e.target.classList.contains('rbc-event-content')) {
-            const bill = props.bills.find((bill) => bill.title === e.target.innerHTML);
-            createEdit(bill);
-        }
-    }
+        if (!e.target.classList.contains('rbc-event-content'))
+            return;
 
-    const customStyles = {
-        overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
-            display: 'flex',
-            zIndex: '1000',
-        },
-        content: {
-            width: '50%',
-            height: '50%',
-            margin: 'auto',
-            display: 'flex',
-        },
-    };
+        if (e.ctrlKey) {
+            const bill = props.bills.find(bill => bill.title === e.target.innerHTML);
+            bill.resources.paid = !bill.resources.paid;
+
+            const editState = () => {
+                const newState = props.bills.map(b => {
+                    if (b.title === bill.title)
+                        return {
+                            ...b, resources: {
+                                paid: !b.resources.paid
+                            }
+                        };
+
+                    return b;
+
+                });
+
+                props.setBills(newState);
+            };
+            editState();
+            return;
+        }
+
+        const bill = props.bills.find((bill) => bill.title === e.target.innerHTML);
+        createEdit(bill);
+    }
 
     function openModal() {
         setIsOpen(true);
@@ -52,8 +64,13 @@ function BigCalendar(props) {
     function closeModal() {
         setIsOpen(false);
 
+        resetAllValues();
+    }
+
+    function resetAllValues() {
         setIsEdit(false);
         setTitle('');
+        setAmount(0);
         setStart(formatDate(new Date()));
         setCurrentBill(null);
     }
@@ -69,10 +86,7 @@ function BigCalendar(props) {
     }
 
     function createNew() {
-        setIsEdit(false);
-        setTitle('');
-        setStart(formatDate(new Date()));
-        setCurrentBill(null);
+        resetAllValues();
 
         openModal();
     }
@@ -93,7 +107,7 @@ function BigCalendar(props) {
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
-                style={customStyles}
+                style={ModalStyles}
                 contentLabel="Example Modal"
                 ariaHideApp={false}
             >
@@ -102,6 +116,8 @@ function BigCalendar(props) {
                     edit={isEdit}
                     title={title}
                     start={start}
+                    amount={amount}
+                    setAmount={setAmount}
                     setTitle={setTitle}
                     setStart={setStart}
                     closeModal={closeModal}

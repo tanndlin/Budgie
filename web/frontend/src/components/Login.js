@@ -1,54 +1,49 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { sendOutsideRequest } from '../common/Requests';
 
 function Login() {
-    var loginName;
-    var loginPassword;
-    const [message, setMessage] = useState('');
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
 
-    const doLogin = async event => {
-        event.preventDefault();
-        var obj = { login: loginName.value, password: loginPassword.value };
-        var js = JSON.stringify(obj);
+    const doLogin = async (e) => {
+        e.preventDefault()
 
-        const BASE_URL = 'https://cop4331-group27.herokuapp.com/api/';
-        try {
-            const response = await fetch(`${BASE_URL}login`, {
-                method: 'POST', body: js, headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            var res = JSON.parse(await response.text());
-            if (res.id <= 0) {
-                setMessage('User/Password combination incorrect');
-            }
-            else {
-                var user =
-                    { firstName: res.firstName, lastName: res.lastName, id: res.id }
-                localStorage.setItem('user_data', JSON.stringify(user));
-                setMessage('');
-                window.location.href = '/calendar';
-            }
+        const URL = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC7OHvwvqRgrOvgYoy2C5sgnXSZ02xLZPc';
+        const payload = {
+            "email": username,
+            "password": password,
+            "returnSecureToken": true
         }
-        catch (e) {
-            alert(e.toString());
-            return;
-        }
+
+
+        sendOutsideRequest(URL, payload, (res) => {
+            const { localId } = JSON.parse(res.responseText);
+            console.log(localId);
+        }, (err) => {
+            console.log(err);
+        });
     };
 
     return (
-        <main className='flex bg-orange-200 h-minus-header'>
+        <main className='flex h-minus-header'>
             <div className='grid container m-auto min-h-1/3 bg-yellow-200 place-items-center flex-1'
                 id='loginDiv'>
-                <form onSubmit={doLogin}>
-                    <span id='inner-title'>Please Log In</span><br />
-                    <input className='mt-5 px-2' type='text' id='loginName' placeholder='Username'
-                        ref={(c) => loginName = c} /><br />
-                    <input className='mt-5 mb-5 px-2' type='password' id='loginPassword' placeholder='Password'
-                        ref={(c) => loginPassword = c} /><br />
-                    <input type='submit' id='loginButton' className='w-40 bg-red-500' value='Log in'
-                        onClick={doLogin} />
+                <form className='grid grid-cols-1 gap-6' onSubmit={doLogin}>
+                    <div className='grid grid-cols-1 gap-2'>
+                        <label htmlFor='username'>Username</label>
+                        <input type='text' name='username' id='username' value={username}
+                            onChange={(e) => setUsername(e.target.value)} />
+                    </div>
+                    <div className='grid grid-cols-1 gap-2'>
+                        <label htmlFor='password'>Password</label>
+                        <input type='password' name='password' id='password' value={password}
+                            onChange={(e) => setPassword(e.target.value)} />
+                    </div>
+                    <div className='grid grid-cols-1 gap-2'>
+                        <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>Login</button>
+                    </div>
                 </form>
-                <span id='loginResult'>{message}</span>
+                <span id='loginResult'></span>
             </div>
         </main>
     );

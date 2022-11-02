@@ -7,14 +7,15 @@ import 'react-circular-progressbar/dist/styles.css';
 
 function Budget(props) {
     function lerpColor(a, b, amount) {
+        const bounded = Math.min(Math.max(amount, 0), 1);
 
         var ah = parseInt(a.replace(/#/g, ''), 16),
             ar = ah >> 16, ag = ah >> 8 & 0xff, ab = ah & 0xff,
             bh = parseInt(b.replace(/#/g, ''), 16),
             br = bh >> 16, bg = bh >> 8 & 0xff, bb = bh & 0xff,
-            rr = ar + amount * (br - ar),
-            rg = ag + amount * (bg - ag),
-            rb = ab + amount * (bb - ab);
+            rr = ar + bounded * (br - ar),
+            rg = ag + bounded * (bg - ag),
+            rb = ab + bounded * (bb - ab);
 
         return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
     }
@@ -32,13 +33,21 @@ function Budget(props) {
 
     return (
         <div className='grid grid-cols-1'>
-            <h2 className='text-xl font-bold'>{budget.name}</h2>
+            <EdittableText
+                type='text'
+                value={budget.name}
+                onChange={(e) => {
+                    budget.name = e.target.value;
+                    props.setBudgets([...props.budgets]);
+                }}
+            />
             <span style={{ width: 200, height: 200 }}>
                 <CircularProgressbar styles={buildStyles({ pathColor: color })} value={percent} text={`${percent}%`} />
             </span>
             <span className='m-auto flex'>
                 <h3 className='font-bold'>$</h3>
                 <EdittableText
+                    type='number'
                     value={budget.spent}
                     max={budget.total}
                     onChange={(e) => {
@@ -49,6 +58,7 @@ function Budget(props) {
                 <p className='mx-1 my-px p-0'>out of</p>
                 <h3 className='font-bold'>$</h3>
                 <EdittableText
+                    type='number'
                     value={budget.total}
                     onChange={(e) => {
                         budget.total = e.target.value;

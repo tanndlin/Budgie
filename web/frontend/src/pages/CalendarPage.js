@@ -14,7 +14,7 @@ function CalendarPage(props) {
 
     return (
         <div className="h-screen">
-            <main className="bg-orange-200 min-h-minus-header">
+            <main className="min-h-minus-header">
                 <BigCalendar bills={props.bills} modifyEvents={modifyEvents} />
 
                 <BudgetsView

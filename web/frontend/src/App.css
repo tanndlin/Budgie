@@ -1,3 +1,13 @@
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+    -moz-appearance: textfield;
+}
+
 .rbc-calendar {
     min-height: 500px;
     height: 100%;
@@ -38,4 +48,8 @@
 .paid {
     background-color: rgb(74 222 128) !important;
     color: black !important;
+}
+
+#listView {
+    height: calc(100% - 42px);
 }

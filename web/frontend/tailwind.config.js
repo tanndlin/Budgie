@@ -15,6 +15,7 @@ module.exports = {
                 '9/10': '90%',
                 'minus-header': 'calc(100vh - 4rem)',
                 calendar: 'calc((100vh - 4rem) * 9/10 * 4/5)',
+                500: '500px',
             },
             width: {
                 '1/10': '10%',
@@ -39,6 +40,12 @@ module.exports = {
                 700: '700px',
                 800: '800px',
                 900: '900px',
+            },
+            maxHeight: {
+                '7/10screen': '70vh',
+                '3/4screen': '75vh',
+                '8/10screen': '80vh',
+                '9/10screen': '90vh',
             },
         },
     },

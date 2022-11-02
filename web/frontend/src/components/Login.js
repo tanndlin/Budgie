@@ -32,10 +32,8 @@ function Login() {
                 <form onSubmit={doLogin}>
                     <span className='grid place-items-center text-[#3B3548] text-[64px]' id='inner-title'>Log In</span><br />
                     <div className='grid place-items-center w-80 h-80 my-[20px] bg-[#b2c6ec] bg-opacity-[.7] rounded-[10px] overflow-hidden'>
-                        <input className='mt-[100px] px-[5px] placeholder-[#4D4D4D] rounded-[10px]' type='text' id='loginName' placeholder='Email'
-                            ref={(c) => loginName = c} /><br />
-                        <input className='mb-[5px] px-[5px] placeholder-[#4D4D4D] rounded-[10px]' type='password' id='loginPassword' placeholder='Password'
-                            ref={(c) => loginPassword = c} /><br />
+                        <input className='mt-[100px] px-[5px] placeholder-[#4D4D4D] rounded-[10px]' type='text' id='loginName' placeholder='Email' /><br />
+                        <input className='mb-[5px] px-[5px] placeholder-[#4D4D4D] rounded-[10px]' type='password' id='loginPassword' placeholder='Password' /><br />
                         <input className='w-40 mx-[5px] bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD]' type='submit' id='loginButton' value='Log in'
                             onClick={doLogin} />
                         <input className='mb-[100px] w-40 mx-[5px] text-[#189DFD] hover:text-[#3818FD]' type='submit' id='forgotPassword' value='forgot password?'

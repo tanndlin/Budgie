@@ -13,7 +13,7 @@ function ListPage(props) {
 
     return (
         <div className="h-minus-header min-h-minus-header">
-            <main className='bg-orange-200 min-h-full'>
+            <main className='min-h-full'>
                 <ListView
                     bills={props.bills}
                     setBills={props.setBills}

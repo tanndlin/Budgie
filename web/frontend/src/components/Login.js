@@ -9,7 +9,7 @@ function Login() {
     };
 
     return (
-        <main className='flex bg-orange-200 h-minus-header'>
+        <main className='flex h-minus-header'>
             <div className='grid container m-auto min-h-1/3 bg-yellow-200 place-items-center flex-1'
                 id='loginDiv'>
                 <form onSubmit={doLogin}>

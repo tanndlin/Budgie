@@ -17,6 +17,8 @@ export function sendRequest(path, payload, callback, errorCallback) {
             }
 
             callback(xhr);
+        } else {
+            errorCallback(xhr.responseText);
         }
     };
 
@@ -41,6 +43,8 @@ export function sendOutsideRequest(url, payload, callback, errorCallback) {
 
             callback(xhr);
             return;
+        } else {
+            errorCallback(xhr.responseText);
         }
     };
 

@@ -15,7 +15,7 @@ function App() {
   return (
     <BrowserRouter>
       <div>
-        <Header
+        {/* <Header
           {...{
             user,
             setUser,
@@ -25,7 +25,7 @@ function App() {
             setBudgets,
           }}
         >
-        </Header>
+        </Header> */}
 
         <Routes>
           <Route path="/" element={<LoginPage {...{

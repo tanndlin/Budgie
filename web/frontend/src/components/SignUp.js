@@ -53,7 +53,7 @@ function SignUp() {
                         onClick={doSignUp} />
                 </form>
                 <footer className='flex'>
-                    <span className='m-auto' id='loginResult'>{message}</span>
+                    <span className='m-auto'>{message}</span>
                 </footer>
             </div>
         </section>

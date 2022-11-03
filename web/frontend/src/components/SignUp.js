@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { pretty, sendOutsideRequest } from '../common/Requests';
+import md5 from 'md5';
 
 function SignUp() {
     const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ function SignUp() {
         const URL = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC7OHvwvqRgrOvgYoy2C5sgnXSZ02xLZPc';
         const payload = {
             "email": email,
-            "password": password,
+            "password": md5(password),
             "returnSecureToken": true
         }
 

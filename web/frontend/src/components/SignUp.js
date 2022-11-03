@@ -1,13 +1,41 @@
 import React, { useState } from 'react';
+import { sendOutsideRequest } from '../common/Requests';
 
 function SignUp() {
-    var signUpEmail;
-    var signUpPassword;
-    var signUpConfirmPassword;
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
     const [message, setMessage] = useState('');
 
-    const doSignUp = async event => {
-        // to do
+
+    const doSignUp = async (e) => {
+        e.preventDefault()
+
+        if (password !== confirmPassword) {
+            setMessage('Passwords do not match');
+            return;
+        }
+
+        const URL = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC7OHvwvqRgrOvgYoy2C5sgnXSZ02xLZPc';
+        const payload = {
+            "email": email,
+            "password": password,
+            "returnSecureToken": true
+        }
+
+
+        sendOutsideRequest(URL, payload, (res) => {
+            const { localId } = JSON.parse(res.responseText);
+            console.log(localId);
+
+
+            setMessage('Account created successfully');
+        }, (err) => {
+            console.log(err);
+
+            setMessage('Account creation failed');
+        });
     };
 
     return (
@@ -18,11 +46,11 @@ function SignUp() {
                     <span className='grid place-items-center text-[#3B3548] text-[64px]' id='inner-title'>Sign Up</span><br />
                     <div className='grid place-items-center w-3/4 m-auto bg-[#b2c6ec] bg-opacity-[.7] rounded-md'>
                         <input className='mt-[100px] px-[5px] placeholder-[#4D4D4D] rounded-md' type='text' id='signUpEmail' placeholder='Email'
-                            ref={(c) => signUpEmail = c} /><br />
+                            onChange={(e) => setEmail(e.target.value)} /><br />
                         <input className='px-[5px] placeholder-[#4D4D4D] rounded-md' type='password' id='signUpPassword' placeholder='Password'
-                            ref={(c) => signUpPassword = c} /><br />
+                            onChange={(e) => setPassword(e.target.value)} /><br />
                         <input className='mb-[5px] px-[5px] placeholder-[#4D4D4D] rounded-md' type='password' id='signUpConfirmPassword' placeholder='Confirm Password'
-                            ref={(c) => signUpConfirmPassword = c} /><br />
+                            onChange={(e) => setConfirmPassword(e.target.value)} /><br />
                         <input className='mb-[100px] w-40 mx-[5px] bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD]' type='submit' id='signUpButton' value='Sign Up'
                             onClick={doSignUp} />
                     </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { sendOutsideRequest } from '../common/Requests';
 
 function Login() {
-    const [username, setUsername] = React.useState('');
+    const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
     const doLogin = async (e) => {
@@ -10,7 +10,7 @@ function Login() {
 
         const URL = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC7OHvwvqRgrOvgYoy2C5sgnXSZ02xLZPc';
         const payload = {
-            "email": username,
+            "email": email,
             "password": password,
             "returnSecureToken": true
         }
@@ -32,8 +32,10 @@ function Login() {
                 <form onSubmit={doLogin}>
                     <span className='grid place-items-center text-[#3B3548] text-[64px]' id='inner-title'>Log In</span><br />
                     <div className='grid place-items-center w-3/4 m-auto bg-[#b2c6ec] bg-opacity-[.7] rounded-md overflow-hidden'>
-                        <input className='mt-[100px] px-[5px] placeholder-[#4D4D4D] rounded-md' type='text' id='loginName' placeholder='Email' /><br />
-                        <input className='mb-[5px] px-[5px] placeholder-[#4D4D4D] rounded-md' type='password' id='loginPassword' placeholder='Password' /><br />
+                        <input className='mt-[100px] px-[5px] placeholder-[#4D4D4D] rounded-md' type='text' id='loginName' placeholder='Email'
+                            onChange={(e) => setEmail(e.target.value)} /><br />
+                        <input className='mb-[5px] px-[5px] placeholder-[#4D4D4D] rounded-md' type='password' id='loginPassword' placeholder='Password'
+                            onChange={(e) => setPassword(e.target.value)} /><br />
                         <input className='rounded-md w-40 mx-[5px] bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD]' type='submit' id='loginButton' value='Log in'
                             onClick={doLogin} />
                         <input className='mb-[100px] w-40 mx-[5px] text-[#189DFD] hover:text-[#3818FD]' type='submit' id='forgotPassword' value='forgot password?'

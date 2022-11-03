@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DividerImage from '../img/divider.png';
+import DividerImage from '../img/divider.jpg';
 
 function Divider() {
     const [dividerToggle, setDividerToggle] = useState(true);

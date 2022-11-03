@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { sendOutsideRequest } from '../common/Requests';
+import { pretty, sendOutsideRequest } from '../common/Requests';
+import md5 from 'md5';
 
 function SignUp() {
     const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ function SignUp() {
         const URL = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC7OHvwvqRgrOvgYoy2C5sgnXSZ02xLZPc';
         const payload = {
             "email": email,
-            "password": password,
+            "password": md5(password),
             "returnSecureToken": true
         }
 
@@ -30,30 +31,30 @@ function SignUp() {
             console.log(localId);
 
             setMessage('Account created successfully');
-        }, (res) => {
-            console.log(res);
-            setMessage(res.error.message);
+        }, (err) => {
+            console.log(err);
+            setMessage(pretty(err.message));
         });
     };
 
     return (
-        <section className='flex'>
-            <div className='grid pb-4 container bg-[#BBE9E7] bg-opacity-[.55] rounded-md flex-1'
-                id='signUpDiv'>
-                <form onSubmit={doSignUp}>
-                    <span className='grid place-items-center text-[#3B3548] text-[64px]' id='inner-title'>Sign Up</span><br />
-                    <div className='grid place-items-center w-3/4 m-auto bg-[#b2c6ec] bg-opacity-[.7] rounded-md'>
-                        <input className='mt-[100px] px-[5px] placeholder-[#4D4D4D] rounded-md' type='text' id='signUpEmail' placeholder='Email'
-                            onChange={(e) => setEmail(e.target.value)} /><br />
-                        <input className='px-[5px] placeholder-[#4D4D4D] rounded-md' type='password' id='signUpPassword' placeholder='Password'
-                            onChange={(e) => setPassword(e.target.value)} /><br />
-                        <input className='mb-[5px] px-[5px] placeholder-[#4D4D4D] rounded-md' type='password' id='signUpConfirmPassword' placeholder='Confirm Password'
-                            onChange={(e) => setConfirmPassword(e.target.value)} /><br />
-                        <input className='mb-[100px] w-40 mx-[5px] bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD]' type='submit' id='signUpButton' value='Sign Up'
-                            onClick={doSignUp} />
-                    </div>
+        <section className='flex container h-full bg-[#BBE9E7] bg-opacity-50 rounded-md'>
+            <div className='w-3/4 py-4 h-3/4 m-auto bg-[#b2c6ec] bg-opacity-[.7] rounded-md'>
+                <h1 className='text-center text-[#3B3548] text-6xl mb-16'>Sign Up</h1>
+
+                <form className='grid grid-rows-4 h-1/2 place-items-center' onSubmit={doSignUp}>
+                    <input className='px-1 placeholder-[#4D4D4D] rounded-md' type='text' placeholder='Email'
+                        onChange={(e) => setEmail(e.target.value)} />
+                    <input className='px-1 placeholder-[#4D4D4D] rounded-md' type='password' placeholder='Password'
+                        onChange={(e) => setPassword(e.target.value)} />
+                    <input className='px-1 placeholder-[#4D4D4D] rounded-md' type='password' placeholder='Password'
+                        onChange={(e) => setConfirmPassword(e.target.value)} />
+                    <input className='w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' type='submit' value='Sign Up'
+                        onClick={doSignUp} />
                 </form>
-                <span id='signUpResult'>{message}</span>
+                <footer className='flex'>
+                    <span className='m-auto'>{message}</span>
+                </footer>
             </div>
         </section>
     );

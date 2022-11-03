@@ -1,9 +1,11 @@
 import React from 'react';
-import { sendOutsideRequest } from '../common/Requests';
+import { pretty, sendOutsideRequest } from '../common/Requests';
 
 function Login() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+
+    const [message, setMessage] = React.useState('');
 
     const doLogin = async (e) => {
         e.preventDefault()
@@ -24,28 +26,27 @@ function Login() {
             window.location.href = '/calendar';
         }, (err) => {
             console.log(err);
+            setMessage(pretty(err.message));
         });
     };
 
     // to do: add on-click function for forgot password
     return (
-        <section className='flex'>
-            <div className='grid pb-4 container bg-[#BBE9E7] bg-opacity-[.55] rounded-md flex-1'
-                id='loginDiv'>
-                <form onSubmit={doLogin}>
-                    <span className='grid place-items-center text-[#3B3548] text-[64px]' id='inner-title'>Log In</span><br />
-                    <div className='grid place-items-center w-3/4 m-auto bg-[#b2c6ec] bg-opacity-[.7] rounded-md overflow-hidden'>
-                        <input className='mt-[100px] px-[5px] placeholder-[#4D4D4D] rounded-md' type='text' id='loginName' placeholder='Email'
-                            onChange={(e) => setEmail(e.target.value)} /><br />
-                        <input className='mb-[5px] px-[5px] placeholder-[#4D4D4D] rounded-md' type='password' id='loginPassword' placeholder='Password'
-                            onChange={(e) => setPassword(e.target.value)} /><br />
-                        <input className='rounded-md w-40 mx-[5px] bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD]' type='submit' id='loginButton' value='Log in'
-                            onClick={doLogin} />
-                        <input className='mb-[100px] w-40 mx-[5px] text-[#189DFD] hover:text-[#3818FD]' type='submit' id='forgotPassword' value='forgot password?'
-                        />
-                    </div>
+        <section className='flex container h-full bg-[#BBE9E7] bg-opacity-50 rounded-md'>
+            <div className='w-3/4 py-4 h-3/4 m-auto bg-[#b2c6ec] bg-opacity-[.7] rounded-md'>
+                <h1 className='text-center text-[#3B3548] text-6xl mb-16'>Log In</h1>
+
+                <form className='grid grid-rows-4 h-1/2 place-items-center' onSubmit={doLogin}>
+                    <input className='row-start-1 px-1 placeholder-[#4D4D4D] rounded-md' type='text' placeholder='Email'
+                        onChange={(e) => setEmail(e.target.value)} />
+                    <input className='row-start-2 px-1 placeholder-[#4D4D4D] rounded-md' type='password' placeholder='Password'
+                        onChange={(e) => setPassword(e.target.value)} />
+                    <input className='row-start-4 w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' type='submit' value='Log In'
+                        onClick={doLogin} />
                 </form>
-                <span id='loginResult'></span>
+                <footer className='flex'>
+                    <span className='m-auto' id='loginResult'>{message}</span>
+                </footer>
             </div>
         </section>
     );

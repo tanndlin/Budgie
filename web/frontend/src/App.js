@@ -14,50 +14,81 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div>
-        {/* <Header
-          {...{
-            user,
-            setUser,
-            bills,
-            setBills,
-            budgets,
-            setBudgets,
-          }}
-        >
-        </Header> */}
+      <Routes>
+        <Route path="/" element={
+          <div className='h-screen'>
+            <Header
+              {...{
+                user,
+                setUser,
+                bills,
+                setBills,
+                budgets,
+                setBudgets,
+                showNav: false,
+              }}
+            />
+            <LoginPage {...{
+              user,
+              setUser,
+              bills,
+              setBills,
+              budgets,
+              setBudgets,
+            }} />
+          </div>
+        } />
 
-        <Routes>
-          <Route path="/" element={<LoginPage {...{
-            user,
-            setUser,
-            bills,
-            setBills,
-            budgets,
-            setBudgets,
-          }} />} />
+        <Route path="/calendar" element={
 
-          <Route path="/calendar" element={<CalendarPage {...{
-            user,
-            setUser,
-            bills,
-            setBills,
-            budgets,
-            setBudgets,
-          }} />} />
+          <div className='h-screen'>
+            <Header
+              {...{
+                user,
+                setUser,
+                bills,
+                setBills,
+                budgets,
+                setBudgets,
+                showNav: true,
+              }}
+            />
+            <CalendarPage {...{
+              user,
+              setUser,
+              bills,
+              setBills,
+              budgets,
+              setBudgets,
+            }} />
+          </div>
+        } />
 
-          <Route path="/list" element={<ListPage {...{
-            user,
-            setUser,
-            bills,
-            setBills,
-            budgets,
-            setBudgets,
-          }} />} />
-
-        </Routes>
-      </div>
-    </BrowserRouter>
+        <Route path="/list" element={
+          <divc className='h-screen'>
+            <Header
+              {...{
+                user,
+                setUser,
+                bills,
+                setBills,
+                budgets,
+                setBudgets,
+                showNav: true,
+              }}
+            />
+            <ListPage {...{
+              user,
+              setUser,
+              bills,
+              setBills,
+              budgets,
+              setBudgets,
+            }} />
+          </divc>
+        } />
+      </Routes >
+    </BrowserRouter >
   );
 }
 

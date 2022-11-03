@@ -41,8 +41,11 @@ function Login() {
                         onChange={(e) => setEmail(e.target.value)} />
                     <input className='row-start-2 px-1 placeholder-[#4D4D4D] rounded-md' type='password' placeholder='Password'
                         onChange={(e) => setPassword(e.target.value)} />
-                    <input className='row-start-4 w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' type='submit' value='Log In'
-                        onClick={doLogin} />
+                    <span className='row-start-4 flex flex-col'>
+                        <input className='w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' type='submit' value='Log In'
+                            onClick={doLogin} />
+                        <a className='ml-4 text-[#189DFD] hover:text-[#3818FD]' href='/forgot-password'>Forgot Password?</a>
+                    </span>
                 </form>
                 <footer className='flex'>
                     <span className='m-auto' id='loginResult'>{message}</span>

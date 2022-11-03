@@ -5,8 +5,8 @@ import Divider from '../components/Divider';
 
 const LoginPage = (props) => {
     return (
-        <div className="min-h-minus-header h-1 flex ">
-            <main className='grid grid-cols-2 w-3/4 w-auto m-auto relative min-w-[500px] h-3/4 max-h-[615px]'>
+        <div className="min-h-minus-header h-1 flex">
+            <main className='grid grid-cols-2 w-3/4 max-w-[960px] m-auto relative min-w-[500px] h-3/4 max-h-[615px]'>
                 <Login />
                 <SignUp />
                 <Divider />

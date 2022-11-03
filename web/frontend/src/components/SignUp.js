@@ -29,12 +29,10 @@ function SignUp() {
             const { localId } = JSON.parse(res.responseText);
             console.log(localId);
 
-
             setMessage('Account created successfully');
-        }, (err) => {
-            console.log(err);
-
-            setMessage('Account creation failed');
+        }, (res) => {
+            console.log(res);
+            setMessage(res.error.message);
         });
     };
 

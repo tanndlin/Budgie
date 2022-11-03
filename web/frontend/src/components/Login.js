@@ -19,6 +19,9 @@ function Login() {
         sendOutsideRequest(URL, payload, (res) => {
             const { localId } = JSON.parse(res.responseText);
             console.log(localId);
+
+            // Go to calendar page
+            window.location.href = '/calendar';
         }, (err) => {
             console.log(err);
         });

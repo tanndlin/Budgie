@@ -44,7 +44,7 @@ export function sendOutsideRequest(url, payload, callback, errorCallback) {
             callback(xhr);
             return;
         } else {
-            errorCallback(xhr.responseText);
+            errorCallback(JSON.parse(xhr.responseText));
         }
     };
 

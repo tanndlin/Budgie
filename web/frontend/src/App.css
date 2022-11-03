@@ -53,3 +53,7 @@ input[type='number'] {
 #listView {
     height: calc(100% - 42px);
 }
+
+.arrow:hover {
+    fill: #3818fd;
+}

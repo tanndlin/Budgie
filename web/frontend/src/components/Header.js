@@ -11,18 +11,21 @@ function Header(props) {
             {props.showNav && (
                 <span className='flex flex-cols gap-x-3 m-auto'>
                     <Link
+                        className='font-bold hover:text-[#189DFD]'
                         to={{
                             pathname: '/',
                             state: props,
                         }}
                     >Home</Link>
                     <Link
+                        className='font-bold hover hover:text-[#189DFD]'
                         to={{
                             pathname: '/calendar',
                             state: props,
                         }}
                     >Calendar</Link>
                     <Link
+                        className='font-bold hover hover:text-[#189DFD]'
                         to={{
                             pathname: '/list',
                             state: props,

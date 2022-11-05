@@ -57,3 +57,10 @@ input[type='number'] {
 .arrow:hover {
     fill: #3818fd;
 }
+
+#bwLogo {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    scale: 0.75;
+}

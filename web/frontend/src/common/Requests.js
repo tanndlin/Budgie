@@ -40,8 +40,10 @@ export function sendOutsideRequest(url, payload, callback, errorCallback) {
             return;
         }
 
+
         const { error } = JSON.parse(xhr.responseText);
-        errorCallback(error);
+        if (error)
+            errorCallback(error);
     };
 
     xhr.send(JSON.stringify(payload));

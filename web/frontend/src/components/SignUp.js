@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { pretty, sendOutsideRequest } from '../common/Requests';
-import md5 from 'md5';
+import sha256 from 'js-sha256';
 
-function SignUp() {
+function SignUp(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -21,16 +21,26 @@ function SignUp() {
         const URL = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC7OHvwvqRgrOvgYoy2C5sgnXSZ02xLZPc';
         const payload = {
             "email": email,
-            "password": md5(password),
+            "password": sha256(password),
             "returnSecureToken": true
         }
-
 
         sendOutsideRequest(URL, payload, (res) => {
             const { localId } = JSON.parse(res.responseText);
             console.log(localId);
 
             setMessage('Account created successfully');
+            props.setLoginEmail(email);
+
+            setEmail('');
+            setPassword('');
+            setConfirmPassword('');
+
+            setTimeout(() => {
+                props.setDividerToggle(true)
+                setMessage('');
+            }, 1000);
+
         }, (err) => {
             console.log(err);
             setMessage(pretty(err.message));
@@ -44,11 +54,11 @@ function SignUp() {
 
                 <form className='grid grid-rows-4 h-1/2 place-items-center' onSubmit={doSignUp}>
                     <input className='px-1 placeholder-[#4D4D4D] rounded-md' type='text' placeholder='Email'
-                        onChange={(e) => setEmail(e.target.value)} />
+                        onChange={(e) => setEmail(e.target.value)} value={email} />
                     <input className='px-1 placeholder-[#4D4D4D] rounded-md' type='password' placeholder='Password'
-                        onChange={(e) => setPassword(e.target.value)} />
+                        onChange={(e) => setPassword(e.target.value)} value={password} />
                     <input className='px-1 placeholder-[#4D4D4D] rounded-md' type='password' placeholder='Password'
-                        onChange={(e) => setConfirmPassword(e.target.value)} />
+                        onChange={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} />
                     <input className='w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' type='submit' value='Sign Up'
                         onClick={doSignUp} />
                 </form>

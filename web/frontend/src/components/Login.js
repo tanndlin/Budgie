@@ -1,11 +1,9 @@
 import React from 'react';
 import { pretty, sendOutsideRequest } from '../common/Requests';
-import md5 from 'md5';
+import sha256 from 'js-sha256';
 
-function Login() {
-    const [email, setEmail] = React.useState('');
+function Login(props) {
     const [password, setPassword] = React.useState('');
-
     const [message, setMessage] = React.useState('');
 
     const doLogin = async (e) => {
@@ -13,8 +11,8 @@ function Login() {
 
         const URL = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC7OHvwvqRgrOvgYoy2C5sgnXSZ02xLZPc';
         const payload = {
-            "email": email,
-            "password": md5(password),
+            "email": props.email,
+            "password": sha256(password),
             "returnSecureToken": true
         }
 
@@ -39,7 +37,7 @@ function Login() {
 
                 <form className='grid grid-rows-4 h-1/2 place-items-center' onSubmit={doLogin}>
                     <input className='row-start-1 px-1 placeholder-[#4D4D4D] rounded-md' type='text' data-testid='email' placeholder='Email'
-                        onChange={(e) => setEmail(e.target.value)} />
+                        onChange={(e) => props.setEmail(e.target.value)} value={props.email} />
                     <input className='row-start-2 px-1 placeholder-[#4D4D4D] rounded-md' type='password' data-testid='password' placeholder='Password'
                         onChange={(e) => setPassword(e.target.value)} />
                     <span className='row-start-4 flex flex-col'>

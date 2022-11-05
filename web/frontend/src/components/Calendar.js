@@ -128,7 +128,7 @@ function BigCalendar(props) {
             <section className="flex flex-col container m-auto">
                 <CalendarControls createBill={createNew} bills={props.bills} />
                 <span
-                    className="container m-auto min-h-500 bg-yellow-200 p-3 rounded-md"
+                    className="container m-auto min-h-500 bg-[#BBE9E7] bg-opacity-50 p-3 rounded-md"
                     onClick={handleCalendarClick}
                 >
                     <Calendar

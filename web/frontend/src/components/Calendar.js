@@ -108,7 +108,6 @@ function BigCalendar(props) {
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
                 style={ModalStyles}
-                contentLabel="Example Modal"
                 ariaHideApp={false}
             >
                 <CreateEvent

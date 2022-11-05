@@ -32,7 +32,7 @@ function Budget(props) {
 
 
     return (
-        <div className='grid grid-cols-1 rounded-md bg-[#b2c6ec] bg-opacity-[.7] w-[232px] p-4'>
+        <div className='grid grid-cols-1 w-[232px] p-4'>
             <EdittableText
                 type='text'
                 value={budget.name}

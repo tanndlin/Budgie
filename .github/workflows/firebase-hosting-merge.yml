@@ -5,7 +5,11 @@ name: Deploy to Firebase Hosting on merge
 'on':
   push:
     branches:
+<<<<<<< HEAD
       - API
+=======
+      - master
+>>>>>>> a2612daa31d6922012b3c769eb516c580cf83b43
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
@@ -18,4 +22,7 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COP4331_LARGE_PROJECT_27 }}'
           channelId: live
           projectId: cop4331-large-project-27
+<<<<<<< HEAD
 
+=======
+>>>>>>> a2612daa31d6922012b3c769eb516c580cf83b43

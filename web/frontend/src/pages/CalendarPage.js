@@ -1,6 +1,7 @@
 import React from 'react';
 import BigCalendar from '../components/Calendar';
 import BudgetsView from '../components/BudgetsView';
+import ExtraneousView from '../components/ExtraneousView';
 
 function CalendarPage(props) {
     // Does both operations because 2 setstates overwrite each other
@@ -20,6 +21,11 @@ function CalendarPage(props) {
                 <BudgetsView
                     budgets={props.budgets}
                     setBudgets={props.setBudgets}
+                />
+
+                <ExtraneousView
+                    extras={props.extras}
+                    setExtras={props.setExtras}
                 />
             </main>
         </div>

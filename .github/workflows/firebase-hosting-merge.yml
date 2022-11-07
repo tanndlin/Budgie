@@ -18,3 +18,4 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COP4331_LARGE_PROJECT_27 }}'
           channelId: live
           projectId: cop4331-large-project-27
+

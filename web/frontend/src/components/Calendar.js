@@ -44,7 +44,7 @@ function BigCalendar(props) {
                     if (b.id === bill.id)
                         return {
                             ...b,
-                            paid: paidDate,
+                            lastPaid: paidDate,
                         };
 
                     return b;
@@ -102,7 +102,7 @@ function BigCalendar(props) {
 
     function eventStyleGetter(event, start, end, isSelected) {
         return {
-            className: event.paid >= start ? 'paid' : 'unpaid',
+            className: event.lastPaid >= start ? 'paid' : 'unpaid',
         };
     }
 

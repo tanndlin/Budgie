@@ -12,7 +12,6 @@ const localizer = momentLocalizer(moment);
 
 function BigCalendar(props) {
     const [modalIsOpen, setIsOpen] = React.useState(false);
-    const [isEdit, setIsEdit] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [start, setStart] = React.useState(formatDate(new Date()));
     const [end, setEnd] = React.useState(formatDate(new Date()));
@@ -72,16 +71,14 @@ function BigCalendar(props) {
     }
 
     function resetAllValues() {
-        setIsEdit(false);
         setTitle('');
         setAmount(0);
         setStart(formatDate(new Date()));
+        setEnd(formatDate(new Date()));
         setCurrentBill(null);
     }
 
     function createEdit(event) {
-        setIsEdit(true);
-
         setTitle(event.title);
         setStart(formatDate(event.start));
         setCurrentBill(event);

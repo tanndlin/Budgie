@@ -3,7 +3,6 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import Modal from 'react-modal';
 import CreateEvent from './CreateEvent';
-import CalendarControls from './CalendarControls';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../App.css';
@@ -108,7 +107,6 @@ function BigCalendar(props) {
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
                 style={ModalStyles}
-                contentLabel="Example Modal"
                 ariaHideApp={false}
             >
                 <CreateEvent
@@ -126,11 +124,21 @@ function BigCalendar(props) {
             </Modal>
 
             <section className="flex flex-col container m-auto">
-                <CalendarControls createBill={createNew} bills={props.bills} />
-                <span
-                    className="container m-auto min-h-500 bg-yellow-200 p-3 rounded-md"
+                <div
+                    className="container m-auto mt-5 min-h-500 bg-[#BBE9E7] bg-opacity-50 p-3 rounded-md"
                     onClick={handleCalendarClick}
                 >
+                    <header className="flex flex-row justify-between font-bold mb-3 border-black border-b-2 p-1">
+                        <h1 className="text-2xl">Bills</h1>
+                        <span className='text-md'>
+                            <h2 className=''>{
+                                `Total:  $${Object.entries(props.bills)
+                                    .reduce((acc, [key, bill]) =>
+                                        acc + +bill.amount, 0)}
+                            / month`
+                            }</h2>
+                        </span>
+                    </header>
                     <Calendar
                         localizer={localizer}
                         events={props.bills}
@@ -138,7 +146,11 @@ function BigCalendar(props) {
                         endAccessor="end"
                         eventPropGetter={eventStyleGetter}
                     />
-                </span>
+                    <footer className='border-black border-t-2 p-1 mt-3 flex flex-row gap-4'>
+                        <input className='px-2 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' type='button' value='Add Bill'
+                            onClick={createNew} />
+                    </footer>
+                </div>
             </section>
         </div>
     );

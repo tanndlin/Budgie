@@ -23,7 +23,7 @@ const billCollection = 'bills';
 
 
 //define google cloud function name
-exports.webApi = functions.https.onRequest(main);
+exports.webApi = functions.https.onRequest(app);
 
 // classes for database objects
 class User {
@@ -71,8 +71,11 @@ class Category {
 //create new user
 app.post('/users', async (req, res) => {
     try {
+
+        const ID = admin.getInstance().getCurrentUser.getUid();
+
         const User = {
-            //userID: ,
+            userID: ID,
             bills: [],
             budgets: [],
             categories: []

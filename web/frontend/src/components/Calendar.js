@@ -129,6 +129,21 @@ function BigCalendar(props) {
         return events;
     }
 
+    // Returns true if date is this month or later
+    function billIsCurrent(bill) {
+        const { start, end } = bill;
+        const today = new Date();
+
+        if (start > today)
+            return false;
+
+        if (end.getYear() < today.getYear())
+            return false;
+
+        return end.getMonth() >= today.getMonth();
+    }
+
+
     return (
         <div className="flex min-h-9/10 mb-5">
             <Modal
@@ -159,11 +174,12 @@ function BigCalendar(props) {
                     <header className="flex flex-row justify-between font-bold mb-3 border-black border-b-2 p-1">
                         <h1 className="text-2xl">Bills</h1>
                         <span className='text-md'>
-                            <h2 className=''>{
+                            <h2 data-testid='billSum'>{
                                 `Total:  $${Object.entries(props.bills)
+                                    .filter(([key, bill]) => billIsCurrent(bill))
                                     .reduce((acc, [key, bill]) =>
-                                        acc + +bill.amount, 0)}
-                            / month`
+                                        acc + +bill.amount, 0) ?? 0}
+                                / month`
                             }</h2>
                         </span>
                     </header>

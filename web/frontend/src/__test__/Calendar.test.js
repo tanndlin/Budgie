@@ -50,6 +50,23 @@ test('Sums total of bills', () => {
 
 
     const sum = bills.reduce((acc, bill) => acc + bill.amount, 0);
-    const event = screen.getByText(new RegExp(`${sum}`));
-    expect(event).toBeInTheDocument();
+    const checkContent = screen.getByTestId('billSum');
+    expect(checkContent).toHaveTextContent(`$${sum} / month`);
+});
+
+test('Do not sum bills that no longer recur', () => {
+    render(<BigCalendar
+        bills={[
+            {
+                title: 'Hello World',
+                start: new Date(0),
+                end: new Date(0),
+                amount: 100,
+            }
+        ]}
+    />);
+
+
+    const checkContent = screen.getByTestId('billSum');
+    expect(checkContent).toHaveTextContent('$0 / month');
 });

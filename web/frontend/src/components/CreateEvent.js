@@ -4,16 +4,16 @@ function CreateEvent(props) {
     function editEvent(e) {
         e.preventDefault();
 
+
+        const isPaid = Math.random() < 0.5;
         props.pushEvent({
             title: props.title,
             start: props.start,
             end: props.end,
-            resources: {
-                paid: Math.random() < 0.5,
-                id: Math.random(),
-            },
+            id: Math.random(),
             amount: props.amount,
             frequency: 1,
+            lastPaid: isPaid ? new Date() : null,
         });
 
         props.closeModal();

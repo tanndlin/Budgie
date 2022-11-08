@@ -22,8 +22,7 @@ function CalendarPage(props) {
     // Does both operations because 2 setstates overwrite each other
     function modifyEvents(add, remove) {
         if (remove) {
-            const id = remove.resources.id;
-            add.resources.id = id;
+            add.id = remove.id;
             props.setBills([...props.bills.filter((e) => e !== remove), add]);
         } else {
             props.setBills([...props.bills, add]);

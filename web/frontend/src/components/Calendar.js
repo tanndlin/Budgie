@@ -30,18 +30,21 @@ function BigCalendar(props) {
         if (!e.target.classList.contains('rbc-event-content'))
             return;
 
+        const month = new Date(document.querySelector('.rbc-toolbar-label').innerHTML);
+
         if (e.ctrlKey) {
             const bill = props.bills.find(bill => bill.title === e.target.innerHTML);
-            bill.resources.paid = !bill.resources.paid;
+            bill.paid = !bill.paid;
+
+            const day = bill.start.getDate();
+            const paidDate = new Date(month.getFullYear(), month.getMonth(), day, 1);
 
             const editState = () => {
                 const newState = props.bills.map(b => {
-                    if (b.resoureces.id === bill.resources.id)
+                    if (b.id === bill.id)
                         return {
-                            ...b, resources: {
-                                ...b.resources,
-                                paid: !b.resources.paid
-                            }
+                            ...b,
+                            paid: paidDate,
                         };
 
                     return b;
@@ -49,7 +52,6 @@ function BigCalendar(props) {
                 });
 
                 props.setBills(newState);
-                console.log(newState);
             };
             editState();
             return;
@@ -100,7 +102,7 @@ function BigCalendar(props) {
 
     function eventStyleGetter(event, start, end, isSelected) {
         return {
-            className: event.resources.paid ? 'paid' : 'unpaid',
+            className: event.paid >= start ? 'paid' : 'unpaid',
         };
     }
 
@@ -125,7 +127,6 @@ function BigCalendar(props) {
             return payDates;
         }).flat();
 
-        console.log(events);
         return events;
     }
 
@@ -178,8 +179,7 @@ function BigCalendar(props) {
                                 `Total:  $${Object.entries(props.bills)
                                     .filter(([key, bill]) => billIsCurrent(bill))
                                     .reduce((acc, [key, bill]) =>
-                                        acc + +bill.amount, 0) ?? 0}
-                                / month`
+                                        acc + +bill.amount, 0) ?? 0} / month`
                             }</h2>
                         </span>
                     </header>

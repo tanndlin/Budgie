@@ -22,6 +22,7 @@ function CalendarPage(props) {
     // Does both operations because 2 setstates overwrite each other
     function modifyEvents(add, remove) {
         if (remove) {
+            add.id = remove.id;
             props.setBills([...props.bills.filter((e) => e !== remove), add]);
         } else {
             props.setBills([...props.bills, add]);
@@ -31,7 +32,11 @@ function CalendarPage(props) {
     return (
         <div className="h-screen">
             <main className="min-h-minus-header">
-                <BigCalendar bills={props.bills} modifyEvents={modifyEvents} />
+                <BigCalendar
+                    bills={props.bills}
+                    setBills={props.setBills}
+                    modifyEvents={modifyEvents}
+                />
 
                 <BudgetsView
                     budgets={props.budgets}

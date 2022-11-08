@@ -2,7 +2,6 @@ import React from 'react';
 import Bill from './Bill';
 import CreateEvent from './CreateEvent';
 import Modal from 'react-modal';
-import CalendarControls from './CalendarControls';
 import ModalStyles from '../common/ModalStyles';
 
 function ListView(props) {
@@ -64,7 +63,6 @@ function ListView(props) {
             </Modal>
 
             <div className="flex flex-col container m-auto mb-16">
-                <CalendarControls createBill={createNew} bills={props.bills} />
                 <article className="container p-4 m-auto min-h-500 max-h-3/4screen bg-[#BBE9E7] bg-opacity-50 p-3 rounded-md overflow-y-auto">
                     <span className='font-bold border-black border-b-2 flex flex-row justify-between'>
                         <h1 className="text-2xl">Bills</h1>

@@ -3,7 +3,6 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import Modal from 'react-modal';
 import CreateEvent from './CreateEvent';
-import CalendarControls from './CalendarControls';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../App.css';

@@ -15,6 +15,7 @@ function BigCalendar(props) {
     const [isEdit, setIsEdit] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [start, setStart] = React.useState(formatDate(new Date()));
+    const [end, setEnd] = React.useState(formatDate(new Date()));
     const [amount, setAmount] = React.useState(0);
     const [currentBill, setCurrentBill] = React.useState(null);
 
@@ -35,9 +36,10 @@ function BigCalendar(props) {
 
             const editState = () => {
                 const newState = props.bills.map(b => {
-                    if (b.title === bill.title)
+                    if (b.resoureces.id === bill.resources.id)
                         return {
                             ...b, resources: {
+                                ...b.resources,
                                 paid: !b.resources.paid
                             }
                         };
@@ -47,6 +49,7 @@ function BigCalendar(props) {
                 });
 
                 props.setBills(newState);
+                console.log(newState);
             };
             editState();
             return;
@@ -101,6 +104,31 @@ function BigCalendar(props) {
         };
     }
 
+    function createEvents() {
+        // Each bill will have multiple events for each pay date
+        const events = props.bills.map(bill => {
+            const payDates = [];
+            const startDate = new Date(bill.start);
+            const endDate = new Date(bill.end);
+
+            // Create an event for each pay date
+            while (startDate <= endDate) {
+                payDates.push({
+                    ...bill,
+                    start: new Date(startDate),
+                    end: new Date(startDate),
+                });
+
+                startDate.setMonth(startDate.getMonth() + bill.frequency);
+            }
+
+            return payDates;
+        }).flat();
+
+        console.log(events);
+        return events;
+    }
+
     return (
         <div className="flex min-h-9/10 mb-5">
             <Modal
@@ -110,14 +138,14 @@ function BigCalendar(props) {
                 ariaHideApp={false}
             >
                 <CreateEvent
-                    events={props.bills}
-                    edit={isEdit}
                     title={title}
                     start={start}
+                    end={end}
                     amount={amount}
                     setAmount={setAmount}
                     setTitle={setTitle}
                     setStart={setStart}
+                    setEnd={setEnd}
                     closeModal={closeModal}
                     pushEvent={pushEvent}
                 />
@@ -141,7 +169,7 @@ function BigCalendar(props) {
                     </header>
                     <Calendar
                         localizer={localizer}
-                        events={props.bills}
+                        events={createEvents(props.bills)}
                         startAccessor="start"
                         endAccessor="end"
                         eventPropGetter={eventStyleGetter}

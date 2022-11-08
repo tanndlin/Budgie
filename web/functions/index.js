@@ -23,12 +23,46 @@ const userCollection = 'users';
 //define google cloud function name
 exports.webApi = functions.https.onRequest(main);
 
+// classes for database objects
 class User {
     constructor(userID, bills, budgets, categories) {
         this.userID = String,
         this.bills = [],
         this.budgets = [],
         this.categories = [];
+    }
+}
+
+class Bill {
+    constructor(billID, name, categoryID, price, startDate, endDate, recurrence, lastPaidDate) {
+        this.billID = String,
+        this.name = String,
+        this.categoryID = String,
+        this.price = float,
+        this.startDate = Date,
+        this.endDate = Date,
+        this.recurrence = String,
+        this.lastPaidDate = Date;
+    }
+}
+
+class Budget {
+    constructor(budgetID, name, expectedPrice, actualPrice, startDate, endDate, recurrence, payments) {
+        this.budgetID = String,
+        this.name = String,
+        this.expectedPrice = float,
+        this.actualPrice = float,
+        this.startDate = Date,
+        this.endDate = Date,
+        this.recurrence = String,
+        this.payments = [];
+    }
+}
+
+class Category {
+    constructor(categoryID, name) {
+        this.categoryID = String,
+        this.name = String;
     }
 }
 

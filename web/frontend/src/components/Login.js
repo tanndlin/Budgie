@@ -21,8 +21,8 @@ function Login(props) {
             const { localId } = JSON.parse(res.responseText);
             console.log(localId);
 
-            // Go to calendar page
-            window.location.href = '/calendar';
+            // Redirect to calendar page and pass states
+            window.location.href = `/calendar?user=${localId}`;
         }, (err) => {
             console.log(err);
             setMessage(pretty(err.message));

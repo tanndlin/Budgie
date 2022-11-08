@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import DividerImage from '../img/divider.jpg';
 
 function Divider(props) {

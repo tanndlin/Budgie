@@ -14,23 +14,10 @@ function Header(props) {
                         className='font-bold hover:text-[#189DFD]'
                         to={{
                             pathname: '/',
-                            state: props,
+                            // state: props,
                         }}
-                    >Home</Link>
-                    <Link
-                        className='font-bold hover hover:text-[#189DFD]'
-                        to={{
-                            pathname: '/calendar',
-                            state: props,
-                        }}
-                    >Calendar</Link>
-                    <Link
-                        className='font-bold hover hover:text-[#189DFD]'
-                        to={{
-                            pathname: '/list',
-                            state: props,
-                        }}
-                    >List</Link>
+                    >Log out</Link>
+
                 </span>
             )
             }

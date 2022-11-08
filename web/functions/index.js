@@ -93,7 +93,7 @@ app.listen(port, () => {
   })
 
 // Create bill
-app.post('/bills', async (req, res) => {
+app.post('/CreateBill', async (req, res) => {
     try {
         const Bill = {
             //billID: String,

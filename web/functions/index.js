@@ -21,7 +21,7 @@ const db = admin.firestore();
 const userCollection = 'users';
 
 //define google cloud function name
-exports.webApi = functions.https.onRequest(main);
+exports.webApi = functions.https.onRequest(app);
 
 // classes for database objects
 class User {
@@ -69,14 +69,17 @@ class Category {
 //create new user
 app.post('/users', async (req, res) => {
     try {
+
+        const ID = admin.getInstance().getCurrentUser.getUid();
+
         const User = {
-            //userID: ,
+            userID: ID,
             bills: [],
             budgets: [],
             categories: []
         }
 
-        const newDoc = await db.collection(userCollection).add(user);
+        const newDoc = await db.collection(userCollection).add(User);
         res.status(201).send(`Created a new user: ${newDoc.id}`);
     } catch (error) {
         res.status(400).send(`User addition to database was unsuccessful`)

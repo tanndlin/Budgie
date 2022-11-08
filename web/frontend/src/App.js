@@ -4,7 +4,6 @@ import './index.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from './pages/LoginPage';
 import CalendarPage from './pages/CalendarPage';
-import ListPage from './pages/ListPage';
 import Header from './components/Header';
 
 function App() {
@@ -47,15 +46,6 @@ function App() {
               {...headerProps(true)}
             />
             <CalendarPage {...props} />
-          </div>
-        } />
-
-        <Route path="/list" element={
-          <div className='h-screen'>
-            <Header
-              {...headerProps(true)}
-            />
-            <ListPage {...props} />
           </div>
         } />
       </Routes >

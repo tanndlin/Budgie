@@ -103,6 +103,7 @@ class _LoginPageState extends State<LoginPage> {
     UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: userEmail,
         password: hashed_password.toString());
+    print(hashed_password.toString());
   }
 
   _login(String email, String password) async {
@@ -118,6 +119,7 @@ class _LoginPageState extends State<LoginPage> {
         login_verification = "bad";
       } else if (e.code == 'wrong-password') {
         print('Incorrect password!');
+        print(hashed_password.toString());
         login_verification = "bad";
       }
     }

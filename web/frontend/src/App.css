@@ -57,6 +57,11 @@ input[type='number'] {
 
 .arrow:hover {
     fill: #3818fd;
+    transition: fill 250ms;
+}
+
+.arrow {
+    transition: fill 250ms;
 }
 
 #bwLogo {
@@ -64,4 +69,9 @@ input[type='number'] {
     width: 100%;
     object-fit: contain;
     scale: 0.75;
+}
+
+.shrink {
+    transform: scale(0.8);
+    transition: 0.3s;
 }

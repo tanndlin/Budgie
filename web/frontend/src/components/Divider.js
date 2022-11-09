@@ -12,7 +12,7 @@ function Divider(props) {
 
     // to do: add on-click function for forgot password
     return (
-        <div id='divider' className={"transition-[1s] w-1/2 absolute right-0 group transform h-full" + (props.dividerToggle ? '' : dividerPositionClass)} onClick={() => { props.setDividerToggle(!props.dividerToggle) }}>
+        <div id='divider' className={"duration-300 w-1/2 min-h-[348px] absolute right-0 group transform h-full" + (props.dividerToggle ? '' : dividerPositionClass)} onClick={() => { props.setDividerToggle(!props.dividerToggle) }}>
             <img className='absolute rounded-md h-full w-full' src={DividerImage} alt='Wood Texture' />
             <img id='bwLogo' className='absolute h-full w-full' src={bwLogo} alt='Bird Logo' />
 

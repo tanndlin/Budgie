@@ -49,7 +49,7 @@ function SignUp(props) {
 
     return (
         <section className='flex container h-full bg-[#BBE9E7] bg-opacity-50 rounded-md'>
-            <div className='w-3/4 py-4 h-3/4 m-auto bg-[#b2c6ec] bg-opacity-[.7] rounded-md'>
+            <div className={'w-3/4 py-4 h-3/4 m-auto bg-[#b2c6ec] bg-opacity-[.7] rounded-md duration-300' + (props.dividerToggle ? ' shrink' : '')}>
                 <h1 className='text-center text-[#3B3548] text-6xl mb-16'>Sign Up</h1>
 
                 <form className='grid grid-rows-4 h-1/2 place-items-center' onSubmit={doSignUp}>

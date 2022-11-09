@@ -12,6 +12,10 @@ function BudgetsView(props) {
         props.setBudgets([...props.budgets, budget]);
     }
 
+    function resetBudgets() {
+        props.setBudgets(props.budgets.map(b => { return { ...b, spent: 0 } }));
+    }
+
     return (
         <article className="m-auto container bg-[#BBE9E7] bg-opacity-50 p-3 mb-5 rounded-md">
             <div className="flex flex-row justify-between font-bold border-black border-b-2 p-1">
@@ -44,7 +48,7 @@ function BudgetsView(props) {
                 <input className='px-2 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' type='button' value='Add Budget'
                     onClick={newBudget} />
                 <input className='px-2 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' type='button' value='Reset Budgets'
-                    onClick={newBudget} />
+                    onClick={resetBudgets} />
             </footer>
         </article>
     );

@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'firebase_options.dart';
+import 'package:crypt/crypt.dart';
 
 /*
 * Tasks:
@@ -98,16 +99,18 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _register(String userEmail, String userPassword) async {
+    final hashed_password = Crypt.sha256(userPassword);
     UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: userEmail,
-        password: userPassword);
+        password: hashed_password.toString());
   }
 
   _login(String email, String password) async {
+    final hashed_password = Crypt.sha256(password);
     try{
       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
-          password: password);
+          password: hashed_password.toString());
       login_verification = "good";
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

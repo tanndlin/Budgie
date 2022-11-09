@@ -56,7 +56,7 @@ function BigCalendar(props) {
             return;
         }
 
-        const bill = props.bills.find((bill) => bill.title === e.target.innerHTML);
+        const bill = props.bills.find((bill) => `${bill.title} - ${bill.amount}` === e.target.innerHTML);
         createEdit(bill);
     }
 
@@ -78,10 +78,12 @@ function BigCalendar(props) {
         setCurrentBill(null);
     }
 
-    function createEdit(event) {
-        setTitle(event.title);
-        setStart(formatDate(event.start));
-        setCurrentBill(event);
+    function createEdit(bill) {
+        setTitle(bill.title);
+        setStart(formatDate(bill.start));
+        setEnd(formatDate(bill.end));
+        setAmount(bill.amount);
+        setCurrentBill(bill);
 
         openModal();
     }

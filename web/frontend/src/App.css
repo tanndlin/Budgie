@@ -57,11 +57,6 @@ input[type='number'] {
 
 .arrow:hover {
     fill: #3818fd;
-    transition: fill 250ms;
-}
-
-.arrow {
-    transition: fill 250ms;
 }
 
 #bwLogo {
@@ -74,4 +69,34 @@ input[type='number'] {
 .shrink {
     transform: scale(0.8);
     transition: 0.3s;
+}
+
+.left {
+    animation-name: slideLeft;
+    animation-duration: 300ms;
+    left: 0;
+}
+
+.right {
+    animation-name: slideRight;
+    animation-duration: 300ms;
+    left: calc(100% - 64px);
+}
+
+@keyframes slideLeft {
+    0% {
+        left: calc(100% - 64px);
+    }
+    100% {
+        left: 0;
+    }
+}
+
+@keyframes slideRight {
+    0% {
+        left: 0;
+    }
+    100% {
+        left: calc(100% - 64px);
+    }
 }

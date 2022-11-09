@@ -103,7 +103,7 @@ function BigCalendar(props) {
         };
     }
 
-    function createEvents() {
+    function getEventsFromBills() {
         // Each bill will have multiple events for each pay date
         const events = props.bills.map(bill => {
             const payDates = [];
@@ -116,6 +116,8 @@ function BigCalendar(props) {
                     ...bill,
                     start: new Date(startDate),
                     end: new Date(startDate),
+                    title: `${bill.title} - ${bill.amount}`,
+                    allDay: true,
                 });
 
                 startDate.setMonth(startDate.getMonth() + bill.frequency);
@@ -182,7 +184,7 @@ function BigCalendar(props) {
                     </header>
                     <Calendar
                         localizer={localizer}
-                        events={createEvents(props.bills)}
+                        events={getEventsFromBills(props.bills)}
                         startAccessor="start"
                         endAccessor="end"
                         eventPropGetter={eventStyleGetter}

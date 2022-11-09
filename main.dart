@@ -97,9 +97,10 @@ class _LoginPageState extends State<LoginPage> {
     _controllerPass.dispose();
     super.dispose();
   }
-
+    //test123@gmail.com
+    //123456
   _register(String userEmail, String userPassword) async {
-    final hashed_password = Crypt.sha256(userPassword);
+    final hashed_password = Crypt.sha256(userPassword, salt: "69420");
     UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: userEmail,
         password: hashed_password.toString());
@@ -107,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _login(String email, String password) async {
-    final hashed_password = Crypt.sha256(password);
+    final hashed_password = Crypt.sha256(password, salt: "69420");
     try{
       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,

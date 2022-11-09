@@ -15,7 +15,7 @@ test('Ctrl Clicking toggles paid on Calendar', () => {
 
 
     // Ctrl + Click on the bill
-    const event = screen.getByText('Hello World');
+    const event = screen.getByText(/Hello World/);
     event.dispatchEvent(new MouseEvent('click', { ctrlKey: true }));
     expect(event).toHaveStyle('background-color: rgb(74 222 128) !important');
 });
@@ -34,7 +34,7 @@ test('Ctrl Clicking toggles paid off Calendar', () => {
 
 
     // Ctrl + Click on the bill
-    const event = screen.getByText('Hello World');
+    const event = screen.getByText(/Hello World/);
     event.dispatchEvent(new MouseEvent('click', { ctrlKey: true }));
     expect(event).toHaveStyle('background-color: rgb(248 113 113) !important');
 });

@@ -7,11 +7,12 @@ import CreateEvent from './CreateEvent';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../App.css';
 import ModalStyles from '../common/ModalStyles';
+import SideBar from './SideBar';
 
 const localizer = momentLocalizer(moment);
 
 function BigCalendar(props) {
-    const [modalIsOpen, setIsOpen] = React.useState(false);
+    // const [modalIsOpen, setIsOpen] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [start, setStart] = React.useState(formatDate(new Date()));
     const [end, setEnd] = React.useState(formatDate(new Date()));
@@ -146,29 +147,13 @@ function BigCalendar(props) {
     }
 
 
+    const [isOpen, setIsOpen] = React.useState(false);
+
     return (
         <div className="flex min-h-9/10 mb-5">
-            <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                style={ModalStyles}
-                ariaHideApp={false}
-            >
-                <CreateEvent
-                    title={title}
-                    start={start}
-                    end={end}
-                    amount={amount}
-                    setAmount={setAmount}
-                    setTitle={setTitle}
-                    setStart={setStart}
-                    setEnd={setEnd}
-                    closeModal={closeModal}
-                    pushEvent={pushEvent}
-                />
-            </Modal>
-
             <section className="flex flex-col container m-auto">
+                <input className='w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' type='submit' value='Log In'
+                    onClick={() => { setIsOpen(!isOpen); console.log(isOpen) }} />
                 <div
                     className="container m-auto mt-5 min-h-500 bg-[#BBE9E7] bg-opacity-50 p-3 rounded-md"
                     onClick={handleCalendarClick}
@@ -196,6 +181,21 @@ function BigCalendar(props) {
                             onClick={createNew} />
                     </footer>
                 </div>
+
+                <SideBar
+                    isOpen={isOpen}
+                    title={title}
+                    start={start}
+                    end={end}
+                    amount={amount}
+                    setAmount={setAmount}
+                    setTitle={setTitle}
+                    setStart={setStart}
+                    setEnd={setEnd}
+                    closeModal={closeModal}
+                    pushEvent={pushEvent}
+                />
+
             </section>
         </div>
     );

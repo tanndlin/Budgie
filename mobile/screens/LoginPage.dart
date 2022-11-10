@@ -21,10 +21,13 @@ class _LoginPageState extends State<LoginPage> {
   final _controllerEmail_Reg = TextEditingController();
   final _controllerPass_Reg = TextEditingController();
   final _controllerPass_Confirm = TextEditingController();
+  final _controllerFirst_Name = TextEditingController();
+  final _controllerLast_Name = TextEditingController();
 
   String email = "";
   String password = "";
   String login_verification = "";
+  String signup_verification = "";
 
   @override
   void dispose() {
@@ -36,10 +39,24 @@ class _LoginPageState extends State<LoginPage> {
   //123456
   _register(String userEmail, String userPassword) async {
     String hashedPassword = Crypt.sha256(userPassword, salt: 'abcdefghijklmnop').toString();
-    UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: userEmail,
-        password: hashedPassword);
-    print(hashedPassword);
+    try{
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: userEmail,
+          password: hashedPassword);
+      signup_verification = "good";
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        print('User Already Exists!');
+        signup_verification = "bad";
+      }
+      }
+    if(signup_verification == "good")
+    {
+      _controllerEmail_Reg.clear();
+      _controllerPass_Reg.clear();
+      _controllerPass_Confirm.clear();
+      Navigator.of(context, rootNavigator: true).pop('dialog');
+    }
   }
 
   _login(String email, String password) async {
@@ -55,7 +72,6 @@ class _LoginPageState extends State<LoginPage> {
         login_verification = "bad";
       } else if (e.code == 'wrong-password') {
         print('Incorrect password!');
-        print(hashedPassword.toString());
         login_verification = "bad";
       }
     }
@@ -193,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       const Padding(
-                                        padding: EdgeInsets.all(8.0),
+                                        padding: EdgeInsets.all(2.0),
                                         child: Text(
                                             'Sign Up',
                                             style: TextStyle(
@@ -201,6 +217,28 @@ class _LoginPageState extends State<LoginPage> {
                                             )
                                         ),
 
+                                      ),
+                                      Row(
+                                          children: <Widget>[
+                                          Expanded(
+                                            child: TextField(
+                                              controller: _controllerFirst_Name,
+                                            decoration: const InputDecoration(
+                                              border: OutlineInputBorder(),
+                                              labelText: 'First Name',
+                                            ),
+                                                textAlign: TextAlign.left),
+                                          ),
+                                            Expanded(
+                                              child: TextField(
+                                                controller: _controllerLast_Name,
+                                                  decoration: const InputDecoration(
+                                                      border: OutlineInputBorder(),
+                                                      labelText: 'Last Name',
+                                                  ),
+                                                  textAlign: TextAlign.right),
+                                            ),
+                                      ],
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
@@ -247,6 +285,7 @@ class _LoginPageState extends State<LoginPage> {
                                               if(_controllerPass_Reg.text == _controllerPass_Confirm.text)
                                               {
                                                 _register(_controllerEmail_Reg.text, _controllerPass_Reg.text);
+                                                // _changeName(_controllerFirst_Name.text, _controllerLast_Name.text);
                                               }
                                               else
                                               {

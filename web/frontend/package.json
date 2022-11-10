@@ -23,7 +23,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src --ext .js",
-    "deploy": "npm run build && firebase deploy"
+    "deploy": "npm run build && firebase deploy --only hosting"
   },
   "eslintConfig": {
     "extends": [

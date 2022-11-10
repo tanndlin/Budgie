@@ -16,7 +16,6 @@ function Login(props) {
             "returnSecureToken": true
         }
 
-
         sendOutsideRequest(URL, payload, (res) => {
             const { localId } = JSON.parse(res.responseText);
             console.log(localId);

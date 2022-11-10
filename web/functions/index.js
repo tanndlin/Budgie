@@ -9,12 +9,14 @@ admin.initializeApp(functions.config().firebase);
 
 //initialize express server
 const app = express();
-const main = express();
+//const main = express();
 
 //add the path to receive request and set json as bodyParser to process the body 
+/*
 main.use('/api/v1', app);
 main.use(bodyParser.json());
 main.use(bodyParser.urlencoded({ extended: false }));
+*/
 
 //initialize the database and the collection 
 const db = admin.firestore();
@@ -70,23 +72,36 @@ class UserProfile {
     }
 }
 
+app.post('/test', async (req, res) => {
+    try {
+
+        const word = req.body.word;
+        res.status(201).send(`${word} was successfully processed`);
+
+    } catch (error) {
+        res.status(400).send(`${error.message}`);
+    }
+});
+
 app.post('/CreateUser', async (req, res) => {
     try {
 
         const userId = req.body.userId;
-        await db.collection(userCollection).add({userId: userId});
-        res.status(201).send(`User, ${userId}, was added to the database`);
+        await db.collection(userCollection).doc(`${userId}`).set({});
+        res.status(201).send(`User ${userId} was added to the database`);
 
     } catch (error) {
-        res.status(400).send(`User addition to database was unsuccessful`);
+        res.status(400).send(`${error.message}`);
     }
 });
+
+//TO DO: ENSURE THE BELOW API HAVE THE CORRECT SYNTAX TO PROPERLY ACCESS FIRESTORE
 
 app.post('/CreateUserProfile', async (req, res) => {
     try{
 
         const userId = req.body.userId; 
-        const userRef = db.collection(userCollection).doc(userId);
+        const userRef = db.collection(userCollection).doc(`${userId}`);
 
         //check if the user profile already exists
         const profileExist = await userRef.collection(userProfileCollection).where('name', '==', req.body.userEmail).get();
@@ -112,7 +127,7 @@ app.post('/CreateUserProfile', async (req, res) => {
     }
 });
 
-app.post('/EditUserProfile', async (req, res) => {
+app.post('/EditUser', async (req, res) => {
     try{
 
         // if the user profile does not exist, we cannot edit it
@@ -122,7 +137,7 @@ app.post('/EditUserProfile', async (req, res) => {
         }
 
         const userId = req.body.userId; 
-        const userRef = db.collection(userCollection).doc(userId);
+        const userRef = db.collection(userCollection).doc(`${userId}`);
         const profileId = req.body.profileId; 
 
         // edit the user profile fields
@@ -148,7 +163,7 @@ app.post('/CreateBill', async (req, res) => {
     try {
 
         const userId = req.body.userId; 
-        const userRef = db.collection(userCollection).doc(userId);
+        const userRef = db.collection(userCollection).doc(`${userId}`);
         const category = req.body.category;
         var categoryId = "";
 
@@ -200,7 +215,7 @@ app.post('/EditBill', async (req, res) => {
     try {
 
         const userId = req.body.userId; 
-        const userRef = db.collection(userCollection).doc(userId);
+        const userRef = db.collection(userCollection).doc(`${userId}`);
         const billId = req.body.billId; 
         const category = req.body.category;
         var categoryId = "";
@@ -239,7 +254,7 @@ app.post('/RemoveBill', async (req, res) => {
     try {
 
         const userId = req.body.userId; 
-        const userRef = db.collection(userCollection).doc(userId);
+        const userRef = db.collection(userCollection).doc(`${userId}`);
         const billId = req.body.billId;
         const billDoc =  await userRef.collection(billCollection).doc(billId).get();
 
@@ -261,7 +276,7 @@ app.post('/CreateBudget', async (req, res) => {
     try {
 
         const userId = req.body.userId; 
-        const userRef = db.collection(userCollection).doc(userId);
+        const userRef = db.collection(userCollection).doc(`${userId}`);
         const category = req.body.category;
         var categoryId = "";
 
@@ -295,7 +310,7 @@ app.post('/CreateBudget', async (req, res) => {
         );
 
         const newBudgetDoc = await userRef.collection(budgetCollection).add(newBudget);
-        res.status(201).send(`{"userId": ${userId}, "newBudgetId": ${newBudgetDoc.id}}`);
+        res.status(201).send(`{"userId": ${userId}, "newBudgetId": ${newBudgetDoc.id}, "budgetRespectiveBills": ${budgetRespectiveBills}}`);
 
     } catch (error) {
         res.status(400).send(`Budget addition to database was unsuccessful`)
@@ -308,7 +323,7 @@ app.post('/EditBudget', async (req, res) => {
     try {
 
         const userId = req.body.userId; 
-        const userRef = db.collection(userCollection).doc(userId);
+        const userRef = db.collection(userCollection).doc(`${userId}`);
         const budgetId = req.body.budgetId; 
         const category = req.body.category;
         var categoryId = "";
@@ -337,7 +352,7 @@ app.post('/EditBudget', async (req, res) => {
         );
 
         await userRef.collection(budgetCollection).doc(budgetId).update(editedBudget);
-        res.status(200).send(`{"userId": ${userId}, "editedBudgetId": ${budgetId}}`);
+        res.status(200).send(`{"userId": ${userId}, "editedBudgetId": ${budgetId}, "budgetRespectiveBills": ${budgetRespectiveBills}}`);
 
     } catch (error) {
         res.status(400).send(`Budget update to database was unsuccessful`)
@@ -349,7 +364,7 @@ app.post('/RemoveBudget', async (req, res) => {
     try {
 
         const userId = req.body.userId; 
-        const userRef = db.collection(userCollection).doc(userId);
+        const userRef = db.collection(userCollection).doc(`${userId}`);
         const budgetId = req.body.budgetId; 
         const budgetDoc = await userRef.collection(budgetCollection).doc(budgetId).get();
 

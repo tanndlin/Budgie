@@ -1,14 +1,14 @@
 import React from 'react';
-import CreateEvent from './CreateEvent';
+import CreateBillPopUp from './CreateBillPopUp';
 
 function SideBar(props) {
 
-    const className = 'container bg-[#b2c6ec] bg-opacity-[.7]' + (props.isOpen ? ' sidebar' : ' sidebarClose');
+    const className = 'container mt-4 bg-[#b2c6ec] bg-opacity-[.7] sidebar' + (props.isOpen ? '' : ' sidebarClose');
 
 
     return (
         <aside className={className}>
-            <CreateEvent
+            <CreateBillPopUp
                 {...props}
             />
         </aside>

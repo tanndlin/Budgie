@@ -4,8 +4,6 @@ const admin = require("firebase-admin");
 const express = require("express");
 const bodyParser = require("body-parser");
 
-import { doc, setDoc } from "firebase/firestore"; 
-
 //initialize firebase inorder to access its services
 admin.initializeApp(functions.config().firebase);
 
@@ -73,10 +71,6 @@ class UserProfile {
         this.expectedIncome = Number
     }
 }
-
-app.listen(port, () => {
-    console.log(`App listening on port ${port}`)
-})
 
 app.post('/CreateUser', async (req, res) => {
     try {
@@ -158,7 +152,7 @@ app.post('/CreateBill', async (req, res) => {
         const userId = req.body.userId; 
         const userRef = db.collection(userCollection).doc(userId);
         const category = req.body.category;
-        const categoryId = "";
+        var categoryId = "";
 
         //check if the bill already exists
         const billExist = await userRef.collection(billCollection).where('name', '==', req.body.billName).get();
@@ -178,10 +172,10 @@ app.post('/CreateBill', async (req, res) => {
             // add it to the category table
             const categoryDoc = await userRef.collection(categoryCollection).add(newCategory);
         }
-
+        
         // add the category for the new bill
         categoryId = categoryDoc.id;
-        
+
 
         // constructor for a new bill
         const newBill = new Bill(
@@ -211,16 +205,14 @@ app.post('/EditBill', async (req, res) => {
         const userRef = db.collection(userCollection).doc(userId);
         const billId = req.body.billId; 
         const category = req.body.category;
-        const categoryId = "";
+        var categoryId = "";
 
         // get the category
         const categoryDoc = await userRef.collection(categoryCollection).doc(categoryId).get();
 
         // if the category doesn't exist, add it to the database
         if(!categoryDoc.exists) { 
-
             const newCategory = new Category(category);
-       
             const categoryDoc = await userRef.collection(categoryCollection).add(newCategory);
         }
 
@@ -273,7 +265,7 @@ app.post('/CreateBudget', async (req, res) => {
         const userId = req.body.userId; 
         const userRef = db.collection(userCollection).doc(userId);
         const category = req.body.category;
-        const categoryId = "";
+        var categoryId = "";
 
         //check if the budget already exists
         const budgetExist = await userRef.collection(budgetCollection).where('category', '==', category).get();
@@ -284,9 +276,7 @@ app.post('/CreateBudget', async (req, res) => {
         const categoryDoc = await userRef.collection(categoryCollection).doc(categoryId).get();
 
         if(!categoryDoc.exists) { 
-
             const newCategory = new Category(category);
-       
             await userRef.collection(categoryCollection).add(newCategory);
         }
 
@@ -295,21 +285,16 @@ app.post('/CreateBudget', async (req, res) => {
         //populate the budget payments array with all the current bills that correspond with it
         const budgetRespectiveBills = await userRef.collection(billCollection).where('category', '==', category).get();
 
-        //can calculate the total amount of expenses utilized under the specific category and insert as the amount spent
-        const amountSpent = Number;
-
-        const newBudget = new Budget();
-
-        newBudget = {
-            "name": req.body.budgetName,
-            "budgetAmount": req.body.budgetAmount,
-            "amountSpent": amountSpent,
-            "startDate": req.body.startDate,
-            "endDate": req.body.endDate,
-            "recurrence": req.body.budgetRecurrence,
-            "category": categoryId,
-            "payments": budgetRespectiveBills
-        }
+        const newBudget = new Budget(
+            req.body.budgetName,
+            req.body.budgetAmount,
+            req.body.amountSpent,
+            req.body.startDate,
+            req.body.endDate,
+            req.body.budgetRecurrence,
+            categoryId,
+            budgetRespectiveBills
+        );
 
         const newBudgetDoc = await userRef.collection(budgetCollection).add(newBudget);
         res.status(201).send(`{"userId": ${userId}, "newBudgetId": ${newBudgetDoc.id}}`);
@@ -328,14 +313,12 @@ app.post('/EditBudget', async (req, res) => {
         const userRef = db.collection(userCollection).doc(userId);
         const budgetId = req.body.budgetId; 
         const category = req.body.category;
-        const categoryId = "";
+        var categoryId = "";
 
         const categoryDoc = await userRef.collection(categoryCollection).doc(categoryId).get();
 
         if(!categoryDoc.exists) { 
-
             const newCategory = new Category(category);
-       
             await userRef.collection(categoryCollection).add(newCategory);
         }
 
@@ -344,21 +327,16 @@ app.post('/EditBudget', async (req, res) => {
         //populate the budget payments array with all the current bills that correspond with it
         const budgetRespectiveBills = await userRef.collection(billCollection).where('category', '==', category).get();
 
-        //can calculate the total amount of expenses utilized under the specific category and insert as the amount spent
-        const amountSpent = Number;
-
-        const editedBudget = new Budget();
-
-        editedBudget = {
-            "name": req.body.budgetName,
-            "budgetAmount": req.body.budgetAmount,
-            "amountSpent": amountSpent,
-            "startDate": req.body.startDate,
-            "endDate": req.body.endDate,
-            "recurrence": req.body.budgetRecurrence,
-            "category": categoryId,
-            "payments": budgetRespectiveBills
-        }
+        const editedBudget = new Budget(
+            req.body.budgetName,
+            req.body.budgetAmount,
+            req.body.amountSpent,
+            req.body.startDate,
+            req.body.endDate,
+            req.body.budgetRecurrence,
+            categoryId,
+            budgetRespectiveBills
+        );
 
         await userRef.collection(budgetCollection).doc(budgetId).update(editedBudget);
         res.status(201).send(`{"userId": ${userId}, "editedBudgetId": ${budgetId}}`);

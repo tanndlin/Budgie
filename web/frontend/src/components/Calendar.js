@@ -1,12 +1,9 @@
 import React from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import Modal from 'react-modal';
-import CreateBillPopUp from './CreateBillPopUp';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../App.css';
-import ModalStyles from '../common/ModalStyles';
 import SideBar from './SideBar';
 
 const localizer = momentLocalizer(moment);

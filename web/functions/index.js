@@ -9,14 +9,12 @@ admin.initializeApp(functions.config().firebase);
 
 //initialize express server
 const app = express();
-//const main = express();
+const main = express();
 
 //add the path to receive request and set json as bodyParser to process the body 
-/*
 main.use('/api/v1', app);
 main.use(bodyParser.json());
 main.use(bodyParser.urlencoded({ extended: false }));
-*/
 
 //initialize the database and the collection 
 const db = admin.firestore();
@@ -34,41 +32,41 @@ exports.webApi = functions.https.onRequest(app);
 
 class Bill {
     constructor(name, amount, startDate, endDate, recurrence, category, lastPaidDate) {
-        this.name = String,
-        this.amount = Number,
-        this.startDate = Date,
-        this.endDate = Date,
-        this.recurrence = String,
-        this.category = String,
-        this.lastPaidDate = Date
+        this.name = name,
+        this.amount = amount,
+        this.startDate = startDate,
+        this.endDate = endDate,
+        this.recurrence = recurrence,
+        this.category = category,
+        this.lastPaidDate = lastPaidDate
     }
 }
 
 class Budget {
     constructor(name, budgetAmount, amountSpent, startDate, endDate, recurrence, category, payments) {
-        this.name = String,
-        this.budgetAmount = Number,
-        this.amountSpent = Number,
-        this.startDate = Date,
-        this.endDate = Date,
-        this.recurrence = String,
-        this.category = String,
-        this.payments = String
+        this.name = name,
+        this.budgetAmount = budgetAmount,
+        this.amountSpent = amountSpent,
+        this.startDate = startDate,
+        this.endDate = endDate,
+        this.recurrence = recurrence,
+        this.category = category,
+        this.payments = payments
     }
 }
 
 class Category {
     constructor(name) {
-        this.name = String
+        this.name = name
     }
 }
 
 class UserProfile {
     constructor(firstName, lastName, email, expectedIncome) {
-        this.firstName = String,
-        this.lastName = String,
-        this.email = String,
-        this.expectedIncome = Number
+        this.firstName = firstName,
+        this.lastName = lastName,
+        this.email = email,
+        this.expectedIncome = expectedIncome
     }
 }
 
@@ -76,7 +74,7 @@ app.post('/CreateUser', async (req, res) => {
     try {
 
         const userId = req.body.userId;
-        await db.collection(userCollection).add(userId);
+        await db.collection(userCollection).add({userId: userId});
         res.status(201).send(`User, ${userId}, was added to the database`);
 
     } catch (error) {
@@ -138,7 +136,7 @@ app.post('/EditUserProfile', async (req, res) => {
         // add the updated user profile to the database
         await userRef.collection(userProfileCollection).doc(profileId).update(editedProfile);
 
-        res.status(201).send(`User profile update for ${userId} to database was successful`);
+        res.status(200).send(`User profile update for ${userId} to database was successful`);
 
     } catch (error) {
         res.status(400).send(`User profile update to database was unsuccessful`);
@@ -161,7 +159,7 @@ app.post('/CreateBill', async (req, res) => {
         }
 
         // get category that the bill has
-        const categoryDoc = await userRef.collection(categoryCollection).doc(categoryId).get();
+        var categoryDoc = await userRef.collection(categoryCollection).doc(categoryId).get();
 
         // if this category doesn't exist
         if(!categoryDoc.exists) { 
@@ -170,7 +168,7 @@ app.post('/CreateBill', async (req, res) => {
             const newCategory = new Category(category);
        
             // add it to the category table
-            const categoryDoc = await userRef.collection(categoryCollection).add(newCategory);
+           categoryDoc = await userRef.collection(categoryCollection).add(newCategory);
         }
         
         // add the category for the new bill
@@ -208,12 +206,12 @@ app.post('/EditBill', async (req, res) => {
         var categoryId = "";
 
         // get the category
-        const categoryDoc = await userRef.collection(categoryCollection).doc(categoryId).get();
+        var categoryDoc = await userRef.collection(categoryCollection).doc(categoryId).get();
 
         // if the category doesn't exist, add it to the database
         if(!categoryDoc.exists) { 
             const newCategory = new Category(category);
-            const categoryDoc = await userRef.collection(categoryCollection).add(newCategory);
+            categoryDoc = await userRef.collection(categoryCollection).add(newCategory);
         }
 
         categoryId = categoryDoc.id;
@@ -229,7 +227,7 @@ app.post('/EditBill', async (req, res) => {
         );
 
         await userRef.collection(billCollection).doc(billId).update(editedBill);
-        res.status(201).send(`{"userId": ${userId}, "editedBillId": ${billId}}`);
+        res.status(200).send(`{"userId": ${userId}, "editedBillId": ${billId}}`);
 
     } catch (error) {
         res.status(400).send(`Bill update to database was unsuccessful`)
@@ -247,7 +245,7 @@ app.post('/RemoveBill', async (req, res) => {
 
         if(billDoc.exists) {
             await userRef.collection(billCollection).doc(billId).delete();
-            res.status(201).send(`{"userId": ${userId}, "billId": "NULL"}`);
+            res.status(200).send(`{"userId": ${userId}, "billId": "NULL"}`);
         }
         else {
             res.status(400).send("Bill doesn't exist")
@@ -273,11 +271,11 @@ app.post('/CreateBudget', async (req, res) => {
             res.status(400).send("This budget already exists")
         }
 
-        const categoryDoc = await userRef.collection(categoryCollection).doc(categoryId).get();
+        var categoryDoc = await userRef.collection(categoryCollection).doc(categoryId).get();
 
         if(!categoryDoc.exists) { 
             const newCategory = new Category(category);
-            await userRef.collection(categoryCollection).add(newCategory);
+            categoryDoc = await userRef.collection(categoryCollection).add(newCategory);
         }
 
         categoryId = categoryDoc.id;
@@ -315,11 +313,11 @@ app.post('/EditBudget', async (req, res) => {
         const category = req.body.category;
         var categoryId = "";
 
-        const categoryDoc = await userRef.collection(categoryCollection).doc(categoryId).get();
+        var categoryDoc = await userRef.collection(categoryCollection).doc(categoryId).get();
 
         if(!categoryDoc.exists) { 
             const newCategory = new Category(category);
-            await userRef.collection(categoryCollection).add(newCategory);
+            categoryDoc = await userRef.collection(categoryCollection).add(newCategory);
         }
 
         categoryId = categoryDoc.id;
@@ -339,7 +337,7 @@ app.post('/EditBudget', async (req, res) => {
         );
 
         await userRef.collection(budgetCollection).doc(budgetId).update(editedBudget);
-        res.status(201).send(`{"userId": ${userId}, "editedBudgetId": ${budgetId}}`);
+        res.status(200).send(`{"userId": ${userId}, "editedBudgetId": ${budgetId}}`);
 
     } catch (error) {
         res.status(400).send(`Budget update to database was unsuccessful`)
@@ -357,7 +355,7 @@ app.post('/RemoveBudget', async (req, res) => {
 
         if(budgetDoc.exists) {
             await userRef.collection(budgetCollection).doc(budgetId).delete();
-            res.status(201).send(`{"userId": ${userId}, "budgetId": "NULL"}`);
+            res.status(200).send(`{"userId": ${userId}, "budgetId": "NULL"}`);
         }
         else {
             res.status(400).send("Budget doesn't exist")

@@ -6,7 +6,6 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "nodemon server.js",
-        "deploy": "cd .. && git subtree push --prefix web heroku master && cd web/frontend && firebase deploy",
         "lint": "eslint . --ext .js"
     },
     "author": "",

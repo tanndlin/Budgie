@@ -1,8 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: [
-        "./src/**/*.{js,jsx,ts,tsx}",
-    ],
+    content: ['./src/**/*.{js,jsx,ts,tsx}'],
     theme: {
         extend: {
             height: {
@@ -15,8 +13,9 @@ module.exports = {
                 '7/10': '70%',
                 '8/10': '80%',
                 '9/10': '90%',
-                'minus-header': 'calc(100% - 4rem)',
-                'calendar': 'calc((100vh - 4rem) * 9/10 * 4/5)',
+                'minus-header': 'calc(100vh - 4rem)',
+                calendar: 'calc((100vh - 4rem) * 9/10 * 4/5)',
+                500: '500px',
             },
             width: {
                 '1/10': '10%',
@@ -36,8 +35,19 @@ module.exports = {
                 '1/5': '20%',
                 '9/10': '90%',
                 'minus-header': 'calc(100% - 4rem)',
-            }
+                500: '500px',
+                600: '600px',
+                700: '700px',
+                800: '800px',
+                900: '900px',
+            },
+            maxHeight: {
+                '7/10screen': '70vh',
+                '3/4screen': '75vh',
+                '8/10screen': '80vh',
+                '9/10screen': '90vh',
+            },
         },
     },
     plugins: [],
-}
+};

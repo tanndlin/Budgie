@@ -11,7 +11,7 @@ class Routes {
   static const String PAYMENTHIST = '/PaymentHist';
   static const String ACCOUNTMANAGER = '/AccountManager';
   static const String CALENDARVIEW = '/CalendarView';
-
+  
   // routes of pages in the app
   static Map<String, Widget Function(BuildContext)> get getroutes => {
     '/': (context) => const LoginPage(),

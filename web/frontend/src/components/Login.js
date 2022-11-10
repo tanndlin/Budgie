@@ -1,56 +1,56 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { pretty, sendOutsideRequest } from '../common/Requests';
+import sha256 from 'js-sha256';
 
-function Login() {
-    var loginName;
-    var loginPassword;
-    const [message, setMessage] = useState('');
+function Login(props) {
+    const [password, setPassword] = React.useState('');
+    const [message, setMessage] = React.useState('');
 
-    const doLogin = async event => {
-        event.preventDefault();
-        var obj = { login: loginName.value, password: loginPassword.value };
-        var js = JSON.stringify(obj);
+    const doLogin = async (e) => {
+        e.preventDefault()
 
-        const BASE_URL = 'https://cop4331-group27.herokuapp.com/api/';
-        try {
-            const response = await fetch(`${BASE_URL}login`, {
-                method: 'POST', body: js, headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            var res = JSON.parse(await response.text());
-            if (res.id <= 0) {
-                setMessage('User/Password combination incorrect');
-            }
-            else {
-                var user =
-                    { firstName: res.firstName, lastName: res.lastName, id: res.id }
-                localStorage.setItem('user_data', JSON.stringify(user));
-                setMessage('');
-                window.location.href = '/calendar';
-            }
+        const URL = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC7OHvwvqRgrOvgYoy2C5sgnXSZ02xLZPc';
+        const payload = {
+            "email": props.email,
+            "password": sha256(password),
+            "returnSecureToken": true
         }
-        catch (e) {
-            alert(e.toString());
-            return;
-        }
+
+
+        sendOutsideRequest(URL, payload, (res) => {
+            const { localId } = JSON.parse(res.responseText);
+            console.log(localId);
+
+            // Redirect to calendar page and pass states
+            window.location.href = `/calendar?user=${localId}`;
+        }, (err) => {
+            console.log(err);
+            setMessage(pretty(err.message));
+        });
     };
 
+    // to do: add on-click function for forgot password
     return (
-        <main className='flex bg-orange-200 h-minus-header'>
-            <div className='grid container m-auto min-h-1/3 bg-yellow-200 place-items-center flex-1'
-                id='loginDiv'>
-                <form onSubmit={doLogin}>
-                    <span id='inner-title'>Please Log In</span><br />
-                    <input className='mt-5 px-2' type='text' id='loginName' placeholder='Username'
-                        ref={(c) => loginName = c} /><br />
-                    <input className='mt-5 mb-5 px-2' type='password' id='loginPassword' placeholder='Password'
-                        ref={(c) => loginPassword = c} /><br />
-                    <input type='submit' id='loginButton' className='w-40 bg-red-500' value='Log in'
-                        onClick={doLogin} />
+        <section className='flex container h-full bg-[#BBE9E7] bg-opacity-50 rounded-md'>
+            <div className={'w-3/4 py-4 h-3/4 m-auto bg-[#b2c6ec] bg-opacity-[.7] rounded-md duration-300' + (!props.dividerToggle ? ' shrink' : '')}>
+                <h1 className='text-center text-[#3B3548] text-6xl mb-16' data-testid='loginHeader'>Log In</h1>
+
+                <form className='grid grid-rows-4 h-1/2 place-items-center' onSubmit={doLogin}>
+                    <input className='row-start-1 px-1 placeholder-[#4D4D4D] rounded-md' type='text' data-testid='email' placeholder='Email'
+                        onChange={(e) => props.setEmail(e.target.value)} value={props.email} />
+                    <input className='row-start-2 px-1 placeholder-[#4D4D4D] rounded-md' type='password' data-testid='password' placeholder='Password'
+                        onChange={(e) => setPassword(e.target.value)} />
+                    <span className='row-start-4 flex flex-col'>
+                        <input className='w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' type='submit' value='Log In'
+                            onClick={doLogin} />
+                        <a className='ml-4 text-[#189DFD] hover:text-[#3818FD]' href='/forgot-password'>Forgot Password?</a>
+                    </span>
                 </form>
-                <span id='loginResult'>{message}</span>
+                <footer className='flex'>
+                    <span className='m-auto'>{message}</span>
+                </footer>
             </div>
-        </main>
+        </section>
     );
 };
 export default Login;

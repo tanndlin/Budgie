@@ -13,6 +13,7 @@ const LoginPage = (props) => {
                 <Login
                     email={loginEmail}
                     setEmail={setLoginEmail}
+                    dividerToggle={dividerToggle}
                 />
                 <SignUp
                     {...{

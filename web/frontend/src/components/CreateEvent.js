@@ -4,14 +4,16 @@ function CreateEvent(props) {
     function editEvent(e) {
         e.preventDefault();
 
+
+        const isPaid = Math.random() < 0.5;
         props.pushEvent({
             title: props.title,
             start: props.start,
-            end: props.start,
-            resources: {
-                paid: Math.random() < 0.5,
-            },
+            end: props.end,
+            id: Math.random(),
             amount: props.amount,
+            frequency: 1,
+            lastPaid: isPaid ? new Date() : null,
         });
 
         props.closeModal();
@@ -29,24 +31,46 @@ function CreateEvent(props) {
         props.setStart(timeZoneAdjusted);
     }
 
+    function endChange(e) {
+        const date = new Date(e.target.value);
+        const timeZoneOffset = new Date().getTimezoneOffset();
+        const timeZoneAdjusted = new Date(date.getTime() + timeZoneOffset * 60 * 1000);
+        props.setEnd(timeZoneAdjusted);
+    }
+
     function amountChange(e) {
         props.setAmount(e.target.value);
     }
 
 
     return (
-        <div className="flex flex-col justify-center items-center bg-orange-200 w-full h-full">
-            <form onSubmit={editEvent} className='bg-yellow-200 p-10 flex flex-col items-center'>
-                <span id='inner-title' className='text-3xl font-bold'>Event</span><br />
-                <input className='mt-5 px-2' type='text' id='titleInput' placeholder='Title' onChange={titleChange} value={props.title} /><br />
-                <label htmlFor="Due Date" className=''>Due Date</label>
-                <input className='mb-5 px-2' type='date' id='dueDateInput' onChange={startChange} value={props.start.toISOString().split('T')[0]} /><br />
-                <label htmlFor="Amount" className=''>Amount</label>
-                <input className='mb-5 px-2' type='number' id='amountInput' onChange={amountChange} value={props.amount} /><br />
-                <input type='submit' id='editButton' className='w-40 bg-red-500' value='Create Event'
-                    onClick={editEvent} />
-            </form>
-        </div>
+        <section className='flex container h-full bg-[#BBE9E7] bg-opacity-50 rounded-md'>
+            <div className='w-3/4 py-4 h-3/4 m-auto bg-[#b2c6ec] bg-opacity-[.7] rounded-md max-w-[500px]'>
+                <h1 className='text-center text-[#3B3548] text-6xl mb-16'>Event</h1>
+
+                <form onSubmit={editEvent} className='grid grid-rows-auto h-1/2 place-items-center'>
+                    <input className='w-48 px-1 placeholder-[#4D4D4D] rounded-md' type='text' id='titleInput' placeholder='Title' onChange={titleChange} value={props.title} /><br />
+
+                    <span className='flex flex-col'>
+                        <label htmlFor="Start Date" className=''>Start Date</label>
+                        <input className='w-48 px-1 placeholder-[#4D4D4D] rounded-md' type='date' id='startDateInput' onChange={startChange} value={props.start.toISOString().split('T')[0]} /><br />
+                    </span>
+
+                    <span className='flex flex-col'>
+                        <label htmlFor="End Date" className=''>End Date</label>
+                        <input className='w-48 px-1 placeholder-[#4D4D4D] rounded-md' type='date' id='endDateInput' onChange={endChange} value={props.end.toISOString().split('T')[0]} /><br />
+                    </span>
+
+                    <span className='flex flex-col'>
+                        <label htmlFor="Amount" className=''>Amount</label>
+                        <input className='w-48 px-2 placeholder-[#4D4D4D] rounded-md' type='number' id='amountInput' onChange={amountChange} value={props.amount} /><br />
+                    </span>
+
+                    <input type='submit' id='editButton' className='w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' value='Create Event'
+                        onClick={editEvent} />
+                </form>
+            </div>
+        </section>
     );
 }
 

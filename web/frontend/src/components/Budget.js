@@ -32,7 +32,7 @@ function Budget(props) {
 
 
     return (
-        <div className='grid grid-cols-1'>
+        <div className='grid grid-cols-1 w-[232px] p-4'>
             <EdittableText
                 type='text'
                 value={budget.name}
@@ -41,9 +41,10 @@ function Budget(props) {
                     props.setBudgets([...props.budgets]);
                 }}
             />
-            <span style={{ width: 200, height: 200 }}>
+            <span className='w-[200px] h-[200px]'>
                 <CircularProgressbar styles={buildStyles({ pathColor: color })} value={percent} text={`${percent}%`} />
             </span>
+
             <span className='m-auto flex'>
                 <h3 className='font-bold'>$</h3>
                 <EdittableText

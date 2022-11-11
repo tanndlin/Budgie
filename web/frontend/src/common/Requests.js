@@ -1,5 +1,5 @@
 export function sendRequest(path, payload, callback, errorCallback) {
-    const url = `budgie/api/${path}`;
+    const url = `https://us-central1-cop4331-large-project-27.cloudfunctions.net/webApi/${path}`;
 
     const xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);

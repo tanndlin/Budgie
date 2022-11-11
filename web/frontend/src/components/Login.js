@@ -4,6 +4,7 @@ import { pretty, sendOutsideRequest } from '../common/Requests';
 function Login(props) {
     const [password, setPassword] = React.useState('');
     const [message, setMessage] = React.useState('');
+    const navigate = useNavigate();
 
     const doLogin = async (e) => {
         e.preventDefault();

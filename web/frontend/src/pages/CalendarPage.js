@@ -7,6 +7,8 @@ function CalendarPage(props) {
     const [categorySortID, setCategorySortID] = React.useState(-1);
 
     if (props.user === null) {
+        console.log(props.user);
+
         // Check url for localId
         const url = new URL(window.location.href);
         const localId = url.searchParams.get('user');

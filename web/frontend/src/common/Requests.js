@@ -6,20 +6,20 @@ export function sendRequest(path, payload, callback, errorCallback) {
     xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8');
 
     xhr.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            const { Error: err } = JSON.parse(xhr.responseText);
-            if (err) {
-                if (!errorCallback) {
-                    console.log(`${url} threw unhandled error: ${err}`);
-                } else {
-                    errorCallback(err);
-                }
-                return;
-            }
+        if (this.readyState === 4 && this.status === 201) {
+            // const { Error: err } = JSON.parse(xhr.responseText);
+            // if (err) {
+            //     if (!errorCallback)
+            //         console.log(`${url} threw unhandled error: ${err}`);
+            //     else
+            //         errorCallback(err);
+            //     return
+            // }
 
             callback(xhr);
         } else {
-            errorCallback(xhr.responseText);
+            // console.log('Bad request');
+            // errorCallback(xhr.responseText);
         }
     };
 

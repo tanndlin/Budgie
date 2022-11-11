@@ -24,14 +24,25 @@ function Login(props) {
                 const { localId } = JSON.parse(res.responseText);
                 console.log(localId);
 
+                sendRequest('CreateUser', { localId }, (res) => {
+                    console.log(res.responseText);
+                    sendRequest('GetUser', { localId }, (res) => {
+                        console.log(res.responseText);
+                        // const { user } = JSON.parse(res.responseText);
+                        // console.log(user);
+                        // props.setUser(user);
+                        // navigate('/');
+                    });
+                }, (err) => {
+                    console.log(err);
+                });
+
                 // Redirect to calendar page and pass states
-                window.location.href = `/calendar?user=${localId}`;
-            },
-            (err) => {
+                // navigate('/calendar', { state: { user } });
+            }, (err) => {
                 console.log(err);
                 setMessage(pretty(err.message));
-            }
-        );
+            });
     };
 
     function openSidebar(e) {

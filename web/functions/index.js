@@ -279,7 +279,7 @@ app.post('/EditBill', async (req, res) => {
         }
 
         //get category that the bill has
-        var categoryExist = await userRef.collection(categoryCollection).where('category', '==', `${req.body.category}`).get();
+        var categoryExist = await userRef.collection(categoryCollection).where('name', '==', `${req.body.category}`).get();
 
         //if this category doesn't exist
         if(categoryExist.empty) {
@@ -374,7 +374,7 @@ app.post('/CreateBudget', async (req, res) => {
         }
 
         //get category that the budget has
-        var categoryExist = await userRef.collection(categoryCollection).where('category', '==', `${req.body.category}`).get();
+        var categoryExist = await userRef.collection(categoryCollection).where('name', '==', `${req.body.category}`).get();
 
         //if this category doesn't exist
         if(categoryExist.empty) {
@@ -493,7 +493,7 @@ app.post('/EditBudget', async (req, res) => {
         }
 
         //get category that the budget has
-        var categoryExist = await userRef.collection(categoryCollection).where('category', '==', `${req.body.category}`).get();
+        var categoryExist = await userRef.collection(categoryCollection).where('name', '==', `${req.body.category}`).get();
 
         //if this category doesn't exist
         if(categoryExist.empty) {
@@ -585,7 +585,7 @@ app.post('/CreateOneOff', async (req, res) => {
         }
 
         //get category that the one-off has
-        var categoryExist = await userRef.collection(categoryCollection).where('category', '==', `${req.body.category}`).get();
+        var categoryExist = await userRef.collection(categoryCollection).where('name', '==', `${req.body.category}`).get();
 
         //if this category doesn't exist
         if(categoryExist.empty) {
@@ -687,7 +687,7 @@ app.post('/EditOneOff', async (req, res) => {
         }
 
         //get category that the one-off has
-        var categoryExist = await userRef.collection(categoryCollection).where('category', '==', `${req.body.category}`).get();
+        var categoryExist = await userRef.collection(categoryCollection).where('name', '==', `${req.body.category}`).get();
 
         //if this category doesn't exist
         if(categoryExist.empty) {
@@ -714,10 +714,10 @@ app.post('/EditOneOff', async (req, res) => {
             "date": `${req.body.date}`,
         }
 
-        await userRef.collection(oneOffCollection).doc(`${oneOffId}`).update(editedoneOff);
+        await userRef.collection(oneOffCollection).doc(`${oneOffId}`).update(editedOneOff);
         res.status(200).send(`{
             "userId": "${userId}",
-            "oneOffId": "${OneOffId}",
+            "oneOffId": "${oneOffId}",
             "name": "${req.body.name}",
             "category": "${categoryId}",
             "color": "${req.body.color}",

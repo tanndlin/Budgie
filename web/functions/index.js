@@ -1,11 +1,12 @@
 //import libraries
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const auth = require ("firebase/auth");
 const express = require("express");
-const bodyParser = require("body-parser");
 const cors = require('cors');  
+const { user } = require("firebase-functions/v1/auth");
 
-//initialize firebase inorder to access its services
+//initialize firebase in order to access its services
 admin.initializeApp(functions.config().firebase);
 
 //initialize express server
@@ -80,6 +81,7 @@ class OneOffs {
 
 //TO DO: check category stuff for correct syntax, test all current API, add API for one-offs
 
+/*
 app.post('/test', async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
@@ -106,52 +108,109 @@ app.post('/CreateUser', async (req, res) => {
         res.status(400).send(`${error.message}`);
     }
 });
+*/
 
+//create user profile
 app.post('/CreateUserProfile', async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
     try{
 
         const userId = req.body.userId; 
+
+        //when a new user signs up, they will be added to the userCollection
+        await db.collection(userCollection).doc(`${userId}`).set({});
         const userRef = db.collection(userCollection).doc(`${userId}`);
 
-        //constructor for a new user profile
-        const newProfile = new UserProfile(
-            req.body.firstName,
-            req.body.lastName,
-            req.body.expectedIncome
-        );
+        const newProfile = {
+            "firstName": `${req.body.firstName}`,
+            "lastName": `${req.body.lastName}`,
+            "expectedIncome": `${req.body.expectedIncome}`,
+        }
 
         //add the user's profile to the database
-        await userRef.set(newProfile);
+        await userRef.update(newProfile);
 
-        res.status(201).send(`User profile creation for ${userId} to database was successful`);
+        res.status(201).send(`{"userId": "${userId}", "firstName": "${req.body.firstName}", "lastName": "${req.body.lastName}", "expectedIncome": "${req.body.expectedIncome}"}`);
 
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
 });
 
-app.post('/EditUser', async (req, res) => {
+//get user profile info
+app.post('/GetUserProfile', async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try{
+
+        const userId = req.body.userId;
+        const userRef = await db.collection('users').doc(`${userId}`).get();
+        
+        //if the user exists, then get the profile info for said user
+        if(userRef.exists) {
+            const firstName = userRef.get("firstName");
+            const lastName = userRef.get("lastName");
+            const expectedIncome = userRef.get("expectedIncome");
+            res.status(200).send(`{"userId": "${userId}", "firstName": "${firstName}", "lastName": "${lastName}", "expectedIncome": "${expectedIncome}"}`);
+        }
+        else {
+            res.status(400).send("User doesn't exist")
+        }
+
+    } catch (error) {
+        res.status(400).send(`${error.message}`);
+    }
+});
+
+//edit user profile
+app.post('/EditUserProfile', async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
     try{
 
         const userId = req.body.userId; 
-        const userRef = db.collection(userCollection).doc(`${userId}`);
-        const profileId = req.body.profileId; 
+        const userRef = await db.collection('users').doc(`${userId}`).get();
+        
+        //if the user exists, then edit the profile info for said user
+        if(userRef.exists) {
+            const newProfile = {
+                "firstName": `${req.body.firstName}`,
+                "lastName": `${req.body.lastName}`,
+                "expectedIncome": `${req.body.expectedIncome}`,
+            }
 
-        //edit the user profile fields
-        const editedProfile = new UserProfile(
-            req.body.firstName,
-            req.body.lastName,
-            req.body.expectedIncome
-        );
+            //add the user's profile to the database
+            await db.collection('users').doc(`${userId}`).update(newProfile);
 
-        //update the user profile to the database
-        await userRef.update(editedProfile);
+            res.status(201).send(`{"userId": "${userId}", "firstName": "${req.body.firstName}", "lastName": "${req.body.lastName}", "expectedIncome": "${req.body.expectedIncome}"}`);
+        }
+        else {
+            res.status(400).send("User doesn't exist")
+        }
+        
+    } catch (error) {
+        res.status(400).send(`${error.message}`);
+    }
+});
 
-        res.status(200).send(`User profile update for ${userId} to database was successful`);
+//delete user profile
+app.post('/RemoveUserProfile', async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try{
+
+        const userId = req.body.userId;
+        const userRef = await db.collection('users').doc(`${userId}`).get();
+        
+        //if the user exists, then delete the user
+        if(userRef.exists) {
+            await db.collection('users').doc(`${userId}`).delete();
+            res.status(200).send(`User has been deleted`);
+        }
+        else {
+            res.status(400).send("User doesn't exist")
+        }
 
     } catch (error) {
         res.status(400).send(`${error.message}`);
@@ -175,24 +234,23 @@ app.post('/CreateBill', async (req, res) => {
             res.status(400).send("This bill already exists")
         }
 
-        // get category that the bill has
+        //get category that the bill has
         var categoryDoc = await userRef.collection(categoryCollection).doc(categoryId).get();
 
-        // if this category doesn't exist
+        //if this category doesn't exist
         if(!categoryDoc.exists) { 
 
-            // make a new category
+            //make a new category
             const newCategory = new Category(category);
        
-            // add it to the category table
+            //add it to the category table
            categoryDoc = await userRef.collection(categoryCollection).add(newCategory);
         }
         
-        // add the category for the new bill
+        //add the category for the new bill
         categoryId = categoryDoc.id;
 
-
-        // constructor for a new bill
+        //constructor for a new bill
         const newBill = new Bill(
             req.body.name,
             req.body.categoryId,

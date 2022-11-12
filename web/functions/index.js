@@ -575,13 +575,13 @@ app.post('/CreateOneOff', async (req, res) => {
         const userRef = db.collection(userCollection).doc(`${userId}`);
         var categoryDoc = "";
 
-        //check if the budget already exists
+        //check if the one-off already exists
         const oneOffExist = await userRef.collection(oneOffCollection).where('name', '==',  `${req.body.name}`).get();
         if(!oneOffExist.empty){
             res.status(400).send("This one-off already exists");
         }
 
-        //get category that the budget has
+        //get category that the one-off has
         var categoryExist = await userRef.collection(categoryCollection).where('category', '==', `${req.body.category}`).get();
 
         //if this category doesn't exist
@@ -596,10 +596,13 @@ app.post('/CreateOneOff', async (req, res) => {
            categoryDoc = await userRef.collection(categoryCollection).doc().set(newCategory);
         }
         
-        //add the category for the new budget
+        //add the category for the new one-off
         const categoryId = categoryDoc.id;
 
-        //constructor for a new bill
+         //make price string into an integer
+         const price = parseInt(req.body.price);
+
+        //constructor for a new one-off
         const newOneOff = {
             "name": `${req.body.name}`,
             "category": `${categoryId}`,
@@ -610,8 +613,15 @@ app.post('/CreateOneOff', async (req, res) => {
 
         const oneOffDoc = await userRef.collection(oneOffCollection).doc().set(newOneOff);
         const oneOffId = oneOffDoc.id;
-
-        //res.status(201).
+        res.status(201).send(`{
+            "userId": "${userId}",
+            "oneOffId": "${oneOffId}",
+            "name": "${req.body.name}",
+            "category": "${categoryId}",
+            "color": "${req.body.color}",
+            "price": ${price},
+            "date": "${req.body.date}",
+        }`);
 
     } catch (error) {
         res.status(400).send(`${error.message}`)
@@ -625,6 +635,9 @@ app.post('/GetOneOff', async (req, res) => {
     try {
 
         
+        res.status(200).send(`{
+
+        }`);
 
     } catch (error) {
         res.status(400).send(`${error.message}`)
@@ -637,7 +650,10 @@ app.post('/EditOneOff', async (req, res) => {
 
     try {
 
-        
+
+        res.status(200).send(`{
+
+        }`);
 
     } catch (error) {
         res.status(400).send(`${error.message}`)
@@ -650,7 +666,10 @@ app.post('/RemoveOneOff', async (req, res) => {
 
     try {
 
-
+        
+        res.status(200).send(`{
+            
+        }`);
 
     } catch (error) {
         res.status(400).send(`${error.message}`)

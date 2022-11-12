@@ -18,30 +18,18 @@ const userCollection = 'users';
 const billCollection = 'bills';
 const budgetCollection = 'budgets';
 const categoryCollection = 'categories';
+const oneOffCollection = 'oneOffs';
 
 //define google cloud function name
 exports.webApi = functions.https.onRequest(app);
 
+
+//initialize CORS for app
 app.use(
     cors({
         origin: "*",
     })
 );
-
-//classes for database objects
-
-class Bill {
-    constructor(name, categoryId, color, price, startDate, endDate, recurrence, isPaid) {
-        this.name = name,
-        this.categoryId = categoryId,
-        this.color = color,
-        this.price = price,
-        this.startDate = startDate,
-        this.endDate = endDate,
-        this.recurrence = recurrence,
-        this.isPaid = isPaid
-    }
-}
 
 class Budget {
     constructor(name, categoryId, expectedPrice, actualPrice, startDate, recurrence, payments) {
@@ -61,54 +49,7 @@ class Category {
     }
 }
 
-class UserProfile {
-    constructor(firstName, lastName, expectedIncome) {
-        this.firstName = firstName,
-        this.lastName = lastName,
-        this.expectedIncome = expectedIncome
-    }
-}
-
-class OneOffs {
-    constructor(name, categoryId, color, price, date) {
-        this.name = name,
-        this.categoryId = categoryId,
-        this.color = color,
-        this.price = price,
-        this.date = date
-    }
-}
-
 //TO DO: check category stuff for correct syntax, test all current API, add API for one-offs
-
-/*
-app.post('/test', async (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
-
-    try {
-
-        const word = req.body.word;
-        res.status(201).send(`${word} was successfully processed`);
-
-    } catch (error) {
-        res.status(400).send(`${error.message}`);
-    }
-});
-
-app.post('/CreateUser', async (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
-
-    try {
-
-        const userId = req.body.userId;
-        await db.collection(userCollection).doc(`${userId}`).set({});
-        res.status(201).send(`User ${userId} was added to the database`);
-
-    } catch (error) {
-        res.status(400).send(`${error.message}`);
-    }
-});
-*/
 
 //create user profile
 app.post('/CreateUserProfile', async (req, res) => {
@@ -116,7 +57,8 @@ app.post('/CreateUserProfile', async (req, res) => {
 
     try{
 
-        const userId = req.body.userId; 
+        const userId = req.body.userId;
+        const expectedIncome = parseInt(req.body.expectedIncome); 
 
         //when a new user signs up, they will be added to the userCollection
         await db.collection(userCollection).doc(`${userId}`).set({});
@@ -125,13 +67,13 @@ app.post('/CreateUserProfile', async (req, res) => {
         const newProfile = {
             "firstName": `${req.body.firstName}`,
             "lastName": `${req.body.lastName}`,
-            "expectedIncome": `${req.body.expectedIncome}`,
+            "expectedIncome": `${expectedIncome}`,
         }
 
         //add the user's profile to the database
         await userRef.update(newProfile);
 
-        res.status(201).send(`{"userId": "${userId}", "firstName": "${req.body.firstName}", "lastName": "${req.body.lastName}", "expectedIncome": "${req.body.expectedIncome}"}`);
+        res.status(201).send(`{"userId": "${userId}", "firstName": "${req.body.firstName}", "lastName": "${req.body.lastName}", "expectedIncome": ${req.body.expectedIncome}}`);
 
     } catch (error) {
         res.status(400).send(`${error.message}`);
@@ -152,7 +94,7 @@ app.post('/GetUserProfile', async (req, res) => {
             const firstName = userRef.get("firstName");
             const lastName = userRef.get("lastName");
             const expectedIncome = userRef.get("expectedIncome");
-            res.status(200).send(`{"userId": "${userId}", "firstName": "${firstName}", "lastName": "${lastName}", "expectedIncome": "${expectedIncome}"}`);
+            res.status(200).send(`{"userId": "${userId}", "firstName": "${firstName}", "lastName": "${lastName}", "expectedIncome": ${expectedIncome}}`);
         }
         else {
             res.status(400).send("User doesn't exist")
@@ -169,7 +111,8 @@ app.post('/EditUserProfile', async (req, res) => {
 
     try{
 
-        const userId = req.body.userId; 
+        const userId = req.body.userId;
+        const expectedIncome = parseInt(req.body.expectedIncome); 
         const userRef = await db.collection('users').doc(`${userId}`).get();
         
         //if the user exists, then edit the profile info for said user
@@ -177,13 +120,13 @@ app.post('/EditUserProfile', async (req, res) => {
             const newProfile = {
                 "firstName": `${req.body.firstName}`,
                 "lastName": `${req.body.lastName}`,
-                "expectedIncome": `${req.body.expectedIncome}`,
+                "expectedIncome": `${expectedIncome}`,
             }
 
             //add the user's profile to the database
             await db.collection('users').doc(`${userId}`).update(newProfile);
 
-            res.status(201).send(`{"userId": "${userId}", "firstName": "${req.body.firstName}", "lastName": "${req.body.lastName}", "expectedIncome": "${req.body.expectedIncome}"}`);
+            res.status(201).send(`{"userId": "${userId}", "firstName": "${req.body.firstName}", "lastName": "${req.body.lastName}", "expectedIncome": ${req.body.expectedIncome}}`);
         }
         else {
             res.status(400).send("User doesn't exist")
@@ -225,49 +168,113 @@ app.post('/CreateBill', async (req, res) => {
 
         const userId = req.body.userId; 
         const userRef = db.collection(userCollection).doc(`${userId}`);
-        const category = req.body.category;
-        var categoryId = "";
+        var categoryDoc = "";
 
         //check if the bill already exists
-        const billExist = await userRef.collection(billCollection).where('name', '==', req.body.billName).get();
+        const billExist = await userRef.collection(billCollection).where('name', '==', `${req.body.name}`).get();
         if(!billExist.empty){
             res.status(400).send("This bill already exists")
         }
 
         //get category that the bill has
-        var categoryDoc = await userRef.collection(categoryCollection).doc(categoryId).get();
+        var categoryExist = await userRef.collection(categoryCollection).where('name', '==', `${req.body.category}`).get();
 
         //if this category doesn't exist
-        if(!categoryDoc.exists) { 
+        if(categoryExist.empty) {
 
             //make a new category
-            const newCategory = new Category(category);
+            const newCategory = {
+                "name": `${req.body.category}`
+            }
        
             //add it to the category table
-           categoryDoc = await userRef.collection(categoryCollection).add(newCategory);
+           categoryDoc = await userRef.collection(categoryCollection).doc().set(newCategory);
         }
         
         //add the category for the new bill
-        categoryId = categoryDoc.id;
+        const categoryId = categoryDoc.id;
+
+        //make price string into an integer
+        const price = parseInt(req.body.price);
+
+        //initialize isPaid array to hold
+        var isPaid = [req.body.recurrence];
 
         //constructor for a new bill
-        const newBill = new Bill(
-            req.body.name,
-            req.body.categoryId,
-            req.body.color,
-            req.body.price,
-            req.body.startDate,
-            req.body.endDate,
-            req.body.recurrence,
-            req.body.isPaid //need to have the array or collection created and later maintained
-        );
+        const newBill = {
+            "name": `${req.body.name}`,
+            "category": `${categoryId}`,
+            "color": `${req.body.color}`,
+            "price": `${price}`,
+            "startDate": `${req.body.startDate}`,
+            "endDate": `${req.body.endDate}`,
+            "recurrence": `${req.body.recurrence}`,
+            "isPaid": `${isPaid}`
+        }
 
-        const newBillDoc = await userRef.collection(billCollection).doc().set(newBill);
-        res.status(201).send(`{"userId": ${userId}, "newBillId": ${newBillDoc.id}}`);
+        const billDoc = await userRef.collection(billCollection).doc().set(newBill);
+        const billId = billDoc.id;
+        res.status(201).send(`{
+            "userId": "${userId}",
+            "billId": "${billId}",
+            "name": "${req.body.name}",
+            "category": "${categoryId}",
+            "color": "${req.body.color}",
+            "price": ${price},
+            "startDate": "${req.body.startDate}",
+            "endDate": "${req.body.endDate}",
+            "recurrence": "${req.body.recurrence}",
+            "isPaid": "${isPaid}"
+        }`);
 
     } catch (error) {
         res.status(400).send(`${error.message}`)
     }
+});
+
+
+//get bill
+app.post('/GetBill', async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try {
+
+        const userId = req.body.userId; 
+        const userRef = db.collection(userCollection).doc(`${userId}`);
+        const billId = req.body.billId; 
+
+         //check if the bill already exists
+         const billExist = await userRef.collection(billCollection).doc(`${billId}`).get();
+         if(billExist.exists) {
+            const name = userRef.collection(billCollection).doc(`${billId}`).get("name");
+            const category = userRef.collection(billCollection).doc(`${billId}`).get("category");
+            const color = userRef.collection(billCollection).doc(`${billId}`).get("color");
+            const price = userRef.collection(billCollection).doc(`${billId}`).get("price");
+            const startDate = userRef.collection(billCollection).doc(`${billId}`).get("startDate");
+            const endDate = userRef.collection(billCollection).doc(`${billId}`).get("endDate");
+            const recurrence = userRef.collection(billCollection).doc(`${billId}`).get("recurrence");
+            const isPaid = userRef.collection(billCollection).doc(`${billId}`).get("isPaid");
+
+            res.status(200).send(`{
+                "userId": "${userId}",
+                "billId": "${billId}",
+                "name": "${name}",
+                "category": "${category}",
+                "color": "${color}",
+                "price": ${price},
+                "startDate": "${startDate}",
+                "endDate": "${endDate}",
+                "recurrence": "${recurrence}",
+                "isPaid": "${isPaid}"
+            }`);
+        }
+         else {
+            res.status(400).send("This bill doesn't exist")
+         }
+
+    } catch (error) {
+        res.status(400).send(`${error.message}`)
+    } 
 });
 
 //edit bill
@@ -279,33 +286,61 @@ app.post('/EditBill', async (req, res) => {
         const userId = req.body.userId; 
         const userRef = db.collection(userCollection).doc(`${userId}`);
         const billId = req.body.billId; 
-        const category = req.body.category;
-        var categoryId = "";
+        var categoryDoc = "";
 
-        // get the category
-        var categoryDoc = await userRef.collection(categoryCollection).doc(categoryId).get();
-
-        // if the category doesn't exist, add it to the database
-        if(!categoryDoc.exists) { 
-            const newCategory = new Category(category);
-            categoryDoc = await userRef.collection(categoryCollection).add(newCategory);
+        //check if the bill already exists
+        const billExist = await userRef.collection(billCollection).doc(`${billId}`).get();
+        if(!billExist.empty){
+            res.status(400).send("This bill already exists")
         }
 
-        categoryId = categoryDoc.id;
+        //get category that the bill has
+        var categoryExist = await userRef.collection(categoryCollection).where('category', '==', `${req.body.category}`).get();
 
-        const editedBill = new Bill(
-            req.body.name,
-            req.body.categoryId,
-            req.body.color,
-            req.body.price,
-            req.body.startDate,
-            req.body.endDate,
-            req.body.recurrence,
-            req.body.isPaid
-        );
+        //if this category doesn't exist
+        if(categoryExist.empty) {
+
+            //make a new category
+            const newCategory = {
+                "name": `${req.body.category}`
+            }
+       
+            //add it to the category table
+           categoryDoc = await userRef.collection(categoryCollection).doc().set(newCategory);
+        }
+        
+        //edit the category for the current bill
+        const categoryId = categoryDoc.id;
+
+        const price = parseInt(req.body.price);
+
+        //update isPaid depending on which months the bill has been paid
+        var isPaid = ;
+
+        const editedBill = {
+            "name": `${req.body.name}`,
+            "category": `${categoryId}`,
+            "color": `${req.body.color}`,
+            "price": `${price}`,
+            "startDate": `${req.body.startDate}`,
+            "endDate": `${req.body.endDate}`,
+            "recurrence": `${req.body.recurrence}`,
+            "isPaid": `${isPaid}`
+        }
 
         await userRef.collection(billCollection).doc(`${billId}`).update(editedBill);
-        res.status(200).send(`{"userId": ${userId}, "editedBillId": ${billId}}`);
+        res.status(200).send(`{
+            "userId": "${userId}",
+            "billId": "${billId}",
+            "name": "${req.body.name}",
+            "category": "${categoryId}",
+            "color": "${req.body.color}",
+            "price": ${price},
+            "startDate": "${req.body.startDate}",
+            "endDate": "${req.body.endDate}",
+            "recurrence": "${req.body.recurrence}",
+            "isPaid": "${isPaid}"
+        }`);
 
     } catch (error) {
         res.status(400).send(`${error.message}`)
@@ -325,7 +360,7 @@ app.post('/RemoveBill', async (req, res) => {
 
         if(billDoc.exists) {
             await userRef.collection(billCollection).doc(`${billId}`).delete();
-            res.status(200).send(`{"userId": ${userId}, "billId": "NULL"}`);
+            res.status(200).send(`{"userId": ${userId}, "billId": "Doesn't exist anymore"}`);
         }
         else {
             res.status(400).send("Bill doesn't exist")
@@ -344,39 +379,109 @@ app.post('/CreateBudget', async (req, res) => {
 
         const userId = req.body.userId; 
         const userRef = db.collection(userCollection).doc(`${userId}`);
-        const category = req.body.category;
-        var categoryId = "";
+        var categoryDoc = "";
 
         //check if the budget already exists
-        const budgetExist = await userRef.collection(budgetCollection).where('category', '==', category).get();
+        const budgetExist = await userRef.collection(budgetCollection).where('name', '==',  `${req.body.name}`).get();
         if(!budgetExist.empty){
-            res.status(400).send("This budget already exists")
+            res.status(400).send("This budget already exists");
         }
 
-        var categoryDoc = await userRef.collection(categoryCollection).doc(categoryId).get();
+        //get category that the budget has
+        var categoryExist = await userRef.collection(categoryCollection).where('category', '==', `${req.body.category}`).get();
 
-        if(!categoryDoc.exists) { 
-            const newCategory = new Category(category);
-            categoryDoc = await userRef.collection(categoryCollection).add(newCategory);
+        //if this category doesn't exist
+        if(categoryExist.empty) {
+
+            //make a new category
+            const newCategory = {
+                "name": `${req.body.category}`
+            }
+       
+            //add it to the category table
+           categoryDoc = await userRef.collection(categoryCollection).doc().set(newCategory);
         }
+        
+        //add the category for the new budget
+        const categoryId = categoryDoc.id;
 
-        categoryId = categoryDoc.id;
+        //make expectedPrice string into an integer
+        const expectedPrice = parseInt(req.body.expectedPrice);
+
+        //make actualPrice string into an integer
+        const actualPrice = parseInt(req.body.actualPrice);
 
         //populate the budget payments array with all the current bills that correspond with it
-        const budgetRespectiveBills = await userRef.collection(billCollection).where('category', '==', category).get();
+        const budgetRespectiveBills = await userRef.collection(billCollection).where('category', '==', `${categoryId}`).get();
 
-        const newBudget = new Budget(
-            req.body.name,
-            req.body.categoryId,
-            req.body.expectedPrice,
-            req.body.actualPrice,
-            req.body.startDate,
-            req.body.recurrence,
-            req.body.payments //need to have the array or collection created and later maintained
-        );
+        //need to parse budgetRespectiveBills into array of the billIds aka separate into the individual bill docs
+        var payments = ;
 
-        const newBudgetDoc = await userRef.collection(budgetCollection).doc().set(newBudget);
-        res.status(201).send(`{"userId": ${userId}, "newBudgetId": ${newBudgetDoc.id}, "budgetRespectiveBills": ${budgetRespectiveBills}}`);
+        const newBudget = {
+            "name": `${req.body.name}`,
+            "category": `${categoryId}`,
+            "expectedPrice": `${expectedPrice}`,
+            "actualPrice": `${actualPrice}`,
+            "startDate": `${req.body.startDate}`,
+            "recurrence": `${req.body.recurrence}`,
+            "payments": `${payments}`
+        }
+
+        const budgetDoc = await userRef.collection(budgetCollection).doc().set(newBudget);
+        const budgetId = budgetDoc.id;
+        res.status(201).send(`{
+            "userId": "${userId}",
+            "budgetId": "${budgetId}",
+            "name": "${req.body.name}",
+            "category": "${categoryId}",
+            "expectedPrice": ${expectedPrice},
+            "actualPrice": ${actualPrice},
+            "startDate": "${req.body.startDate}",
+            "recurrence": "${req.body.recurrence}",
+            "payments": "${payments}"
+        }`);
+
+    } catch (error) {
+        res.status(400).send(`${error.message}`)
+    }
+});
+
+//get budget
+app.post('/GetBudget', async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try {
+
+        const userId = req.body.userId; 
+        const userRef = db.collection(userCollection).doc(`${userId}`);
+        const budgetId = req.body.budgetId; 
+
+         //check if the bill already exists
+         const budgetExist = await userRef.collection(budgetCollection).doc(`${budgetId}`).get();
+         if(budgetExist.exists) {
+            const name = userRef.collection(budgetCollection).doc(`${budgetId}`).get("name");
+            const category = userRef.collection(budgetCollection).doc(`${budgetId}`).get("category");
+            const expectedPrice = userRef.collection(budgetCollection).doc(`${budgetId}`).get("expectedPrice");
+            const actualPrice = userRef.collection(budgetCollection).doc(`${budgetId}`).get("actualPrice");
+            const startDate = userRef.collection(budgetCollection).doc(`${budgetId}`).get("startDate");
+            const recurrence = userRef.collection(budgetCollection).doc(`${budgetId}`).get("recurrence");
+            const payments = userRef.collection(budgetCollection).doc(`${budgetId}`).get("payments");
+
+            res.status(200).send(`{
+                "userId": "${userId}",
+                "budgetId": "${budgetId}",
+                "name": "${name}",
+                "category": "${category}",
+                "expectedPrice": ${expectedPrice},
+                "actualPrice": ${actualPrice},
+                "startDate": "${startDate}",
+                "recurrence": "${recurrence}",
+                "payments": "${payments}"
+            }`);
+        }
+         else {
+            res.status(400).send("This budget doesn't exist")
+         }
 
     } catch (error) {
         res.status(400).send(`${error.message}`)
@@ -406,6 +511,7 @@ app.post('/EditBudget', async (req, res) => {
 
         //populate the budget payments array with all the current bills that correspond with it
         const budgetRespectiveBills = await userRef.collection(billCollection).where('category', '==', category).get();
+        var payments = ;
 
         const editedBudget = new Budget(
             req.body.name,
@@ -418,7 +524,17 @@ app.post('/EditBudget', async (req, res) => {
         );
 
         await userRef.collection(budgetCollection).doc(`${budgetId}`).update(editedBudget);
-        res.status(200).send(`{"userId": ${userId}, "editedBudgetId": ${budgetId}, "budgetRespectiveBills": ${budgetRespectiveBills}}`);
+        res.status(200).send(`{
+            "userId": "${userId}",
+            "budgetId": "${budgetId}",
+            "name": "${req.body.name}",
+            "category": "${categoryId}",
+            "expectedPrice": ${expectedPrice},
+            "actualPrice": ${actualPrice},
+            "startDate": "${req.body.startDate}",
+            "recurrence": "${req.body.recurrence}",
+            "payments": "${payments}"
+        }`);
 
     } catch (error) {
         res.status(400).send(`${error.message}`)
@@ -438,11 +554,103 @@ app.post('/RemoveBudget', async (req, res) => {
 
         if(budgetDoc.exists) {
             await userRef.collection(budgetCollection).doc(`${budgetId}`).delete();
-            res.status(200).send(`{"userId": ${userId}, "budgetId": "NULL"}`);
+            res.status(200).send(`{"userId": ${userId}, "budgetId": "Doesn't exist anymore"}`);
         }
         else {
             res.status(400).send("Budget doesn't exist")
         }
+
+    } catch (error) {
+        res.status(400).send(`${error.message}`)
+    }
+});
+
+//create one-off
+app.post('/CreateOneOff', async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try {
+
+        const userId = req.body.userId; 
+        const userRef = db.collection(userCollection).doc(`${userId}`);
+        var categoryDoc = "";
+
+        //check if the budget already exists
+        const oneOffExist = await userRef.collection(oneOffCollection).where('name', '==',  `${req.body.name}`).get();
+        if(!oneOffExist.empty){
+            res.status(400).send("This one-off already exists");
+        }
+
+        //get category that the budget has
+        var categoryExist = await userRef.collection(categoryCollection).where('category', '==', `${req.body.category}`).get();
+
+        //if this category doesn't exist
+        if(categoryExist.empty) {
+
+            //make a new category
+            const newCategory = {
+                "name": `${req.body.category}`
+            }
+       
+            //add it to the category table
+           categoryDoc = await userRef.collection(categoryCollection).doc().set(newCategory);
+        }
+        
+        //add the category for the new budget
+        const categoryId = categoryDoc.id;
+
+        //constructor for a new bill
+        const newOneOff = {
+            "name": `${req.body.name}`,
+            "category": `${categoryId}`,
+            "color": `${req.body.color}`,
+            "price": `${price}`,
+            "date": `${req.body.date}`,
+        }
+
+        const oneOffDoc = await userRef.collection(oneOffCollection).doc().set(newOneOff);
+        const oneOffId = oneOffDoc.id;
+
+        //res.status(201).
+
+    } catch (error) {
+        res.status(400).send(`${error.message}`)
+    }
+});
+
+//get one-off
+app.post('/GetOneOff', async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try {
+
+        
+
+    } catch (error) {
+        res.status(400).send(`${error.message}`)
+    }
+});
+
+//edit one-off
+app.post('/EditOneOff', async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try {
+
+        
+
+    } catch (error) {
+        res.status(400).send(`${error.message}`)
+    }
+});
+
+//delete one-off
+app.post('/RemoveOneOff', async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try {
+
+
 
     } catch (error) {
         res.status(400).send(`${error.message}`)

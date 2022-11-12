@@ -508,7 +508,9 @@ app.post('/EditBudget', async (req, res) => {
 
         //populate the budget payments array with all the current bills that correspond with it
         const budgetRespectiveBills = await userRef.collection(billCollection).where('category', '==', category).get();
-        var payments = ;
+        // payments is an array containing all the bills belonging
+        // to the category of the budget
+        var payments = budgetRespectiveBills.docs.map(x => x.data());
 
         const editedBudget = {
             "name": `${req.body.name}`,

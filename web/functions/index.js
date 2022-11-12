@@ -635,7 +635,6 @@ app.post('/CreateOneOff', async (req, res) => {
 app.post('/GetOneOff', async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
-<<<<<<< HEAD
     try {
 
         const userId = req.body.userId; 
@@ -668,9 +667,6 @@ app.post('/GetOneOff', async (req, res) => {
     } catch (error) {
         res.status(400).send(`${error.message}`)
     }
-=======
-   
->>>>>>> a6e8973 (edit one-off)
 });
 
 //edit one-off
@@ -742,21 +738,12 @@ app.post('/RemoveOneOff', async (req, res) => {
 
         const userId = req.body.userId; 
         const userRef = db.collection(userCollection).doc(`${userId}`);
-<<<<<<< HEAD
-        const oneOffId = req.body.oneOffId; 
-        const oneOffDoc = await userRef.collection(oneOffCollection).doc(`${oneOffId}`).get();
-
-        if(oneOffDoc.exists) {
-            await userRef.collection(oneOffCollection).doc(`${oneOffId}`).delete();
-            res.status(200).send(`{"userId": ${userId}, "oneOffId": "Doesn't exist anymore"}`);
-=======
         const oneOffId = req.body.oneOffId;
         const oneOffDoc =  await userRef.collection(oneOffCollection).doc(`${oneOffId}`).get();
 
         if(oneOffDoc.exists) {
             await userRef.collection(oneOffCollection).doc(`${oneOffId}`).delete();
             res.status(200).send(`{"userId": ${userId}, "oneOffId": ${oneOffId}, "has been deleted"}`);
->>>>>>> a6e8973 (edit one-off)
         }
         else {
             res.status(400).send("One-off doesn't exist")

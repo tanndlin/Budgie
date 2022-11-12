@@ -31,7 +31,8 @@ app.use(
 );
 
 //TO DO: finish budget create and edit functions with updatable actualPrices, and then test all API
-//for the former, will need to get a better understanding of firestore maps, and then get and sum up the prices from bills and one-offs
+//For the former, will need to get a better understanding of firestore maps, and then get and sum up the prices from bills and one-offs
+//Plus, may need to filter the bills and one-offs for a particular budget to fit its timeline (all bills and one-offs after the budget's start date)
 
 //create user profile
 app.post('/CreateUserProfile', async (req, res) => {
@@ -392,6 +393,7 @@ app.post('/CreateBudget', async (req, res) => {
         var oneOffPrices = budgetRespectiveOneOffs.docs.map();
 
         //get the actualPrice based on price for the bills and one-offs of a particular category
+        //Number is just a place holder and will be removed once we figure out code to get the price summation
         const actualPrice = Number;
 
         const newBudget = {

@@ -30,7 +30,8 @@ app.use(
     })
 );
 
-//TO DO: finish one-off functions and then test all API
+//TO DO: finish budget create and edit functions with updatable actualPrices, and then test all API
+//for the former, will need to get a better understanding of firestore maps, and then get and sum up the prices from bills and one-offs
 
 //create user profile
 app.post('/CreateUserProfile', async (req, res) => {
@@ -187,7 +188,7 @@ app.post('/CreateBill', async (req, res) => {
         //constructor for a new bill
         const newBill = {
             "name": `${req.body.name}`,
-            "category": `${categoryId}`,
+            "categoryId": `${categoryId}`,
             "color": `${req.body.color}`,
             "price": `${price}`,
             "startDate": `${req.body.startDate}`,
@@ -198,11 +199,12 @@ app.post('/CreateBill', async (req, res) => {
 
         const billDoc = await userRef.collection(billCollection).doc().set(newBill);
         const billId = billDoc.id;
+        await userRef.collection(billCollection).doc(`${billId}`).update(`"billId": "${billId}"`);
         res.status(201).send(`{
             "userId": "${userId}",
             "billId": "${billId}",
             "name": "${req.body.name}",
-            "category": "${categoryId}",
+            "categoryId": "${categoryId}",
             "color": "${req.body.color}",
             "price": ${price},
             "startDate": "${req.body.startDate}",
@@ -225,31 +227,15 @@ app.post('/GetBill', async (req, res) => {
 
         const userId = req.body.userId; 
         const userRef = db.collection(userCollection).doc(`${userId}`);
-        const billId = req.body.billId; 
 
          //check if the bill already exists
-         const billExist = await userRef.collection(billCollection).doc(`${billId}`).get();
-         if(billExist.exists) {
-            const name = userRef.collection(billCollection).doc(`${billId}`).get("name");
-            const category = userRef.collection(billCollection).doc(`${billId}`).get("category");
-            const color = userRef.collection(billCollection).doc(`${billId}`).get("color");
-            const price = userRef.collection(billCollection).doc(`${billId}`).get("price");
-            const startDate = userRef.collection(billCollection).doc(`${billId}`).get("startDate");
-            const endDate = userRef.collection(billCollection).doc(`${billId}`).get("endDate");
-            const recurrence = userRef.collection(billCollection).doc(`${billId}`).get("recurrence");
-            const isPaid = userRef.collection(billCollection).doc(`${billId}`).get("isPaid");
+         const billExist = await userRef.collection(billCollection).where('name', '==', `${req.body.name}`).get();
+
+         if(!billExist.empty) {
 
             res.status(200).send(`{
                 "userId": "${userId}",
-                "billId": "${billId}",
-                "name": "${name}",
-                "category": "${category}",
-                "color": "${color}",
-                "price": ${price},
-                "startDate": "${startDate}",
-                "endDate": "${endDate}",
-                "recurrence": "${recurrence}",
-                "isPaid": "${isPaid}"
+                "bill": "${billExist}"
             }`);
         }
          else {
@@ -305,13 +291,14 @@ app.post('/EditBill', async (req, res) => {
 
         const editedBill = {
             "name": `${req.body.name}`,
-            "category": `${categoryId}`,
+            "categoryId": `${categoryId}`,
             "color": `${req.body.color}`,
             "price": `${price}`,
             "startDate": `${req.body.startDate}`,
             "endDate": `${req.body.endDate}`,
             "recurrence": `${req.body.recurrence}`,
-            "isPaid": `${isPaid}`
+            "isPaid": `${isPaid}`,
+            "billId": `${billId}`
         }
 
         await userRef.collection(billCollection).doc(`${billId}`).update(editedBill);
@@ -319,7 +306,7 @@ app.post('/EditBill', async (req, res) => {
             "userId": "${userId}",
             "billId": "${billId}",
             "name": "${req.body.name}",
-            "category": "${categoryId}",
+            "categoryId": "${categoryId}",
             "color": "${req.body.color}",
             "price": ${price},
             "startDate": "${req.body.startDate}",
@@ -394,37 +381,44 @@ app.post('/CreateBudget', async (req, res) => {
         //make expectedPrice string into an integer
         const expectedPrice = parseInt(req.body.expectedPrice);
 
-        //make actualPrice string into an integer
-        const actualPrice = parseInt(req.body.actualPrice);
+        //populate the budget payments arrays with all the current bills and one-offs that correspond with it
+        const budgetRespectiveBills = await userRef.collection(billCollection).where('categoryId', '==', `${categoryId}`).get();
+        const budgetRespectiveOneOffs = await userRef.collection(oneOffCollection).where('categoryId', '==', `${categoryId}`).get();
 
-        //populate the budget payments array with all the current bills that correspond with it
-        const budgetRespectiveBills = await userRef.collection(billCollection).where('category', '==', `${categoryId}`).get();
+        //need to parse budgetRespectiveBills into array of the bills
+        var billPrices = budgetRespectiveBills.docs.map();
 
-        //need to parse budgetRespectiveBills into array of the billIds aka separate into the individual bill docs
-        var payments = budgetRespectiveBills.docs.map(x => x.data());
+        //need to parse budgetRespectiveOneOffs into array of the one-offs
+        var oneOffPrices = budgetRespectiveOneOffs.docs.map();
+
+        //get the actualPrice based on price for the bills and one-offs of a particular category
+        const actualPrice = Number;
 
         const newBudget = {
             "name": `${req.body.name}`,
-            "category": `${categoryId}`,
+            "categoryId": `${categoryId}`,
             "expectedPrice": `${expectedPrice}`,
             "actualPrice": `${actualPrice}`,
             "startDate": `${req.body.startDate}`,
             "recurrence": `${req.body.recurrence}`,
-            "payments": `${payments}`
+            "billPayments": `${budgetRespectiveBills}`,
+            "oneOffPayments": `${budgetRespectiveOneOffs}`
         }
 
         const budgetDoc = await userRef.collection(budgetCollection).doc().set(newBudget);
         const budgetId = budgetDoc.id;
+        await userRef.collection(budgetCollection).doc(`${budgetId}`).update(`"budgetId": "${budgetId}"`);
         res.status(201).send(`{
             "userId": "${userId}",
             "budgetId": "${budgetId}",
             "name": "${req.body.name}",
-            "category": "${categoryId}",
+            "categoryId": "${categoryId}",
             "expectedPrice": ${expectedPrice},
             "actualPrice": ${actualPrice},
             "startDate": "${req.body.startDate}",
             "recurrence": "${req.body.recurrence}",
-            "payments": "${payments}"
+            "billPayments": "${budgetRespectiveBills}",
+            "oneOffPayments": "${budgetRespectiveOneOffs}"
         }`);
 
     } catch (error) {
@@ -440,29 +434,15 @@ app.post('/GetBudget', async (req, res) => {
 
         const userId = req.body.userId; 
         const userRef = db.collection(userCollection).doc(`${userId}`);
-        const budgetId = req.body.budgetId; 
 
          //check if the budget already exists
-         const budgetExist = await userRef.collection(budgetCollection).doc(`${budgetId}`).get();
-         if(budgetExist.exists) {
-            const name = userRef.collection(budgetCollection).doc(`${budgetId}`).get("name");
-            const category = userRef.collection(budgetCollection).doc(`${budgetId}`).get("category");
-            const expectedPrice = userRef.collection(budgetCollection).doc(`${budgetId}`).get("expectedPrice");
-            const actualPrice = userRef.collection(budgetCollection).doc(`${budgetId}`).get("actualPrice");
-            const startDate = userRef.collection(budgetCollection).doc(`${budgetId}`).get("startDate");
-            const recurrence = userRef.collection(budgetCollection).doc(`${budgetId}`).get("recurrence");
-            const payments = userRef.collection(budgetCollection).doc(`${budgetId}`).get("payments");
+         const budgetExist = await userRef.collection(budgetCollection).where('name', '==', `${req.body.name}`).get();
+
+         if(!budgetExist.empty) {
 
             res.status(200).send(`{
                 "userId": "${userId}",
-                "budgetId": "${budgetId}",
-                "name": "${name}",
-                "category": "${category}",
-                "expectedPrice": ${expectedPrice},
-                "actualPrice": ${actualPrice},
-                "startDate": "${startDate}",
-                "recurrence": "${recurrence}",
-                "payments": "${payments}"
+                "budget": "${budgetExist}"
             }`);
         }
          else {
@@ -510,20 +490,31 @@ app.post('/EditBudget', async (req, res) => {
         //add the category for the new budget
         const categoryId = categoryDoc.id;
 
-        //populate the budget payments array with all the current bills that correspond with it
-        const budgetRespectiveBills = await userRef.collection(billCollection).where('category', '==', category).get();
-        // payments is an array containing all the bills belonging
-        // to the category of the budget
-        var payments = budgetRespectiveBills.docs.map(x => x.data());
+        const expectedPrice = parseInt(req.body.expectedPrice);
+
+        //populate the budget payments arrays with all the current bills and one-offs that correspond with it
+        const budgetRespectiveBills = await userRef.collection(billCollection).where('categoryId', '==', `${categoryId}`).get();
+        const budgetRespectiveOneOffs = await userRef.collection(oneOffCollection).where('categoryId', '==', `${categoryId}`).get();
+
+        //need to parse budgetRespectiveBills into array of the bills
+        var billPrices = budgetRespectiveBills.docs.map();
+
+        //need to parse budgetRespectiveOneOffs into array of the one-offs
+        var oneOffPrices = budgetRespectiveOneOffs.docs.map();
+
+        //get the actualPrice based on price for the bills and one-offs of a particular category
+        const actualPrice = Number;
 
         const editedBudget = {
             "name": `${req.body.name}`,
-            "category": `${categoryId}`,
+            "categoryId": `${categoryId}`,
             "expectedPrice": `${expectedPrice}`,
             "actualPrice": `${actualPrice}`,
             "startDate": `${req.body.startDate}`,
             "recurrence": `${req.body.recurrence}`,
-            "payments": `${payments}`
+            "billPayments": `${budgetRespectiveBills}`,
+            "oneOffPayments": `${budgetRespectiveOneOffs}`,
+            "budgetId": `${budgetId}`
         }
 
         await userRef.collection(budgetCollection).doc(`${budgetId}`).update(editedBudget);
@@ -531,12 +522,13 @@ app.post('/EditBudget', async (req, res) => {
             "userId": "${userId}",
             "budgetId": "${budgetId}",
             "name": "${req.body.name}",
-            "category": "${categoryId}",
+            "categoryId": "${categoryId}",
             "expectedPrice": ${expectedPrice},
             "actualPrice": ${actualPrice},
             "startDate": "${req.body.startDate}",
             "recurrence": "${req.body.recurrence}",
-            "payments": "${payments}"
+            "billPayments": "${budgetRespectiveBills}",
+            "oneOffPayments": "${budgetRespectiveOneOffs}"
         }`);
 
     } catch (error) {
@@ -608,7 +600,7 @@ app.post('/CreateOneOff', async (req, res) => {
         //constructor for a new one-off
         const newOneOff = {
             "name": `${req.body.name}`,
-            "category": `${categoryId}`,
+            "categoryId": `${categoryId}`,
             "color": `${req.body.color}`,
             "price": `${price}`,
             "date": `${req.body.date}`,
@@ -616,11 +608,12 @@ app.post('/CreateOneOff', async (req, res) => {
 
         const oneOffDoc = await userRef.collection(oneOffCollection).doc().set(newOneOff);
         const oneOffId = oneOffDoc.id;
+        await userRef.collection(oneOffCollection).doc(`${oneOffId}`).update(`"oneOffId": "${oneOffId}"`);
         res.status(201).send(`{
             "userId": "${userId}",
             "oneOffId": "${oneOffId}",
             "name": "${req.body.name}",
-            "category": "${categoryId}",
+            "categoryId": "${categoryId}",
             "color": "${req.body.color}",
             "price": ${price},
             "date": "${req.body.date}"
@@ -631,33 +624,22 @@ app.post('/CreateOneOff', async (req, res) => {
     }
 });
 
-//get one-off
-app.post('/GetOneOff', async (req, res) => {
+//get one-offs
+app.post('/GetOneOffs', async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
     try {
 
         const userId = req.body.userId; 
-        const userRef = db.collection(userCollection).doc(`${userId}`);
-        const oneOffId = req.body.oneOffId; 
+        const userRef = db.collection(userCollection).doc(`${userId}`); 
 
          //check if the one-off already exists
-         const oneOffExist = await userRef.collection(oneOffCollection).doc(`${oneOffId}`).get();
-         if(oneOffExist.exists) {
-            const name = userRef.collection(oneOffCollection).doc(`${oneOffId}`).get("name");
-            const category = userRef.collection(oneOffCollection).doc(`${oneOffId}`).get("category");
-            const color = userRef.collection(oneOffCollection).doc(`${oneOffId}`).get("color");
-            const price = userRef.collection(oneOffCollection).doc(`${oneOffId}`).get("price");
-            const date = userRef.collection(oneOffCollection).doc(`${oneOffId}`).get("date");
+         const oneOffDocs = await userRef.collection(oneOffCollection).get();
+         if(!oneOffDocs.empty) {
 
             res.status(200).send(`{
                 "userId": "${userId}",
-                "oneOffId": "${oneOffId}",
-                "name": "${name}",
-                "category": "${category}",
-                "color": "${color}",
-                "price": ${price},
-                "date": "${date}"
+                "oneOffs": "${oneOffCollection}"
             }`);
         }
          else {
@@ -708,10 +690,11 @@ app.post('/EditOneOff', async (req, res) => {
 
         const editedOneOff = {
             "name": `${req.body.name}`,
-            "category": `${categoryId}`,
+            "categoryId": `${categoryId}`,
             "color": `${req.body.color}`,
             "price": `${price}`,
             "date": `${req.body.date}`,
+            "oneOffId": `${oneOffId}`
         }
 
         await userRef.collection(oneOffCollection).doc(`${oneOffId}`).update(editedOneOff);
@@ -719,7 +702,7 @@ app.post('/EditOneOff', async (req, res) => {
             "userId": "${userId}",
             "oneOffId": "${oneOffId}",
             "name": "${req.body.name}",
-            "category": "${categoryId}",
+            "categoryId": "${categoryId}",
             "color": "${req.body.color}",
             "price": ${price},
             "date": "${req.body.date}",

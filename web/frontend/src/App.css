@@ -100,3 +100,16 @@ input[type='number'] {
         left: calc(100% - 64px);
     }
 }
+
+.sidebar {
+    height: auto;
+    transition: 300ms;
+    max-height: 1000px;
+}
+
+.sidebarClose {
+    max-height: 0px;
+    transition: 300ms;
+    transform: scaleY(0);
+    visibility: hidden;
+}

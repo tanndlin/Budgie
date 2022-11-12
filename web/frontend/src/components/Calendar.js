@@ -1,22 +1,21 @@
 import React from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import Modal from 'react-modal';
-import CreateEvent from './CreateEvent';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../App.css';
-import ModalStyles from '../common/ModalStyles';
+import SideBar from './SideBar';
 
 const localizer = momentLocalizer(moment);
 
 function BigCalendar(props) {
-    const [modalIsOpen, setIsOpen] = React.useState(false);
+    const [isOpen, setIsOpen] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [start, setStart] = React.useState(formatDate(new Date()));
     const [end, setEnd] = React.useState(formatDate(new Date()));
     const [amount, setAmount] = React.useState(0);
     const [currentBill, setCurrentBill] = React.useState(null);
+
 
     function formatDate(date) {
         // return date.toISOString().split('T')[0];
@@ -145,16 +144,11 @@ function BigCalendar(props) {
         return end.getMonth() >= today.getMonth();
     }
 
-
     return (
         <div className="flex min-h-9/10 mb-5">
-            <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                style={ModalStyles}
-                ariaHideApp={false}
-            >
-                <CreateEvent
+            <section className="flex flex-col container m-auto">
+                <SideBar
+                    isOpen={isOpen}
                     title={title}
                     start={start}
                     end={end}
@@ -166,9 +160,7 @@ function BigCalendar(props) {
                     closeModal={closeModal}
                     pushEvent={pushEvent}
                 />
-            </Modal>
 
-            <section className="flex flex-col container m-auto">
                 <div
                     className="container m-auto mt-5 min-h-500 bg-[#BBE9E7] bg-opacity-50 p-3 rounded-md"
                     onClick={handleCalendarClick}

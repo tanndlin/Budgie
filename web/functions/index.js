@@ -31,24 +31,6 @@ app.use(
     })
 );
 
-class Budget {
-    constructor(name, categoryId, expectedPrice, actualPrice, startDate, recurrence, payments) {
-        this.name = name,
-        this.categoryId = categoryId,
-        this.expectedPrice = expectedPrice,
-        this.actualPrice = actualPrice,
-        this.startDate = startDate,
-        this.recurrence = recurrence,
-        this.payments = payments
-    }
-}
-
-class Category {
-    constructor(name) {
-        this.name = name
-    }
-}
-
 //TO DO: check category stuff for correct syntax, test all current API, add API for one-offs
 
 //create user profile

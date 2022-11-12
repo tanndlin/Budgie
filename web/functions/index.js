@@ -23,7 +23,6 @@ const oneOffCollection = 'oneOffs';
 //define google cloud function name
 exports.webApi = functions.https.onRequest(app);
 
-
 //initialize CORS for app
 app.use(
     cors({
@@ -31,7 +30,7 @@ app.use(
     })
 );
 
-//TO DO: check category stuff for correct syntax, test all current API, add API for one-offs
+//TO DO: finish one-off functions and then test all API
 
 //create user profile
 app.post('/CreateUserProfile', async (req, res) => {
@@ -181,6 +180,9 @@ app.post('/CreateBill', async (req, res) => {
 
         //initialize isPaid array to hold
         var isPaid = [req.body.recurrence];
+        if(req.body.isPaidEvent != "NULL") {
+            isPaid.push(req.body.isPaidEvent);
+        }
 
         //constructor for a new bill
         const newBill = {
@@ -297,7 +299,9 @@ app.post('/EditBill', async (req, res) => {
         const price = parseInt(req.body.price);
 
         //update isPaid depending on which months the bill has been paid
-        var isPaid = ;
+        if(req.body.isPaidEvent != "NULL") {
+            isPaid.push(req.body.isPaidEvent);
+        }
 
         const editedBill = {
             "name": `${req.body.name}`,
@@ -397,7 +401,7 @@ app.post('/CreateBudget', async (req, res) => {
         const budgetRespectiveBills = await userRef.collection(billCollection).where('category', '==', `${categoryId}`).get();
 
         //need to parse budgetRespectiveBills into array of the billIds aka separate into the individual bill docs
-        var payments = ;
+        var payments = budgetRespectiveBills.docs.map(x => x.data());
 
         const newBudget = {
             "name": `${req.body.name}`,
@@ -438,7 +442,7 @@ app.post('/GetBudget', async (req, res) => {
         const userRef = db.collection(userCollection).doc(`${userId}`);
         const budgetId = req.body.budgetId; 
 
-         //check if the bill already exists
+         //check if the budget already exists
          const budgetExist = await userRef.collection(budgetCollection).doc(`${budgetId}`).get();
          if(budgetExist.exists) {
             const name = userRef.collection(budgetCollection).doc(`${budgetId}`).get("name");
@@ -619,7 +623,7 @@ app.post('/CreateOneOff', async (req, res) => {
             "category": "${categoryId}",
             "color": "${req.body.color}",
             "price": ${price},
-            "date": "${req.body.date}",
+            "date": "${req.body.date}"
         }`);
 
     } catch (error) {
@@ -633,10 +637,32 @@ app.post('/GetOneOff', async (req, res) => {
 
     try {
 
-        
-        res.status(200).send(`{
+        const userId = req.body.userId; 
+        const userRef = db.collection(userCollection).doc(`${userId}`);
+        const oneOffId = req.body.oneOffId; 
 
-        }`);
+         //check if the one-off already exists
+         const oneOffExist = await userRef.collection(oneOffCollection).doc(`${oneOffId}`).get();
+         if(oneOffExist.exists) {
+            const name = userRef.collection(oneOffCollection).doc(`${oneOffId}`).get("name");
+            const category = userRef.collection(oneOffCollection).doc(`${oneOffId}`).get("category");
+            const color = userRef.collection(oneOffCollection).doc(`${oneOffId}`).get("color");
+            const price = userRef.collection(oneOffCollection).doc(`${oneOffId}`).get("price");
+            const date = userRef.collection(oneOffCollection).doc(`${oneOffId}`).get("date");
+
+            res.status(200).send(`{
+                "userId": "${userId}",
+                "oneOffId": "${oneOffId}",
+                "name": "${name}",
+                "category": "${category}",
+                "color": "${color}",
+                "price": ${price},
+                "date": "${date}"
+            }`);
+        }
+         else {
+            res.status(400).send("This budget doesn't exist")
+         }
 
     } catch (error) {
         res.status(400).send(`${error.message}`)
@@ -665,10 +691,18 @@ app.post('/RemoveOneOff', async (req, res) => {
 
     try {
 
-        
-        res.status(200).send(`{
+        const userId = req.body.userId; 
+        const userRef = db.collection(userCollection).doc(`${userId}`);
+        const oneOffId = req.body.oneOffId; 
+        const oneOffDoc = await userRef.collection(oneOffCollection).doc(`${oneOffId}`).get();
 
-        }`);
+        if(oneOffDoc.exists) {
+            await userRef.collection(oneOffCollection).doc(`${oneOffId}`).delete();
+            res.status(200).send(`{"userId": ${userId}, "oneOffId": "Doesn't exist anymore"}`);
+        }
+        else {
+            res.status(400).send("One-off doesn't exist")
+        }
 
     } catch (error) {
         res.status(400).send(`${error.message}`)

@@ -346,7 +346,7 @@ app.post('/RemoveBill', async (req, res) => {
 
         if(billDoc.exists) {
             await userRef.collection(billCollection).doc(`${billId}`).delete();
-            res.status(200).send(`{"userId": ${userId}, "billId":  ${billId}, "Has been deleted"}`);
+            res.status(200).send(`{"userId": ${userId}, "billId":  ${billId}, "has been deleted"}`);
         }
         else {
             res.status(400).send("Bill doesn't exist")
@@ -557,7 +557,7 @@ app.post('/RemoveBudget', async (req, res) => {
 
         if(budgetDoc.exists) {
             await userRef.collection(budgetCollection).doc(`${budgetId}`).delete();
-            res.status(200).send(`{"userId": ${userId}, "budgetId": "Has been deleted"}`);
+            res.status(200).send(`{"userId": ${userId}, "budgetId": ${budgetId}, "has been deleted"}`);
         }
         else {
             res.status(400).send("Budget doesn't exist")

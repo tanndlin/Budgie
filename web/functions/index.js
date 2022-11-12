@@ -346,7 +346,7 @@ app.post('/RemoveBill', async (req, res) => {
 
         if(billDoc.exists) {
             await userRef.collection(billCollection).doc(`${billId}`).delete();
-            res.status(200).send(`{"userId": ${userId}, "billId": "Doesn't exist anymore"}`);
+            res.status(200).send(`{"userId": ${userId}, "billId":  ${billId}, "Doesn't exist anymore"}`);
         }
         else {
             res.status(400).send("Bill doesn't exist")
@@ -635,6 +635,7 @@ app.post('/CreateOneOff', async (req, res) => {
 app.post('/GetOneOff', async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
+<<<<<<< HEAD
     try {
 
         const userId = req.body.userId; 
@@ -667,6 +668,9 @@ app.post('/GetOneOff', async (req, res) => {
     } catch (error) {
         res.status(400).send(`${error.message}`)
     }
+=======
+   
+>>>>>>> a6e8973 (edit one-off)
 });
 
 //edit one-off
@@ -675,9 +679,54 @@ app.post('/EditOneOff', async (req, res) => {
 
     try {
 
+        const userId = req.body.userId; 
+        const userRef = db.collection(userCollection).doc(`${userId}`);
+        const oneOffId = req.body.oneOffId; 
+        var categoryDoc = "";
 
+        //check if the one-off already exists
+        const oneOffExist = await userRef.collection(oneOffCollection).doc(`${oneOffId}`).get();
+        if(!oneOffExist.exists){
+            res.status(400).send("This one-off doesn't exist")
+        }
+
+        //get category that the one-off has
+        var categoryExist = await userRef.collection(categoryCollection).where('category', '==', `${req.body.category}`).get();
+
+        //if this category doesn't exist
+        if(categoryExist.empty) {
+
+            //make a new category
+            const newCategory = {
+                "name": `${req.body.category}`
+            }
+       
+            //add it to the category table
+           categoryDoc = await userRef.collection(categoryCollection).doc().set(newCategory);
+        }
+        
+        //edit the category for the current one-off
+        const categoryId = categoryDoc.id;
+
+        const price = parseInt(req.body.price);
+
+        const editedOneOff = {
+            "name": `${req.body.name}`,
+            "category": `${categoryId}`,
+            "color": `${req.body.color}`,
+            "price": `${price}`,
+            "date": `${req.body.date}`,
+        }
+
+        await userRef.collection(oneOffCollection).doc(`${oneOffId}`).update(editedoneOff);
         res.status(200).send(`{
-
+            "userId": "${userId}",
+            "oneOffId": "${OneOffId}",
+            "name": "${req.body.name}",
+            "category": "${categoryId}",
+            "color": "${req.body.color}",
+            "price": ${price},
+            "date": "${req.body.date}",
         }`);
 
     } catch (error) {
@@ -693,12 +742,21 @@ app.post('/RemoveOneOff', async (req, res) => {
 
         const userId = req.body.userId; 
         const userRef = db.collection(userCollection).doc(`${userId}`);
+<<<<<<< HEAD
         const oneOffId = req.body.oneOffId; 
         const oneOffDoc = await userRef.collection(oneOffCollection).doc(`${oneOffId}`).get();
 
         if(oneOffDoc.exists) {
             await userRef.collection(oneOffCollection).doc(`${oneOffId}`).delete();
             res.status(200).send(`{"userId": ${userId}, "oneOffId": "Doesn't exist anymore"}`);
+=======
+        const oneOffId = req.body.oneOffId;
+        const oneOffDoc =  await userRef.collection(oneOffCollection).doc(`${oneOffId}`).get();
+
+        if(oneOffDoc.exists) {
+            await userRef.collection(oneOffCollection).doc(`${oneOffId}`).delete();
+            res.status(200).send(`{"userId": ${userId}, "oneOffId": ${oneOffId}, "has been deleted"}`);
+>>>>>>> a6e8973 (edit one-off)
         }
         else {
             res.status(400).send("One-off doesn't exist")
@@ -707,6 +765,7 @@ app.post('/RemoveOneOff', async (req, res) => {
     } catch (error) {
         res.status(400).send(`${error.message}`)
     }
+   
 });
 
 

@@ -346,7 +346,7 @@ app.post('/RemoveBill', async (req, res) => {
 
         if(billDoc.exists) {
             await userRef.collection(billCollection).doc(`${billId}`).delete();
-            res.status(200).send(`{"userId": ${userId}, "billId":  ${billId}, "Doesn't exist anymore"}`);
+            res.status(200).send(`{"userId": ${userId}, "billId":  ${billId}, "Has been deleted"}`);
         }
         else {
             res.status(400).send("Bill doesn't exist")
@@ -557,7 +557,7 @@ app.post('/RemoveBudget', async (req, res) => {
 
         if(budgetDoc.exists) {
             await userRef.collection(budgetCollection).doc(`${budgetId}`).delete();
-            res.status(200).send(`{"userId": ${userId}, "budgetId": "Doesn't exist anymore"}`);
+            res.status(200).send(`{"userId": ${userId}, "budgetId": "Has been deleted"}`);
         }
         else {
             res.status(400).send("Budget doesn't exist")
@@ -635,7 +635,6 @@ app.post('/CreateOneOff', async (req, res) => {
 app.post('/GetOneOff', async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
-<<<<<<< HEAD
     try {
 
         const userId = req.body.userId; 
@@ -668,9 +667,6 @@ app.post('/GetOneOff', async (req, res) => {
     } catch (error) {
         res.status(400).send(`${error.message}`)
     }
-=======
-   
->>>>>>> a6e8973 (edit one-off)
 });
 
 //edit one-off
@@ -742,21 +738,12 @@ app.post('/RemoveOneOff', async (req, res) => {
 
         const userId = req.body.userId; 
         const userRef = db.collection(userCollection).doc(`${userId}`);
-<<<<<<< HEAD
-        const oneOffId = req.body.oneOffId; 
-        const oneOffDoc = await userRef.collection(oneOffCollection).doc(`${oneOffId}`).get();
-
-        if(oneOffDoc.exists) {
-            await userRef.collection(oneOffCollection).doc(`${oneOffId}`).delete();
-            res.status(200).send(`{"userId": ${userId}, "oneOffId": "Doesn't exist anymore"}`);
-=======
         const oneOffId = req.body.oneOffId;
         const oneOffDoc =  await userRef.collection(oneOffCollection).doc(`${oneOffId}`).get();
 
         if(oneOffDoc.exists) {
             await userRef.collection(oneOffCollection).doc(`${oneOffId}`).delete();
-            res.status(200).send(`{"userId": ${userId}, "oneOffId": ${oneOffId}, "has been deleted"}`);
->>>>>>> a6e8973 (edit one-off)
+            res.status(200).send(`{"userId": ${userId}, "oneOffId": "Has been deleted"}`);
         }
         else {
             res.status(400).send("One-off doesn't exist")

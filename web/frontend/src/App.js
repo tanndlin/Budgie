@@ -40,12 +40,13 @@ function App() {
         } />
 
         <Route path="/calendar" element={
-
-          <div className='h-screen'>
+          <div className=''>
             <Header
               {...headerProps(true)}
             />
-            <CalendarPage {...props} />
+            <div className='overflow-hidden h-auto'>
+              <CalendarPage {...props} />
+            </div>
           </div>
         } />
       </Routes >

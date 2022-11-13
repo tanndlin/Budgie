@@ -2,6 +2,7 @@ import React from 'react';
 import BigCalendar from '../components/Calendar';
 import BudgetsView from '../components/BudgetsView';
 import ExtraneousView from '../components/ExtraneousView';
+import BackgroundImage from '../img/divider.jpg';
 
 function CalendarPage(props) {
     if (props.user === null) {
@@ -30,24 +31,25 @@ function CalendarPage(props) {
     }
 
     return (
-        <div className="h-screen">
-            <main className="min-h-minus-header">
-                <BigCalendar
-                    bills={props.bills}
-                    setBills={props.setBills}
-                    modifyEvents={modifyEvents}
-                />
-
-                <BudgetsView
-                    budgets={props.budgets}
-                    setBudgets={props.setBudgets}
-                />
-
-                <ExtraneousView
-                    extras={props.extras}
-                    setExtras={props.setExtras}
-                />
-            </main>
+        <div className=''>
+            <img className='fixed h-full w-full opacity-70 object-fill' src={BackgroundImage} alt='Background image' />
+            <div className="fixed h-full w-full object-fill overflow-y-auto snap-x scroll-smooth">
+                <div className='snap-end'>
+                    <BigCalendar bills={props.bills} modifyEvents={modifyEvents} />
+                </div>
+                <div className='snap-end'>
+                    <BudgetsView
+                        budgets={props.budgets}
+                        setBudgets={props.setBudgets}
+                    />
+                </div>
+                <div className='snap-end'>
+                    <ExtraneousView
+                        extras={props.extras}
+                        setExtras={props.setExtras}
+                    />
+                </div>
+            </div>
         </div>
     );
 }

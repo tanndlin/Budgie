@@ -1,6 +1,10 @@
 import React from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import Modal from 'react-modal';
+import CreateEvent from './CreateEvent';
+import CalendarControls from './CalendarControls';
+import CalendarBackground from '../img/paper_v2.jpg';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../App.css';
@@ -188,8 +192,8 @@ function BigCalendar(props) {
                             onClick={createNew} />
                     </footer>
                 </div>
-            </section>
-        </div>
+            </section >
+        </div >
     );
 }
 export default BigCalendar;

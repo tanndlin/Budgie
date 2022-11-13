@@ -385,15 +385,16 @@ app.post('/CreateBudget', async (req, res) => {
         var billPrices = budgetRespectiveBills.docs.map(bill => {return bill.get(price);});
         var billSum = 0;
 
+        //get the sum of all the bill prices
         for(i = 0; i < budgetRespectiveBills.length; i++) {
             billSum += billPrices[i];
         }
 
         //need to parse budgetRespectiveOneOffs into array of the one-offs
         var oneOffPrices = budgetRespectiveOneOffs.docs.map(oneOff => {return oneOff.get(price)});
-
         var oneOffSum = 0;
 
+        //get the sum of all the one-off prices
         for(i = 0; i < budgetRespectiveOneOffs.length; i++) {
             oneOffSum += oneOffPrices[i];
         }

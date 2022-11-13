@@ -30,10 +30,6 @@ app.use(
     })
 );
 
-//TO DO: finish budget create and edit functions with updatable actualPrices, and then test all API
-//For the former, will need to get a better understanding of firestore maps, and then get and sum up the prices from bills and one-offs
-//Plus, may need to filter the bills and one-offs for a particular budget to fit its timeline (all bills and one-offs after the budget's start date)
-
 //create user profile
 app.post('/CreateUserProfile', async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
@@ -219,7 +215,6 @@ app.post('/CreateBill', async (req, res) => {
     }
 });
 
-
 //get bill
 app.post('/GetBill', async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
@@ -230,17 +225,17 @@ app.post('/GetBill', async (req, res) => {
         const userRef = db.collection(userCollection).doc(`${userId}`);
 
          //check if the bill already exists
-         const billExist = await userRef.collection(billCollection).where('name', '==', `${req.body.name}`).get();
+         const bills = await userRef.collection(billCollection).get();
 
-         if(!billExist.empty) {
+         if(!bills.empty) {
 
             res.status(200).send(`{
                 "userId": "${userId}",
-                "bill": "${billExist}"
+                "bills": "${bills}"
             }`);
         }
          else {
-            res.status(400).send("This bill doesn't exist")
+            res.status(400).send("There are no existing bills")
          }
 
     } catch (error) {
@@ -387,14 +382,25 @@ app.post('/CreateBudget', async (req, res) => {
         const budgetRespectiveOneOffs = await userRef.collection(oneOffCollection).where('categoryId', '==', `${categoryId}`).get();
 
         //need to parse budgetRespectiveBills into array of the bills
-        var billPrices = budgetRespectiveBills.docs.map();
+        var billPrices = budgetRespectiveBills.docs.map(bill => {return bill.get(price);});
+        var billSum = 0;
+
+        for(i = 0; i < budgetRespectiveBills.length; i++) {
+            billSum += billPrices[i];
+        }
 
         //need to parse budgetRespectiveOneOffs into array of the one-offs
-        var oneOffPrices = budgetRespectiveOneOffs.docs.map();
+        var oneOffPrices = budgetRespectiveOneOffs.docs.map(oneOff => {return oneOff.get(price)});
+
+        var oneOffSum = 0;
+
+        for(i = 0; i < budgetRespectiveOneOffs.length; i++) {
+            oneOffSum += oneOffPrices[i];
+        }
 
         //get the actualPrice based on price for the bills and one-offs of a particular category
         //Number is just a place holder and will be removed once we figure out code to get the price summation
-        const actualPrice = Number;
+        const actualPrice = billSum + oneOffSum;
 
         const newBudget = {
             "name": `${req.body.name}`,
@@ -438,17 +444,17 @@ app.post('/GetBudget', async (req, res) => {
         const userRef = db.collection(userCollection).doc(`${userId}`);
 
          //check if the budget already exists
-         const budgetExist = await userRef.collection(budgetCollection).where('name', '==', `${req.body.name}`).get();
+         const budgets = await userRef.collection(budgetCollection).get();
 
-         if(!budgetExist.empty) {
+         if(!budgets.empty) {
 
             res.status(200).send(`{
                 "userId": "${userId}",
-                "budget": "${budgetExist}"
+                "budgets": "${budgets}"
             }`);
         }
          else {
-            res.status(400).send("This budget doesn't exist")
+            res.status(400).send("There are no existing budgets")
          }
 
     } catch (error) {
@@ -636,16 +642,16 @@ app.post('/GetOneOffs', async (req, res) => {
         const userRef = db.collection(userCollection).doc(`${userId}`); 
 
          //check if the one-off already exists
-         const oneOffDocs = await userRef.collection(oneOffCollection).get();
-         if(!oneOffDocs.empty) {
+         const oneOffs = await userRef.collection(oneOffCollection).get();
+         if(!oneOffs.empty) {
 
             res.status(200).send(`{
                 "userId": "${userId}",
-                "oneOffs": "${oneOffCollection}"
+                "oneOffs": "${oneOffs}"
             }`);
         }
          else {
-            res.status(400).send("This budget doesn't exist")
+            res.status(400).send("There are no existing one-offs");
          }
 
     } catch (error) {
@@ -739,5 +745,3 @@ app.post('/RemoveOneOff', async (req, res) => {
     }
    
 });
-
-

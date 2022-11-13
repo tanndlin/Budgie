@@ -19,6 +19,8 @@ export function BigCalendar(props) {
     const [currentBill, setCurrentBill] = React.useState(null);
     const [categoryID, setCategoryID] = React.useState(-1);
 
+    const [categorySortID, setCategorySortID] = React.useState(-1);
+
 
     function formatDate(date) {
         // return date.toISOString().split('T')[0];
@@ -157,6 +159,12 @@ export function BigCalendar(props) {
                                     label: c.name,
                                 }
                             })}
+                            value={props.categories.find(c => c.id === categorySortID)?.name}
+                            onChange={(e) => {
+                                const category = props.categories.find(c => c.name === e.value);
+                                setCategorySortID(category.id);
+                            }}
+
                             className='dropdown'
                             controlClassName='dropdown-control'
                             menuClassName='dropdown-menu'
@@ -175,7 +183,7 @@ export function BigCalendar(props) {
                     </header>
                     <Calendar
                         localizer={localizer}
-                        events={getEventsFromBills(props.bills)}
+                        events={getEventsFromBills(props.bills, categorySortID)}
                         startAccessor="start"
                         endAccessor="end"
                         eventPropGetter={eventStyleGetter}
@@ -190,9 +198,14 @@ export function BigCalendar(props) {
     );
 }
 
-export function getEventsFromBills(bills) {
+export function getEventsFromBills(bills, categorySortID) {
     // Each bill will have multiple events for each pay date
-    return bills.map(bill => {
+    return bills.filter((bill) => {
+        if (categorySortID === -1)
+            return true;
+
+        return bill.categoryID === categorySortID;
+    }).map(bill => {
         const payDates = [];
 
         const currentDate = new Date(bill.start);

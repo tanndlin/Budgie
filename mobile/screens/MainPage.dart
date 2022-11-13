@@ -29,7 +29,7 @@ class MainPage extends StatelessWidget {
               child: TextButton(
                 style: ButtonStyle(
                   foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.black),
+                  MaterialStateProperty.all<Color>(Colors.black),
                 ),
                 onPressed: () { Navigator.pushNamed(context, '/MainPage');},
                 child: const Text('Main'),
@@ -45,7 +45,7 @@ class MainPage extends StatelessWidget {
               child: TextButton(
                 style: ButtonStyle(
                   foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.black),
+                  MaterialStateProperty.all<Color>(Colors.black),
                 ),
                 onPressed: () { Navigator.pushNamed(context, '/CalendarView');},
                 child: const Text('Calendar'),
@@ -61,7 +61,7 @@ class MainPage extends StatelessWidget {
               child: TextButton(
                 style: ButtonStyle(
                   foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.black),
+                  MaterialStateProperty.all<Color>(Colors.black),
                 ),
                 onPressed: () { Navigator.pushNamed(context, '/PaymentHist');},
                 child: const Text('History'),

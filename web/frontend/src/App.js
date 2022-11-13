@@ -13,6 +13,10 @@ function App() {
   const [extras, setExtras] = React.useState([]);
   const [categories, setCategories] = React.useState([
     {
+      id: -1,
+      name: 'All',
+    },
+    {
       id: 1,
       name: 'Food',
     },

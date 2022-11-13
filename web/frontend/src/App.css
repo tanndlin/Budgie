@@ -113,3 +113,11 @@ input[type='number'] {
     transform: scaleY(0);
     visibility: hidden;
 }
+
+/* .Dropdown-root {
+    height: 100%;
+}
+
+.Dropdown-control {
+    height: 100%;
+} */

@@ -1,4 +1,5 @@
 import React from "react";
+import Dropdown from "react-dropdown";
 
 function CreateBillPopUp(props) {
     function editEvent(e) {
@@ -14,6 +15,7 @@ function CreateBillPopUp(props) {
             amount: props.amount,
             frequency: 1,
             lastPaid: isPaid ? new Date() : null,
+            categoryID: props.categoryID,
         });
 
         props.closeModal();
@@ -74,6 +76,24 @@ function CreateBillPopUp(props) {
                         <span className='flex flex-col'>
                             <label htmlFor="Amount">Amount</label>
                             <input className='w-48 px-1 placeholder-[#4D4D4D] rounded-md' type='number' id='amountInput' onChange={amountChange} value={props.amount} />
+                        </span>
+
+                        <span className='flex flex-col'>
+                            <label htmlFor="Category">Category</label>
+                            <span className='h-[26px]'>
+                                <Dropdown
+                                    options={props.categories.map(c => {
+                                        return {
+                                            value: c.name,
+                                            label: c.name,
+                                        }
+                                    })}
+                                    onChange={(e) => {
+                                        props.setCategoryID(props.categories.find(c => c.name === e.value).id);
+                                    }}
+                                    value={props.categories.find(c => c.id === props.categoryID).name}
+                                />
+                            </span>
                         </span>
                     </div>
 

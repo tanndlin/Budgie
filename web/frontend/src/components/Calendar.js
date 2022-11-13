@@ -17,6 +17,7 @@ export function BigCalendar(props) {
     const [end, setEnd] = React.useState(formatDate(new Date()));
     const [amount, setAmount] = React.useState(0);
     const [currentBill, setCurrentBill] = React.useState(null);
+    const [categoryID, setCategoryID] = React.useState(-1);
 
 
     function formatDate(date) {
@@ -77,6 +78,7 @@ export function BigCalendar(props) {
         setStart(formatDate(new Date()));
         setEnd(formatDate(new Date()));
         setCurrentBill(null);
+        setCategoryID(-1);
     }
 
     function createEdit(bill) {
@@ -85,6 +87,7 @@ export function BigCalendar(props) {
         setEnd(formatDate(bill.end));
         setAmount(bill.amount);
         setCurrentBill(bill);
+        setCategoryID(bill.categoryID);
 
         openModal();
     }
@@ -120,12 +123,6 @@ export function BigCalendar(props) {
         return end.getMonth() >= today.getMonth();
     }
 
-    function onSelect(e) {
-        console.log(e);
-    }
-
-    console.log(props.categories);
-
     return (
         <div className="flex min-h-9/10 mb-5">
             <section className="flex flex-col container m-auto">
@@ -135,12 +132,15 @@ export function BigCalendar(props) {
                     start={start}
                     end={end}
                     amount={amount}
+                    categoryID={categoryID}
+                    setCategoryID={setCategoryID}
                     setAmount={setAmount}
                     setTitle={setTitle}
                     setStart={setStart}
                     setEnd={setEnd}
                     closeModal={closeModal}
                     pushEvent={pushEvent}
+                    categories={props.categories}
                 />
 
                 <div
@@ -157,7 +157,6 @@ export function BigCalendar(props) {
                                     label: c.name,
                                 }
                             })}
-                            onChange={onSelect}
                             className='dropdown'
                             controlClassName='dropdown-control'
                             menuClassName='dropdown-menu'

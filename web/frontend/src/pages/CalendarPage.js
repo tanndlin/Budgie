@@ -36,6 +36,7 @@ function CalendarPage(props) {
                     bills={props.bills}
                     setBills={props.setBills}
                     modifyEvents={modifyEvents}
+                    categories={props.categories}
                 />
 
                 <BudgetsView

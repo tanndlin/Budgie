@@ -1,10 +1,11 @@
 import React from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import SideBar from './SideBar';
+import Dropdown from 'react-dropdown';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../App.css';
-import SideBar from './SideBar';
 
 const localizer = momentLocalizer(moment);
 
@@ -118,6 +119,12 @@ export function BigCalendar(props) {
         return end.getMonth() >= today.getMonth();
     }
 
+    function onSelect(e) {
+        console.log(e);
+    }
+
+    console.log(props.categories);
+
     return (
         <div className="flex min-h-9/10 mb-5">
             <section className="flex flex-col container m-auto">
@@ -141,6 +148,22 @@ export function BigCalendar(props) {
                 >
                     <header className="flex flex-row justify-between font-bold mb-3 border-black border-b-2 p-1">
                         <h1 className="text-2xl">Bills</h1>
+
+                        <Dropdown
+                            options={props.categories.map(c => {
+                                return {
+                                    value: c.name,
+                                    label: c.name,
+                                }
+                            })}
+                            onChange={onSelect}
+                            className='dropdown'
+                            controlClassName='dropdown-control'
+                            menuClassName='dropdown-menu'
+                            arrowClassName='dropdown-arrow'
+                            placeholderClassName='dropdown-placeholder'
+                        />
+
                         <span className='text-md'>
                             <h2 data-testid='billSum'>{
                                 `Total:  $${Object.entries(props.bills)

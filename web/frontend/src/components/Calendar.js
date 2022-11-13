@@ -19,8 +19,6 @@ export function BigCalendar(props) {
     const [currentBill, setCurrentBill] = React.useState(null);
     const [categoryID, setCategoryID] = React.useState(-1);
 
-    const [categorySortID, setCategorySortID] = React.useState(-1);
-
 
     function formatDate(date) {
         // return date.toISOString().split('T')[0];
@@ -159,10 +157,10 @@ export function BigCalendar(props) {
                                     label: c.name,
                                 }
                             })}
-                            value={props.categories.find(c => c.id === categorySortID)?.name}
+                            value={props.categories.find(c => c.id === props.categorySortID)?.name}
                             onChange={(e) => {
                                 const category = props.categories.find(c => c.name === e.value);
-                                setCategorySortID(category.id);
+                                props.setCategorySortID(category.id);
                             }}
 
                             className='dropdown'
@@ -183,7 +181,7 @@ export function BigCalendar(props) {
                     </header>
                     <Calendar
                         localizer={localizer}
-                        events={getEventsFromBills(props.bills, categorySortID)}
+                        events={getEventsFromBills(props.bills, props.categorySortID)}
                         startAccessor="start"
                         endAccessor="end"
                         eventPropGetter={eventStyleGetter}

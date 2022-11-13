@@ -114,10 +114,8 @@ input[type='number'] {
     visibility: hidden;
 }
 
-/* .Dropdown-root {
-    height: 100%;
+.slim {
+    background: none !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
 }
-
-.Dropdown-control {
-    height: 100%;
-} */

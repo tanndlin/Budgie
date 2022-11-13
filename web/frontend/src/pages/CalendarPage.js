@@ -4,6 +4,8 @@ import BudgetsView from '../components/BudgetsView';
 import ExtraneousView from '../components/ExtraneousView';
 
 function CalendarPage(props) {
+    const [categorySortID, setCategorySortID] = React.useState(-1);
+
     if (props.user === null) {
         // Check url for localId
         const url = new URL(window.location.href);
@@ -37,16 +39,22 @@ function CalendarPage(props) {
                     setBills={props.setBills}
                     modifyEvents={modifyEvents}
                     categories={props.categories}
+                    categorySortID={categorySortID}
+                    setCategorySortID={setCategorySortID}
                 />
 
                 <BudgetsView
                     budgets={props.budgets}
                     setBudgets={props.setBudgets}
+                    categories={props.categories}
+                    categorySortID={categorySortID}
                 />
 
                 <ExtraneousView
                     extras={props.extras}
                     setExtras={props.setExtras}
+                    categories={props.categories}
+                    categorySortID={categorySortID}
                 />
             </main>
         </div>

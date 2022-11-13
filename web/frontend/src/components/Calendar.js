@@ -5,6 +5,7 @@ import SideBar from './SideBar';
 import Dropdown from 'react-dropdown';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import 'react-dropdown/style.css';
 import '../App.css';
 
 const localizer = momentLocalizer(moment);

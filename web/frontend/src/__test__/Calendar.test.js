@@ -3,6 +3,12 @@ import { render, screen } from '@testing-library/react';
 import { BigCalendar, getEventsFromBills } from '../components/Calendar';
 
 test('Events red on unpaid', () => {
+    const categories = [
+        {
+            name: 'All',
+            id: -1,
+        },
+    ];
     render(<BigCalendar
         bills={[{
             title: 'Hello World',
@@ -10,6 +16,8 @@ test('Events red on unpaid', () => {
             end: new Date(),
             lastPaid: null,
         }]}
+        categories={categories}
+        categorySortID={-1}
     />);
 
     const event = screen.getByText(/Hello World/);
@@ -17,6 +25,13 @@ test('Events red on unpaid', () => {
 });
 
 test('Events green on paid', () => {
+    const categories = [
+        {
+            name: 'All',
+            id: -1,
+        },
+    ];
+
     render(<BigCalendar
         bills={[{
             title: 'Hello World',
@@ -24,6 +39,8 @@ test('Events green on paid', () => {
             end: new Date(),
             lastPaid: new Date(),
         }]}
+        categories={categories}
+        categorySortID={-1}
     />);
 
     const event = screen.getByText(/Hello World/);
@@ -31,6 +48,13 @@ test('Events green on paid', () => {
 });
 
 test('Sums total of bills', () => {
+    const categories = [
+        {
+            name: 'All',
+            id: -1,
+        },
+    ];
+
     const bills = [];
     for (let i = 0; i < 10; i++) {
         bills.push({
@@ -43,6 +67,8 @@ test('Sums total of bills', () => {
 
     render(<BigCalendar
         bills={bills}
+        categories={categories}
+        categorySortID={-1}
     />);
 
 
@@ -52,15 +78,22 @@ test('Sums total of bills', () => {
 });
 
 test('Do not sum bills that no longer recur', () => {
+    const categories = [
+        {
+            name: 'All',
+            id: -1,
+        },
+    ];
+
     render(<BigCalendar
-        bills={[
-            {
-                title: 'Hello World',
-                start: new Date(0),
-                end: new Date(0),
-                amount: 100,
-            }
-        ]}
+        bills={[{
+            title: 'Hello World',
+            start: new Date(0),
+            end: new Date(0),
+            amount: 100,
+        }]}
+        categories={categories}
+        categorySortID={-1}
     />);
 
 

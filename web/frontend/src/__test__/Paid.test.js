@@ -2,6 +2,13 @@ import { render, screen } from '@testing-library/react';
 import { BigCalendar } from '../components/Calendar';
 
 test('Ctrl Clicking toggles paid on Calendar', () => {
+    const categories = [
+        {
+            name: 'All',
+            id: -1,
+        },
+    ];
+
     render(<BigCalendar
         bills={[{
             title: 'Hello World',
@@ -11,6 +18,8 @@ test('Ctrl Clicking toggles paid on Calendar', () => {
             resources: { paid: false, },
             amount: 100,
         }]}
+        categories={categories}
+        categorySortID={-1}
     />);
 
 
@@ -21,6 +30,13 @@ test('Ctrl Clicking toggles paid on Calendar', () => {
 });
 
 test('Ctrl Clicking toggles paid off Calendar', () => {
+    const categories = [
+        {
+            name: 'All',
+            id: -1,
+        },
+    ];
+
     render(<BigCalendar
         bills={[{
             title: 'Hello World',
@@ -30,6 +46,8 @@ test('Ctrl Clicking toggles paid off Calendar', () => {
             resources: { paid: true, },
             amount: 100,
         }]}
+        categories={categories}
+        categorySortID={-1}
     />);
 
 

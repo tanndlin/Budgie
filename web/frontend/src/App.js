@@ -40,8 +40,7 @@ function App() {
         } />
 
         <Route path="/calendar" element={
-
-          <div className='h-screen'>
+          <div className=''>
             <Header
               {...{
                 user,
@@ -53,14 +52,16 @@ function App() {
                 showNav: true,
               }}
             />
-            <CalendarPage {...{
-              user,
-              setUser,
-              bills,
-              setBills,
-              budgets,
-              setBudgets,
-            }} />
+            <div className='overflow-hidden h-auto'>
+              <CalendarPage {...{
+                user,
+                setUser,
+                bills,
+                setBills,
+                budgets,
+                setBudgets,
+              }} /> 
+            </div> 
           </div>
         } />
 

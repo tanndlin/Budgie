@@ -4,6 +4,7 @@ import moment from 'moment';
 import Modal from 'react-modal';
 import CreateEvent from './CreateEvent';
 import CalendarControls from './CalendarControls';
+import CalendarBackground from '../img/paper_v2.jpg';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../App.css';
@@ -128,7 +129,7 @@ function BigCalendar(props) {
             <section className="flex flex-col container m-auto">
                 <CalendarControls createBill={createNew} bills={props.bills} />
                 <span
-                    className="container m-auto min-h-500 bg-yellow-200 p-3 rounded-md"
+                    className="container m-auto min-h-500 bg-[#BBE9E7] bg-opacity-90 p-3 rounded-md"
                     onClick={handleCalendarClick}
                 >
                     <Calendar
@@ -137,7 +138,7 @@ function BigCalendar(props) {
                         startAccessor="start"
                         endAccessor="end"
                         eventPropGetter={eventStyleGetter}
-                    />
+                    />                    
                 </span>
             </section>
         </div>

@@ -8,12 +8,12 @@ function BudgetsView(props) {
     }
 
     return (
-        <div className='flex flex-col container m-auto'>
+        <div className='flex flex-col container m-auto mb-36'>
             <BudgetControls
                 budgets={props.budgets}
                 newBudget={newBudget}
             />
-            <section className="m-auto container bg-yellow-200 p-3 mb-5 rounded-md">
+            <section className="m-auto container bg-[#BBE9E7] bg-opacity-90 p-3 mb-5 rounded-md">
                 <div className="flex flex-row justify-between font-bold border-black border-b-2 p-1">
                     <h1 className="text-2xl">Budgets</h1>
                     <span className='text-md'>

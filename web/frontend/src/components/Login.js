@@ -24,18 +24,21 @@ function Login(props) {
                 const { localId } = JSON.parse(res.responseText);
                 console.log(localId);
 
-                sendRequest('CreateUser', { localId }, (res) => {
+                // sendRequest('CreateUserProfile', { userId: localId }, (res) => {
+                // console.log(res);
+
+                sendRequest('GetUserProfile', { userId: localId }, (res) => {
                     console.log(res.responseText);
-                    sendRequest('GetUser', { localId }, (res) => {
-                        console.log(res.responseText);
-                        // const { user } = JSON.parse(res.responseText);
-                        // console.log(user);
-                        // props.setUser(user);
-                        // navigate('/');
-                    });
+                    // const { user } = JSON.parse(res.responseText);
+                    // console.log(user);
+                    // props.setUser(user);
+                    // navigate('/');
                 }, (err) => {
+                    console.log('here');
                     console.log(err);
+                    setMessage(pretty(err.message));
                 });
+                // });
 
                 // Redirect to calendar page and pass states
                 // navigate('/calendar', { state: { user } });

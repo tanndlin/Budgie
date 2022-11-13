@@ -7,19 +7,9 @@ export function sendRequest(path, payload, callback, errorCallback) {
 
     xhr.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 201) {
-            // const { Error: err } = JSON.parse(xhr.responseText);
-            // if (err) {
-            //     if (!errorCallback)
-            //         console.log(`${url} threw unhandled error: ${err}`);
-            //     else
-            //         errorCallback(err);
-            //     return
-            // }
-
             callback(xhr);
         } else {
-            // console.log('Bad request');
-            // errorCallback(xhr.responseText);
+            errorCallback(xhr.responseText);
         }
     };
 

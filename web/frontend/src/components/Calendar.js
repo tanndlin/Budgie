@@ -172,7 +172,7 @@ export function getEventsFromBills(bills) {
     return bills.map(bill => {
         const payDates = [];
 
-        const currentDate = bill.start;
+        const currentDate = new Date(bill.start);
         // Create an event for each pay date
         while (currentDate <= bill.end) {
             payDates.push({

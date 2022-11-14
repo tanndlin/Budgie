@@ -1,10 +1,9 @@
 //import libraries
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const auth = require ("firebase/auth");
 const express = require("express");
 const cors = require('cors');  
-const { user } = require("firebase-functions/v1/auth");
+//const { user } = require("firebase-functions/v1/auth");
 
 //initialize firebase in order to access its services
 admin.initializeApp(functions.config().firebase);
@@ -175,7 +174,7 @@ app.post('/CreateBill', async (req, res) => {
 
         //initialize isPaid array to hold all events of a bill that were paid
         var isPaid = [];
-        if(req.body.isPaidEvent != "NULL") {
+        if(req.body.isPaidEvent != ("NULL" || "" || " ")) {
             isPaid.push(req.body.isPaidEvent);
         }
 
@@ -300,7 +299,7 @@ app.post('/EditBill', async (req, res) => {
         var isPaid = userRef.collection(billCollection).doc(`${billId}`).get("isPaid");
 
         //update isPaid depending on which months the bill has been paid
-        if(req.body.isPaidEvent != "NULL") {
+        if(req.body.isPaidEvent != ("NULL" || "" || " ")) {
             isPaid.push(req.body.isPaidEvent);
         }
 

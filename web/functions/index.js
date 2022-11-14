@@ -222,20 +222,36 @@ app.post('/GetBill', async (req, res) => {
     try {
 
         const userId = req.body.userId; 
-        const userRef = db.collection(userCollection).doc(`${userId}`);
+        const userRef = db.collection(userCollection).doc(`${userId}`); 
 
-         //check if the bill already exists
-         const bills = await userRef.collection(billCollection).get();
+         //check if the one-off already exists
+         const billDocs = await userRef.collection(billCollection).get();
+         if(!billDocs.empty) {
 
-         if(!bills.empty) {
+            var bills = [];
+            billDocs.docs.forEach(curBill => {
+                var bill = {
+                    "name":`${curBill.get("name")}`,
+                    "categoryId":`${curBill.get("categoryId")}`,
+                    "color":`${curBill.get("color")}`,
+                    "price":`${curBill.get("price")}`,
+                    "startDate":`${curBill.get("startDate")}`,
+                    "endDate":`${curBill.get("endDate")}`,
+                    "recurrence":`${curBill.get("recurrence")}`,
+                    "isPaid":`${curBill.get("isPaid")}`,
+                    "billId":`${curBill.id}`
+                }
+
+                bills.push(bill);
+            })
 
             res.status(200).send(`{
                 "userId": "${userId}",
-                "bills": "${bills}"
+                "oneOffs": "${JSON.stringify(bills, null, 10)}"
             }`);
         }
          else {
-            res.status(400).send("There are no existing bills")
+            res.status(400).send("There are no existing bills");
          }
 
     } catch (error) {
@@ -442,20 +458,37 @@ app.post('/GetBudget', async (req, res) => {
     try {
 
         const userId = req.body.userId; 
-        const userRef = db.collection(userCollection).doc(`${userId}`);
+        const userRef = db.collection(userCollection).doc(`${userId}`); 
 
-         //check if the budget already exists
-         const budgets = await userRef.collection(budgetCollection).get();
+         //check if the one-off already exists
+         const budgetDocs = await userRef.collection(budgetCollection).get();
+         if(!budgetDocs.empty) {
 
-         if(!budgets.empty) {
+            var budgets = [];
+            budgetDocs.docs.forEach(curBudget => {
+                var budget = {
+                    "name":`${curBudget.get("name")}`,
+                    "categoryId":`${curBudget.get("categoryId")}`,
+                    "expectedPrice":`${curBudget.get("expectedPrice")}`,
+                    "actualPrice":`${curBudget.get("actualPrice")}`,
+                    "startDate":`${curBudget.get("startDate")}`,
+                    "endDate":`${curBudget.get("endDate")}`,
+                    "recurrence":`${curBudget.get("recurrence")}`,
+                    "billPayments":`${curBudget.get("billPayments")}`,
+                    "oneOffPayments":`${curBudget.get("oneOffPayments")}`,
+                    "budgetId":`${curBudget.id}`
+                }
+
+                budgets.push(budget);
+            })
 
             res.status(200).send(`{
                 "userId": "${userId}",
-                "budgets": "${budgets}"
+                "budgets": "${JSON.stringify(budgets, null, 10)}"
             }`);
         }
          else {
-            res.status(400).send("There are no existing budgets")
+            res.status(400).send("There are no existing budgets");
          }
 
     } catch (error) {

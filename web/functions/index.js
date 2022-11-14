@@ -147,37 +147,34 @@ app.post('/CreateBill', async (req, res) => {
 
         const userId = req.body.userId; 
         const userRef = db.collection(userCollection).doc(`${userId}`);
+
+        //get category of the bill
+        var categoryExist = await userRef.collection(categoryCollection).where('name', '==', `${req.body.category}`).get();
+        var categoryId = "";
         var categoryDoc = "";
 
-        //check if the bill already exists
-        const billExist = await userRef.collection(billCollection).where('name', '==', `${req.body.name}`).get();
-        if(!billExist.empty){
-            res.status(400).send("This bill already exists")
-        }
-
-        //get category that the bill has
-        var categoryExist = await userRef.collection(categoryCollection).where('name', '==', `${req.body.category}`).get();
-
-        //if this category doesn't exist
+        //if this category collection or the specific category doesn't exist
         if(categoryExist.empty) {
 
             //make a new category
             const newCategory = {
                 "name": `${req.body.category}`
             }
-       
+    
             //add it to the category table
-           categoryDoc = await userRef.collection(categoryCollection).doc().set(newCategory);
+            categoryDoc = await userRef.collection(categoryCollection).doc().set(newCategory);
+            categoryId = categoryDoc.id;
         }
-        
-        //add the category for the new bill
-        const categoryId = categoryDoc.id;
+        else {
+            var category = categoryExist.docs.map(category => {return category.id});
+            categoryId = category[0];
+        }
 
         //make price string into an integer
         const price = parseInt(req.body.price);
 
-        //initialize isPaid array to hold
-        var isPaid = [req.body.recurrence];
+        //initialize isPaid array to hold all events of a bill that were paid
+        var isPaid = [];
         if(req.body.isPaidEvent != "NULL") {
             isPaid.push(req.body.isPaidEvent);
         }
@@ -197,6 +194,7 @@ app.post('/CreateBill', async (req, res) => {
         const billDoc = await userRef.collection(billCollection).doc().set(newBill);
         const billId = billDoc.id;
         await userRef.collection(billCollection).doc(`${billId}`).update(`"billId": "${billId}"`);
+
         res.status(201).send(`{
             "userId": "${userId}",
             "billId": "${billId}",
@@ -268,7 +266,6 @@ app.post('/EditBill', async (req, res) => {
         const userId = req.body.userId; 
         const userRef = db.collection(userCollection).doc(`${userId}`);
         const billId = req.body.billId; 
-        var categoryDoc = "";
 
         //check if the bill already exists
         const billExist = await userRef.collection(billCollection).doc(`${billId}`).get();
@@ -276,25 +273,31 @@ app.post('/EditBill', async (req, res) => {
             res.status(400).send("This bill doesn't exist")
         }
 
-        //get category that the bill has
+        //get category of the bill
         var categoryExist = await userRef.collection(categoryCollection).where('name', '==', `${req.body.category}`).get();
+        var categoryId = "";
+        var categoryDoc = "";
 
-        //if this category doesn't exist
+        //if this category collection or the specific category doesn't exist
         if(categoryExist.empty) {
 
             //make a new category
             const newCategory = {
                 "name": `${req.body.category}`
             }
-       
+    
             //add it to the category table
-           categoryDoc = await userRef.collection(categoryCollection).doc().set(newCategory);
+            categoryDoc = await userRef.collection(categoryCollection).doc().set(newCategory);
+            categoryId = categoryDoc.id;
         }
-        
-        //edit the category for the current bill
-        const categoryId = categoryDoc.id;
+        else {
+            var category = categoryExist.docs.map(category => {return category.id});
+            categoryId = category[0];
+        }
 
         const price = parseInt(req.body.price);
+
+        var isPaid = userRef.collection(billCollection).doc(`${billId}`).get("isPaid");
 
         //update isPaid depending on which months the bill has been paid
         if(req.body.isPaidEvent != "NULL") {
@@ -314,6 +317,7 @@ app.post('/EditBill', async (req, res) => {
         }
 
         await userRef.collection(billCollection).doc(`${billId}`).update(editedBill);
+        
         res.status(200).send(`{
             "userId": "${userId}",
             "billId": "${billId}",
@@ -364,31 +368,28 @@ app.post('/CreateBudget', async (req, res) => {
 
         const userId = req.body.userId; 
         const userRef = db.collection(userCollection).doc(`${userId}`);
+
+        //get category of the one-off
+        var categoryExist = await userRef.collection(categoryCollection).where('name', '==', `${req.body.category}`).get();
+        var categoryId = "";
         var categoryDoc = "";
 
-        //check if the budget already exists
-        const budgetExist = await userRef.collection(budgetCollection).where('name', '==',  `${req.body.name}`).get();
-        if(!budgetExist.empty){
-            res.status(400).send("This budget already exists");
-        }
-
-        //get category that the budget has
-        var categoryExist = await userRef.collection(categoryCollection).where('name', '==', `${req.body.category}`).get();
-
-        //if this category doesn't exist
+        //if this category collection or the specific category doesn't exist
         if(categoryExist.empty) {
 
             //make a new category
             const newCategory = {
                 "name": `${req.body.category}`
             }
-       
+    
             //add it to the category table
-           categoryDoc = await userRef.collection(categoryCollection).doc().set(newCategory);
+            categoryDoc = await userRef.collection(categoryCollection).doc().set(newCategory);
+            categoryId = categoryDoc.id;
         }
-        
-        //add the category for the new budget
-        const categoryId = categoryDoc.id;
+        else {
+            var category = categoryExist.docs.map(category => {return category.id});
+            categoryId = category[0];
+        }
 
         //make expectedPrice string into an integer
         const expectedPrice = parseInt(req.body.expectedPrice);
@@ -505,7 +506,6 @@ app.post('/EditBudget', async (req, res) => {
         const userId = req.body.userId; 
         const userRef = db.collection(userCollection).doc(`${userId}`);
         const budgetId = req.body.budgetId; 
-        var categoryDoc = "";
 
         //check if the budget already exists
         const budgetExist = await userRef.collection(budgetCollection).doc(`${budgetId}`).get();
@@ -513,23 +513,27 @@ app.post('/EditBudget', async (req, res) => {
             res.status(400).send("This budget doesn't exist");
         }
 
-        //get category that the budget has
+        //get category of the one-off
         var categoryExist = await userRef.collection(categoryCollection).where('name', '==', `${req.body.category}`).get();
+        var categoryId = "";
+        var categoryDoc = "";
 
-        //if this category doesn't exist
+        //if this category collection or the specific category doesn't exist
         if(categoryExist.empty) {
 
             //make a new category
             const newCategory = {
                 "name": `${req.body.category}`
             }
-       
+    
             //add it to the category table
-           categoryDoc = await userRef.collection(categoryCollection).doc().set(newCategory);
+            categoryDoc = await userRef.collection(categoryCollection).doc().set(newCategory);
+            categoryId = categoryDoc.id;
         }
-        
-        //add the category for the new budget
-        const categoryId = categoryDoc.id;
+        else {
+            var category = categoryExist.docs.map(category => {return category.id});
+            categoryId = category[0];
+        }
 
         const expectedPrice = parseInt(req.body.expectedPrice);
 
@@ -822,4 +826,41 @@ app.post('/RemoveOneOff', async (req, res) => {
         res.status(400).send(`${error.message}`)
     }
    
+});
+
+//get categories
+app.post('/GetCategories', async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try {
+
+        const userId = req.body.userId; 
+        const userRef = db.collection(userCollection).doc(`${userId}`); 
+
+         //check if the one-off already exists
+         const categoryDocs = await userRef.collection(categoryCollection).get();
+         if(!categoryDocs.empty) {
+
+            var categories = [];
+            categoryDocs.docs.forEach(curCategory => {
+                var category = {
+                    "name":`${curCategory.get("name")}`,
+                    "categoryId":`${curCategory.id}`
+                }
+
+                categories.push(category);
+            })
+
+            res.status(200).send(`{
+                "userId": "${userId}",
+                "categories": "${JSON.stringify(categories, null)}"
+            }`);
+        }
+         else {
+            res.status(400).send("There are no existing categories");
+         }
+
+    } catch (error) {
+        res.status(400).send(`${error.message}`)
+    }
 });

@@ -590,11 +590,126 @@ app.post('/CreateOneOff', async (req, res) => {
         const userId = req.body.userId;
         const userRef = db.collection(userCollection).doc(`${userId}`);
 
+        //get category of the one-off
+        var categoryExist = await userRef.collection(categoryCollection).where('name', '==', `${req.body.category}`).get();
+        var categoryId = "";
+        var categoryDoc = "";
+
+        //if this category collection or the specific category doesn't exist
+        if(categoryExist.empty) {
+
+            //make a new category
+            const newCategory = {
+                "name": `${req.body.category}`
+            }
+    
+            //add it to the category table
+            categoryDoc = await userRef.collection(categoryCollection).doc().set(newCategory);
+            categoryId = categoryDoc.id;
+        }
+        else {
+            var category = categoryExist.docs.map(category => {return category.id});
+            categoryId = category[0];
+        }
+
+        //make price string into an integer
+        const price = parseInt(req.body.price);
+
+        //object for a new one-off
+        const newOneOff = {
+            "name": `${req.body.name}`,
+            "categoryId": `${categoryId}`,
+            "color": `${req.body.color}`,
+            "price": `${price}`,
+            "date": `${req.body.date}`
+        }
+
+        const oneOffDoc = userRef.collection(oneOffCollection).doc();
+        const oneOffId = oneOffDoc.id;
+        await oneOffDoc.set(newOneOff);
+
+        const editedOneOff = {
+            "name": `${req.body.name}`,
+            "categoryId": `${categoryId}`,
+            "color": `${req.body.color}`,
+            "price": `${price}`,
+            "date": `${req.body.date}`,
+            "oneOffId": `${oneOffId}`
+        }
+
+        await userRef.collection(oneOffCollection).doc(`${oneOffId}`).update(editedOneOff);
+
+        res.status(201).send(`{
+            "userId": "${userId}",
+            "oneOffId": "${oneOffId}",
+            "name": "${req.body.name}",
+            "categoryId": "${categoryId}",
+            "color": "${req.body.color}",
+            "price": ${price},
+            "date": "${req.body.date}"
+        }`);
+
+    } catch (error) {
+        res.status(400).send(`${error.message}`)
+    }
+});
+
+//get one-offs
+app.post('/GetOneOffs', async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try {
+
+        const userId = req.body.userId; 
+        const userRef = db.collection(userCollection).doc(`${userId}`); 
+
+         //check if the one-off already exists
+         const oneOffDocs = await userRef.collection(oneOffCollection).get();
+         if(!oneOffDocs.empty) {
+
+            var oneOffs = [];
+            oneOffDocs.docs.forEach(curOneOff => {
+                var oneOff = {
+                    "name":`${curOneOff.get("name")}`,
+                    "categoryId":`${curOneOff.get("categoryId")}`,
+                    "color":`${curOneOff.get("color")}`,
+                    "price":`${curOneOff.get("price")}`,
+                    "date":`${curOneOff.get("date")}`,
+                    "oneOffId":`${curOneOff.id}`,
+                }
+
+                oneOffs.push(oneOff);
+            })
+
+            res.status(200).send(`{
+                "userId": "${userId}",
+                "oneOffs": "${JSON.stringify(oneOffs, null, 10)}"
+            }`);
+        }
+         else {
+            res.status(400).send("There are no existing one-offs");
+         }
+
+    } catch (error) {
+        res.status(400).send(`${error.message}`)
+    }
+});
+
+//edit one-off
+app.post('/EditOneOff', async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try {
+
+        const userId = req.body.userId;
+        const userRef = db.collection(userCollection).doc(`${userId}`);
+        const oneOffId = req.body.oneOffId;
+
         //get name of the one-off
-        var oneOffExist = await userRef.collection(oneOffCollection).where('name', '==', `${req.body.name}`).get();
+        var oneOffExist = await userRef.collection(oneOffCollection).doc(`${oneOffId}`).get();
 
         //if this one-off collection or the specific one-off doesn't exist
-        if(oneOffExist.empty) {
+        if(!oneOffExist.empty) {
 
             //get category of the one-off
             var categoryExist = await userRef.collection(categoryCollection).where('name', '==', `${req.body.category}`).get();
@@ -621,31 +736,20 @@ app.post('/CreateOneOff', async (req, res) => {
             //make price string into an integer
             const price = parseInt(req.body.price);
 
-            //constructor for a new one-off
-            const newOneOff = {
-                "name": `${req.body.name}`,
-                "categoryId": `${categoryId}`,
-                "color": `${req.body.color}`,
-                "price": `${price}`,
-                "date": `${req.body.date}`
-            }
-
-            //add the oneOffId to the one-off document
-            const oneOffDoc = await userRef.collection(oneOffCollection).doc().set(newOneOff);
-
             const editedOneOff = {
                 "name": `${req.body.name}`,
                 "categoryId": `${categoryId}`,
                 "color": `${req.body.color}`,
                 "price": `${price}`,
                 "date": `${req.body.date}`,
-                "oneOffId": `${oneOffDoc.id}`
+                "oneOffId": `${oneOffId}`
             }
-            await userRef.collection(oneOffCollection).doc(oneOffDoc.id).update(editedOneOff);
+
+            await userRef.collection(oneOffCollection).doc(`${oneOffId}`).update(editedOneOff);
 
             res.status(201).send(`{
                 "userId": "${userId}",
-                "oneOffId": "${oneOffDoc.id}",
+                "oneOffId": "${oneOffId}",
                 "name": "${req.body.name}",
                 "categoryId": "${categoryId}",
                 "color": "${req.body.color}",
@@ -654,101 +758,8 @@ app.post('/CreateOneOff', async (req, res) => {
             }`);
         }
         else {
-            res.status(400).send("This one-off already exists");
+            res.status(400).send("This one-off doesn't exist");
         }
-
-    } catch (error) {
-        res.status(400).send(`${error.message}`)
-    }
-});
-
-//get one-offs
-app.post('/GetOneOffs', async (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
-
-    try {
-
-        const userId = req.body.userId; 
-        const userRef = db.collection(userCollection).doc(`${userId}`); 
-
-         //check if the one-off already exists
-         const oneOffDocs = await userRef.collection(oneOffCollection).get();
-         if(!oneOffDocs.empty) {
-
-            const oneOffs = oneOffDocs.docs.map(oneOff => oneOff.data())
-
-            //for loop to get JSON objects from each doc into an array to output to frontend
-
-            res.status(200).send(`{
-                "userId": "${userId}",
-                "oneOffs": "${oneOffs}"
-            }`);
-        }
-         else {
-            res.status(400).send("There are no existing one-offs");
-         }
-
-    } catch (error) {
-        res.status(400).send(`${error.message}`)
-    }
-});
-
-//edit one-off
-app.post('/EditOneOff', async (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
-
-    try {
-
-        const userId = req.body.userId; 
-        const userRef = db.collection(userCollection).doc(`${userId}`);
-        const oneOffId = req.body.oneOffId; 
-        var categoryDoc = "";
-
-        //check if the one-off already exists
-        const oneOffExist = await userRef.collection(oneOffCollection).doc(`${oneOffId}`).get();
-        if(!oneOffExist.exists){
-            res.status(400).send("This one-off doesn't exist")
-        }
-
-        //get category that the one-off has
-        var categoryExist = await userRef.collection(categoryCollection).where('name', '==', `${req.body.category}`).get();
-
-        //if this category doesn't exist
-        if(categoryExist.empty) {
-
-            //make a new category
-            const newCategory = {
-                "name": `${req.body.category}`
-            }
-       
-            //add it to the category table
-           categoryDoc = await userRef.collection(categoryCollection).doc().set(newCategory);
-        }
-        
-        //edit the category for the current one-off
-        const categoryId = categoryDoc.id;
-
-        const price = parseInt(req.body.price);
-
-        const editedOneOff = {
-            "name": `${req.body.name}`,
-            "categoryId": `${categoryId}`,
-            "color": `${req.body.color}`,
-            "price": `${price}`,
-            "date": `${req.body.date}`,
-            "oneOffId": `${oneOffId}`
-        }
-
-        await userRef.collection(oneOffCollection).doc(`${oneOffId}`).update(editedOneOff);
-        res.status(200).send(`{
-            "userId": "${userId}",
-            "oneOffId": "${oneOffId}",
-            "name": "${req.body.name}",
-            "categoryId": "${categoryId}",
-            "color": "${req.body.color}",
-            "price": ${price},
-            "date": "${req.body.date}"
-        }`);
 
     } catch (error) {
         res.status(400).send(`${error.message}`)

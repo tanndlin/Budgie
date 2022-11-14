@@ -32,7 +32,7 @@ function CalendarPage(props) {
 
     return (
         <div className=''>
-            <img className='fixed h-full w-full opacity-70 object-fill' src={BackgroundImage} alt='Background image' />
+            <img className='fixed h-full w-full opacity-70 object-fill' src={BackgroundImage} alt='Wooden Texture' />
             <div className="fixed h-full w-full object-fill overflow-y-auto snap-x scroll-smooth">
                 <div className='snap-end'>
                     <BigCalendar bills={props.bills} modifyEvents={modifyEvents} />

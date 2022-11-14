@@ -17,7 +17,7 @@ function BudgetsView(props) {
     }
 
     return (
-        <article className="m-auto container bg-[#BBE9E7] bg-opacity-50 p-3 mb-5 rounded-md">
+        <article className="m-auto container bg-[#BBE9E7] bg-opacity-90 p-3 mb-5 rounded-md">
             <div className="flex flex-row justify-between font-bold border-black border-b-2 p-1">
                 <h1 className="text-2xl">Budgets</h1>
                 <span className='text-md'>

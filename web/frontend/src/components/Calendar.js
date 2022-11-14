@@ -162,7 +162,7 @@ function BigCalendar(props) {
                 />
 
                 <div
-                    className="container m-auto mt-5 min-h-500 bg-[#BBE9E7] bg-opacity-50 p-3 rounded-md"
+                    className="container m-auto mt-5 min-h-500 bg-[#BBE9E7] bg-opacity-90 p-3 rounded-md"
                     onClick={handleCalendarClick}
                 >
                     <header className="flex flex-row justify-between font-bold mb-3 border-black border-b-2 p-1">

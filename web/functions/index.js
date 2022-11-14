@@ -172,13 +172,8 @@ app.post('/CreateBill', async (req, res) => {
         //make price string into an integer
         const price = parseInt(req.body.price);
 
-        //initialize isPaid array to hold all events of a bill that were paid
-        var isPaid = [];
-        if(req.body.isPaidEvent != ("NULL" || "" || " ")) {
-            isPaid.push(req.body.isPaidEvent);
-        }
+        var isPaid = req.body.isPaid;
 
-        //constructor for a new bill
         const newBill = {
             "name": `${req.body.name}`,
             "categoryId": `${categoryId}`,
@@ -187,12 +182,26 @@ app.post('/CreateBill', async (req, res) => {
             "startDate": `${req.body.startDate}`,
             "endDate": `${req.body.endDate}`,
             "recurrence": `${req.body.recurrence}`,
-            "isPaid": `${isPaid}`
+            "isPaid": isPaid
         }
 
-        const billDoc = await userRef.collection(billCollection).doc().set(newBill);
+        const billDoc = userRef.collection(billCollection).doc();
         const billId = billDoc.id;
-        await userRef.collection(billCollection).doc(`${billId}`).update(`"billId": "${billId}"`);
+        await billDoc.set(newBill);
+
+        const editedBill = {
+            "name": `${req.body.name}`,
+            "categoryId": `${categoryId}`,
+            "color": `${req.body.color}`,
+            "price": `${price}`,
+            "startDate": `${req.body.startDate}`,
+            "endDate": `${req.body.endDate}`,
+            "recurrence": `${req.body.recurrence}`,
+            "isPaid": isPaid,
+            "billId":`${billId}`
+        }
+
+        await userRef.collection(billCollection).doc(`${billId}`).update(editedBill);
 
         res.status(201).send(`{
             "userId": "${userId}",
@@ -212,8 +221,8 @@ app.post('/CreateBill', async (req, res) => {
     }
 });
 
-//get bill
-app.post('/GetBill', async (req, res) => {
+//get bills
+app.post('/GetBills', async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
     try {
@@ -227,16 +236,18 @@ app.post('/GetBill', async (req, res) => {
 
             var bills = [];
             billDocs.docs.forEach(curBill => {
+                var isPaid = curBill.get("isPaid");
+
                 var bill = {
-                    "name":`${curBill.get("name")}`,
-                    "categoryId":`${curBill.get("categoryId")}`,
-                    "color":`${curBill.get("color")}`,
-                    "price":`${curBill.get("price")}`,
-                    "startDate":`${curBill.get("startDate")}`,
-                    "endDate":`${curBill.get("endDate")}`,
-                    "recurrence":`${curBill.get("recurrence")}`,
-                    "isPaid":`${curBill.get("isPaid")}`,
-                    "billId":`${curBill.id}`
+                    "name": `${curBill.get("name")}`,
+                    "categoryId": `${curBill.get("categoryId")}`,
+                    "color": `${curBill.get("color")}`,
+                    "price": `${curBill.get("price")}`,
+                    "startDate": `${curBill.get("startDate")}`,
+                    "endDate": `${curBill.get("endDate")}`,
+                    "recurrence": `${curBill.get("recurrence")}`,
+                    "isPaid": isPaid,
+                    "billId": `${curBill.id}`
                 }
 
                 bills.push(bill);
@@ -244,7 +255,7 @@ app.post('/GetBill', async (req, res) => {
 
             res.status(200).send(`{
                 "userId": "${userId}",
-                "oneOffs": "${JSON.stringify(bills, null, 10)}"
+                "bills": "${JSON.stringify(bills, null, 10)}"
             }`);
         }
          else {
@@ -262,7 +273,7 @@ app.post('/EditBill', async (req, res) => {
 
     try {
 
-        const userId = req.body.userId; 
+        const userId = req.body.userId;
         const userRef = db.collection(userCollection).doc(`${userId}`);
         const billId = req.body.billId; 
 
@@ -296,12 +307,7 @@ app.post('/EditBill', async (req, res) => {
 
         const price = parseInt(req.body.price);
 
-        var isPaid = userRef.collection(billCollection).doc(`${billId}`).get("isPaid");
-
-        //update isPaid depending on which months the bill has been paid
-        if(req.body.isPaidEvent != ("NULL" || "" || " ")) {
-            isPaid.push(req.body.isPaidEvent);
-        }
+        var isPaid = req.body.isPaid;
 
         const editedBill = {
             "name": `${req.body.name}`,
@@ -311,7 +317,7 @@ app.post('/EditBill', async (req, res) => {
             "startDate": `${req.body.startDate}`,
             "endDate": `${req.body.endDate}`,
             "recurrence": `${req.body.recurrence}`,
-            "isPaid": `${isPaid}`,
+            "isPaid": isPaid,
             "billId": `${billId}`
         }
 
@@ -430,9 +436,23 @@ app.post('/CreateBudget', async (req, res) => {
             "oneOffPayments": `${budgetRespectiveOneOffs}`
         }
 
-        const budgetDoc = await userRef.collection(budgetCollection).doc().set(newBudget);
+        const budgetDoc = userRef.collection(budgetCollection).doc();
         const budgetId = budgetDoc.id;
-        await userRef.collection(budgetCollection).doc(`${budgetId}`).update(`"budgetId": "${budgetId}"`);
+        await budgetDoc.set(newBudget);
+
+        const editedBudget = {
+            "name": `${req.body.name}`,
+            "categoryId": `${categoryId}`,
+            "expectedPrice": `${expectedPrice}`,
+            "actualPrice": `${actualPrice}`,
+            "startDate": `${req.body.startDate}`,
+            "recurrence": `${req.body.recurrence}`,
+            "billPayments": `${budgetRespectiveBills}`,
+            "oneOffPayments": `${budgetRespectiveOneOffs}`,
+            "budgetId":`${budgetId}`
+        }
+
+        await userRef.collection(budgetCollection).doc(`${budgetId}`).update(editedBudget);
         res.status(201).send(`{
             "userId": "${userId}",
             "budgetId": "${budgetId}",
@@ -451,8 +471,8 @@ app.post('/CreateBudget', async (req, res) => {
     }
 });
 
-//get budget
-app.post('/GetBudget', async (req, res) => {
+//get budgets
+app.post('/GetBudgets', async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
     try {

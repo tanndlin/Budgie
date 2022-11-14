@@ -8,7 +8,7 @@ import SideBar from './SideBar';
 
 const localizer = momentLocalizer(moment);
 
-function BigCalendar(props) {
+export function BigCalendar(props) {
     const [isOpen, setIsOpen] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [start, setStart] = React.useState(formatDate(new Date()));
@@ -104,32 +104,6 @@ function BigCalendar(props) {
         };
     }
 
-    function getEventsFromBills() {
-        // Each bill will have multiple events for each pay date
-        const events = props.bills.map(bill => {
-            const payDates = [];
-            const startDate = new Date(bill.start);
-            const endDate = new Date(bill.end);
-
-            // Create an event for each pay date
-            while (startDate <= endDate) {
-                payDates.push({
-                    ...bill,
-                    start: new Date(startDate),
-                    end: new Date(startDate),
-                    title: `${bill.title} - ${bill.amount}`,
-                    allDay: true,
-                });
-
-                startDate.setMonth(startDate.getMonth() + bill.frequency);
-            }
-
-            return payDates;
-        }).flat();
-
-        return events;
-    }
-
     // Returns true if date is this month or later
     function billIsCurrent(bill) {
         const { start, end } = bill;
@@ -192,4 +166,26 @@ function BigCalendar(props) {
         </div>
     );
 }
-export default BigCalendar;
+
+export function getEventsFromBills(bills) {
+    // Each bill will have multiple events for each pay date
+    return bills.map(bill => {
+        const payDates = [];
+
+        const currentDate = new Date(bill.start);
+        // Create an event for each pay date
+        while (currentDate <= bill.end) {
+            payDates.push({
+                ...bill,
+                start: new Date(currentDate),
+                end: new Date(currentDate),
+                title: `${bill.title} - ${bill.amount}`,
+                allDay: true,
+            });
+
+            currentDate.setMonth(currentDate.getMonth() + (bill.frequency ?? 1));
+        }
+
+        return payDates;
+    }).flat();
+}

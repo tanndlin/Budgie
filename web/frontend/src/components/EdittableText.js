@@ -1,24 +1,14 @@
 import React from 'react';
 
 function EdittableText(props) {
-
-    function onChange(e) {
-        // const value = e.target.value;
-        // if (value > props.max) {
-        //     e.target.value = props.max;
-        // }
-
-        props.onChange(e);
-    }
-
     function onBlur(e) {
         if (!e.target.value)
-            e.target.value = '0';
+            e.target.value = props.type === 'number' ? 0 : 'Please Enter A Value';
     }
 
     return (
         <input
-            onChange={onChange}
+            onChange={props.onChange}
             onBlur={onBlur}
             className='font-bold editable'
             type={props.type}

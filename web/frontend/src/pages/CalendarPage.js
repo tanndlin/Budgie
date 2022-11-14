@@ -1,5 +1,5 @@
 import React from 'react';
-import BigCalendar from '../components/Calendar';
+import { BigCalendar } from '../components/Calendar';
 import BudgetsView from '../components/BudgetsView';
 import ExtraneousView from '../components/ExtraneousView';
 

@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-node-access */
 import { render, screen } from '@testing-library/react';
-import BigCalendar from '../components/Calendar';
+import { BigCalendar, getEventsFromBills } from '../components/Calendar';
 
 test('Events red on unpaid', () => {
     render(<BigCalendar
@@ -66,4 +66,29 @@ test('Do not sum bills that no longer recur', () => {
 
     const checkContent = screen.getByTestId('billSum');
     expect(checkContent).toHaveTextContent('$0 / month');
+});
+
+test('Events from Bills Exact Dates', () => {
+    const bills = [{
+        title: 'Hello World',
+        start: new Date(Date.parse('01 Jan 2022')),
+        end: new Date(Date.parse('01 December 2022')),
+        amount: 100,
+    }];
+
+    const events = getEventsFromBills(bills);
+    expect(events).toHaveLength(12);
+});
+
+test('Events from Bills Cutoff', () => {
+    const bills = [{
+        title: 'Hello World',
+        start: new Date(Date.parse('01 Jan 2022')),
+        end: new Date(Date.parse('30 November 2022')),
+        amount: 100,
+    }];
+
+
+    const events = getEventsFromBills(bills);
+    expect(events).toHaveLength(11);
 });

@@ -73,6 +73,11 @@ input[type='number'] {
     grid-template-columns: repeat(auto-fill, 200px);
 }
 
+#extraView {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 150px);
+}
+
 .unpaid {
     background-color: rgb(248 113 113) !important;
     color: black !important;
@@ -83,10 +88,61 @@ input[type='number'] {
     color: black !important;
 }
 
-#listView {
-    height: calc(100% - 42px);
-}
-
 .arrow:hover {
     fill: #3818fd;
+}
+
+#bwLogo {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    scale: 0.75;
+}
+
+.shrink {
+    transform: scale(0.8);
+    transition: 0.3s;
+}
+
+.left {
+    animation-name: slideLeft;
+    animation-duration: 300ms;
+    left: 0;
+}
+
+.right {
+    animation-name: slideRight;
+    animation-duration: 300ms;
+    left: calc(100% - 64px);
+}
+
+@keyframes slideLeft {
+    0% {
+        left: calc(100% - 64px);
+    }
+    100% {
+        left: 0;
+    }
+}
+
+@keyframes slideRight {
+    0% {
+        left: 0;
+    }
+    100% {
+        left: calc(100% - 64px);
+    }
+}
+
+.sidebar {
+    height: auto;
+    transition: 300ms;
+    max-height: 1000px;
+}
+
+.sidebarClose {
+    max-height: 0px;
+    transition: 300ms;
+    transform: scaleY(0);
+    visibility: hidden;
 }

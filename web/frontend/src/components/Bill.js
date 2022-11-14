@@ -2,7 +2,6 @@ import React from 'react';
 
 function Bill(props) {
     function handleClick(e) {
-        console.log('Hello World');
         e.preventDefault();
         // If it was a Ctrl + Click
         if (!e.ctrlKey) return;

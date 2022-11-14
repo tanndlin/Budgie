@@ -4,13 +4,28 @@ import './index.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from './pages/LoginPage';
 import CalendarPage from './pages/CalendarPage';
-import ListPage from './pages/ListPage';
 import Header from './components/Header';
 
 function App() {
   const [user, setUser] = React.useState(null);
   const [bills, setBills] = React.useState([]);
   const [budgets, setBudgets] = React.useState([]);
+  const [extras, setExtras] = React.useState([]);
+
+  const props = {
+    user,
+    setUser,
+    bills,
+    setBills,
+    budgets,
+    setBudgets,
+    extras,
+    setExtras,
+  };
+
+  const headerProps = (shouldShowNav) => ({
+    ...props, showNav: shouldShowNav,
+  });
 
   return (
     <BrowserRouter>
@@ -18,75 +33,21 @@ function App() {
         <Route path="/" element={
           <div className='h-screen'>
             <Header
-              {...{
-                user,
-                setUser,
-                bills,
-                setBills,
-                budgets,
-                setBudgets,
-                showNav: false,
-              }}
+              {...headerProps(false)}
             />
-            <LoginPage {...{
-              user,
-              setUser,
-              bills,
-              setBills,
-              budgets,
-              setBudgets,
-            }} />
+            <LoginPage {...props} />
           </div>
         } />
 
         <Route path="/calendar" element={
           <div className=''>
             <Header
-              {...{
-                user,
-                setUser,
-                bills,
-                setBills,
-                budgets,
-                setBudgets,
-                showNav: true,
-              }}
+              {...headerProps(true)}
             />
             <div className='overflow-hidden h-auto'>
-              <CalendarPage {...{
-                user,
-                setUser,
-                bills,
-                setBills,
-                budgets,
-                setBudgets,
-              }} /> 
-            </div> 
+              <CalendarPage {...props} />
+            </div>
           </div>
-        } />
-
-        <Route path="/list" element={
-          <divc className='h-screen'>
-            <Header
-              {...{
-                user,
-                setUser,
-                bills,
-                setBills,
-                budgets,
-                setBudgets,
-                showNav: true,
-              }}
-            />
-            <ListPage {...{
-              user,
-              setUser,
-              bills,
-              setBills,
-              budgets,
-              setBudgets,
-            }} />
-          </divc>
         } />
       </Routes >
     </BrowserRouter >

@@ -41,7 +41,11 @@ function ExtraneousView(props) {
     }
 
     return (
+<<<<<<< HEAD
         <article className="m-auto container bg-[#BBE9E7] bg-opacity-50 p-3 rounded-md">
+=======
+        <article className="m-auto container bg-[#BBE9E7] bg-opacity-90 p-3 mb-36 rounded-md">
+>>>>>>> fff9bc9 (change opacity, fix margin of extraneous category)
             <div className="flex flex-row justify-between font-bold border-black border-b-2 p-1">
                 <h1 className="text-2xl">One Offs</h1>
                 <span className="text-md">

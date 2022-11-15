@@ -152,8 +152,3 @@ input[type='number'] {
     padding-bottom: 0 !important;
     border: none;
 }
-
-.fuck {
-    display: inline-flex;
-    align-items: flex-start;
-}

@@ -28,7 +28,18 @@ function ExtraneousView(props) {
     }
 
     function deleteExtra(extra) {
-        props.setExtras(props.extras.filter((e) => e.id !== extra.id));
+        sendRequest(
+            'RemoveOneOff',
+            { userId: props.user.userId, oneOffId: extra.oneOffId },
+            () => {
+                props.setExtras(
+                    props.extras.filter((e) => e.oneOffId !== extra.oneOffId)
+                );
+            },
+            (err) => {
+                console.log(err);
+            }
+        );
     }
 
     return (

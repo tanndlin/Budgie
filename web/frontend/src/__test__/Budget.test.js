@@ -1,12 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import BudgetsView from '../components/BudgetsView';
+import React from 'react';
 
 test('Sums total of Budgets', () => {
     const categories = [
         {
             name: 'All',
-            id: -1,
-        },
+            id: -1
+        }
     ];
 
     const budgets = [];
@@ -16,16 +17,17 @@ test('Sums total of Budgets', () => {
             name: 'Hello World',
             total,
             spent: Math.floor(Math.random() * total),
-            categoryID: -1,
+            categoryID: -1
         });
     }
 
-    render(<BudgetsView
-        budgets={budgets}
-        categories={categories}
-        categorySortID={-1}
-    />);
-
+    render(
+        <BudgetsView
+            budgets={budgets}
+            categories={categories}
+            categorySortID={-1}
+        />
+    );
 
     const sum = budgets.reduce((acc, budget) => acc + budget.total, 0);
     const event = screen.getByText(new RegExp(`${sum}`));
@@ -36,8 +38,8 @@ test('Sums spent of Budget', () => {
     const categories = [
         {
             name: 'All',
-            id: -1,
-        },
+            id: -1
+        }
     ];
 
     const budgets = [];
@@ -47,16 +49,17 @@ test('Sums spent of Budget', () => {
             name: 'Hello World',
             total,
             spent: Math.floor(Math.random() * total),
-            categoryID: -1,
+            categoryID: -1
         });
     }
 
-    render(<BudgetsView
-        budgets={budgets}
-        categories={categories}
-        categorySortID={-1}
-    />);
-
+    render(
+        <BudgetsView
+            budgets={budgets}
+            categories={categories}
+            categorySortID={-1}
+        />
+    );
 
     const sum = budgets.reduce((acc, budget) => acc + budget.spent, 0);
     const event = screen.getByText(new RegExp(`${sum}`));

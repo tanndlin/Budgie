@@ -1,0 +1,62 @@
+{
+    "env": {
+        "commonjs": true,
+        "es6": true,
+        "node": true,
+        "jest": true,
+        "browser": true
+    },
+    "extends": [
+        "eslint-config-prettier",
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "plugins": ["prettier"],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "rules": {
+        "eqeqeq": ["error", "smart"],
+        "eol-last": ["error"],
+        "curly": "warn",
+        "no-var": 2,
+        "prefer-const": "error",
+        "semi": "error",
+        "space-before-blocks": "error",
+        "spaced-comment": "warn",
+        "prettier/prettier": [
+            "error",
+            { "singleQuote": true, "endOfLine": "auto" }
+        ],
+        "quotes": [2, "single", { "avoidEscape": true }],
+        "no-unused-vars": [
+            "error",
+            {
+                "caughtErrors": "none",
+                "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^_",
+                "caughtErrorsIgnorePattern": "^_"
+            }
+        ],
+        "react/prop-types": 0,
+        "react/jsx-key": 0
+    },
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+        "ecmaVersion": 12,
+        "sourceType": "module",
+        "requireConfigFile": false,
+        "babelOptions": {
+            "parserOpts": {
+                "plugins": ["jsx"]
+            }
+        }
+    },
+    "root": true,
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    }
+}

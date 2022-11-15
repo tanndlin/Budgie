@@ -6,16 +6,28 @@ import SideBar from '../components/SideBar';
 import ForgotPassword from '../components/ForgotPassword';
 
 const LoginPage = (props) => {
+    const defaultSidebarClassName = 'max-w-[960px] m-auto mt-0';
+
     const [loginEmail, setLoginEmail] = React.useState('');
     const [dividerToggle, setDividerToggle] = React.useState(true);
     const [isOpen, setIsOpen] = React.useState(false);
+    const [sidebarClassName, setSidebarClassName] = React.useState(defaultSidebarClassName + ' sidebarClose');
 
     const openSidebar = () => {
         setIsOpen(true);
+        setSidebarClassName(defaultSidebarClassName + ' sidebarOpen');
+
+        setTimeout(() => {
+            setSidebarClassName(defaultSidebarClassName);
+        }, 300);
     };
 
     const closeSidebar = () => {
-        setIsOpen(false);
+        setSidebarClassName(defaultSidebarClassName + ' sidebarClose');
+
+        setTimeout(() => {
+            setIsOpen(false);
+        }, 300);
     };
 
 
@@ -25,8 +37,6 @@ const LoginPage = (props) => {
             return defaultClassName;
         else
             return `${defaultClassName} mb-4`;
-
-
     }
 
     return (
@@ -54,14 +64,16 @@ const LoginPage = (props) => {
                         }}
                     />
                 </section>
-
-                <SideBar
-                    className='max-w-[960px] m-auto mt-0'
-                    isOpen={isOpen}>
-                    <ForgotPassword
-                        closeSidebar={closeSidebar}
-                    />
-                </SideBar>
+                {
+                    isOpen &&
+                    <SideBar
+                        className={sidebarClassName}
+                        isOpen={isOpen}>
+                        <ForgotPassword
+                            closeSidebar={closeSidebar}
+                        />
+                    </SideBar>
+                }
             </main>
         </article>
     );

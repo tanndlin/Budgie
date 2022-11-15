@@ -5,7 +5,9 @@ function SideBar(props) {
     const className = defaultClassName + (props.className ? ` ${props.className}` : '');
 
     return (
-        <aside className={className}>
+        <aside
+            id='sidebar'
+            className={className}>
             {props.children}
         </aside>
     );

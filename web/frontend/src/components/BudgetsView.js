@@ -8,9 +8,14 @@ function BudgetsView(props) {
             total: 100,
             spent: 0,
             categoryID: -1,
+            id: Math.random(),
         };
 
         props.setBudgets([...props.budgets, budget]);
+    }
+
+    function deleteBudget(budget) {
+        props.setBudgets([...props.budgets.filter((b) => b.id !== budget.id)]);
     }
 
     function resetBudgets() {
@@ -48,6 +53,7 @@ function BudgetsView(props) {
                         budgets={props.budgets}
                         setBudgets={props.setBudgets}
                         categories={props.categories}
+                        deleteBudget={deleteBudget}
                     />
                 ))}
             </section>

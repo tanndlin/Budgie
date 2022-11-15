@@ -34,7 +34,7 @@ function Budget(props) {
 
     return (
         <div className='grid grid-cols-1 w-[232px] p-4'>
-            <span className='flex justify-between'>
+            <span className='flex justify-between relative'>
 
                 <EdittableText
                     type='text'
@@ -44,16 +44,12 @@ function Budget(props) {
                         props.setBudgets([...props.budgets]);
                     }}
                 />
-                <Dropdown
-                    options={props.categories.map((category) => category.name)}
-                    value={props.categories.find(c => c.id === budget.categoryID)?.name}
-                    onChange={(e) => {
-                        budget.categoryID = props.categories.find(c => c.name === e.value)?.id;
-                        props.setBudgets([...props.budgets]);
-                    }}
-                    className='slim'
-                    controlClassName='slim'
-                    placeholderClassName='slim'
+
+                <input
+                    className='absolute -top-2 right-0 cursor-pointer text-[24px] font-bold hover:text-red-500'
+                    type='button'
+                    value='&times;'
+                    onClick={() => props.deleteBudget(budget)}
                 />
             </span>
             <span className='w-[200px] h-[200px]'>
@@ -82,6 +78,18 @@ function Budget(props) {
                     }}
                 />
             </span>
+
+            <Dropdown
+                options={props.categories.map((category) => category.name)}
+                value={props.categories.find(c => c.id === budget.categoryID)?.name}
+                onChange={(e) => {
+                    budget.categoryID = props.categories.find(c => c.name === e.value)?.id;
+                    props.setBudgets([...props.budgets]);
+                }}
+                className='slim-parent border-2 border-black rounded-md'
+                controlClassName='slim'
+                placeholderClassName='slim'
+            />
         </div>
     );
 }

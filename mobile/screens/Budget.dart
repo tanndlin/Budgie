@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class AccountManager extends StatefulWidget {
-  const AccountManager({super.key});
+class Budget extends StatefulWidget {
+  const Budget({super.key});
 
   @override
-  State<AccountManager> createState() => _AccountManagerState();
+  State<Budget> createState() => _BudgetState();
 }
 
-class _AccountManagerState extends State<AccountManager> {
-  int selectedIndex = 4;
+class _BudgetState extends State<Budget> {
+  int selectedIndex = 1;
   List<String> routes = ['/MainPage', '/Budget', '/BillPage', '/CalendarView', '/AccountManager'];
 
 
@@ -45,7 +45,7 @@ class _AccountManagerState extends State<AccountManager> {
           appBar: AppBar(
             centerTitle: false,
             title: const Text(
-              'Account Details',
+              'Budget',
               style: TextStyle(fontSize: 35, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),
             ),
             automaticallyImplyLeading: false,
@@ -82,6 +82,4 @@ class _AccountManagerState extends State<AccountManager> {
         )
     );
   }
-
-
 }

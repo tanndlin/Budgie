@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from './pages/LoginPage';
 import CalendarPage from './pages/CalendarPage';
 import Header from './components/Header';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -55,8 +56,16 @@ function App() {
           </div>
         } />
 
-        <Route path="/calendar" element={
+        <Route path="/forgot-password" element={
+          <div className='h-screen'>
+            <Header
+              {...headerProps(false)}
+            />
+            <ForgotPasswordPage {...props} />
+          </div>
+        } />
 
+        <Route path="/calendar" element={
           <div className='h-screen'>
             <Header
               {...headerProps(true)}

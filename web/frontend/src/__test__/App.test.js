@@ -1,14 +1,15 @@
 import { render, screen } from '@testing-library/react';
 import App from '../App';
+import React from 'react';
 
 test('renders header', () => {
-  render(<App />);
-  const header = screen.getByText(/Budgie/i);
-  expect(header).toBeInTheDocument();
+    render(<App />);
+    const header = screen.getByText(/Budgie/i);
+    expect(header).toBeInTheDocument();
 });
 
 test('renders login page', () => {
-  render(<App />);
-  const h1 = screen.getByTestId('loginHeader');
-  expect(h1).toBeInTheDocument();
+    render(<App />);
+    const h1 = screen.getByTestId('loginHeader');
+    expect(h1).toBeInTheDocument();
 });

@@ -1,13 +1,9 @@
-/* eslint-disable testing-library/no-node-access */
-import { fireEvent, render, screen } from '@testing-library/react';
-import EdittableText from "../components/EdittableText";
+import { fireEvent, render } from '@testing-library/react';
+import EdittableText from '../components/EdittableText';
+import React from 'react';
 
 test('Value defaults to 0 for EdittableText in Number Type', () => {
-    render(<EdittableText
-        type='number'
-        value=''
-    />);
-
+    render(<EdittableText type="number" value="" />);
 
     const input = document.querySelector('input');
     fireEvent.blur(input);
@@ -16,10 +12,7 @@ test('Value defaults to 0 for EdittableText in Number Type', () => {
 });
 
 test('Value defaults for EdittableText in Text Type', () => {
-    render(<EdittableText
-        type='text'
-        value=''
-    />);
+    render(<EdittableText type="text" value="" />);
 
     const input = document.querySelector('input');
     fireEvent.blur(input);
@@ -28,10 +21,7 @@ test('Value defaults for EdittableText in Text Type', () => {
 });
 
 test('Text unchanged in EdittableText', () => {
-    render(<EdittableText
-        type='text'
-        value='Hello'
-    />);
+    render(<EdittableText type="text" value="Hello" />);
 
     const input = document.querySelector('input');
     fireEvent.blur(input);
@@ -40,10 +30,7 @@ test('Text unchanged in EdittableText', () => {
 });
 
 test('Number cannot be letters in EdittableText', () => {
-    render(<EdittableText
-        type='number'
-        value='Hello'
-    />);
+    render(<EdittableText type="number" value="Hello" />);
 
     const input = document.querySelector('input');
     fireEvent.blur(input);

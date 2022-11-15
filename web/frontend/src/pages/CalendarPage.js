@@ -34,6 +34,11 @@ function CalendarPage(props) {
         // hydrate('GetOneOffs', props.setOneOffs);
         // hydrate('GetCategories', props.setCategories);
 
+        const billNotifID = props.pushNotification(
+            'Retrieving Bills',
+            'Please wait...'
+        );
+
         sendRequest(
             'GetBills',
             { userId: state.user.userId },
@@ -46,10 +51,17 @@ function CalendarPage(props) {
                         endDate: new Date(b.endDate)
                     }))
                 );
+
+                props.removeNotification(billNotifID);
             },
             (err) => {
                 console.log('GetBills', err);
             }
+        );
+
+        const budgetNotifID = props.pushNotification(
+            'Retrieving Budgets',
+            'Please wait...'
         );
 
         sendRequest(
@@ -63,10 +75,17 @@ function CalendarPage(props) {
                         startDate: new Date(b.startDate)
                     }))
                 );
+
+                props.removeNotification(budgetNotifID);
             },
             (err) => {
                 console.log('GetBudgets', err);
             }
+        );
+
+        const oneOffNotifID = props.pushNotification(
+            'Retrieving One Offs',
+            'Please wait...'
         );
 
         sendRequest(
@@ -80,10 +99,17 @@ function CalendarPage(props) {
                         date: new Date(o.date)
                     }))
                 );
+
+                props.removeNotification(oneOffNotifID);
             },
             (err) => {
                 console.log('GetOneOffs', err);
             }
+        );
+
+        const categoryNotifID = props.pushNotification(
+            'Retrieving Categories',
+            'Please wait...'
         );
 
         sendRequest(
@@ -95,9 +121,12 @@ function CalendarPage(props) {
                     ...categories,
                     { categoryId: -1, name: 'All' }
                 ]);
+
+                props.removeNotification(categoryNotifID);
             },
             (err) => {
                 console.log('GetCategories', err);
+                props.removeNotification(categoryNotifID);
             }
         );
     };

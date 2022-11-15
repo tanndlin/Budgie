@@ -28,16 +28,9 @@ function App() {
         }
     ]);
 
-    const [notifications, setNotifications] = React.useState([
-        {
-            id: -1,
-            title: 'Welcome',
-            message: 'Welcome to the app!'
-        }
-    ]);
+    const [notifications, setNotifications] = React.useState([]);
 
     let id = 0;
-
     const pushNotification = (title, message) => {
         const notification = {
             id: id++,

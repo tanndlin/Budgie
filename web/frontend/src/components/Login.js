@@ -53,8 +53,6 @@ function Login(props) {
                 const { localId } = JSON.parse(res.responseText);
                 console.log(localId);
 
-                // sendRequest('CreateUserProfile', { userId: localId }, (res) => {
-                // console.log(res);
                 const id = props.pushNotification(
                     'Retrieving Profile',
                     'Please wait...'
@@ -68,7 +66,7 @@ function Login(props) {
                         console.log(res.responseText);
                         const user = JSON.parse(res.responseText);
                         console.log(user);
-                        // navigateToHome(user);
+                        navigateToHome(user);
                     },
                     (err) => {
                         console.log('here');

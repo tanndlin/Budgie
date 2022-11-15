@@ -28,6 +28,11 @@ function Login(props) {
         });
     };
 
+    function openSidebar(e) {
+        e.preventDefault();
+        props.openSidebar();
+    }
+
     // to do: add on-click function for forgot password
     return (
         <section className='flex container h-full bg-[#BBE9E7] bg-opacity-50 rounded-md'>
@@ -42,7 +47,7 @@ function Login(props) {
                     <span className='row-start-4 flex flex-col'>
                         <input className='w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' type='submit' value='Log In'
                             onClick={doLogin} />
-                        <button className='ml-4 text-[#189DFD] hover:text-[#3818FD]' onClick={props.openSidebar}>Forgot Password?</button>
+                        <button className='ml-4 text-[#189DFD] hover:text-[#3818FD]' onClick={openSidebar}>Forgot Password?</button>
                     </span>
                 </form>
                 <footer className='flex'>

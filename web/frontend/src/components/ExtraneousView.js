@@ -8,11 +8,15 @@ function ExtraneousView(props) {
             name: "New Extraneous",
             amount: 0,
             categoryID: -1,
+            id: Math.random(),
         };
 
         props.setExtras([...props.extras, extra]);
     }
 
+    function deleteExtra(extra) {
+        props.setExtras(props.extras.filter(e => e.id !== extra.id));
+    }
 
     return (
         <article className="m-auto container bg-[#BBE9E7] bg-opacity-50 p-3 mb-5 rounded-md">
@@ -38,6 +42,7 @@ function ExtraneousView(props) {
                         extras={props.extras}
                         setExtras={props.setExtras}
                         categories={props.categories}
+                        deleteExtra={deleteExtra}
                     />
                 ))}
             </section>

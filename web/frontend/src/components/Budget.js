@@ -4,6 +4,7 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import EdittableText from './EdittableText';
 import 'react-circular-progressbar/dist/styles.css';
 import Dropdown from 'react-dropdown';
+import { sendRequest } from '../common/Requests';
 
 function Budget(props) {
     function lerpColor(a, b, price) {
@@ -38,6 +39,23 @@ function Budget(props) {
     const green = '#7aff75';
     const color = lerpColor(green, red, percent / 100);
 
+    function editMe() {
+        sendRequest(
+            'EditBudget',
+            { ...budget, userId: props.user.userId },
+            () => {
+                props.setBudgets(
+                    props.budgets.map((b) =>
+                        b.budgetId === budget.budgetId ? budget : b
+                    )
+                );
+            },
+            (err) => {
+                console.log(err);
+            }
+        );
+    }
+
     return (
         <div className="grid grid-cols-1 w-[232px] p-4">
             <span className="flex justify-between relative">
@@ -48,6 +66,7 @@ function Budget(props) {
                         budget.name = e.target.value;
                         props.setBudgets([...props.budgets]);
                     }}
+                    onBlur={editMe}
                 />
 
                 <input
@@ -75,6 +94,7 @@ function Budget(props) {
                         budget.actualPrice = e.target.value;
                         props.setBudgets([...props.budgets]);
                     }}
+                    onBlur={editMe}
                 />
                 <p className="mx-1 my-px p-0">out of</p>
                 <h3 className="font-bold">$</h3>
@@ -85,6 +105,7 @@ function Budget(props) {
                         budget.expectedPrice = e.target.value;
                         props.setBudgets([...props.budgets]);
                     }}
+                    onBlur={editMe}
                 />
             </span>
 
@@ -98,7 +119,7 @@ function Budget(props) {
                     budget.categoryId = props.categories.find(
                         (c) => c.name === e.value
                     )?.id;
-                    props.setBudgets([...props.budgets]);
+                    editMe();
                 }}
                 className="slim-parent border-2 border-black rounded-md"
                 controlClassName="slim"

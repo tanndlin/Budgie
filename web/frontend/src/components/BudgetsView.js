@@ -76,6 +76,8 @@ function BudgetsView(props) {
                     })
                     .map((budget) => (
                         <Budget
+                            key={budget.budgetId}
+                            user={props.user}
                             budget={budget}
                             budgets={props.budgets}
                             setBudgets={props.setBudgets}

@@ -140,8 +140,15 @@ input[type='number'] {
     }
 }
 
+.slim-parent {
+    background: none !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
 .slim {
     background: none !important;
     padding-top: 0 !important;
     padding-bottom: 0 !important;
+    border: none;
 }

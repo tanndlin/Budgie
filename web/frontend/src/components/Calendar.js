@@ -12,6 +12,7 @@ import CreateBillPopUp from './CreateBillPopUp';
 const localizer = momentLocalizer(moment);
 
 export function BigCalendar(props) {
+    const [isEdit, setIsEdit] = React.useState(false);
     const [isOpen, setIsOpen] = React.useState(false);
     const [title, setTitle] = React.useState('');
     const [start, setStart] = React.useState(formatDate(new Date()));
@@ -63,12 +64,19 @@ export function BigCalendar(props) {
         createEdit(bill);
     }
 
+    function deleteBill() {
+        const newState = props.bills.filter(b => b.id !== currentBill.id);
+        props.setBills(newState);
+        closeModal();
+    }
+
     function openModal() {
         setIsOpen(true);
     }
 
     function closeModal() {
         setIsOpen(false);
+        setIsEdit(false);
 
         resetAllValues();
     }
@@ -90,6 +98,7 @@ export function BigCalendar(props) {
         setCurrentBill(bill);
         setCategoryID(bill.categoryID);
 
+        setIsEdit(true);
         openModal();
     }
 
@@ -131,19 +140,23 @@ export function BigCalendar(props) {
                     isOpen={isOpen}
                 >
                     <CreateBillPopUp
-                        title={title}
-                        start={start}
-                        end={end}
-                        amount={amount}
-                        categoryID={categoryID}
-                        setCategoryID={setCategoryID}
-                        setAmount={setAmount}
-                        setTitle={setTitle}
-                        setStart={setStart}
-                        setEnd={setEnd}
-                        closeModal={closeModal}
-                        pushEvent={pushEvent}
-                        categories={props.categories}
+                        {...{
+                            title,
+                            start,
+                            end,
+                            amount,
+                            categoryID,
+                            setCategoryID,
+                            setAmount,
+                            setTitle,
+                            setStart,
+                            setEnd,
+                            closeModal,
+                            pushEvent,
+                            deleteBill,
+                            isEdit,
+                            categories: props.categories
+                        }}
                     />
                 </SideBar>
 

@@ -24,24 +24,19 @@ class _LoginPageState extends State<LoginPage> {
 
   // register output to screen
   bool register = false;
+  // bool passW = false;
   String result = "";
-  void output(int n)
-  {
-    if (n == 1) {
-      this.result = "Register success";
-    }
-    else if (n == 2){
-      this.result = "Passwords do not match";
-    }
-  }
+  // void output(int n)
+  // {
+  //   if (n == 1) {
+  //     this.result = "Register success";
+  //   }
+  //   else if (n == 2){
+  //     this.result = "Passwords do not match";
+  //   }
+  // }
+  //
 
-  String getColor()
-  {
-    if (register)
-      return  "0xFF2D4B03";
-    else
-      return "0xFFFF0000";
-  }
 
   String email = "";
   String password = "";
@@ -83,8 +78,7 @@ class _LoginPageState extends State<LoginPage> {
     if(login_verification == "good")
     {
       print('Good login');
-      // Navigator.pushNamed(context, '/MainPage');
-      Navigator.pushNamed(context, '/MainPageNav');
+      Navigator.pushNamed(context, '/MainPage');
 
     }
   }
@@ -189,24 +183,28 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           onPressed: () {
                             // sign up btn
-                            this.result = "";
-                            this.register = false;
+                            // this.result = "";
                             if (_controllerPass_Reg.text == _controllerPass_Confirm.text)
                             {
                                 _register(_controllerEmail_Reg.text, _controllerPass_Reg.text);
-                                // 1 = register success
-                                output(1);
-                                this.register = true;
+                                // showError(1, context);
+                                setState(() {
+                                  this.result = "Register Success!";
+                                  this.register = true;
+                                });
                                 print('Register success!');
                             }
                             else
                             {
                                 print('Passwords don\'t match!');
-                                this.register = false;
-                                // 2 = passwords dont match
-                                output(2);
+                                setState(() {
+                                  this.result = "Passwords do not match!";
+                                  this.register = false;
+                                });
+                                // showError(2, context);
                                 // SHOW ON SCREEN
                             }
+                            print(this.result);
                           },
                           child: const Text(
                             'Sign Up',
@@ -214,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                    Text(this.result, style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Color(int.parse(getColor()))),),
+                    new Text(this.result, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: this.register ? Color(0xFF2D4B03) : Color(0xFFFF0000),)),
                     ],
                   ),
                 ),
@@ -299,6 +297,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: const Center(child: Text(
               'Budgie',
             style: TextStyle(fontSize: 35, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),

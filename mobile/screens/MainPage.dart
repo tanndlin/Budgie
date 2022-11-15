@@ -17,12 +17,21 @@ class _MainPageState extends State<MainPage> {
     //
     // ];
 
+    void _goToDisplay(display){
+      Navigator.pushNamed(context, '/Budget');
+    }
+
     void onTabTapped(index){
       print(index);
       Navigator.pushNamed(context, routes[index]);
     }
 
+    void _logout(){
+      Navigator.pushNamed(context, '/LoginPage');
+    }
+
     return Container(
+      // BACKGROUND AND APPBAR
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -38,10 +47,21 @@ class _MainPageState extends State<MainPage> {
       child: Scaffold (
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Center(child: Text(
+          centerTitle: false,
+          title: const Text(
             'Budgie',
             style: TextStyle(fontSize: 35, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),
-          )),
+          ),
+          actions: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {
+                _logout();
+              },
+              child: Icon(Icons.logout, color: Color(0xFF2D4B03), size: 35.0,),
+            ),)
+          ],
           automaticallyImplyLeading: false,
           flexibleSpace: Container(
             decoration: const BoxDecoration(
@@ -56,6 +76,150 @@ class _MainPageState extends State<MainPage> {
                   tileMode: TileMode.clamp),
             ),
           ),
+        ),
+
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 10.0,),
+              // WHOLE PAGE
+              Padding(
+                padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                child: Column(
+                  children: <Widget>[
+                    // BUDGET WIDGET
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 280,
+                      decoration: BoxDecoration(
+                          color: Color(0xddb3e5fc),
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [ BoxShadow(
+                              blurRadius: 8,
+                              offset: Offset(0, 15),
+                              color: Color(0xffe3e9e7).withOpacity(.5),
+                              spreadRadius: -9)]
+                      ),
+                      child: Column(
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 10.0),
+                            child:  Column(
+                              children: <Widget>[
+                                const Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text('Welcome!', style: TextStyle(fontSize: 20,  fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('Your Budgets', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
+                                    TextButton(
+                                      onPressed: () {
+                                        _goToDisplay('/Budgets');
+                                      },
+                                      child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
+                                    ),
+                                  ],
+                                )
+                                // BudgetCircle();
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 15.0,),
+                    // BILL WIDGET
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 200,
+                      decoration: BoxDecoration(
+                          color: Color(0xddb3e5fc),
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [ BoxShadow(
+                              blurRadius: 8,
+                              offset: Offset(0, 15),
+                              color: Color(0xffe3e9e7).withOpacity(.5),
+                              spreadRadius: -9)]
+                      ),
+                      child: Column(
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 10.0),
+                            child:  Column(
+                              children: <Widget>[
+
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('Your Bills', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
+                                    TextButton(
+                                      onPressed: () {
+                                        _goToDisplay('/Bills');
+                                      },
+                                      child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
+                                    ),
+                                  ],
+                                )
+                                // BudgetCircle();
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 15.0,),
+                    // BILL WIDGET
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 180,
+                      decoration: BoxDecoration(
+                          color: Color(0xddb3e5fc),
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [ BoxShadow(
+                              blurRadius: 8,
+                              offset: Offset(0, 15),
+                              color: Color(0xffe3e9e7).withOpacity(.5),
+                              spreadRadius: -9)]
+                      ),
+                      child: Column(
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 10.0),
+                            child:  Column(
+                              children: <Widget>[
+
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('Your Extras', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
+                                    TextButton(
+                                      onPressed: () {
+                                        _goToDisplay('/Bills');
+                                      },
+                                      child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
+                                    ),
+                                  ],
+                                )
+                                // BudgetCircle();
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              ),
+            ],
+          )
         ),
 
         // BOTTOM NAV

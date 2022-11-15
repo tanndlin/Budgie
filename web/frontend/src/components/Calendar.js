@@ -45,29 +45,45 @@ export function BigCalendar(props) {
                 month.getFullYear(),
                 month.getMonth(),
                 bill.startDate.getDate(),
-                1
+                0
             );
 
             const editState = () => {
                 const newState = props.bills.map((b) => {
-                    if (b.id === bill.id) {
-                        const { isPaid } = b;
-
-                        // Remove if exists
-                        if (isPaid.includes(paidDate)) {
-                            isPaid.splice(isPaid.indexOf(paidDate), 1);
-                        } else {
-                            // Add if not
-                            isPaid.push(paidDate);
-                        }
-
-                        return {
-                            ...b,
-                            isPaid
-                        };
+                    if (b.billId !== bill.billId) {
+                        return b;
                     }
 
-                    return b;
+                    let { isPaid } = b;
+
+                    // Remove if exists
+                    if (isPaid.some((d) => datesAreSame(d, paidDate))) {
+                        isPaid = isPaid.filter(
+                            (d) => !datesAreSame(d, paidDate)
+                        );
+                    } else {
+                        // Add if not
+                        isPaid.push(paidDate);
+                    }
+
+                    sendRequest(
+                        'EditBill',
+                        {
+                            ...b,
+                            isPaid,
+                            userId: props.user.userId
+                        },
+                        (res) => {
+                            console.log(res);
+                        },
+                        (err) => {
+                            console.log(err);
+                        }
+                    );
+                    return {
+                        ...b,
+                        isPaid
+                    };
                 });
 
                 props.setBills(newState);
@@ -141,17 +157,19 @@ export function BigCalendar(props) {
         setCurrentBill(null);
     }
 
+    function datesAreSame(a, b) {
+        const d1 = new Date(a);
+        const d2 = new Date(b);
+
+        d1.setHours(0, 0, 0, 0);
+        d2.setHours(0, 0, 0, 0);
+
+        return d1.valueOf() === d2.valueOf();
+    }
+
     function eventStyleGetter(event, start, _end, _isSelected) {
         return {
-            className: event.isPaid.some((d) => {
-                const d1 = new Date(d);
-                const d2 = new Date(start);
-
-                d1.setHours(0, 0, 0, 0);
-                d2.setHours(0, 0, 0, 0);
-
-                return d1.valueOf() === d2.valueOf();
-            })
+            className: event.isPaid.some((d) => datesAreSame(d, start))
                 ? 'paid'
                 : 'unpaid'
         };

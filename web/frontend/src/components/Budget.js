@@ -6,8 +6,8 @@ import 'react-circular-progressbar/dist/styles.css';
 import Dropdown from 'react-dropdown';
 
 function Budget(props) {
-    function lerpColor(a, b, amount) {
-        const bounded = Math.min(Math.max(amount, 0), 1);
+    function lerpColor(a, b, price) {
+        const bounded = Math.min(Math.max(price, 0), 1);
 
         const ah = parseInt(a.replace(/#/g, ''), 16),
             ar = ah >> 16,
@@ -91,11 +91,11 @@ function Budget(props) {
             <Dropdown
                 options={props.categories.map((category) => category.name)}
                 value={
-                    props.categories.find((c) => c.id === budget.categoryID)
+                    props.categories.find((c) => c.id === budget.categoryId)
                         ?.name
                 }
                 onChange={(e) => {
-                    budget.categoryID = props.categories.find(
+                    budget.categoryId = props.categories.find(
                         (c) => c.name === e.value
                     )?.id;
                     props.setBudgets([...props.budgets]);

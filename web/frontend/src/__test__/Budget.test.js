@@ -17,7 +17,7 @@ test('Sums total of Budgets', () => {
             name: 'Hello World',
             total,
             spent: Math.floor(Math.random() * total),
-            categoryID: -1
+            categoryId: -1
         });
     }
 
@@ -49,7 +49,7 @@ test('Sums spent of Budget', () => {
             name: 'Hello World',
             total,
             spent: Math.floor(Math.random() * total),
-            categoryID: -1
+            categoryId: -1
         });
     }
 

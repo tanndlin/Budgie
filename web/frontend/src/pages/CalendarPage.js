@@ -8,52 +8,48 @@ import { sendRequest } from '../common/Requests';
 function CalendarPage(props) {
     const [categorySortID, setCategorySortID] = React.useState(-1);
     const { state } = useLocation();
-    props.setUser(state.user);
 
-    if (props.user === null) {
-        window.location.href = '/';
-    } else {
-        // TODO: Hydrate bills and budgets
-        // TODO: Hydrate bills
-        sendRequest(
-            'GetBills',
-            { userId: props.user.userId },
-            (res) => {
-                const bills = JSON.parse(res.responseText);
-                console.log(bills);
-                // props.setBills(bills);
-            },
-            (err) => {
-                console.log(err);
-            }
-        );
+    const hydrateCalendar = () => {
+        const hydrate = (url, callback) => {
+            sendRequest(
+                url,
+                { userId: state.user.userId },
+                (res) => {
+                    const { userId: _userId, bills } = JSON.parse(
+                        res.responseText
+                    );
 
-        sendRequest(
-            'GetBudgets',
-            { userId: props.user.userId },
-            (res) => {
-                const budgets = JSON.parse(res.responseText);
-                console.log(budgets);
-                // props.setBudgets(budgets);
-            },
-            (err) => {
-                console.log(err);
-            }
-        );
+                    const parsed = bills.map((bill) => ({
+                        ...bill,
+                        startDate: new Date(bill.startDate),
+                        endDate: new Date(bill.endDate)
+                    }));
 
-        sendRequest(
-            'GetOneOffs',
-            { userId: props.user.userId },
-            (res) => {
-                const oneOffs = JSON.parse(res.responseText);
-                console.log(oneOffs);
-                // props.setOneOffs(oneOffs);
-            },
-            (err) => {
-                console.log(err);
-            }
-        );
-    }
+                    console.log(parsed);
+
+                    callback(parsed);
+                },
+                (err) => {
+                    console.log(url, err);
+                }
+            );
+        };
+
+        if (!state.user) {
+            window.location.href = '/';
+            return;
+        }
+
+        hydrate('GetBills', props.setBills);
+        hydrate('GetBudgets', props.setBudgets);
+        hydrate('GetOneOffs', props.setOneOffs);
+        hydrate('GetCategories', props.setCategories);
+    };
+
+    React.useEffect(() => {
+        props.setUser(state.user);
+        hydrateCalendar();
+    }, []);
 
     // Does both operations because 2 setstates overwrite each other
     function modifyEvents(add, remove) {
@@ -69,6 +65,7 @@ function CalendarPage(props) {
         <div className="h-screen">
             <main className="min-h-minus-header">
                 <BigCalendar
+                    user={props.user}
                     bills={props.bills}
                     setBills={props.setBills}
                     modifyEvents={modifyEvents}

@@ -2,13 +2,13 @@
 interface IBill extends IEvent {
     lastPaidDate: Date;
     frequency: Number;
-    categoryID: Number;
+    categoryId: Number;
 }
 
 interface IEvent {
-    title: string;
-    start: Date;
-    end: Date;
+    name: string;
+    startDate: Date;
+    endDate: Date;
     allDay?: boolean;
     resource?: any;
 }

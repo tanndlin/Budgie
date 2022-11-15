@@ -5,8 +5,8 @@ function ExtraneousView(props) {
     function newExtraneous() {
         const extra = {
             name: 'New Extraneous',
-            amount: 0,
-            categoryID: -1,
+            price: 0,
+            categoryId: -1,
             id: Math.random()
         };
 
@@ -23,7 +23,7 @@ function ExtraneousView(props) {
                 <h1 className="text-2xl">Extraneous</h1>
                 <span className="text-md">
                     <h2>{`Total:  $${Object.entries(props.extras).reduce(
-                        (acc, [_key, extra]) => acc + +extra.amount,
+                        (acc, [_key, extra]) => acc + +extra.price,
                         0
                     )}`}</h2>
                 </span>
@@ -33,12 +33,12 @@ function ExtraneousView(props) {
                     .filter((extra) => {
                         if (
                             props.categorySortID === -1 ||
-                            extra.categoryID === -1
+                            extra.categoryId === -1
                         ) {
                             return true;
                         }
 
-                        return extra.categoryID === props.categorySortID;
+                        return extra.categoryId === props.categorySortID;
                     })
                     .map((extra) => (
                         <Extra

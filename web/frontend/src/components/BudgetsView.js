@@ -7,7 +7,7 @@ function BudgetsView(props) {
             name: 'New Budget',
             total: 100,
             spent: 0,
-            categoryID: -1,
+            categoryId: -1,
             id: Math.random()
         };
 
@@ -49,12 +49,12 @@ function BudgetsView(props) {
                     .filter((budget) => {
                         if (
                             props.categorySortID === -1 ||
-                            budget.categoryID === -1
+                            budget.categoryId === -1
                         ) {
                             return true;
                         }
 
-                        return budget.categoryID === props.categorySortID;
+                        return budget.categoryId === props.categorySortID;
                     })
                     .map((budget) => (
                         <Budget

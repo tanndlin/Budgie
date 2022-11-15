@@ -27,9 +27,9 @@ function Extra(props) {
                 <h3 className="font-bold">$</h3>
                 <EdittableText
                     type="number"
-                    value={props.extra.amount}
+                    value={props.extra.price}
                     onChange={(e) => {
-                        props.extra.amount = e.target.value;
+                        props.extra.price = e.target.value;
                         props.setExtras([...props.extras]);
                     }}
                 />
@@ -39,11 +39,11 @@ function Extra(props) {
                 options={props.categories.map((category) => category.name)}
                 value={
                     props.categories.find(
-                        (c) => c.id === props.extra.categoryID
+                        (c) => c.id === props.extra.categoryId
                     )?.name
                 }
                 onChange={(e) => {
-                    props.extra.categoryID = props.categories.find(
+                    props.extra.categoryId = props.categories.find(
                         (c) => c.name === e.value
                     )?.id;
                     props.setExtras([...props.extras]);

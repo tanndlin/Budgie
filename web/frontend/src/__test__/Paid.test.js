@@ -14,12 +14,12 @@ test('Ctrl Clicking toggles paid on Calendar', () => {
         <BigCalendar
             bills={[
                 {
-                    title: 'Hello World',
-                    start: new Date(),
-                    end: new Date(),
+                    name: 'Hello World',
+                    startDate: new Date(),
+                    endDate: new Date(),
                     allDay: true,
                     resources: { paid: false },
-                    amount: 100
+                    price: 100
                 }
             ]}
             categories={categories}
@@ -45,12 +45,12 @@ test('Ctrl Clicking toggles paid off Calendar', () => {
         <BigCalendar
             bills={[
                 {
-                    title: 'Hello World',
-                    start: new Date(),
-                    end: new Date(),
+                    name: 'Hello World',
+                    startDate: new Date(),
+                    endDate: new Date(),
                     allDay: true,
                     resources: { paid: true },
-                    amount: 100
+                    price: 100
                 }
             ]}
             categories={categories}

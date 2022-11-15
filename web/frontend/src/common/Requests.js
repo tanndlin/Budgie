@@ -8,7 +8,7 @@ export function sendRequest(path, payload, callback, errorCallback) {
     xhr.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             callback(xhr);
-        } else {
+        } else if (this.readyState === 4 && this.status === 400) {
             errorCallback(xhr.responseText);
         }
     };
@@ -26,7 +26,10 @@ export function sendOutsideRequest(url, payload, callback, errorCallback) {
             return;
         }
 
-        if (this.readyState === 4 && this.status === 200) {
+        if (
+            (this.readyState === 4 && this.status === 200) ||
+            this.status === 201
+        ) {
             callback(xhr);
             return;
         }

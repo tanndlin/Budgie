@@ -1,17 +1,29 @@
 import React from 'react';
 import Budget from './Budget';
+import { sendRequest } from '../common/Requests';
 
 function BudgetsView(props) {
     function newBudget() {
         const budget = {
             name: 'New Budget',
-            total: 100,
-            spent: 0,
+            expectedPrice: 100,
+            actualPrice: 0,
             categoryId: -1,
-            id: Math.random()
+            startDate: new Date().setDate(1),
+            recurrence: 'monthly'
         };
 
-        props.setBudgets([...props.budgets, budget]);
+        sendRequest(
+            'CreateBudget',
+            { ...budget, userId: props.user.userId },
+            (res) => {
+                const { b } = res;
+                props.setBudgets([...props.budgets, b]);
+            },
+            (err) => {
+                console.log(err);
+            }
+        );
     }
 
     function deleteBudget(budget) {
@@ -33,11 +45,17 @@ function BudgetsView(props) {
                 <span className="text-md">
                     <h2 className="">{`Total:  $${Object.entries(
                         props.budgets
-                    ).reduce((acc, [_key, budget]) => acc + +budget.total, 0)}
+                    ).reduce(
+                        (acc, [_key, budget]) => acc + +budget.expectedPrice,
+                        0
+                    )}
                             / month`}</h2>
                     <h2 className="">{`Spent: $${Object.entries(
                         props.budgets
-                    ).reduce((acc, [_key, budget]) => acc + +budget.spent, 0)}
+                    ).reduce(
+                        (acc, [_key, budget]) => acc + +budget.actualPrice,
+                        0
+                    )}
                             / month`}</h2>
                 </span>
             </div>

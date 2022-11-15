@@ -30,7 +30,7 @@ function Budget(props) {
     }
 
     const budget = props.budget;
-    const ratio = (props.budget.spent / props.budget.total) * 100;
+    const ratio = (props.budget.actualPrice / props.budget.expectedPrice) * 100;
     const percent = Math.round(ratio * 100) / 100;
 
     // Lerp color from green to red
@@ -69,10 +69,10 @@ function Budget(props) {
                 <h3 className="font-bold">$</h3>
                 <EdittableText
                     type="number"
-                    value={budget.spent}
-                    max={budget.total}
+                    value={budget.actualPrice}
+                    max={budget.expectedPrice}
                     onChange={(e) => {
-                        budget.spent = e.target.value;
+                        budget.actualPrice = e.target.value;
                         props.setBudgets([...props.budgets]);
                     }}
                 />
@@ -80,9 +80,9 @@ function Budget(props) {
                 <h3 className="font-bold">$</h3>
                 <EdittableText
                     type="number"
-                    value={budget.total}
+                    value={budget.expectedPrice}
                     onChange={(e) => {
-                        budget.total = e.target.value;
+                        budget.expectedPrice = e.target.value;
                         props.setBudgets([...props.budgets]);
                     }}
                 />

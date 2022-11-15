@@ -10,40 +10,81 @@ function CalendarPage(props) {
     const { state } = useLocation();
 
     const hydrateCalendar = () => {
-        const hydrate = (url, callback) => {
-            sendRequest(
-                url,
-                { userId: state.user.userId },
-                (res) => {
-                    const { userId: _userId, bills } = JSON.parse(
-                        res.responseText
-                    );
-
-                    const parsed = bills.map((bill) => ({
-                        ...bill,
-                        startDate: new Date(bill.startDate),
-                        endDate: new Date(bill.endDate)
-                    }));
-
-                    console.log(parsed);
-
-                    callback(parsed);
-                },
-                (err) => {
-                    console.log(url, err);
-                }
-            );
-        };
-
         if (!state.user) {
             window.location.href = '/';
             return;
         }
 
-        hydrate('GetBills', props.setBills);
-        hydrate('GetBudgets', props.setBudgets);
-        hydrate('GetOneOffs', props.setOneOffs);
-        hydrate('GetCategories', props.setCategories);
+        // const hydrate = (url, callback) => {
+        //     sendRequest(
+        //         url,
+        //         { userId: state.user.userId },
+        //         (res) => {
+        //             const parsed = JSON.parse(res.responseText);
+        //             callback(parsed);
+        //         },
+        //         (err) => {
+        //             console.log(url, err);
+        //         }
+        //     );
+        // };
+
+        // hydrate('GetBills', props.setBills);
+        // hydrate('GetBudgets', props.setBudgets);
+        // hydrate('GetOneOffs', props.setOneOffs);
+        // hydrate('GetCategories', props.setCategories);
+
+        sendRequest(
+            'GetBills',
+            { userId: state.user.userId },
+            (res) => {
+                const { bills } = JSON.parse(res.responseText);
+                props.setBills(
+                    bills.map((b) => ({
+                        ...b,
+                        startDate: new Date(b.startDate),
+                        endDate: new Date(b.endDate)
+                    }))
+                );
+            },
+            (err) => {
+                console.log('GetBills', err);
+            }
+        );
+
+        sendRequest(
+            'GetBudgets',
+            { userId: state.user.userId },
+            (res) => {
+                const { budgets } = JSON.parse(res.responseText);
+                props.setBudgets(
+                    budgets.map((b) => ({
+                        ...b,
+                        startDate: new Date(b.startDate)
+                    }))
+                );
+            },
+            (err) => {
+                console.log('GetBudgets', err);
+            }
+        );
+
+        sendRequest(
+            'GetOneOffs',
+            { userId: state.user.userId },
+            (res) => {
+                const { oneOffs } = JSON.parse(res.responseText);
+                props.setExtras(
+                    oneOffs.map((o) => ({
+                        ...o,
+                        date: new Date(o.date)
+                    }))
+                );
+            },
+            (err) => {
+                console.log('GetOneOffs', err);
+            }
+        );
     };
 
     React.useEffect(() => {
@@ -75,6 +116,7 @@ function CalendarPage(props) {
                 />
 
                 <BudgetsView
+                    user={props.user}
                     budgets={props.budgets}
                     setBudgets={props.setBudgets}
                     categories={props.categories}
@@ -82,6 +124,7 @@ function CalendarPage(props) {
                 />
 
                 <ExtraneousView
+                    user={props.user}
                     extras={props.extras}
                     setExtras={props.setExtras}
                     categories={props.categories}

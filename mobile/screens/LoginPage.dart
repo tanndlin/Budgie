@@ -83,7 +83,9 @@ class _LoginPageState extends State<LoginPage> {
     if(login_verification == "good")
     {
       print('Good login');
-      Navigator.pushNamed(context, '/MainPage');
+      // Navigator.pushNamed(context, '/MainPage');
+      Navigator.pushNamed(context, '/MainPageNav');
+
     }
   }
 

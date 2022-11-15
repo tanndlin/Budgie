@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import BigCalendar from '../components/Calendar';
+import { BigCalendar } from '../components/Calendar';
 
 test('Shows all unfiltered', () => {
     const categories = [

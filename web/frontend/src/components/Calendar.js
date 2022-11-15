@@ -204,17 +204,18 @@ export function BigCalendar(props) {
                         />
 
                         <span className="text-md">
-                            <h2 data-testid="billSum">{`Total:  $${
-                                Object.entries(props.bills)
-                                    .filter(([_key, bill]) =>
-                                        billIsCurrent(bill)
-                                    )
-                                    .reduce(
-                                        (acc, [_key, bill]) =>
-                                            acc + +bill.amount,
-                                        0
-                                    ) ?? 0
-                            } / month`}</h2>
+                            <h2 data-testid="billSum">
+                                {'Total:  ' +
+                                    Object.entries(props.bills)
+                                        .filter(([_key, bill]) =>
+                                            billIsCurrent(bill)
+                                        )
+                                        .reduce(
+                                            (acc, [_key, bill]) =>
+                                                acc + +bill.amount,
+                                            0
+                                        ) ?? 0 + ' / month'}
+                            </h2>
                         </span>
                     </header>
                     <Calendar

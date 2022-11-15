@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { pretty, sendOutsideRequest } from '../common/Requests';
-import sha256 from 'js-sha256';
 
 function SignUp(props) {
     const [email, setEmail] = useState('');
@@ -21,7 +20,7 @@ function SignUp(props) {
         const URL = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC7OHvwvqRgrOvgYoy2C5sgnXSZ02xLZPc';
         const payload = {
             "email": email,
-            "password": sha256(password),
+            "password": password,
             "returnSecureToken": true
         }
 

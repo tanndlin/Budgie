@@ -1,27 +1,31 @@
 import { render, screen } from '@testing-library/react';
 import { BigCalendar } from '../components/Calendar';
+import React from 'react';
 
 test('Ctrl Clicking toggles paid on Calendar', () => {
     const categories = [
         {
             name: 'All',
-            id: -1,
-        },
+            id: -1
+        }
     ];
 
-    render(<BigCalendar
-        bills={[{
-            title: 'Hello World',
-            start: new Date(),
-            end: new Date(),
-            allDay: true,
-            resources: { paid: false, },
-            amount: 100,
-        }]}
-        categories={categories}
-        categorySortID={-1}
-    />);
-
+    render(
+        <BigCalendar
+            bills={[
+                {
+                    title: 'Hello World',
+                    start: new Date(),
+                    end: new Date(),
+                    allDay: true,
+                    resources: { paid: false },
+                    amount: 100
+                }
+            ]}
+            categories={categories}
+            categorySortID={-1}
+        />
+    );
 
     // Ctrl + Click on the bill
     const event = screen.getByText(/Hello World/);
@@ -33,23 +37,26 @@ test('Ctrl Clicking toggles paid off Calendar', () => {
     const categories = [
         {
             name: 'All',
-            id: -1,
-        },
+            id: -1
+        }
     ];
 
-    render(<BigCalendar
-        bills={[{
-            title: 'Hello World',
-            start: new Date(),
-            end: new Date(),
-            allDay: true,
-            resources: { paid: true, },
-            amount: 100,
-        }]}
-        categories={categories}
-        categorySortID={-1}
-    />);
-
+    render(
+        <BigCalendar
+            bills={[
+                {
+                    title: 'Hello World',
+                    start: new Date(),
+                    end: new Date(),
+                    allDay: true,
+                    resources: { paid: true },
+                    amount: 100
+                }
+            ]}
+            categories={categories}
+            categorySortID={-1}
+        />
+    );
 
     // Ctrl + Click on the bill
     const event = screen.getByText(/Hello World/);

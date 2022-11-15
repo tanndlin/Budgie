@@ -8,6 +8,7 @@ function Login(props) {
     const navigate = useNavigate();
 
     const createUserProfile = (localId, callback) => {
+        const id = props.pushNotification('Creating Profile', 'Please wait...');
         sendRequest(
             'CreateUserProfile',
             {
@@ -19,6 +20,7 @@ function Login(props) {
             (res) => {
                 console.log(res);
                 const user = JSON.parse(res.responseText);
+                props.removeNotification(id);
                 callback(user);
             },
             (err) => {
@@ -53,15 +55,20 @@ function Login(props) {
 
                 // sendRequest('CreateUserProfile', { userId: localId }, (res) => {
                 // console.log(res);
+                const id = props.pushNotification(
+                    'Retrieving Profile',
+                    'Please wait...'
+                );
 
                 sendRequest(
                     'GetUserProfile',
                     { userId: localId },
                     (res) => {
+                        props.removeNotification(id);
                         console.log(res.responseText);
                         const user = JSON.parse(res.responseText);
                         console.log(user);
-                        navigateToHome(user);
+                        // navigateToHome(user);
                     },
                     (err) => {
                         console.log('here');
@@ -71,7 +78,6 @@ function Login(props) {
                             return;
                         }
 
-                        setMessage('Creating a user profile');
                         createUserProfile(localId, navigateToHome);
                     }
                 );

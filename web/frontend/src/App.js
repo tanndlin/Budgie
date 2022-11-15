@@ -1,11 +1,11 @@
 import React from 'react';
-import './App.css';
-import './index.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from './pages/LoginPage';
 import CalendarPage from './pages/CalendarPage';
 import Header from './components/Header';
-import ForgotPasswordPage from './pages/ForgotPasswordPage';
+
+import './App.css';
+import './index.css';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -53,15 +53,6 @@ function App() {
               {...headerProps(false)}
             />
             <LoginPage {...props} />
-          </div>
-        } />
-
-        <Route path="/forgot-password" element={
-          <div className='h-screen'>
-            <Header
-              {...headerProps(false)}
-            />
-            <ForgotPasswordPage {...props} />
           </div>
         } />
 

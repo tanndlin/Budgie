@@ -7,6 +7,7 @@ import Dropdown from 'react-dropdown';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-dropdown/style.css';
 import '../App.css';
+import CreateBillPopUp from './CreateBillPopUp';
 
 const localizer = momentLocalizer(moment);
 
@@ -128,20 +129,23 @@ export function BigCalendar(props) {
             <section className="flex flex-col container m-auto">
                 <SideBar
                     isOpen={isOpen}
-                    title={title}
-                    start={start}
-                    end={end}
-                    amount={amount}
-                    categoryID={categoryID}
-                    setCategoryID={setCategoryID}
-                    setAmount={setAmount}
-                    setTitle={setTitle}
-                    setStart={setStart}
-                    setEnd={setEnd}
-                    closeModal={closeModal}
-                    pushEvent={pushEvent}
-                    categories={props.categories}
-                />
+                >
+                    <CreateBillPopUp
+                        title={title}
+                        start={start}
+                        end={end}
+                        amount={amount}
+                        categoryID={categoryID}
+                        setCategoryID={setCategoryID}
+                        setAmount={setAmount}
+                        setTitle={setTitle}
+                        setStart={setStart}
+                        setEnd={setEnd}
+                        closeModal={closeModal}
+                        pushEvent={pushEvent}
+                        categories={props.categories}
+                    />
+                </SideBar>
 
                 <div
                     className="container m-auto mt-5 min-h-500 bg-[#BBE9E7] bg-opacity-50 p-3 rounded-md"

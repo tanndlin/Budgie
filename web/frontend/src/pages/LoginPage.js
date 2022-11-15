@@ -2,10 +2,23 @@ import React from 'react';
 import Login from '../components/Login';
 import SignUp from '../components/SignUp';
 import Divider from '../components/Divider';
+import SideBar from '../components/SideBar';
+import ForgotPassword from '../components/ForgotPassword';
 
 const LoginPage = (props) => {
     const [loginEmail, setLoginEmail] = React.useState('');
     const [dividerToggle, setDividerToggle] = React.useState(true);
+    const [isOpen, setIsOpen] = React.useState(false);
+
+    const openSidebar = () => {
+        setIsOpen(true);
+    };
+
+    const closeSidebar = () => {
+        setIsOpen(false);
+    };
+
+
 
     return (
         <article className="min-h-minus-header h-1 flex">
@@ -14,6 +27,7 @@ const LoginPage = (props) => {
                     email={loginEmail}
                     setEmail={setLoginEmail}
                     dividerToggle={dividerToggle}
+                    openSidebar={openSidebar}
                 />
                 <SignUp
                     {...{
@@ -29,6 +43,11 @@ const LoginPage = (props) => {
                         setDividerToggle,
                     }}
                 />
+
+                <SideBar
+                    isOpen={isOpen}>
+                    <ForgotPassword />
+                </SideBar>
             </main>
         </article>
     );

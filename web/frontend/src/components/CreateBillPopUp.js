@@ -44,7 +44,6 @@ function CreateBillPopUp(props) {
         props.setAmount(e.target.value);
     }
 
-
     return (
         <section className='flex container h-full bg-[#BBE9E7] bg-opacity-50 rounded-md relative'>
             <input className='absolute top-0 right-0 cursor-pointer text-[36px] font-bold mr-4' type='button' value='&times;' onClick={() => { props.closeModal() }} />
@@ -100,7 +99,8 @@ function CreateBillPopUp(props) {
                     <p></p>
                     <input type='submit' id='editButton' className='w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' value='Create Bill'
                         onClick={editEvent} />
-                    <p></p>
+                    <input type='button' id='deleteButton' className='w-40 bg-[#f13232] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' value='Delete Bill'
+                        onClick={deleteBill} />
                 </form>
             </div>
         </section>

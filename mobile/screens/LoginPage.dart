@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -41,69 +43,71 @@ class _LoginPageState extends State<LoginPage> {
     _controllerPass.dispose();
     super.dispose();
   }
-  //test123@gmail.com
-  //123456
-  // _register(String userEmail, String userPassword) async {
-  //   String hashedPassword = Crypt.sha256(userPassword, salt: 'abcdefghijklmnop').toString();
-  //   UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-  //       email: userEmail,
-  //       password: hashedPassword);
-  //   print(hashedPassword);
-  // }
 
+  _showToast() => Fluttertoast.showToast(
+    msg: result, fontSize: 18, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) :  Colors.green.withOpacity(.9), textColor: Colors.white,);
 
-  _register(String userEmail, String userPassword) async {
-    try{
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: userEmail,
-          password: userPassword);
-      reg_verification = "Good";
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-in-use') {
-        print('That email is taken!');
-        reg_verification = "Email is already taken!";
-        return 1;
+  _register(String userEmail, String userPassword, String confirmPassword) async {
+    if (userPassword == confirmPassword){
+      // Passwords match
+      try{
+        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: userEmail,
+            password: userPassword);
+        reg_verification = "Good";
+        result = "Register Success!";
+        error = false;
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'email-already-in-use') {
+          print('That email is taken!');
+          reg_verification = "Email is already taken!";
+          result = "Email is already taken!";
+          error = true;
+        }
       }
+    } else {
+    //  Passwords dont match
+      reg_verification = "Passwords do not match";
+      result = "Passwords do not match";
+      error = true;
     }
-    if (reg_verification == "Good") {
-
-      return 0;
+    _showToast();
+    
+    if (reg_verification == "Good"){
+      Navigator.pop(context, true);
     }
   }
 
-  _login(String email, String password) async {
+ _login(String email, String password) async {
     try{
       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
           password: password);
       login_verification = "good";
+      result = "Logging....";
+      error = false;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found with that email!');
         login_verification = "bad";
-        return 1;
-
-
+        // return 1;
+        result = "Email does not exist";
+        error = true;
       } else if (e.code == 'wrong-password') {
         print('Incorrect password!');
         login_verification = "bad";
-        return 2;
-
-
+        result = "Incorrect Password";
+        error = true;
       }
     }
+    _showToast();
     if(login_verification == "good")
     {
-
-
       print('Good login');
-      // Navigator.pushNamed(context, '/MainPage');
-      Navigator.pushNamed(context, '/MainPageNav');
-      return 0;
+      Navigator.pushNamed(context, '/MainPage');
+      // Navigator.pushNamed(context, '/MainPageNav');
     }
   }
-
-
 
 
   @override
@@ -111,8 +115,8 @@ class _LoginPageState extends State<LoginPage> {
     // final formKey = GlobalKey<FormState>();
     // final dialogKey = GlobalKey<Dialog>();
 
-    void showToast() => Fluttertoast.showToast(
-        msg: result, fontSize: 20, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) : Colors.green.withOpacity(.8), textColor: Colors.white);
+    // void showToast() => Fluttertoast.showToast(
+    //     msg: result, fontSize: 20, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) : Colors.green.withOpacity(.8), textColor: Colors.white);
 
     showSignUpDialog(BuildContext context){
       showDialog(
@@ -229,39 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             onPressed: () {
                               // sign up btn
-                              // this.result = "";
-                              if (_controllerPass_Reg.text == _controllerPass_Confirm.text) {
-                                setState(() {
-                                  result = "";
-                                  error = false;
-                                });
-
-                                Future<dynamic> n = _register(_controllerEmail_Reg.text, _controllerPass_Reg.text);
-                                if (n == 0)
-                                {
-                                    setState(() {
-                                      result = "Register Success!";
-                                      error = false;
-                                    });
-                                }
-                                else if (n == 1)
-                                {
-                                    setState(() {
-                                      result = "Email is already taken!";
-                                      error = true;
-                                    });
-                                }
-                                // showError(1, context);
-                              }
-                              else {
-                                setState(() {
-                                  result = "Passwords do not match!";
-                                  error = true;
-                                });
-                                // showError(2, context);
-                                // SHOW ON SCREEN
-                              }
-                              showToast();
+                              _register(_controllerEmail_Reg.text, _controllerPass_Reg.text, _controllerPass_Confirm.text);
 
                             },
                             child: const Text(
@@ -459,30 +431,8 @@ class _LoginPageState extends State<LoginPage> {
                     foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
                   ),
                   onPressed: () {
-                    setState(() {
-                      result = "";
-                      error = false;
-                    });
-
-                    Future<dynamic> n = _login(_controllerEmail.text, _controllerPass.text);
-                    print(n.toString());
-                    if (n.toString() == "0"){
-                      setState(() {
-                        result = "Logging...";
-                        error = false;
-                      });
-                    } else if (n == 1){
-                      setState(() {
-                        result = "Email does not exist!";
-                        error = true;
-                      });
-                    } else if (n == 2){
-                      setState(() {
-                        result = "Incorrect password!";
-                        error = true;
-                      });
-                    }
-                    showToast();
+                    // log in btn
+                    _login(_controllerEmail.text, _controllerPass.text);
                   },
                   child: const Text(
                       'Log in',

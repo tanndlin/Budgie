@@ -2,25 +2,57 @@ import React from 'react';
 import { BigCalendar } from '../components/Calendar';
 import BudgetsView from '../components/BudgetsView';
 import ExtraneousView from '../components/ExtraneousView';
+import { useLocation } from 'react-router-dom';
+import { sendRequest } from '../common/Requests';
 
 function CalendarPage(props) {
     const [categorySortID, setCategorySortID] = React.useState(-1);
+    const { state } = useLocation();
+    props.setUser(state.user);
 
     if (props.user === null) {
-        console.log(props.user);
+        window.location.href = '/';
+    } else {
+        // TODO: Hydrate bills and budgets
+        // TODO: Hydrate bills
+        sendRequest(
+            'GetBills',
+            { userId: props.user.userId },
+            (res) => {
+                const bills = JSON.parse(res.responseText);
+                console.log(bills);
+                // props.setBills(bills);
+            },
+            (err) => {
+                console.log(err);
+            }
+        );
 
-        // Check url for localId
-        const url = new URL(window.location.href);
-        const localId = url.searchParams.get('user');
-        if (localId) {
-            // If localId is found, set user to localId
-            props.setUser(localId);
+        sendRequest(
+            'GetBudgets',
+            { userId: props.user.userId },
+            (res) => {
+                const budgets = JSON.parse(res.responseText);
+                console.log(budgets);
+                // props.setBudgets(budgets);
+            },
+            (err) => {
+                console.log(err);
+            }
+        );
 
-            // TODO: Hydrate bills and budgets
-        } else {
-            // If localId is not found, redirect to login page
-            window.location.href = '/';
-        }
+        sendRequest(
+            'GetOneOffs',
+            { userId: props.user.userId },
+            (res) => {
+                const oneOffs = JSON.parse(res.responseText);
+                console.log(oneOffs);
+                // props.setOneOffs(oneOffs);
+            },
+            (err) => {
+                console.log(err);
+            }
+        );
     }
 
     // Does both operations because 2 setstates overwrite each other

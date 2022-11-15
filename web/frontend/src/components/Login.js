@@ -9,8 +9,13 @@ function Login(props) {
 
     const createUserProfile = (localId, callback) => {
         sendRequest(
-            'GetUserProfile',
-            { userId: localId },
+            'CreateUserProfile',
+            {
+                userId: localId,
+                firstName: 'Tanner',
+                lastName: 'Sandlin',
+                expectedIncome: 2000
+            },
             (res) => {
                 console.log(res);
                 const user = JSON.parse(res.responseText);
@@ -23,6 +28,8 @@ function Login(props) {
     };
 
     const navigateToHome = (user) => {
+        console.log('navigating');
+        console.log(user);
         navigate('/calendar', { state: { user } });
     };
 

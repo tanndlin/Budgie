@@ -1,10 +1,11 @@
 import React from 'react';
-import './App.css';
-import './index.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from './pages/LoginPage';
 import CalendarPage from './pages/CalendarPage';
 import Header from './components/Header';
+
+import './App.css';
+import './index.css';
 
 function App() {
   const [user, setUser] = React.useState(null);
@@ -56,7 +57,6 @@ function App() {
         } />
 
         <Route path="/calendar" element={
-
           <div className='h-screen'>
             <Header
               {...headerProps(true)}

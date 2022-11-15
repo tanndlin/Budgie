@@ -7,6 +7,7 @@ function BudgetsView(props) {
             name: 'New Budget',
             total: 100,
             spent: 0,
+            categoryID: -1,
         };
 
         props.setBudgets([...props.budgets, budget]);
@@ -36,11 +37,17 @@ function BudgetsView(props) {
                 </span>
             </div>
             <section id="budgetView" className="grid gap-16 justify-center p-16">
-                {props.budgets.map((budget) => (
+                {props.budgets.filter((budget) => {
+                    if (props.categorySortID === -1 || budget.categoryID === -1)
+                        return true;
+
+                    return budget.categoryID === props.categorySortID;
+                }).map((budget) => (
                     <Budget
                         budget={budget}
                         budgets={props.budgets}
                         setBudgets={props.setBudgets}
+                        categories={props.categories}
                     />
                 ))}
             </section>

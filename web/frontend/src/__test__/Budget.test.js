@@ -2,6 +2,13 @@ import { render, screen } from '@testing-library/react';
 import BudgetsView from '../components/BudgetsView';
 
 test('Sums total of Budgets', () => {
+    const categories = [
+        {
+            name: 'All',
+            id: -1,
+        },
+    ];
+
     const budgets = [];
     for (let i = 0; i < 10; i++) {
         const total = Math.floor(Math.random() * 100);
@@ -9,11 +16,14 @@ test('Sums total of Budgets', () => {
             name: 'Hello World',
             total,
             spent: Math.floor(Math.random() * total),
+            categoryID: -1,
         });
     }
 
     render(<BudgetsView
         budgets={budgets}
+        categories={categories}
+        categorySortID={-1}
     />);
 
 
@@ -23,6 +33,13 @@ test('Sums total of Budgets', () => {
 });
 
 test('Sums spent of Budget', () => {
+    const categories = [
+        {
+            name: 'All',
+            id: -1,
+        },
+    ];
+
     const budgets = [];
     for (let i = 0; i < 10; i++) {
         const total = Math.floor(Math.random() * 100);
@@ -30,11 +47,14 @@ test('Sums spent of Budget', () => {
             name: 'Hello World',
             total,
             spent: Math.floor(Math.random() * total),
+            categoryID: -1,
         });
     }
 
     render(<BudgetsView
         budgets={budgets}
+        categories={categories}
+        categorySortID={-1}
     />);
 
 

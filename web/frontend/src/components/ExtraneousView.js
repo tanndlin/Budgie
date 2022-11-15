@@ -7,6 +7,7 @@ function ExtraneousView(props) {
         const extra = {
             name: "New Extraneous",
             amount: 0,
+            categoryID: -1,
         };
 
         props.setExtras([...props.extras, extra]);
@@ -26,11 +27,17 @@ function ExtraneousView(props) {
                 </span>
             </div>
             <section id="extraView" className="grid gap-4 justify-center p-16">
-                {props.extras.map((extra) => (
+                {props.extras.filter((extra) => {
+                    if (props.categorySortID === -1 || extra.categoryID === -1)
+                        return true;
+
+                    return extra.categoryID === props.categorySortID;
+                }).map((extra) => (
                     <Extra
                         extra={extra}
                         extras={props.extras}
                         setExtras={props.setExtras}
+                        categories={props.categories}
                     />
                 ))}
             </section>

@@ -2,8 +2,7 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const express = require("express");
-const cors = require('cors');  
-//const { user } = require("firebase-functions/v1/auth");
+const cors = require('cors');
 
 //initialize firebase in order to access its services
 admin.initializeApp(functions.config().firebase);

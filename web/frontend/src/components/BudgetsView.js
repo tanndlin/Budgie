@@ -6,9 +6,9 @@ function BudgetsView(props) {
     function newBudget() {
         const budget = {
             name: 'New Budget',
+            categoryId: -1,
             expectedPrice: 100,
             actualPrice: 0,
-            categoryId: -1,
             startDate: new Date().setDate(1),
             recurrence: 'monthly'
         };
@@ -17,8 +17,8 @@ function BudgetsView(props) {
             'CreateBudget',
             { ...budget, userId: props.user.userId },
             (res) => {
-                const { b } = res;
-                props.setBudgets([...props.budgets, b]);
+                const { budget } = JSON.parse(res.responseText);
+                props.setBudgets([...props.budgets, budget]);
             },
             (err) => {
                 console.log(err);
@@ -27,7 +27,23 @@ function BudgetsView(props) {
     }
 
     function deleteBudget(budget) {
-        props.setBudgets([...props.budgets.filter((b) => b.id !== budget.id)]);
+        sendRequest(
+            'RemoveBudget',
+            {
+                userId: props.user.userId,
+                budgetId: budget.budgetId
+            },
+            () => {
+                props.setBudgets([
+                    ...props.budgets.filter(
+                        (b) => b.budgetId !== budget.budgetId
+                    )
+                ]);
+            },
+            (err) => {
+                console.log(err);
+            }
+        );
     }
 
     function resetBudgets() {

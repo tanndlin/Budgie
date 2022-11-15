@@ -2,6 +2,7 @@ import React from 'react';
 
 function ForgotPassword(props) {
     const [email, setEmail] = React.useState('');
+    // eslint-disable-next-line no-unused-vars
     const [message, setMessage] = React.useState('Link was sent');
 
     const handleSubmit = (event) => {

@@ -42,7 +42,7 @@ function Login(props) {
                     <span className='row-start-4 flex flex-col'>
                         <input className='w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' type='submit' value='Log In'
                             onClick={doLogin} />
-                        <a className='ml-4 text-[#189DFD] hover:text-[#3818FD]' onClick={props.openSidebar}>Forgot Password?</a>
+                        <button className='ml-4 text-[#189DFD] hover:text-[#3818FD]' onClick={props.openSidebar}>Forgot Password?</button>
                     </span>
                 </form>
                 <footer className='flex'>

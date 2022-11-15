@@ -1,10 +1,30 @@
 import React from 'react';
-import { pretty, sendOutsideRequest } from '../common/Requests';
+import { useNavigate } from 'react-router-dom';
+import { pretty, sendOutsideRequest, sendRequest } from '../common/Requests';
 
 function Login(props) {
     const [password, setPassword] = React.useState('');
     const [message, setMessage] = React.useState('');
     const navigate = useNavigate();
+
+    const createUserProfile = (localId, callback) => {
+        sendRequest(
+            'GetUserProfile',
+            { userId: localId },
+            (res) => {
+                console.log(res);
+                const user = JSON.parse(res.responseText);
+                callback(user);
+            },
+            (err) => {
+                setMessage(err);
+            }
+        );
+    };
+
+    const navigateToHome = (user) => {
+        navigate('/calendar', { state: { user } });
+    };
 
     const doLogin = async (e) => {
         e.preventDefault();
@@ -27,25 +47,33 @@ function Login(props) {
                 // sendRequest('CreateUserProfile', { userId: localId }, (res) => {
                 // console.log(res);
 
-                sendRequest('GetUserProfile', { userId: localId }, (res) => {
-                    console.log(res.responseText);
-                    // const { user } = JSON.parse(res.responseText);
-                    // console.log(user);
-                    // props.setUser(user);
-                    // navigate('/');
-                }, (err) => {
-                    console.log('here');
-                    console.log(err);
-                    setMessage(pretty(err.message));
-                });
-                // });
+                sendRequest(
+                    'GetUserProfile',
+                    { userId: localId },
+                    (res) => {
+                        console.log(res.responseText);
+                        const user = JSON.parse(res.responseText);
+                        console.log(user);
+                        navigateToHome(user);
+                    },
+                    (err) => {
+                        console.log('here');
+                        console.log(err);
+                        if (err !== "User doesn't exist") {
+                            setMessage(err);
+                            return;
+                        }
 
-                // Redirect to calendar page and pass states
-                // navigate('/calendar', { state: { user } });
-            }, (err) => {
+                        setMessage('Creating a user profile');
+                        createUserProfile(localId, navigateToHome);
+                    }
+                );
+            },
+            (err) => {
                 console.log(err);
                 setMessage(pretty(err.message));
-            });
+            }
+        );
     };
 
     function openSidebar(e) {

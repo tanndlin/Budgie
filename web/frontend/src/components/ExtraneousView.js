@@ -67,6 +67,7 @@ function ExtraneousView(props) {
                     })
                     .map((extra) => (
                         <Extra
+                            user={props.user}
                             extra={extra}
                             extras={props.extras}
                             setExtras={props.setExtras}

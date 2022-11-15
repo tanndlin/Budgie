@@ -1,8 +1,28 @@
 import React from 'react';
 import Dropdown from 'react-dropdown';
 import EdittableText from './EdittableText';
+import { sendRequest } from '../common/Requests';
 
 function Extra(props) {
+    function editMe() {
+        const extra = props.extra;
+
+        sendRequest(
+            'EditOneOff',
+            { ...extra, userId: props.user.userId },
+            () => {
+                props.setExtras(
+                    props.extras.map((e) =>
+                        e.oneOffId === extra.oneOffId ? extra : e
+                    )
+                );
+            },
+            (err) => {
+                console.log(err);
+            }
+        );
+    }
+
     return (
         <div className="bg-[#b2c6ec] bg-opacity-[.7] rounded-md p-4 flex flex-col relative min-w-[200px] w-min">
             <span className="flex flex-row justify-between">
@@ -13,6 +33,7 @@ function Extra(props) {
                         props.extra.name = e.target.value;
                         props.setExtras([...props.extras]);
                     }}
+                    onBlur={editMe}
                 />
 
                 <input
@@ -32,6 +53,7 @@ function Extra(props) {
                         props.extra.price = e.target.value;
                         props.setExtras([...props.extras]);
                     }}
+                    onBlur={editMe}
                 />
             </span>
 
@@ -47,6 +69,7 @@ function Extra(props) {
                         (c) => c.name === e.value
                     )?.id;
                     props.setExtras([...props.extras]);
+                    editMe();
                 }}
                 className="slim"
                 controlClassName="slim"

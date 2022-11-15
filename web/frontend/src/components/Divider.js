@@ -1,5 +1,5 @@
 import React from 'react';
-import DividerImage from '../img/divider.jpg';
+import DividerImage from '../img/divider_v2.jpg';
 import bwLogo from '../img/bwLogo.png';
 
 function Divider(props) {
@@ -15,7 +15,7 @@ function Divider(props) {
         <div
             id="divider"
             className={
-                'duration-300 w-1/2 min-h-[348px] absolute right-0 group transform h-full' +
+                'duration-300 w-1/2 min-h-[348px] absolute right-0 group transform h-full bg-gradient-to-br from-[#479CE0] via-[#9ECFA2] to-[#E7E233]' +
                 (props.dividerToggle ? '' : dividerPositionClass)
             }
             onClick={() => {
@@ -23,7 +23,7 @@ function Divider(props) {
             }}
         >
             <img
-                className="absolute rounded-md h-full w-full"
+                className="absolute rounded-md h-full w-full opacity-[0.7]"
                 src={DividerImage}
                 alt="Wood Texture"
             />
@@ -41,7 +41,6 @@ function Divider(props) {
                 src={bwLogo}
                 alt="Bird Logo"
             />
-
             <svg
                 className={
                     !props.dividerToggle ? rightClassName : leftClassName

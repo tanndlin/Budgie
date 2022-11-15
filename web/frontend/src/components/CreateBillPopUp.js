@@ -99,8 +99,14 @@ function CreateBillPopUp(props) {
                     <p></p>
                     <input type='submit' id='editButton' className='w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' value='Create Bill'
                         onClick={editEvent} />
-                    <input type='button' id='deleteButton' className='w-40 bg-[#f13232] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' value='Delete Bill'
-                        onClick={deleteBill} />
+                    {
+                        props.isEdit &&
+                        <input type='button' id='deleteButton' className='w-40 bg-[#f13232] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' value='Delete Bill'
+                            onClick={props.deleteBill} />
+                    }
+                    {
+                        !props.isEdit && <p></p>
+                    }
                 </form>
             </div>
         </section>

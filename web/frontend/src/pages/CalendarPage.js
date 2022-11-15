@@ -85,6 +85,21 @@ function CalendarPage(props) {
                 console.log('GetOneOffs', err);
             }
         );
+
+        sendRequest(
+            'GetCategories',
+            { userId: state.user.userId },
+            (res) => {
+                const { categories } = JSON.parse(res.responseText);
+                props.setCategories([
+                    ...categories,
+                    { categoryId: -1, name: 'All' }
+                ]);
+            },
+            (err) => {
+                console.log('GetCategories', err);
+            }
+        );
     };
 
     React.useEffect(() => {

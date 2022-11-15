@@ -7,7 +7,7 @@ function EdittableText(props) {
                 props.type === 'number' ? 0 : 'Please Enter A Value';
         }
 
-        props.onBlur(e);
+        props.onBlur && props.onBlur(e);
     }
 
     return (

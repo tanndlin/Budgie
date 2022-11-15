@@ -38,24 +38,32 @@ export function BigCalendar(props) {
 
         if (e.ctrlKey) {
             const bill = props.bills.find(
-                (bill) => bill.name === e.target.innerHTML
+                (bill) => `${bill.name} - ${bill.price}` === e.target.innerHTML
             );
-            bill.paid = !bill.paid;
 
-            const day = bill.startDate.getDate();
             const paidDate = new Date(
                 month.getFullYear(),
                 month.getMonth(),
-                day,
+                bill.startDate.getDate(),
                 1
             );
 
             const editState = () => {
                 const newState = props.bills.map((b) => {
                     if (b.id === bill.id) {
+                        const { isPaid } = b;
+
+                        // Remove if exists
+                        if (isPaid.includes(paidDate)) {
+                            isPaid.splice(isPaid.indexOf(paidDate), 1);
+                        } else {
+                            // Add if not
+                            isPaid.push(paidDate);
+                        }
+
                         return {
                             ...b,
-                            lastPaid: paidDate
+                            isPaid
                         };
                     }
 
@@ -135,7 +143,17 @@ export function BigCalendar(props) {
 
     function eventStyleGetter(event, start, _end, _isSelected) {
         return {
-            className: event.isPaid.some((d) => d === start) ? 'paid' : 'unpaid'
+            className: event.isPaid.some((d) => {
+                const d1 = new Date(d);
+                const d2 = new Date(start);
+
+                d1.setHours(0, 0, 0, 0);
+                d2.setHours(0, 0, 0, 0);
+
+                return d1.valueOf() === d2.valueOf();
+            })
+                ? 'paid'
+                : 'unpaid'
         };
     }
 

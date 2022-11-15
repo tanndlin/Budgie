@@ -16,7 +16,7 @@ test('Events red on unpaid', () => {
                     name: 'Hello World',
                     startDate: new Date(),
                     endDate: new Date(),
-                    lastPaid: null
+                    isPaid: []
                 }
             ]}
             categories={categories}
@@ -43,7 +43,7 @@ test('Events green on paid', () => {
                     name: 'Hello World',
                     startDate: new Date(),
                     endDate: new Date(),
-                    lastPaid: new Date()
+                    isPaid: [new Date()]
                 }
             ]}
             categories={categories}
@@ -69,7 +69,8 @@ test('Sums total of bills', () => {
             name: 'Hello World',
             startDate: new Date(),
             endDate: new Date(),
-            price: Math.floor(Math.random() * 100)
+            price: Math.floor(Math.random() * 100),
+            isPaid: []
         });
     }
 
@@ -101,7 +102,8 @@ test('Do not sum bills that no longer recur', () => {
                     name: 'Hello World',
                     startDate: new Date(0),
                     endDate: new Date(0),
-                    price: 100
+                    price: 100,
+                    isPaid: []
                 }
             ]}
             categories={categories}
@@ -119,7 +121,8 @@ test('Events from Bills Exact Dates', () => {
             name: 'Hello World',
             startDate: new Date(Date.parse('01 Jan 2022')),
             endDate: new Date(Date.parse('01 December 2022')),
-            price: 100
+            price: 100,
+            isPaid: []
         }
     ];
 
@@ -133,7 +136,8 @@ test('Events from Bills Cutoff', () => {
             name: 'Hello World',
             startDate: new Date(Date.parse('01 Jan 2022')),
             endDate: new Date(Date.parse('30 November 2022')),
-            price: 100
+            price: 100,
+            isPaid: []
         }
     ];
 

@@ -19,7 +19,8 @@ test('Ctrl Clicking toggles paid on Calendar', () => {
                     endDate: new Date(),
                     allDay: true,
                     resources: { paid: false },
-                    price: 100
+                    price: 100,
+                    isPaid: []
                 }
             ]}
             categories={categories}
@@ -50,7 +51,8 @@ test('Ctrl Clicking toggles paid off Calendar', () => {
                     endDate: new Date(),
                     allDay: true,
                     resources: { paid: true },
-                    price: 100
+                    price: 100,
+                    isPaid: [new Date()]
                 }
             ]}
             categories={categories}

@@ -20,14 +20,16 @@ test('Shows all unfiltered', () => {
             price: 100,
             categoryId: -1,
             startDate: new Date(),
-            endDate: new Date()
+            endDate: new Date(),
+            isPaid: []
         },
         {
             name: 'Bill 2',
             price: 200,
             categoryId: 1,
             startDate: new Date(),
-            endDate: new Date()
+            endDate: new Date(),
+            isPaid: []
         }
     ];
 
@@ -62,21 +64,24 @@ test('Shows only filtered', () => {
             price: 100,
             categoryId: -1,
             startDate: new Date(),
-            endDate: new Date()
+            endDate: new Date(),
+            isPaid: []
         },
         {
             name: 'Bill 2',
             price: 200,
             categoryId: 1,
             startDate: new Date(),
-            endDate: new Date()
+            endDate: new Date(),
+            isPaid: []
         },
         {
             name: 'Bill 3',
             price: 300,
             categoryId: 2,
             startDate: new Date(),
-            endDate: new Date()
+            endDate: new Date(),
+            isPaid: []
         }
     ];
 

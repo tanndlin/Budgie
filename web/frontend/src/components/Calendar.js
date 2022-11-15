@@ -199,7 +199,7 @@ export function BigCalendar(props) {
 export function getEventsFromBills(bills, categorySortID) {
     // Each bill will have multiple events for each pay date
     return bills.filter((bill) => {
-        if (categorySortID === -1)
+        if (categorySortID === -1 || bill.categoryID === -1)
             return true;
 
         return bill.categoryID === categorySortID;

@@ -38,7 +38,7 @@ function BudgetsView(props) {
             </div>
             <section id="budgetView" className="grid gap-16 justify-center p-16">
                 {props.budgets.filter((budget) => {
-                    if (props.categorySortID === -1)
+                    if (props.categorySortID === -1 || budget.categoryID === -1)
                         return true;
 
                     return budget.categoryID === props.categorySortID;

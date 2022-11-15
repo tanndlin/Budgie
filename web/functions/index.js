@@ -2,7 +2,8 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const express = require("express");
-const cors = require('cors');
+const cors = require('cors');  
+//const { user } = require("firebase-functions/v1/auth");
 
 //initialize firebase in order to access its services
 admin.initializeApp(functions.config().firebase);
@@ -10,7 +11,7 @@ admin.initializeApp(functions.config().firebase);
 //initialize express server
 const app = express();
 
-//initialize the database and the collection 
+//initialize the database and the collection
 const db = admin.firestore();
 const userCollection = 'users';
 const billCollection = 'bills';

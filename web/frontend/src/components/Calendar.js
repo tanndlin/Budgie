@@ -1,10 +1,12 @@
 import React from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import SideBar from './SideBar';
+import Dropdown from 'react-dropdown';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import 'react-dropdown/style.css';
 import '../App.css';
-import SideBar from './SideBar';
 
 const localizer = momentLocalizer(moment);
 
@@ -15,6 +17,7 @@ export function BigCalendar(props) {
     const [end, setEnd] = React.useState(formatDate(new Date()));
     const [amount, setAmount] = React.useState(0);
     const [currentBill, setCurrentBill] = React.useState(null);
+    const [categoryID, setCategoryID] = React.useState(-1);
 
 
     function formatDate(date) {
@@ -75,6 +78,7 @@ export function BigCalendar(props) {
         setStart(formatDate(new Date()));
         setEnd(formatDate(new Date()));
         setCurrentBill(null);
+        setCategoryID(-1);
     }
 
     function createEdit(bill) {
@@ -83,6 +87,7 @@ export function BigCalendar(props) {
         setEnd(formatDate(bill.end));
         setAmount(bill.amount);
         setCurrentBill(bill);
+        setCategoryID(bill.categoryID);
 
         openModal();
     }
@@ -127,12 +132,15 @@ export function BigCalendar(props) {
                     start={start}
                     end={end}
                     amount={amount}
+                    categoryID={categoryID}
+                    setCategoryID={setCategoryID}
                     setAmount={setAmount}
                     setTitle={setTitle}
                     setStart={setStart}
                     setEnd={setEnd}
                     closeModal={closeModal}
                     pushEvent={pushEvent}
+                    categories={props.categories}
                 />
 
                 <div
@@ -141,6 +149,27 @@ export function BigCalendar(props) {
                 >
                     <header className="flex flex-row justify-between font-bold mb-3 border-black border-b-2 p-1">
                         <h1 className="text-2xl">Bills</h1>
+
+                        <Dropdown
+                            options={props.categories.map(c => {
+                                return {
+                                    value: c.name,
+                                    label: c.name,
+                                }
+                            })}
+                            value={props.categories.find(c => c.id === props.categorySortID)?.name}
+                            onChange={(e) => {
+                                const category = props.categories.find(c => c.name === e.value);
+                                props.setCategorySortID(category.id);
+                            }}
+
+                            className='dropdown'
+                            controlClassName='dropdown-control'
+                            menuClassName='dropdown-menu'
+                            arrowClassName='dropdown-arrow'
+                            placeholderClassName='dropdown-placeholder'
+                        />
+
                         <span className='text-md'>
                             <h2 data-testid='billSum'>{
                                 `Total:  $${Object.entries(props.bills)
@@ -152,7 +181,7 @@ export function BigCalendar(props) {
                     </header>
                     <Calendar
                         localizer={localizer}
-                        events={getEventsFromBills(props.bills)}
+                        events={getEventsFromBills(props.bills, props.categorySortID)}
                         startAccessor="start"
                         endAccessor="end"
                         eventPropGetter={eventStyleGetter}
@@ -167,9 +196,14 @@ export function BigCalendar(props) {
     );
 }
 
-export function getEventsFromBills(bills) {
+export function getEventsFromBills(bills, categorySortID) {
     // Each bill will have multiple events for each pay date
-    return bills.map(bill => {
+    return bills.filter((bill) => {
+        if (categorySortID === -1 || bill.categoryID === -1)
+            return true;
+
+        return bill.categoryID === categorySortID;
+    }).map(bill => {
         const payDates = [];
 
         const currentDate = new Date(bill.start);

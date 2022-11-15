@@ -1,3 +1,4 @@
+import Dropdown from "react-dropdown";
 import EdittableText from "./EdittableText";
 
 function Extra(props) {
@@ -12,6 +13,7 @@ function Extra(props) {
                     props.setExtras([...props.extras]);
                 }}
             />
+
             <span className="flex flex-row">
                 <h3 className='font-bold'>$</h3>
                 <EdittableText
@@ -23,6 +25,18 @@ function Extra(props) {
                     }}
                 />
             </span>
+
+            <Dropdown
+                options={props.categories.map((category) => category.name)}
+                value={props.categories.find(c => c.id === props.extra.categoryID)?.name}
+                onChange={(e) => {
+                    props.extra.categoryID = props.categories.find(c => c.name === e.value)?.id;
+                    props.setExtras([...props.extras]);
+                }}
+                className='slim'
+                controlClassName='slim'
+                placeholderClassName='slim'
+            />
         </div>
     );
 }

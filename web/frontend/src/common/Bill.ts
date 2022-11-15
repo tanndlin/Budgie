@@ -2,6 +2,7 @@
 interface IBill extends IEvent {
     lastPaidDate: Date;
     frequency: Number;
+    categoryID: Number;
 }
 
 interface IEvent {

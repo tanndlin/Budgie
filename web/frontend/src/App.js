@@ -11,6 +11,20 @@ function App() {
   const [bills, setBills] = React.useState([]);
   const [budgets, setBudgets] = React.useState([]);
   const [extras, setExtras] = React.useState([]);
+  const [categories, setCategories] = React.useState([
+    {
+      id: -1,
+      name: 'All',
+    },
+    {
+      id: 1,
+      name: 'Food',
+    },
+    {
+      id: 2,
+      name: 'Utilities',
+    }
+  ]);
 
   const props = {
     user,
@@ -21,6 +35,8 @@ function App() {
     setBudgets,
     extras,
     setExtras,
+    categories,
+    setCategories,
   };
 
   const headerProps = (shouldShowNav) => ({

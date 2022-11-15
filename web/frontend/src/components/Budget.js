@@ -3,6 +3,7 @@ import React from 'react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import EdittableText from './EdittableText';
 import 'react-circular-progressbar/dist/styles.css';
+import Dropdown from 'react-dropdown';
 
 
 function Budget(props) {
@@ -33,14 +34,28 @@ function Budget(props) {
 
     return (
         <div className='grid grid-cols-1 w-[232px] p-4'>
-            <EdittableText
-                type='text'
-                value={budget.name}
-                onChange={(e) => {
-                    budget.name = e.target.value;
-                    props.setBudgets([...props.budgets]);
-                }}
-            />
+            <span className='flex justify-between'>
+
+                <EdittableText
+                    type='text'
+                    value={budget.name}
+                    onChange={(e) => {
+                        budget.name = e.target.value;
+                        props.setBudgets([...props.budgets]);
+                    }}
+                />
+                <Dropdown
+                    options={props.categories.map((category) => category.name)}
+                    value={props.categories.find(c => c.id === budget.categoryID)?.name}
+                    onChange={(e) => {
+                        budget.categoryID = props.categories.find(c => c.name === e.value)?.id;
+                        props.setBudgets([...props.budgets]);
+                    }}
+                    className='slim'
+                    controlClassName='slim'
+                    placeholderClassName='slim'
+                />
+            </span>
             <span className='w-[200px] h-[200px]'>
                 <CircularProgressbar styles={buildStyles({ pathColor: color })} value={percent} text={`${percent}%`} />
             </span>

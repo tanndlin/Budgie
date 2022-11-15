@@ -113,3 +113,9 @@ input[type='number'] {
     transform: scaleY(0);
     visibility: hidden;
 }
+
+.slim {
+    background: none !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}

@@ -1,14 +1,28 @@
 import React from 'react';
+import { sendRequest } from '../common/Requests';
 import Extra from './Extra';
 
 function ExtraneousView(props) {
     function newExtraneous() {
         const extra = {
-            name: 'New Extraneous',
-            price: 0,
+            name: 'New One Off',
             categoryId: -1,
-            id: Math.random()
+            price: 0,
+            color: '#000000',
+            date: new Date()
         };
+
+        sendRequest(
+            'CreateOneOff',
+            { userId: props.user.userId, ...extra },
+            (res) => {
+                const { oneOff } = JSON.parse(res.responseText);
+                props.setOneOffs([...props.oneOffs, oneOff]);
+            },
+            (err) => {
+                console.log(err);
+            }
+        );
 
         props.setExtras([...props.extras, extra]);
     }
@@ -20,7 +34,7 @@ function ExtraneousView(props) {
     return (
         <article className="m-auto container bg-[#BBE9E7] bg-opacity-50 p-3 mb-5 rounded-md">
             <div className="flex flex-row justify-between font-bold border-black border-b-2 p-1">
-                <h1 className="text-2xl">Extraneous</h1>
+                <h1 className="text-2xl">One Offs</h1>
                 <span className="text-md">
                     <h2>{`Total:  $${Object.entries(props.extras).reduce(
                         (acc, [_key, extra]) => acc + +extra.price,

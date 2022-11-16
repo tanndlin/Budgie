@@ -160,6 +160,7 @@ input[type='number'] {
   width: 20px;
   height: 20px;
   animation: spin 2s linear infinite;
+  margin-left: 4rem;
 }
 
 @keyframes spin {

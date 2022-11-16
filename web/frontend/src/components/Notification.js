@@ -3,7 +3,7 @@ import React from 'react';
 function Notification(props) {
     const getClassName = () => {
         const defaultClassName =
-            'relative flex flex-col bg-[#b2c6ec] bg-opacity-[.7] rounded-md p-4 shadow-lg w-max';
+            'relative flex flex-col bg-[#b2c6ec] bg-opacity-[.9] rounded-md p-4 shadow-lg w-max z-50';
 
         if (props.close) {
             return defaultClassName + ' notifClose';

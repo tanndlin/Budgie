@@ -22,7 +22,7 @@ input[type='number'] {
     background-blend-mode: luminosity;
 }
 .rbc-today {
-  background-color: rgb(187, 233, 231) !important;
+  background-color: rgba(178, 198, 236, 1) !important;
 }
 .rbc-off-range {
     min-height: 500px;

@@ -266,7 +266,7 @@ app.post('/GetBills', async (req, res) => {
 
             res.status(200).send(
                 JSON.stringify({
-                    userId: userId,
+                    //userId: userId,
                     bills: bills
                 })
             );
@@ -467,7 +467,7 @@ app.post('/GetBudgets', async (req, res) => {
 
             res.status(200).send(
                 JSON.stringify({
-                    userId: userId,
+                    //userId: userId,
                     budgets: budgets
                 })
             );
@@ -640,7 +640,7 @@ app.post('/GetOneOffs', async (req, res) => {
 
             res.status(200).send(
                 JSON.stringify({
-                    userId: userId,
+                    //userId: userId,
                     oneOffs: oneOffs
                 })
             );

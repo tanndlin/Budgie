@@ -41,8 +41,11 @@ input[type='number'] {
 }
 
 #extraView {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 150px);
+    display: flex;
+    flex-wrap: wrap;
+    overflow: auto;
+    justify-content: center;
+    align-content: flex-start;
 }
 
 .unpaid {
@@ -154,13 +157,13 @@ input[type='number'] {
 }
 
 .loader {
-  border: 2px solid #f3f3f3; /* Light grey */
-  border-top: 2px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 2s linear infinite;
-  margin-left: 4rem;
+    border: 2px solid #f3f3f3; /* Light grey */
+    border-top: 2px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 2s linear infinite;
+    margin-left: 4rem;
 }
 
 @keyframes spin {
@@ -172,16 +175,16 @@ input[type='number'] {
     }
 }
 
-.notifClose{
+.notifClose {
     animation: notifClose 1000ms forwards;
 }
 
-@keyframes notifClose{
-    0%{
+@keyframes notifClose {
+    0% {
         opacity: 1;
         margin-left: 0;
     }
-    100%{
+    100% {
         opacity: 0;
         margin-left: 50vw;
     }

@@ -271,9 +271,10 @@ app.post('/GetBills', async (req, res) => {
                 })
             );
         } else {
-            // res.status(400).send('There are no existing bills');
             const bills = [];
-            return { bills };
+            res.status(400).send(JSON.stringify({
+                "bills": bills
+            }));
         }
     } catch (error) {
         res.status(400).send(`${error.message}`);
@@ -472,9 +473,10 @@ app.post('/GetBudgets', async (req, res) => {
                 })
             );
         } else {
-            // res.status(400).send('There are no existing budgets');
             const budgets = [];
-            return { budgets };
+            res.status(400).send(JSON.stringify({
+                "budgets": budgets
+            }));
         }
     } catch (error) {
         res.status(400).send(`${error.message}`);
@@ -645,9 +647,10 @@ app.post('/GetOneOffs', async (req, res) => {
                 })
             );
         } else {
-            // res.status(400).send('There are no existing one-offs');
             const oneOffs = [];
-            return { oneOffs };
+            res.status(400).send(JSON.stringify({
+                "oneOffs": oneOffs
+            }));
         }
     } catch (error) {
         res.status(400).send(`${error.message}`);
@@ -800,7 +803,7 @@ app.post('/GetCategories', async (req, res) => {
             const categories = categoryDocs.docs.map((curCategory) => {
                 return {
                     name: curCategory.get('name'),
-                    categoryId: curCategory.id
+                    id: curCategory.id
                 };
             });
 
@@ -811,9 +814,10 @@ app.post('/GetCategories', async (req, res) => {
                 })
             );
         } else {
-            // res.status(400).send('There are no existing categories');
             const categories = [];
-            return { categories };
+            res.status(400).send(JSON.stringify({
+                "categories": categories
+            }));
         }
     } catch (error) {
         res.status(400).send(`${error.message}`);

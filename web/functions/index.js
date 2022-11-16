@@ -240,7 +240,9 @@ app.post('/GetBills', async (req, res) => {
                 })
             );
         } else {
-            res.status(400).send('There are no existing bills');
+            //res.status(400).send('There are no existing bills');
+            const bills = [];
+            return {bills}
         }
     } catch (error) {
         res.status(400).send(`${error.message}`);
@@ -422,7 +424,10 @@ app.post('/GetBudgets', async (req, res) => {
                 })
             );
         } else {
-            res.status(400).send('There are no existing budgets');
+            //res.status(400).send('There are no existing budgets');
+            const budgets = [];
+            return {budgets}
+
         }
     } catch (error) {
         res.status(400).send(`${error.message}`);
@@ -596,7 +601,9 @@ app.post('/GetOneOffs', async (req, res) => {
                 })
             );
         } else {
-            res.status(400).send('There are no existing one-offs');
+            //res.status(400).send('There are no existing one-offs');
+            const oneOffs = [];
+            return {oneOffs}
         }
     } catch (error) {
         res.status(400).send(`${error.message}`);
@@ -763,7 +770,9 @@ app.post('/GetCategories', async (req, res) => {
                 })
             );
         } else {
-            res.status(400).send('There are no existing categories');
+            //res.status(400).send('There are no existing categories');
+            const categories = [];
+            return {categories}
         }
     } catch (error) {
         res.status(400).send(`${error.message}`);

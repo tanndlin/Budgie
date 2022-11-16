@@ -12,12 +12,13 @@ test('Sums total of Budgets', () => {
 
     const budgets = [];
     for (let i = 0; i < 10; i++) {
-        const total = Math.floor(Math.random() * 100);
+        const expectedPrice = Math.floor(Math.random() * 100);
         budgets.push({
             name: 'Hello World',
-            total,
-            spent: Math.floor(Math.random() * total),
-            categoryID: -1
+            expectedPrice,
+            actualPrice: Math.floor(Math.random() * expectedPrice),
+            categoryId: -1,
+            budgetId: i
         });
     }
 
@@ -29,7 +30,7 @@ test('Sums total of Budgets', () => {
         />
     );
 
-    const sum = budgets.reduce((acc, budget) => acc + budget.total, 0);
+    const sum = budgets.reduce((acc, budget) => acc + budget.expectedPrice, 0);
     const event = screen.getByText(new RegExp(`${sum}`));
     expect(event).toBeInTheDocument();
 });
@@ -44,12 +45,13 @@ test('Sums spent of Budget', () => {
 
     const budgets = [];
     for (let i = 0; i < 10; i++) {
-        const total = Math.floor(Math.random() * 100);
+        const expectedPrice = Math.floor(Math.random() * 100);
         budgets.push({
             name: 'Hello World',
-            total,
-            spent: Math.floor(Math.random() * total),
-            categoryID: -1
+            expectedPrice,
+            actualPrice: Math.floor(Math.random() * expectedPrice),
+            categoryId: -1,
+            budgetId: i
         });
     }
 
@@ -61,7 +63,7 @@ test('Sums spent of Budget', () => {
         />
     );
 
-    const sum = budgets.reduce((acc, budget) => acc + budget.spent, 0);
+    const sum = budgets.reduce((acc, budget) => acc + budget.actualPrice, 0);
     const event = screen.getByText(new RegExp(`${sum}`));
     expect(event).toBeInTheDocument();
 });

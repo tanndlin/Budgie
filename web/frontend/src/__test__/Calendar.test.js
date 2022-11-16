@@ -13,10 +13,10 @@ test('Events red on unpaid', () => {
         <BigCalendar
             bills={[
                 {
-                    title: 'Hello World',
-                    start: new Date(),
-                    end: new Date(),
-                    lastPaid: null
+                    name: 'Hello World',
+                    startDate: new Date(),
+                    endDate: new Date(),
+                    isPaid: []
                 }
             ]}
             categories={categories}
@@ -40,10 +40,10 @@ test('Events green on paid', () => {
         <BigCalendar
             bills={[
                 {
-                    title: 'Hello World',
-                    start: new Date(),
-                    end: new Date(),
-                    lastPaid: new Date()
+                    name: 'Hello World',
+                    startDate: new Date(),
+                    endDate: new Date(),
+                    isPaid: [new Date()]
                 }
             ]}
             categories={categories}
@@ -66,10 +66,11 @@ test('Sums total of bills', () => {
     const bills = [];
     for (let i = 0; i < 10; i++) {
         bills.push({
-            title: 'Hello World',
-            start: new Date(),
-            end: new Date(),
-            amount: Math.floor(Math.random() * 100)
+            name: 'Hello World',
+            startDate: new Date(),
+            endDate: new Date(),
+            price: Math.floor(Math.random() * 100),
+            isPaid: []
         });
     }
 
@@ -81,7 +82,7 @@ test('Sums total of bills', () => {
         />
     );
 
-    const sum = bills.reduce((acc, bill) => acc + bill.amount, 0);
+    const sum = bills.reduce((acc, bill) => acc + bill.price, 0);
     const checkContent = screen.getByTestId('billSum');
     expect(checkContent).toHaveTextContent(`$${sum} / month`);
 });
@@ -98,10 +99,11 @@ test('Do not sum bills that no longer recur', () => {
         <BigCalendar
             bills={[
                 {
-                    title: 'Hello World',
-                    start: new Date(0),
-                    end: new Date(0),
-                    amount: 100
+                    name: 'Hello World',
+                    startDate: new Date(0),
+                    endDate: new Date(0),
+                    price: 100,
+                    isPaid: []
                 }
             ]}
             categories={categories}
@@ -116,10 +118,11 @@ test('Do not sum bills that no longer recur', () => {
 test('Events from Bills Exact Dates', () => {
     const bills = [
         {
-            title: 'Hello World',
-            start: new Date(Date.parse('01 Jan 2022')),
-            end: new Date(Date.parse('01 December 2022')),
-            amount: 100
+            name: 'Hello World',
+            startDate: new Date(Date.parse('01 Jan 2022')),
+            endDate: new Date(Date.parse('01 December 2022')),
+            price: 100,
+            isPaid: []
         }
     ];
 
@@ -130,10 +133,11 @@ test('Events from Bills Exact Dates', () => {
 test('Events from Bills Cutoff', () => {
     const bills = [
         {
-            title: 'Hello World',
-            start: new Date(Date.parse('01 Jan 2022')),
-            end: new Date(Date.parse('30 November 2022')),
-            amount: 100
+            name: 'Hello World',
+            startDate: new Date(Date.parse('01 Jan 2022')),
+            endDate: new Date(Date.parse('30 November 2022')),
+            price: 100,
+            isPaid: []
         }
     ];
 

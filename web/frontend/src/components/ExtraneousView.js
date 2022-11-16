@@ -1,29 +1,54 @@
 import React from 'react';
+import { sendRequest } from '../common/Requests';
 import Extra from './Extra';
 
 function ExtraneousView(props) {
     function newExtraneous() {
         const extra = {
-            name: 'New Extraneous',
-            amount: 0,
-            categoryID: -1,
-            id: Math.random()
+            name: 'New One Off',
+            categoryId: -1,
+            price: 0,
+            color: '#000000',
+            date: new Date()
         };
+
+        sendRequest(
+            'CreateOneOff',
+            { userId: props.user.userId, ...extra },
+            (res) => {
+                const { oneOff } = JSON.parse(res.responseText);
+                props.setOneOffs([...props.oneOffs, oneOff]);
+            },
+            (err) => {
+                console.log(err);
+            }
+        );
 
         props.setExtras([...props.extras, extra]);
     }
 
     function deleteExtra(extra) {
-        props.setExtras(props.extras.filter((e) => e.id !== extra.id));
+        sendRequest(
+            'RemoveOneOff',
+            { userId: props.user.userId, oneOffId: extra.oneOffId },
+            () => {
+                props.setExtras(
+                    props.extras.filter((e) => e.oneOffId !== extra.oneOffId)
+                );
+            },
+            (err) => {
+                console.log(err);
+            }
+        );
     }
 
     return (
         <article className="m-auto container bg-[#BBE9E7] bg-opacity-50 p-3 mb-5 rounded-md">
             <div className="flex flex-row justify-between font-bold border-black border-b-2 p-1">
-                <h1 className="text-2xl">Extraneous</h1>
+                <h1 className="text-2xl">One Offs</h1>
                 <span className="text-md">
                     <h2>{`Total:  $${Object.entries(props.extras).reduce(
-                        (acc, [_key, extra]) => acc + +extra.amount,
+                        (acc, [_key, extra]) => acc + +extra.price,
                         0
                     )}`}</h2>
                 </span>
@@ -33,15 +58,16 @@ function ExtraneousView(props) {
                     .filter((extra) => {
                         if (
                             props.categorySortID === -1 ||
-                            extra.categoryID === -1
+                            extra.categoryId === -1
                         ) {
                             return true;
                         }
 
-                        return extra.categoryID === props.categorySortID;
+                        return extra.categoryId === props.categorySortID;
                     })
                     .map((extra) => (
                         <Extra
+                            user={props.user}
                             extra={extra}
                             extras={props.extras}
                             setExtras={props.setExtras}

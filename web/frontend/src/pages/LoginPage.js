@@ -5,7 +5,7 @@ import Divider from '../components/Divider';
 import SideBar from '../components/SideBar';
 import ForgotPassword from '../components/ForgotPassword';
 
-const LoginPage = () => {
+const LoginPage = (props) => {
     const defaultSidebarClassName = 'max-w-[960px] m-auto mt-0';
 
     const [loginEmail, setLoginEmail] = React.useState('');
@@ -51,6 +51,8 @@ const LoginPage = () => {
                         setEmail={setLoginEmail}
                         dividerToggle={dividerToggle}
                         openSidebar={openSidebar}
+                        pushNotification={props.pushNotification}
+                        removeNotification={props.removeNotification}
                     />
                     <SignUp
                         {...{

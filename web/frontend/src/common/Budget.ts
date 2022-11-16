@@ -5,5 +5,5 @@ interface IBudget {
     total: number;
     spent: number;
     payments: number[];
-    categoryID: number;
+    categoryId: number;
 }

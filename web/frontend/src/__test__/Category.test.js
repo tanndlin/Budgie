@@ -16,18 +16,20 @@ test('Shows all unfiltered', () => {
 
     const bills = [
         {
-            title: 'Bill 1',
-            amount: 100,
-            categoryID: -1,
-            start: new Date(),
-            end: new Date()
+            name: 'Bill 1',
+            price: 100,
+            categoryId: -1,
+            startDate: new Date(),
+            endDate: new Date(),
+            isPaid: []
         },
         {
-            title: 'Bill 2',
-            amount: 200,
-            categoryID: 1,
-            start: new Date(),
-            end: new Date()
+            name: 'Bill 2',
+            price: 200,
+            categoryId: 1,
+            startDate: new Date(),
+            endDate: new Date(),
+            isPaid: []
         }
     ];
 
@@ -58,25 +60,28 @@ test('Shows only filtered', () => {
 
     const bills = [
         {
-            title: 'Bill 1',
-            amount: 100,
-            categoryID: -1,
-            start: new Date(),
-            end: new Date()
+            name: 'Bill 1',
+            price: 100,
+            categoryId: -1,
+            startDate: new Date(),
+            endDate: new Date(),
+            isPaid: []
         },
         {
-            title: 'Bill 2',
-            amount: 200,
-            categoryID: 1,
-            start: new Date(),
-            end: new Date()
+            name: 'Bill 2',
+            price: 200,
+            categoryId: 1,
+            startDate: new Date(),
+            endDate: new Date(),
+            isPaid: []
         },
         {
-            title: 'Bill 3',
-            amount: 300,
-            categoryID: 2,
-            start: new Date(),
-            end: new Date()
+            name: 'Bill 3',
+            price: 300,
+            categoryId: 2,
+            startDate: new Date(),
+            endDate: new Date(),
+            isPaid: []
         }
     ];
 

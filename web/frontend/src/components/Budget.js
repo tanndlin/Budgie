@@ -4,10 +4,11 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import EdittableText from './EdittableText';
 import 'react-circular-progressbar/dist/styles.css';
 import Dropdown from 'react-dropdown';
+import { sendRequest } from '../common/Requests';
 
 function Budget(props) {
-    function lerpColor(a, b, amount) {
-        const bounded = Math.min(Math.max(amount, 0), 1);
+    function lerpColor(a, b, price) {
+        const bounded = Math.min(Math.max(price, 0), 1);
 
         const ah = parseInt(a.replace(/#/g, ''), 16),
             ar = ah >> 16,
@@ -30,13 +31,30 @@ function Budget(props) {
     }
 
     const budget = props.budget;
-    const ratio = (props.budget.spent / props.budget.total) * 100;
+    const ratio = (props.budget.actualPrice / props.budget.expectedPrice) * 100;
     const percent = Math.round(ratio * 100) / 100;
 
     // Lerp color from green to red
     const red = '#f74f31';
     const green = '#7aff75';
     const color = lerpColor(green, red, percent / 100);
+
+    function editMe() {
+        sendRequest(
+            'EditBudget',
+            { ...budget, userId: props.user.userId },
+            () => {
+                props.setBudgets(
+                    props.budgets.map((b) =>
+                        b.budgetId === budget.budgetId ? budget : b
+                    )
+                );
+            },
+            (err) => {
+                console.log(err);
+            }
+        );
+    }
 
     return (
         <div className="grid grid-cols-1 w-[232px] p-4">
@@ -48,6 +66,7 @@ function Budget(props) {
                         budget.name = e.target.value;
                         props.setBudgets([...props.budgets]);
                     }}
+                    onBlur={editMe}
                 />
 
                 <input
@@ -69,36 +88,38 @@ function Budget(props) {
                 <h3 className="font-bold">$</h3>
                 <EdittableText
                     type="number"
-                    value={budget.spent}
-                    max={budget.total}
+                    value={budget.actualPrice}
+                    max={budget.expectedPrice}
                     onChange={(e) => {
-                        budget.spent = e.target.value;
+                        budget.actualPrice = e.target.value;
                         props.setBudgets([...props.budgets]);
                     }}
+                    onBlur={editMe}
                 />
                 <p className="mx-1 my-px p-0">out of</p>
                 <h3 className="font-bold">$</h3>
                 <EdittableText
                     type="number"
-                    value={budget.total}
+                    value={budget.expectedPrice}
                     onChange={(e) => {
-                        budget.total = e.target.value;
+                        budget.expectedPrice = e.target.value;
                         props.setBudgets([...props.budgets]);
                     }}
+                    onBlur={editMe}
                 />
             </span>
 
             <Dropdown
                 options={props.categories.map((category) => category.name)}
                 value={
-                    props.categories.find((c) => c.id === budget.categoryID)
+                    props.categories.find((c) => c.id === budget.categoryId)
                         ?.name
                 }
                 onChange={(e) => {
-                    budget.categoryID = props.categories.find(
+                    budget.categoryId = props.categories.find(
                         (c) => c.name === e.value
                     )?.id;
-                    props.setBudgets([...props.budgets]);
+                    editMe();
                 }}
                 className="slim-parent border-2 border-black rounded-md"
                 controlClassName="slim"

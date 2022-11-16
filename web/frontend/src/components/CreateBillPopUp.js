@@ -1,50 +1,82 @@
 import React from 'react';
 import Dropdown from 'react-dropdown';
+import { sendRequest } from '../common/Requests';
 
 function CreateBillPopUp(props) {
     function editEvent(e) {
         e.preventDefault();
 
-        const isPaid = Math.random() < 0.5;
-        props.pushEvent({
-            title: props.title,
-            start: props.start,
-            end: props.end,
-            id: Math.random(),
-            amount: props.amount,
-            frequency: 1,
-            lastPaid: isPaid ? new Date() : null,
-            categoryID: props.categoryID
-        });
+        const bill = {
+            name: props.name,
+            categoryId: props.categoryId,
+            color: '#ffffff',
+            price: props.price,
+            startDate: props.startDate,
+            endDate: props.endDate,
+            recurrence: 'monthly',
+            isPaid: []
+        };
+
+        const isNew = !props.id;
+        console.log(props.id);
+        if (isNew) {
+            sendRequest(
+                'CreateBill',
+                { ...bill, userId: props.user.userId },
+                (res) => {
+                    console.log('Saved new bill', res);
+                    const resBill = JSON.parse(res.responseText);
+                    bill.id = resBill.id;
+                    props.pushEvent(bill);
+                },
+                (err) => {
+                    console.log('Error creating bill', err);
+                }
+            );
+        } else {
+            sendRequest(
+                'EditBill',
+                { ...bill, billId: props.id, userId: props.user.userId },
+                (res) => {
+                    console.log('Editted bill', res);
+                    const resBill = JSON.parse(res.responseText);
+                    bill.billId = resBill.billId;
+                    props.pushEvent(bill);
+                },
+                (err) => {
+                    console.log('Error editting bill', err);
+                }
+            );
+        }
 
         props.closeModal();
     }
 
-    function titleChange(e) {
-        props.setTitle(e.target.value);
+    function nameChange(e) {
+        props.setName(e.target.value);
     }
 
     // Time zones are fucking cringe, the whole world needs to be on UTC
-    function startChange(e) {
+    function startDateChange(e) {
         const date = new Date(e.target.value);
         const timeZoneOffset = new Date().getTimezoneOffset();
         const timeZoneAdjusted = new Date(
             date.getTime() + timeZoneOffset * 60 * 1000
         );
-        props.setStart(timeZoneAdjusted);
+        props.setStartDate(timeZoneAdjusted);
     }
 
-    function endChange(e) {
+    function endDateChange(e) {
         const date = new Date(e.target.value);
         const timeZoneOffset = new Date().getTimezoneOffset();
         const timeZoneAdjusted = new Date(
             date.getTime() + timeZoneOffset * 60 * 1000
         );
-        props.setEnd(timeZoneAdjusted);
+        props.setEndDate(timeZoneAdjusted);
     }
 
-    function amountChange(e) {
-        props.setAmount(e.target.value);
+    function priceChange(e) {
+        props.setPrice(e.target.value);
     }
 
     return (
@@ -69,14 +101,14 @@ function CreateBillPopUp(props) {
                 >
                     <div className="grid grid-rows-2">
                         <span className="flex flex-col">
-                            <label htmlFor="Title">Title</label>
+                            <label htmlFor="Name">Name</label>
                             <input
                                 className="w-48 px-1 placeholder-[#4D4D4D] rounded-md"
                                 type="text"
-                                id="titleInput"
-                                placeholder="Title"
-                                onChange={titleChange}
-                                value={props.title}
+                                id="nameInput"
+                                placeholder="Name"
+                                onChange={nameChange}
+                                value={props.name}
                             />
                         </span>
                     </div>
@@ -87,9 +119,11 @@ function CreateBillPopUp(props) {
                             <input
                                 className="w-48 px-1 placeholder-[#4D4D4D] rounded-md"
                                 type="date"
-                                id="startDateInput"
-                                onChange={startChange}
-                                value={props.start.toISOString().split('T')[0]}
+                                id="startDateDateInput"
+                                onChange={startDateChange}
+                                value={
+                                    props.startDate.toISOString().split('T')[0]
+                                }
                             />
                         </span>
 
@@ -99,21 +133,23 @@ function CreateBillPopUp(props) {
                                 className="w-48 px-1 placeholder-[#4D4D4D] rounded-md"
                                 type="date"
                                 id="endDateInput"
-                                onChange={endChange}
-                                value={props.end.toISOString().split('T')[0]}
+                                onChange={endDateChange}
+                                value={
+                                    props.endDate.toISOString().split('T')[0]
+                                }
                             />
                         </span>
                     </div>
 
                     <div className="grid grid-rows-2">
                         <span className="flex flex-col">
-                            <label htmlFor="Amount">Amount</label>
+                            <label htmlFor="Price">Price</label>
                             <input
                                 className="w-48 px-1 placeholder-[#4D4D4D] rounded-md"
                                 type="number"
-                                id="amountInput"
-                                onChange={amountChange}
-                                value={props.amount}
+                                id="priceInput"
+                                onChange={priceChange}
+                                value={props.price}
                             />
                         </span>
 
@@ -136,7 +172,7 @@ function CreateBillPopUp(props) {
                                     }}
                                     value={
                                         props.categories.find(
-                                            (c) => c.id === props.categoryID
+                                            (c) => c.id === props.categoryId
                                         ).name
                                     }
                                 />

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import CalendarPage from './pages/CalendarPage';
 import Header from './components/Header';
+import NotificationProvider from './components/NotificationProvider';
 
 import './App.css';
 import './index.css';
@@ -27,6 +28,38 @@ function App() {
         }
     ]);
 
+    const [notifications, setNotifications] = React.useState([]);
+
+    let id = 0;
+    const pushNotification = (title, message) => {
+        const notification = {
+            id: id++,
+            title: title,
+            message: message
+        };
+
+        setNotifications((notifications) => [...notifications, notification]);
+        return notification.id;
+    };
+
+    const removeNotification = (id) => {
+        setNotifications((notifications) =>
+            notifications.map((n) => {
+                if (n.id === id) {
+                    n.close = true;
+                }
+
+                return n;
+            })
+        );
+
+        setTimeout(() => {
+            setNotifications((notifications) =>
+                notifications.filter((notification) => notification.id !== id)
+            );
+        }, 1000);
+    };
+
     const props = {
         user,
         setUser,
@@ -37,7 +70,10 @@ function App() {
         extras,
         setExtras,
         categories,
-        setCategories
+        setCategories,
+        notifications,
+        pushNotification,
+        removeNotification
     };
 
     const headerProps = (shouldShowNav) => ({
@@ -47,6 +83,7 @@ function App() {
 
     return (
         <BrowserRouter>
+            <NotificationProvider {...{ notifications }} />
             <Routes>
                 <Route
                     path="/"

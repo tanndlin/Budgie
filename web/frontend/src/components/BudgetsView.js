@@ -1,21 +1,49 @@
 import React from 'react';
 import Budget from './Budget';
+import { sendRequest } from '../common/Requests';
 
 function BudgetsView(props) {
     function newBudget() {
         const budget = {
             name: 'New Budget',
-            total: 100,
-            spent: 0,
-            categoryID: -1,
-            id: Math.random()
+            categoryId: -1,
+            expectedPrice: 100,
+            actualPrice: 0,
+            startDate: new Date().setDate(1),
+            recurrence: 'monthly'
         };
 
-        props.setBudgets([...props.budgets, budget]);
+        sendRequest(
+            'CreateBudget',
+            { ...budget, userId: props.user.userId },
+            (res) => {
+                const { budget } = JSON.parse(res.responseText);
+                props.setBudgets([...props.budgets, budget]);
+            },
+            (err) => {
+                console.log(err);
+            }
+        );
     }
 
     function deleteBudget(budget) {
-        props.setBudgets([...props.budgets.filter((b) => b.id !== budget.id)]);
+        sendRequest(
+            'RemoveBudget',
+            {
+                userId: props.user.userId,
+                budgetId: budget.budgetId
+            },
+            () => {
+                props.setBudgets([
+                    ...props.budgets.filter(
+                        (b) => b.budgetId !== budget.budgetId
+                    )
+                ]);
+            },
+            (err) => {
+                console.log(err);
+            }
+        );
     }
 
     function resetBudgets() {
@@ -33,11 +61,17 @@ function BudgetsView(props) {
                 <span className="text-md">
                     <h2 className="">{`Total:  $${Object.entries(
                         props.budgets
-                    ).reduce((acc, [_key, budget]) => acc + +budget.total, 0)}
+                    ).reduce(
+                        (acc, [_key, budget]) => acc + +budget.expectedPrice,
+                        0
+                    )}
                             / month`}</h2>
                     <h2 className="">{`Spent: $${Object.entries(
                         props.budgets
-                    ).reduce((acc, [_key, budget]) => acc + +budget.spent, 0)}
+                    ).reduce(
+                        (acc, [_key, budget]) => acc + +budget.actualPrice,
+                        0
+                    )}
                             / month`}</h2>
                 </span>
             </div>
@@ -49,15 +83,17 @@ function BudgetsView(props) {
                     .filter((budget) => {
                         if (
                             props.categorySortID === -1 ||
-                            budget.categoryID === -1
+                            budget.categoryId === -1
                         ) {
                             return true;
                         }
 
-                        return budget.categoryID === props.categorySortID;
+                        return budget.categoryId === props.categorySortID;
                     })
                     .map((budget) => (
                         <Budget
+                            key={budget.budgetId}
+                            user={props.user}
                             budget={budget}
                             budgets={props.budgets}
                             setBudgets={props.setBudgets}

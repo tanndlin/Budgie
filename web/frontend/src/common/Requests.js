@@ -1,5 +1,5 @@
 export function sendRequest(path, payload, callback, errorCallback) {
-    const url = `budgie/api/${path}`;
+    const url = `https://us-central1-cop4331-large-project-27.cloudfunctions.net/webApi/${path}`;
 
     const xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
@@ -7,18 +7,8 @@ export function sendRequest(path, payload, callback, errorCallback) {
 
     xhr.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
-            const { Error: err } = JSON.parse(xhr.responseText);
-            if (err) {
-                if (!errorCallback) {
-                    console.log(`${url} threw unhandled error: ${err}`);
-                } else {
-                    errorCallback(err);
-                }
-                return;
-            }
-
             callback(xhr);
-        } else {
+        } else if (this.readyState === 4 && this.status === 400) {
             errorCallback(xhr.responseText);
         }
     };
@@ -36,7 +26,10 @@ export function sendOutsideRequest(url, payload, callback, errorCallback) {
             return;
         }
 
-        if (this.readyState === 4 && this.status === 200) {
+        if (
+            (this.readyState === 4 && this.status === 200) ||
+            this.status === 201
+        ) {
             callback(xhr);
             return;
         }

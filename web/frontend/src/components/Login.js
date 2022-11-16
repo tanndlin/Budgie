@@ -1,9 +1,39 @@
 import React from 'react';
-import { pretty, sendOutsideRequest } from '../common/Requests';
+import { useNavigate } from 'react-router-dom';
+import { pretty, sendOutsideRequest, sendRequest } from '../common/Requests';
 
 function Login(props) {
     const [password, setPassword] = React.useState('');
     const [message, setMessage] = React.useState('');
+    const navigate = useNavigate();
+
+    const createUserProfile = (localId, callback) => {
+        const id = props.pushNotification('Creating Profile', 'Please wait...');
+        sendRequest(
+            'CreateUserProfile',
+            {
+                userId: localId,
+                firstName: 'Tanner',
+                lastName: 'Sandlin',
+                expectedIncome: 2000
+            },
+            (res) => {
+                console.log(res);
+                const user = JSON.parse(res.responseText);
+                props.removeNotification(id);
+                callback(user);
+            },
+            (err) => {
+                setMessage(err);
+            }
+        );
+    };
+
+    const navigateToHome = (user) => {
+        console.log('navigating');
+        console.log(user);
+        navigate('/calendar', { state: { user } });
+    };
 
     const doLogin = async (e) => {
         e.preventDefault();
@@ -23,8 +53,32 @@ function Login(props) {
                 const { localId } = JSON.parse(res.responseText);
                 console.log(localId);
 
-                // Redirect to calendar page and pass states
-                window.location.href = `/calendar?user=${localId}`;
+                const id = props.pushNotification(
+                    'Retrieving Profile',
+                    'Please wait...'
+                );
+
+                sendRequest(
+                    'GetUserProfile',
+                    { userId: localId },
+                    (res) => {
+                        props.removeNotification(id);
+                        console.log(res.responseText);
+                        const user = JSON.parse(res.responseText);
+                        console.log(user);
+                        navigateToHome(user);
+                    },
+                    (err) => {
+                        console.log('here');
+                        console.log(err);
+                        if (err !== "User doesn't exist") {
+                            setMessage(err);
+                            return;
+                        }
+
+                        createUserProfile(localId, navigateToHome);
+                    }
+                );
             },
             (err) => {
                 console.log(err);

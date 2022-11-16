@@ -40,6 +40,21 @@ app.post('/CreateUserProfile', async (req, res) => {
         await db.collection(userCollection).doc(`${userId}`).set({});
         const userRef = db.collection(userCollection).doc(`${userId}`);
 
+        if((req.body.firstName != "") || (req.body.firstName != " ") || (req.body.firstName != NULL)) {
+            firstName = req.body.firstName;
+        } 
+        else {firstName = "";}
+
+        if((req.body.lastName != "") || (req.body.lastName != " ") || (req.body.lastName != NULL)) {
+            lastName = req.body.lastName;
+        }
+        else {lastName = "";}
+
+        if((req.body.expectedIncome != "") || (req.body.expectedIncome != " ") || (req.body.expectedIncome != NULL)) {
+            expectedIncome = parseInt(req.body.expectedIncome);
+        }
+        else {expectedIncome = "";}
+
         const newProfile = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
@@ -102,6 +117,22 @@ app.post('/EditUserProfile', async (req, res) => {
 
         // if the user exists, then edit the profile info for said user
         if (userRef.exists) {
+
+            if((req.body.firstName != "") || (req.body.firstName != " ") || (req.body.firstName != NULL)) {
+                firstName = req.body.firstName;
+            } 
+            else {firstName = "";}
+    
+            if((req.body.lastName != "") || (req.body.lastName != " ") || (req.body.lastName != NULL)) {
+                lastName = req.body.lastName;
+            }
+            else {lastName = "";}
+    
+            if((req.body.expectedIncome != "") || (req.body.expectedIncome != " ") || (req.body.expectedIncome != NULL)) {
+                expectedIncome = parseInt(req.body.expectedIncome);
+            }
+            else {expectedIncome = "";}
+
             const newProfile = {
                 firstName: `${req.body.firstName}`,
                 lastName: `${req.body.lastName}`,
@@ -395,7 +426,7 @@ app.post('/CreateBudget', async (req, res) => {
             expectedPrice: +req.body.expectedPrice,
             actualPrice: +req.body.actualPrice,
             startDate: req.body.startDate,
-            recurrence: req.body.recurrence
+            //recurrence: req.body.recurrence
         };
         const budgetDoc = userRef.collection(budgetCollection).doc();
         await budgetDoc.set(newBudget);

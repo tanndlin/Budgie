@@ -48,6 +48,17 @@ class _AccountManagerState extends State<AccountManager> {
               'Account Details',
               style: TextStyle(fontSize: 35, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),
             ),
+            actions: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(right: 20.0, bottom: 6.0),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/MainPage');
+                  },
+                  // child: Icon(Icons.logout, color: Color(0xFF2D4B03), size: 35.0,),
+                  child: Image.asset('assets/images/budgie.png', scale: 0.1,),
+                ),)
+            ],
             automaticallyImplyLeading: false,
             flexibleSpace: Container(
               decoration: const BoxDecoration(

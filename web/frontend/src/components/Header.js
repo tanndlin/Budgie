@@ -15,10 +15,19 @@ function Header(props) {
                     <Link
                         className="font-bold hover:text-[#189DFD]"
                         to={{
-                            pathname: '/'
+                            pathname: '/calendar'
                         }}
                     >
-                        Log out
+                        Calendar
+                    </Link>
+
+                    <Link
+                        className="font-bold hover:text-[#189DFD]"
+                        to={{
+                            pathname: '/account'
+                        }}
+                    >
+                        My Account
                     </Link>
                 </span>
             )}

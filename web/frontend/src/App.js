@@ -7,6 +7,7 @@ import NotificationProvider from './components/NotificationProvider';
 
 import './App.css';
 import './index.css';
+import AccountPage from './pages/AccountPage';
 
 function App() {
     const [user, setUser] = React.useState(null);
@@ -101,6 +102,16 @@ function App() {
                         <div className="h-screen">
                             <Header {...headerProps(true)} />
                             <CalendarPage {...props} />
+                        </div>
+                    }
+                />
+
+                <Route
+                    path="/account"
+                    element={
+                        <div className="h-screen">
+                            <Header {...headerProps(true)} />
+                            <AccountPage {...props} />
                         </div>
                     }
                 />

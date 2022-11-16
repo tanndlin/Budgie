@@ -344,7 +344,7 @@ app.post('/CreateBudget', async (req, res) => {
         const userId = req.body.userId;
         const userRef = db.collection(userCollection).doc(`${userId}`);
 
-        // make expectedPrice string into an integer
+        /*  // make expectedPrice string into an integer
         const expectedPrice = parseInt(req.body.expectedPrice);
 
         // make actualPrice string into an integer
@@ -388,7 +388,24 @@ app.post('/CreateBudget', async (req, res) => {
                 startDate: req.body.startDate
                 // recurrence: req.body.recurrence
             })
-        );
+        );*/
+        const newBudget = {
+            name: req.body.name,
+            categoryId: req.body.categoryId,
+            expectedPrice: +req.body.expectedPrice,
+            actualPrice: +req.body.actualPrice,
+            startDate: req.body.startDate,
+            recurrence: req.body.recurrence
+        };
+        const budgetDoc = userRef.collection(budgetCollection).doc();
+        await budgetDoc.set(newBudget);
+        const budgetId = budgetDoc.id;
+        newBudget.budgetId = budgetDoc.id;
+        await userRef
+            .collection(budgetCollection)
+            .doc(`${budgetId}`)
+            .update(newBudget);
+        res.status(201).send(JSON.stringify(newBudget));
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }

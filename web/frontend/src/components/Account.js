@@ -71,15 +71,21 @@ function Account(props) {
 
             <span>
                 <h2 className="text-xl">Expected Income per month</h2>
-                <EdittableText
-                    id="expectedIncome"
-                    type="number"
-                    value={expectedIncome}
-                    onBlur={editProfile}
-                    onChange={(e) => {
-                        setExpectedIncome(e.target.value);
-                    }}
-                />
+                <span>
+                    <p className="inline">
+                        <b>$</b>
+                    </p>
+                    <EdittableText
+                        id="expectedIncome"
+                        type="number"
+                        value={expectedIncome}
+                        onBlur={editProfile}
+                        onChange={(e) => {
+                            setExpectedIncome(e.target.value);
+                        }}
+                        className="inline"
+                    />
+                </span>
             </span>
 
             <span className="grid grid-cols-2 justify-center pt-4">

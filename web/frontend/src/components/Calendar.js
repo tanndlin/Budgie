@@ -50,7 +50,7 @@ export function BigCalendar(props) {
 
             const editState = () => {
                 const newState = props.bills.map((b) => {
-                    if (b.billId !== bill.billId) {
+                    if (b.id !== bill.id) {
                         return b;
                     }
 
@@ -99,12 +99,12 @@ export function BigCalendar(props) {
     }
 
     function deleteBill() {
-        const id = currentBill.billId;
+        const id = currentBill.id;
         sendRequest(
             'RemoveBill',
-            { billId: id, userId: props.user.userId },
+            { id: id, userId: props.user.userId },
             (_res) => {
-                const newState = props.bills.filter((b) => b.billId !== id);
+                const newState = props.bills.filter((b) => b.id !== id);
                 props.setBills(newState);
                 closeModal();
             },
@@ -220,7 +220,7 @@ export function BigCalendar(props) {
                             deleteBill,
                             isEdit,
                             categories: props.categories,
-                            id: currentBill?.billId
+                            id: currentBill?.id
                         }}
                     />
                 </SideBar>

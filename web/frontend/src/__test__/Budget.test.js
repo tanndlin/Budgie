@@ -18,7 +18,7 @@ test('Sums total of Budgets', () => {
             expectedPrice,
             actualPrice: Math.floor(Math.random() * expectedPrice),
             categoryId: -1,
-            budgetId: i
+            id: i
         });
     }
 
@@ -51,7 +51,7 @@ test('Sums spent of Budget', () => {
             expectedPrice,
             actualPrice: Math.floor(Math.random() * expectedPrice),
             categoryId: -1,
-            budgetId: i
+            id: i
         });
     }
 

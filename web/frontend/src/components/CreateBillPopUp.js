@@ -36,11 +36,11 @@ function CreateBillPopUp(props) {
         } else {
             sendRequest(
                 'EditBill',
-                { ...bill, billId: props.id, userId: props.user.userId },
+                { ...bill, id: props.id, userId: props.user.userId },
                 (res) => {
                     console.log('Editted bill', res);
                     const resBill = JSON.parse(res.responseText);
-                    bill.billId = resBill.billId;
+                    bill.id = resBill.id;
                     props.pushEvent(bill);
                 },
                 (err) => {

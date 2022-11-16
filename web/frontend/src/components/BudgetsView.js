@@ -31,13 +31,11 @@ function BudgetsView(props) {
             'RemoveBudget',
             {
                 userId: props.user.userId,
-                budgetId: budget.budgetId
+                id: budget.id
             },
             () => {
                 props.setBudgets([
-                    ...props.budgets.filter(
-                        (b) => b.budgetId !== budget.budgetId
-                    )
+                    ...props.budgets.filter((b) => b.id !== budget.id)
                 ]);
             },
             (err) => {
@@ -92,7 +90,7 @@ function BudgetsView(props) {
                     })
                     .map((budget) => (
                         <Budget
-                            key={budget.budgetId}
+                            key={budget.id}
                             user={props.user}
                             budget={budget}
                             budgets={props.budgets}

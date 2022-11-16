@@ -147,20 +147,6 @@ function BigCalendar(props) {
     return (
         <div className="flex min-h-9/10 mb-5">
             <section className="flex flex-col container m-auto">
-                <SideBar
-                    isOpen={isOpen}
-                    title={title}
-                    start={start}
-                    end={end}
-                    amount={amount}
-                    setAmount={setAmount}
-                    setTitle={setTitle}
-                    setStart={setStart}
-                    setEnd={setEnd}
-                    closeModal={closeModal}
-                    pushEvent={pushEvent}
-                />
-
                 <div
                     className="container m-auto mt-5 min-h-500 bg-[#BBE9E7] bg-opacity-90 p-3 rounded-md"
                     onClick={handleCalendarClick}
@@ -188,6 +174,20 @@ function BigCalendar(props) {
                             onClick={createNew} />
                     </footer>
                 </div>
+
+                <SideBar
+                    isOpen={isOpen}
+                    title={title}
+                    start={start}
+                    end={end}
+                    amount={amount}
+                    setAmount={setAmount}
+                    setTitle={setTitle}
+                    setStart={setStart}
+                    setEnd={setEnd}
+                    closeModal={closeModal}
+                    pushEvent={pushEvent}
+                />
             </section >
         </div >
     );

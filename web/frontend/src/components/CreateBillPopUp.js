@@ -45,9 +45,9 @@ function CreateBillPopUp(props) {
 
     return (
         <section className='flex container h-full bg-[#BBE9E7] bg-opacity-50 rounded-md relative'>
-            <input className='absolute top-0 right-0 cursor-pointer text-[36px] font-bold mr-4' type='button' value='&times;' onClick={() => { props.closeModal() }} />
+            <input className='absolute top-0 left-0 cursor-pointer text-[36px] font-bold ml-4' type='button' value='&times;' onClick={() => { props.closeModal() }} />
 
-            <div className='p-4 my-4 h-3/4 m-auto bg-[#b2c6ec] bg-opacity-[.7] rounded-md'>
+            <div className='p-4 my-4 h-3/4 m-auto bg-[#B2C6EC] bg-opacity-[.7] rounded-md'>
                 <h1 className='text-center text-[#3B3548] text-6xl mb-4'>Bill</h1>
 
                 <form onSubmit={editEvent} className='grid grid-cols-3 gap-4 place-items-center'>

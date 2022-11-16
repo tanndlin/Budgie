@@ -167,7 +167,7 @@ app.post('/CreateBill', async (req, res) => {
         };
 
         const billDoc = userRef.collection(billCollection).doc();
-        const billId = billDoc.id;
+        const id = billDoc.id;
         await billDoc.set(newBill);
 
         const editedBill = {
@@ -179,18 +179,18 @@ app.post('/CreateBill', async (req, res) => {
             endDate: req.body.endDate,
             recurrence: req.body.recurrence,
             isPaid: isPaid,
-            billId: billId
+            id: id
         };
 
         await userRef
             .collection(billCollection)
-            .doc(`${billId}`)
+            .doc(`${id}`)
             .update(editedBill);
 
         res.status(201).send(
             JSON.stringify({
                 userId: userId,
-                billId: billId,
+                id: id,
                 name: req.body.name,
                 categoryId: req.body.categoryId,
                 color: req.body.color,
@@ -229,7 +229,7 @@ app.post('/GetBills', async (req, res) => {
                     endDate: curBill.get('endDate'),
                     recurrence: curBill.get('recurrence'),
                     isPaid: isPaid,
-                    billId: curBill.id
+                    id: curBill.id
                 };
             });
 
@@ -254,12 +254,12 @@ app.post('/EditBill', async (req, res) => {
     try {
         const userId = req.body.userId;
         const userRef = db.collection(userCollection).doc(`${userId}`);
-        const billId = req.body.billId;
+        const id = req.body.id;
 
         // check if the bill already exists
         const billExist = await userRef
             .collection(billCollection)
-            .doc(`${billId}`)
+            .doc(`${id}`)
             .get();
         if (!billExist.exists) {
             res.status(400).send("This bill doesn't exist");
@@ -278,18 +278,18 @@ app.post('/EditBill', async (req, res) => {
             endDate: req.body.endDate,
             recurrence: req.body.recurrence,
             isPaid: isPaid,
-            billId: billId
+            id: id
         };
 
         await userRef
             .collection(billCollection)
-            .doc(`${billId}`)
+            .doc(`${id}`)
             .update(editedBill);
 
         res.status(200).send(
             JSON.stringify({
                 userId: userId,
-                billId: billId,
+                id: id,
                 name: req.body.name,
                 categoryId: req.body.categoryId,
                 color: req.body.color,
@@ -312,18 +312,18 @@ app.post('/RemoveBill', async (req, res) => {
     try {
         const userId = req.body.userId;
         const userRef = db.collection(userCollection).doc(`${userId}`);
-        const billId = req.body.billId;
+        const id = req.body.id;
         const billDoc = await userRef
             .collection(billCollection)
-            .doc(`${billId}`)
+            .doc(`${id}`)
             .get();
 
         if (billDoc.exists) {
-            await userRef.collection(billCollection).doc(`${billId}`).delete();
+            await userRef.collection(billCollection).doc(`${id}`).delete();
             res.status(200).send(
                 JSON.stringify({
                     userId: userId,
-                    billId: `${billId} has been deleted`
+                    id: `${id} has been deleted`
                 })
             );
         } else {
@@ -354,11 +354,11 @@ app.post('/CreateBudget', async (req, res) => {
             expectedPrice: expectedPrice,
             actualPrice: actualPrice,
             startDate: req.body.startDate,
-            recurrence: req.body.recurrence
+            //recurrence: req.body.recurrence
         };
 
         const budgetDoc = userRef.collection(budgetCollection).doc();
-        const budgetId = budgetDoc.id;
+        const id = budgetDoc.id;
         await budgetDoc.set(newBudget);
 
         const editedBudget = {
@@ -367,24 +367,24 @@ app.post('/CreateBudget', async (req, res) => {
             expectedPrice: expectedPrice,
             actualPrice: actualPrice,
             startDate: req.body.startDate,
-            recurrence: req.body.recurrence,
-            budgetId: budgetId
+            //recurrence: req.body.recurrence,
+            id: id
         };
 
         await userRef
             .collection(budgetCollection)
-            .doc(`${budgetId}`)
+            .doc(`${id}`)
             .update(editedBudget);
         res.status(201).send(
             JSON.stringify({
                 userId: userId,
-                budgetId: budgetId,
+                id: id,
                 name: req.body.name,
                 categoryId: req.body.categoryId,
                 expectedPrice: expectedPrice,
                 actualPrice: actualPrice,
                 startDate: req.body.startDate,
-                recurrence: req.body.recurrence
+                //recurrence: req.body.recurrence
             })
         );
     } catch (error) {
@@ -410,8 +410,8 @@ app.post('/GetBudgets', async (req, res) => {
                     expectedPrice: curBudget.get('expectedPrice'),
                     actualPrice: curBudget.get('actualPrice'),
                     startDate: curBudget.get('startDate'),
-                    recurrence: curBudget.get('recurrence'),
-                    budgetId: curBudget.id
+                    //recurrence: curBudget.get('recurrence'),
+                    id: curBudget.id
                 };
             });
 
@@ -436,12 +436,12 @@ app.post('/EditBudget', async (req, res) => {
     try {
         const userId = req.body.userId;
         const userRef = db.collection(userCollection).doc(`${userId}`);
-        const budgetId = req.body.budgetId;
+        const id = req.body.id;
 
         // check if the budget already exists
         const budgetExist = await userRef
             .collection(budgetCollection)
-            .doc(`${budgetId}`)
+            .doc(`${id}`)
             .get();
         if (!budgetExist.exists) {
             res.status(400).send("This budget doesn't exist");
@@ -456,24 +456,24 @@ app.post('/EditBudget', async (req, res) => {
             expectedPrice: expectedPrice,
             actualPrice: actualPrice,
             startDate: req.body.startDate,
-            recurrence: req.body.recurrence,
-            budgetId: budgetId
+            //recurrence: req.body.recurrence,
+            id: id
         };
 
         await userRef
             .collection(budgetCollection)
-            .doc(`${budgetId}`)
+            .doc(`${id}`)
             .update(editedBudget);
         res.status(200).send(
             JSON.stringify({
-                userId: userId,
-                budgetId: budgetId,
+                userId: id,
+                id: id,
                 name: req.body.name,
                 categoryId: req.body.categoryId,
                 expectedPrice: expectedPrice,
                 actualPrice: actualPrice,
-                startDate: req.body.startDate,
-                recurrence: req.body.recurrence
+                startDate: req.body.startDate
+                //recurrence: req.body.recurrence
             })
         );
     } catch (error) {
@@ -488,21 +488,21 @@ app.post('/RemoveBudget', async (req, res) => {
     try {
         const userId = req.body.userId;
         const userRef = db.collection(userCollection).doc(`${userId}`);
-        const budgetId = req.body.budgetId;
+        const id = req.body.id;
         const budgetDoc = await userRef
             .collection(budgetCollection)
-            .doc(`${budgetId}`)
+            .doc(`${id}`)
             .get();
 
         if (budgetDoc.exists) {
             await userRef
                 .collection(budgetCollection)
-                .doc(`${budgetId}`)
+                .doc(`${id}`)
                 .delete();
             res.status(200).send(
                 JSON.stringify({
                     userId: userId,
-                    budgetId: `${budgetId} has been deleted`
+                    budgetId: `${id} has been deleted`
                 })
             );
         } else {
@@ -534,7 +534,7 @@ app.post('/CreateOneOff', async (req, res) => {
         };
 
         const oneOffDoc = userRef.collection(oneOffCollection).doc();
-        const oneOffId = oneOffDoc.id;
+        const id = oneOffDoc.id;
         await oneOffDoc.set(newOneOff);
 
         const editedOneOff = {
@@ -543,18 +543,18 @@ app.post('/CreateOneOff', async (req, res) => {
             color: req.body.color,
             price: price,
             date: req.body.date,
-            oneOffId: `${oneOffId}`
+            id: `${id}`
         };
 
         await userRef
             .collection(oneOffCollection)
-            .doc(`${oneOffId}`)
+            .doc(`${id}`)
             .update(editedOneOff);
 
         res.status(201).send(
             JSON.stringify({
                 userId: userId,
-                oneOffId: oneOffId,
+                id: id,
                 name: req.body.name,
                 categoryId: req.body.categoryId,
                 color: req.body.color,
@@ -585,7 +585,7 @@ app.post('/GetOneOffs', async (req, res) => {
                     color: curOneOff.get('color'),
                     price: curOneOff.get('price'),
                     date: curOneOff.get('date'),
-                    oneOffId: curOneOff.id
+                    id: curOneOff.id
                 };
             });
 
@@ -610,12 +610,12 @@ app.post('/EditOneOff', async (req, res) => {
     try {
         const userId = req.body.userId;
         const userRef = db.collection(userCollection).doc(`${userId}`);
-        const oneOffId = req.body.oneOffId;
+        const id = req.body.id;
 
         // get name of the one-off
         const oneOffExist = await userRef
             .collection(oneOffCollection)
-            .doc(`${oneOffId}`)
+            .doc(`${id}`)
             .get();
 
         // if this one-off collection or the specific one-off doesn't exist
@@ -629,18 +629,18 @@ app.post('/EditOneOff', async (req, res) => {
                 color: req.body.color,
                 price: price,
                 date: req.body.date,
-                oneOffId: oneOffId
+                id: id
             };
 
             await userRef
                 .collection(oneOffCollection)
-                .doc(`${oneOffId}`)
+                .doc(`${id}`)
                 .update(editedOneOff);
 
             res.status(201).send(
                 JSON.stringify({
                     userId: userId,
-                    oneOffId: oneOffId,
+                    id: id,
                     name: req.body.name,
                     categoryId: req.body.categoryId,
                     color: req.body.color,
@@ -663,21 +663,21 @@ app.post('/RemoveOneOff', async (req, res) => {
     try {
         const userId = req.body.userId;
         const userRef = db.collection(userCollection).doc(`${userId}`);
-        const oneOffId = req.body.oneOffId;
+        const id = req.body.id;
         const oneOffDoc = await userRef
             .collection(oneOffCollection)
-            .doc(`${oneOffId}`)
+            .doc(`${id}`)
             .get();
 
         if (oneOffDoc.exists) {
             await userRef
                 .collection(oneOffCollection)
-                .doc(`${oneOffId}`)
+                .doc(`${id}`)
                 .delete();
             res.status(200).send(
                 JSON.stringify({
                     userId: userId,
-                    oneOffId: `${oneOffId} has been deleted`
+                    id: `${id} has been deleted`
                 })
             );
         } else {

@@ -240,9 +240,9 @@ app.post('/GetBills', async (req, res) => {
                 })
             );
         } else {
-            //res.status(400).send('There are no existing bills');
+            // res.status(400).send('There are no existing bills');
             const bills = [];
-            return {bills}
+            return { bills };
         }
     } catch (error) {
         res.status(400).send(`${error.message}`);
@@ -355,7 +355,7 @@ app.post('/CreateBudget', async (req, res) => {
             categoryId: req.body.categoryId,
             expectedPrice: expectedPrice,
             actualPrice: actualPrice,
-            startDate: req.body.startDate,
+            startDate: req.body.startDate
             // recurrence: req.body.recurrence
         };
 
@@ -385,7 +385,7 @@ app.post('/CreateBudget', async (req, res) => {
                 categoryId: req.body.categoryId,
                 expectedPrice: expectedPrice,
                 actualPrice: actualPrice,
-                startDate: req.body.startDate,
+                startDate: req.body.startDate
                 // recurrence: req.body.recurrence
             })
         );
@@ -426,8 +426,7 @@ app.post('/GetBudgets', async (req, res) => {
         } else {
             // res.status(400).send('There are no existing budgets');
             const budgets = [];
-            return {budgets}
-
+            return { budgets };
         }
     } catch (error) {
         res.status(400).send(`${error.message}`);
@@ -495,14 +494,12 @@ app.post('/RemoveBudget', async (req, res) => {
         const userRef = db.collection(userCollection).doc(`${userId}`);
         const id = req.body.id;
         const budgetDoc = await userRef
-            .collection(budgetCollection).doc(`${id}`)
+            .collection(budgetCollection)
+            .doc(`${id}`)
             .get();
 
         if (budgetDoc.exists) {
-            await userRef
-                .collection(budgetCollection)
-                .doc(`${id}`)
-                .delete();
+            await userRef.collection(budgetCollection).doc(`${id}`).delete();
             res.status(200).send(
                 JSON.stringify({
                     userId: userId,
@@ -602,7 +599,7 @@ app.post('/GetOneOffs', async (req, res) => {
         } else {
             // res.status(400).send('There are no existing one-offs');
             const oneOffs = [];
-            return {oneOffs}
+            return { oneOffs };
         }
     } catch (error) {
         res.status(400).send(`${error.message}`);
@@ -671,14 +668,12 @@ app.post('/RemoveOneOff', async (req, res) => {
         const userRef = db.collection(userCollection).doc(`${userId}`);
         const id = req.body.id;
         const oneOffDoc = await userRef
-            .collection(oneOffCollection).doc(`${id}`)
+            .collection(oneOffCollection)
+            .doc(`${id}`)
             .get();
 
         if (oneOffDoc.exists) {
-            await userRef
-                .collection(oneOffCollection)
-                .doc(`${id}`)
-                .delete();
+            await userRef.collection(oneOffCollection).doc(`${id}`).delete();
             res.status(200).send(
                 JSON.stringify({
                     userId: userId,
@@ -770,7 +765,7 @@ app.post('/GetCategories', async (req, res) => {
         } else {
             // res.status(400).send('There are no existing categories');
             const categories = [];
-            return {categories}
+            return { categories };
         }
     } catch (error) {
         res.status(400).send(`${error.message}`);

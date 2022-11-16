@@ -9,7 +9,7 @@ class MainPage extends StatefulWidget{
 
 class _MainPageState extends State<MainPage> {
   int selectedIndex = 0;
-  List<String> routes = ['/MainPage', '/Budget', '/BillPage', '/CalendarView', '/AccountManager'];
+  List<String> routes = ['/MainPage', '/DisplayPage', '/AddPage', '/CalendarView', '/AccountManager'];
   @override
   Widget build(BuildContext context) {
     // List<Widget> widgetOptions = <Widget>[
@@ -17,8 +17,8 @@ class _MainPageState extends State<MainPage> {
     //
     // ];
 
-    void _goToDisplay(display){
-      Navigator.pushNamed(context, '/Budget');
+    void _goToDisplay(){
+      Navigator.pushNamed(context, '/DisplayPage');
     }
 
     void onTabTapped(index){
@@ -45,6 +45,7 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
       child: Scaffold (
+        // Header and background
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           centerTitle: false,
@@ -54,12 +55,13 @@ class _MainPageState extends State<MainPage> {
           ),
           actions: <Widget>[
             Padding(
-              padding: EdgeInsets.only(right: 20.0),
+              padding: EdgeInsets.only(right: 20.0, bottom: 6.0),
             child: GestureDetector(
               onTap: () {
-                _logout();
+                Navigator.pushNamed(context, '/MainPage');
               },
-              child: Icon(Icons.logout, color: Color(0xFF2D4B03), size: 35.0,),
+              // child: Icon(Icons.logout, color: Color(0xFF2D4B03), size: 35.0,),
+              child: Image.asset('assets/images/budgie.png', scale: 0.1,),
             ),)
           ],
           automaticallyImplyLeading: false,
@@ -118,7 +120,8 @@ class _MainPageState extends State<MainPage> {
                                     Text('Your Budgets', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
                                     TextButton(
                                       onPressed: () {
-                                        _goToDisplay('/Budgets');
+                                        // display budgets
+                                        _goToDisplay();
                                       },
                                       child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
                                     ),
@@ -160,7 +163,8 @@ class _MainPageState extends State<MainPage> {
                                     Text('Your Bills', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
                                     TextButton(
                                       onPressed: () {
-                                        _goToDisplay('/Bills');
+                                        // display bills
+                                        _goToDisplay();
                                       },
                                       child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
                                     ),
@@ -202,7 +206,8 @@ class _MainPageState extends State<MainPage> {
                                     Text('Your Extras', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
                                     TextButton(
                                       onPressed: () {
-                                        _goToDisplay('/Bills');
+                                        // display one-off
+                                        _goToDisplay();
                                       },
                                       child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
                                     ),

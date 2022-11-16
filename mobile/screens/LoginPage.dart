@@ -31,11 +31,18 @@ class _LoginPageState extends State<LoginPage> {
   bool error = false;
   String result = "";
 
-
   String email = "";
   String password = "";
   String login_verification = "";
   String reg_verification = "";
+
+  void clearLogSignFields() {
+    _controllerEmail.clear();
+    _controllerPass.clear();
+    _controllerEmail_Reg.clear();
+    _controllerPass_Reg.clear();
+    _controllerPass_Confirm.clear();
+  }
 
   @override
   void dispose() {
@@ -74,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
     _showToast();
     
     if (reg_verification == "Good"){
+      clearLogSignFields();
       Navigator.pop(context, true);
     }
   }
@@ -103,20 +111,16 @@ class _LoginPageState extends State<LoginPage> {
     _showToast();
     if(login_verification == "good")
     {
+      clearLogSignFields();
       print('Good login');
       Navigator.pushNamed(context, '/MainPage');
-      // Navigator.pushNamed(context, '/MainPageNav');
     }
   }
 
 
   @override
   Widget build(BuildContext context) {
-    // final formKey = GlobalKey<FormState>();
-    // final dialogKey = GlobalKey<Dialog>();
 
-    // void showToast() => Fluttertoast.showToast(
-    //     msg: result, fontSize: 20, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) : Colors.green.withOpacity(.8), textColor: Colors.white);
 
     showSignUpDialog(BuildContext context){
       showDialog(
@@ -463,6 +467,8 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         this.error = false;
                         this.result = "";
+                        clearLogSignFields();
+
                         showSignUpDialog(context);
                       },
                       child: const Text(
@@ -472,6 +478,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(
+                height: 80,
               ),
             ],
           ),

@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class CalendarView extends StatefulWidget {
-  const CalendarView({super.key});
+class DisplayPage extends StatefulWidget {
+  const DisplayPage({super.key});
 
   @override
-  State<CalendarView> createState() => _CalendarViewState();
+  State<DisplayPage> createState() => _DisplayPageState();
 }
 
-class _CalendarViewState extends State<CalendarView> {
-  int selectedIndex = 3;
+class _DisplayPageState extends State<DisplayPage> {
+  int selectedIndex = 1;
   List<String> routes = ['/MainPage', '/DisplayPage', '/AddPage', '/CalendarView', '/AccountManager'];
 
 
@@ -45,7 +45,7 @@ class _CalendarViewState extends State<CalendarView> {
           appBar: AppBar(
             centerTitle: false,
             title: const Text(
-              'Calendar',
+              'Budget',
               style: TextStyle(fontSize: 35, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),
             ),
             automaticallyImplyLeading: false,
@@ -82,6 +82,4 @@ class _CalendarViewState extends State<CalendarView> {
         )
     );
   }
-
-
 }

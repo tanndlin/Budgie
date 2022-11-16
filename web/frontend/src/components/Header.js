@@ -15,7 +15,8 @@ function Header(props) {
                     <Link
                         className="font-bold hover:text-[#189DFD]"
                         to={{
-                            pathname: '/calendar'
+                            pathname: '/calendar',
+                            state: props
                         }}
                     >
                         Calendar
@@ -24,7 +25,8 @@ function Header(props) {
                     <Link
                         className="font-bold hover:text-[#189DFD]"
                         to={{
-                            pathname: '/account'
+                            pathname: '/account',
+                            state: props
                         }}
                     >
                         My Account

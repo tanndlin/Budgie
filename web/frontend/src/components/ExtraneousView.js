@@ -3,6 +3,7 @@ import { sendRequest } from '../common/Requests';
 import Extra from './Extra';
 
 function ExtraneousView(props) {
+    console.log(props.extras);
     function newExtraneous() {
         const extra = {
             name: 'New One Off',

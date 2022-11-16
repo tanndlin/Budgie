@@ -806,7 +806,7 @@ app.post('/GetCategories', async (req, res) => {
 
             res.status(200).send(
                 JSON.stringify({
-                    userId: userId,
+                    //userId: userId,
                     categories: categories
                 })
             );

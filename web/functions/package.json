@@ -6,7 +6,8 @@
     "shell": "firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "lint": "eslint -c .eslintrc.json . --ext .js"
   },
   "engines": {
     "node": "16"
@@ -19,6 +20,11 @@
     "firebase-functions": "^4.0.2"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.19.1",
+    "eslint": "^8.27.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.10",
     "firebase-functions-test": "^0.2.0"
   },
   "private": true

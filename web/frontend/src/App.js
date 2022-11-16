@@ -4,6 +4,7 @@ import './index.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from './pages/LoginPage';
 import CalendarPage from './pages/CalendarPage';
+import AccountPage from './pages/AccountPage'
 import Header from './components/Header';
 
 function App() {
@@ -46,6 +47,17 @@ function App() {
             />
             <div className='overflow-hidden h-auto'>
               <CalendarPage {...props} />
+            </div>
+          </div>
+        } />
+
+        <Route path="/account" element={
+          <div className=''>
+            <Header
+              {...headerProps(true)}
+            />
+            <div className='overflow-hidden h-auto'>
+              <AccountPage {...props} />
             </div>
           </div>
         } />

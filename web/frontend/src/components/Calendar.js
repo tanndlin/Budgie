@@ -220,7 +220,8 @@ export function BigCalendar(props) {
                             deleteBill,
                             isEdit,
                             categories: props.categories,
-                            id: currentBill?.id
+                            id: currentBill?.id,
+                            isPaid: currentBill?.isPaid
                         }}
                     />
                 </SideBar>

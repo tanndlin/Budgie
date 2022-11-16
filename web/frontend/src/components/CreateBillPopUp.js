@@ -14,11 +14,10 @@ function CreateBillPopUp(props) {
             startDate: props.startDate,
             endDate: props.endDate,
             recurrence: 'monthly',
-            isPaid: []
+            isPaid: props.isPaid ?? []
         };
 
         const isNew = !props.id;
-        console.log(props.id);
         if (isNew) {
             sendRequest(
                 'CreateBill',

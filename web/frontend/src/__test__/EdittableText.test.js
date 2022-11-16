@@ -5,6 +5,7 @@ import React from 'react';
 test('Value defaults to 0 for EdittableText in Number Type', () => {
     render(
         <EdittableText
+            id="test"
             onChange={() => {
                 // This is here to prevent a warning
             }}
@@ -22,6 +23,7 @@ test('Value defaults to 0 for EdittableText in Number Type', () => {
 test('Value defaults for EdittableText in Text Type', () => {
     render(
         <EdittableText
+            id="test"
             onChange={() => {
                 // This is here to prevent a warning
             }}
@@ -39,6 +41,7 @@ test('Value defaults for EdittableText in Text Type', () => {
 test('Text unchanged in EdittableText', () => {
     render(
         <EdittableText
+            id="test"
             onChange={() => {
                 // This is here to prevent a warning
             }}
@@ -56,6 +59,7 @@ test('Text unchanged in EdittableText', () => {
 test('Number cannot be letters in EdittableText', () => {
     render(
         <EdittableText
+            id="test"
             onChange={() => {
                 // This is here to prevent a warning
             }}

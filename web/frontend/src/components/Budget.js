@@ -60,6 +60,7 @@ function Budget(props) {
         <div className="grid grid-cols-1 w-[232px] p-4">
             <span className="flex justify-between relative">
                 <EdittableText
+                    id={`${budget.budgetId}-name`}
                     type="text"
                     value={budget.name}
                     onChange={(e) => {
@@ -87,6 +88,7 @@ function Budget(props) {
             <span className="m-auto flex">
                 <h3 className="font-bold">$</h3>
                 <EdittableText
+                    id={`${budget.budgetId}-actual`}
                     type="number"
                     value={budget.actualPrice}
                     max={budget.expectedPrice}
@@ -99,6 +101,7 @@ function Budget(props) {
                 <p className="mx-1 my-px p-0">out of</p>
                 <h3 className="font-bold">$</h3>
                 <EdittableText
+                    id={`${budget.budgetId}-expected`}
                     type="number"
                     value={budget.expectedPrice}
                     onChange={(e) => {

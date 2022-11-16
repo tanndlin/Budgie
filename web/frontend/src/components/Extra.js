@@ -27,6 +27,7 @@ function Extra(props) {
         <div className="bg-[#b2c6ec] bg-opacity-[.7] rounded-md p-4 flex flex-col relative min-w-[200px] w-min">
             <span className="flex flex-row justify-between">
                 <EdittableText
+                    id={`${props.extra.oneOffId}-name`}
                     type="text"
                     value={props.extra.name}
                     onChange={(e) => {
@@ -47,6 +48,7 @@ function Extra(props) {
             <span className="flex flex-row">
                 <h3 className="font-bold">$</h3>
                 <EdittableText
+                    id={`${props.extra.oneOffId}-price`}
                     type="number"
                     value={props.extra.price}
                     onChange={(e) => {

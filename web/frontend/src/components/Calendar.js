@@ -188,7 +188,14 @@ export function BigCalendar(props) {
             return false;
         }
 
-        return endDate.getMonth() >= today.getMonth();
+        if (
+            endDate.getYear() === today.getYear() &&
+            endDate.getMonth() < today.getMonth()
+        ) {
+            return false;
+        }
+
+        return true;
     }
 
     return (

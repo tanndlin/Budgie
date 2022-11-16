@@ -53,7 +53,10 @@ function ExtraneousView(props) {
                     )}`}</h2>
                 </span>
             </div>
-            <section id="extraView" className="grid gap-4 justify-center p-16">
+            <section
+                id="extraView"
+                className="grid gap-4 justify-center py-4 px-2"
+            >
                 {props.extras
                     .filter((extra) => {
                         if (

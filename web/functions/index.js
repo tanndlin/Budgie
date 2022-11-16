@@ -356,7 +356,7 @@ app.post('/CreateBudget', async (req, res) => {
             expectedPrice: expectedPrice,
             actualPrice: actualPrice,
             startDate: req.body.startDate,
-            //recurrence: req.body.recurrence
+            // recurrence: req.body.recurrence
         };
 
         const budgetDoc = userRef.collection(budgetCollection).doc();
@@ -369,7 +369,7 @@ app.post('/CreateBudget', async (req, res) => {
             expectedPrice: expectedPrice,
             actualPrice: actualPrice,
             startDate: req.body.startDate,
-            //recurrence: req.body.recurrence,
+            // recurrence: req.body.recurrence,
             id: id
         };
 
@@ -386,7 +386,7 @@ app.post('/CreateBudget', async (req, res) => {
                 expectedPrice: expectedPrice,
                 actualPrice: actualPrice,
                 startDate: req.body.startDate,
-                //recurrence: req.body.recurrence
+                // recurrence: req.body.recurrence
             })
         );
     } catch (error) {
@@ -412,7 +412,7 @@ app.post('/GetBudgets', async (req, res) => {
                     expectedPrice: curBudget.get('expectedPrice'),
                     actualPrice: curBudget.get('actualPrice'),
                     startDate: curBudget.get('startDate'),
-                    //recurrence: curBudget.get('recurrence'),
+                    // recurrence: curBudget.get('recurrence'),
                     id: curBudget.id
                 };
             });
@@ -424,7 +424,7 @@ app.post('/GetBudgets', async (req, res) => {
                 })
             );
         } else {
-            //res.status(400).send('There are no existing budgets');
+            // res.status(400).send('There are no existing budgets');
             const budgets = [];
             return {budgets}
 
@@ -461,7 +461,7 @@ app.post('/EditBudget', async (req, res) => {
             expectedPrice: expectedPrice,
             actualPrice: actualPrice,
             startDate: req.body.startDate,
-            //recurrence: req.body.recurrence,
+            // recurrence: req.body.recurrence,
             id: id
         };
 
@@ -478,7 +478,7 @@ app.post('/EditBudget', async (req, res) => {
                 expectedPrice: expectedPrice,
                 actualPrice: actualPrice,
                 startDate: req.body.startDate
-                //recurrence: req.body.recurrence
+                // recurrence: req.body.recurrence
             })
         );
     } catch (error) {
@@ -495,8 +495,7 @@ app.post('/RemoveBudget', async (req, res) => {
         const userRef = db.collection(userCollection).doc(`${userId}`);
         const id = req.body.id;
         const budgetDoc = await userRef
-            .collection(budgetCollection)
-            .doc(`${id}`)
+            .collection(budgetCollection).doc(`${id}`)
             .get();
 
         if (budgetDoc.exists) {
@@ -601,7 +600,7 @@ app.post('/GetOneOffs', async (req, res) => {
                 })
             );
         } else {
-            //res.status(400).send('There are no existing one-offs');
+            // res.status(400).send('There are no existing one-offs');
             const oneOffs = [];
             return {oneOffs}
         }
@@ -672,8 +671,7 @@ app.post('/RemoveOneOff', async (req, res) => {
         const userRef = db.collection(userCollection).doc(`${userId}`);
         const id = req.body.id;
         const oneOffDoc = await userRef
-            .collection(oneOffCollection)
-            .doc(`${id}`)
+            .collection(oneOffCollection).doc(`${id}`)
             .get();
 
         if (oneOffDoc.exists) {
@@ -770,7 +768,7 @@ app.post('/GetCategories', async (req, res) => {
                 })
             );
         } else {
-            //res.status(400).send('There are no existing categories');
+            // res.status(400).send('There are no existing categories');
             const categories = [];
             return {categories}
         }

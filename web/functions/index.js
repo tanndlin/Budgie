@@ -34,29 +34,29 @@ app.post('/CreateUserProfile', async (req, res) => {
 
     try {
         const userId = req.body.userId;
-        let expectedIncome = parseInt(req.body.expectedIncome);
+        const expectedIncome = parseInt(req.body.expectedIncome);
 
         // when a new user signs up, they will be added to the userCollection
         await db.collection(userCollection).doc(`${userId}`).set({});
         const userRef = db.collection(userCollection).doc(`${userId}`);
 
-            const newProfile = {
+        const newProfile = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            expectedIncome: expectedIncome
+        };
+
+        // add the user's profile to the database
+        await userRef.update(newProfile);
+
+        res.status(201).send(
+            JSON.stringify({
+                userId: userId,
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 expectedIncome: expectedIncome
-            };
-
-            // add the user's profile to the database
-            await userRef.update(newProfile);
-
-            res.status(201).send(
-                JSON.stringify({
-                    userId: userId,
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    expectedIncome: expectedIncome
-                })
-            );
+            })
+        );
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
@@ -72,7 +72,6 @@ app.post('/GetUserProfile', async (req, res) => {
 
         // if the user exists, then get the profile info for said user
         if (userRef.exists) {
-
             const firstName = userRef.get('firstName');
             const lastName = userRef.get('lastName');
             const expectedIncome = userRef.get('expectedIncome');
@@ -98,12 +97,11 @@ app.post('/EditUserProfile', async (req, res) => {
 
     try {
         const userId = req.body.userId;
-        let expectedIncome = parseInt(req.body.expectedIncome);
+        const expectedIncome = parseInt(req.body.expectedIncome);
         const userRef = await db.collection('users').doc(`${userId}`).get();
 
         // if the user exists, then edit the profile info for said user
         if (userRef.exists) {
-
             const newProfile = {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
@@ -113,12 +111,14 @@ app.post('/EditUserProfile', async (req, res) => {
             // add the user's profile to the database
             await db.collection('users').doc(`${userId}`).update(newProfile);
 
-            res.status(201).send(JSON.stringify({
-                "userId": userId, 
-                "firstName": req.body.firstName, 
-                "lastName": req.body.lastName, 
-                "expectedIncome": req.body.expectedIncome
-            }));
+            res.status(201).send(
+                JSON.stringify({
+                    userId: userId,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    expectedIncome: req.body.expectedIncome
+                })
+            );
         } else {
             res.status(400).send("User doesn't exist");
         }

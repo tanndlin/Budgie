@@ -10,7 +10,7 @@ function Divider(props) {
     const leftClassName = arrowClassName + '-rotate-90 left';
     const rightClassName = arrowClassName + 'rotate-90 right';
 
-    const dividerText = 'text-center text-[#3B3548] text-6xl';
+    const dividerText = 'text-center text-[#000000] text-6xl';
 
     const textInvisible = dividerText + ' invisible';
     const textVisible = dividerText + ' visible';

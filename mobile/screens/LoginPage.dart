@@ -411,8 +411,8 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const SizedBox(width: 240),
                   MaterialButton(
+                    padding: EdgeInsets.only(left: 50.0),
                     child: const Text('Forgot Password', style: TextStyle(fontSize: 18, color: Color(0xFF2D4B03), decoration: TextDecoration.underline)),
                     onPressed: (){
                         showForgotPassword(context);

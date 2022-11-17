@@ -34,16 +34,15 @@ app.post('/CreateUserProfile', async (req, res) => {
 
     try {
         const userId = req.body.userId;
-        const expectedIncome = parseInt(req.body.expectedIncome);
 
         // when a new user signs up, they will be added to the userCollection
         await db.collection(userCollection).doc(`${userId}`).set({});
         const userRef = db.collection(userCollection).doc(`${userId}`);
 
         const newProfile = {
-            firstName: req.body.firstName ?? '',
-            lastName: req.body.lastName ?? '',
-            expectedIncome: expectedIncome ?? ''
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            expectedIncome: req.body.expectedIncome
         };
 
         // add the user's profile to the database
@@ -54,7 +53,7 @@ app.post('/CreateUserProfile', async (req, res) => {
                 userId: userId,
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
-                expectedIncome: expectedIncome
+                expectedIncome: req.body.expectedIncome
             })
         );
     } catch (error) {
@@ -97,15 +96,14 @@ app.post('/EditUserProfile', async (req, res) => {
 
     try {
         const userId = req.body.userId;
-        const expectedIncome = parseInt(req.body.expectedIncome);
         const userRef = await db.collection('users').doc(`${userId}`).get();
 
         // if the user exists, then edit the profile info for said user
         if (userRef.exists) {
             const newProfile = {
-                firstName: req.body.firstName ?? '',
-                lastName: req.body.lastName ?? '',
-                expectedIncome: expectedIncome ?? ''
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                expectedIncome: req.body.expectedIncome
             };
 
             // add the user's profile to the database

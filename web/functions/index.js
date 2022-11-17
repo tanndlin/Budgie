@@ -247,35 +247,30 @@ app.post('/GetBills', async (req, res) => {
 
         // check if the one-off already exists
         const billDocs = await userRef.collection(billCollection).get();
-        if (!billDocs.empty) {
-            const bills = billDocs.docs.map((curBill) => {
-                const isPaid = curBill.get('isPaid');
+        
+        const bills = billDocs.docs.map((curBill) => {
+            const isPaid = curBill.get('isPaid');
 
-                return {
-                    name: curBill.get('name'),
-                    categoryId: curBill.get('categoryId'),
-                    color: curBill.get('color'),
-                    price: curBill.get('price'),
-                    startDate: curBill.get('startDate'),
-                    endDate: curBill.get('endDate'),
-                    recurrence: curBill.get('recurrence'),
-                    isPaid: isPaid,
-                    id: curBill.id
-                };
-            });
+            return {
+                name: curBill.get('name'),
+                categoryId: curBill.get('categoryId'),
+                color: curBill.get('color'),
+                price: curBill.get('price'),
+                startDate: curBill.get('startDate'),
+                endDate: curBill.get('endDate'),
+                recurrence: curBill.get('recurrence'),
+                isPaid: isPaid,
+                id: curBill.id
+            };
+        });
 
-            res.status(201).send(
-                JSON.stringify({
-                    //userId: userId,
-                    bills: bills
-                })
-            );
-        } else {
-            const bills = [];
-            res.status(400).send(JSON.stringify({
-                "bills": bills
-            }));
-        }
+        res.status(201).send(
+            JSON.stringify({
+                //userId: userId,
+                bills: bills
+            })
+        );
+
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
@@ -453,31 +448,26 @@ app.post('/GetBudgets', async (req, res) => {
 
         // check if the one-off already exists
         const budgetDocs = await userRef.collection(budgetCollection).get();
-        if (!budgetDocs.empty) {
-            const budgets = budgetDocs.docs.map((curBudget) => {
-                return {
-                    name: curBudget.get('name'),
-                    categoryId: curBudget.get('categoryId'),
-                    expectedPrice: curBudget.get('expectedPrice'),
-                    actualPrice: curBudget.get('actualPrice'),
-                    startDate: curBudget.get('startDate'),
-                    // recurrence: curBudget.get('recurrence'),
-                    id: curBudget.id
-                };
-            });
+        
+        const budgets = budgetDocs.docs.map((curBudget) => {
+            return {
+                name: curBudget.get('name'),
+                categoryId: curBudget.get('categoryId'),
+                expectedPrice: curBudget.get('expectedPrice'),
+                actualPrice: curBudget.get('actualPrice'),
+                startDate: curBudget.get('startDate'),
+                // recurrence: curBudget.get('recurrence'),
+                id: curBudget.id
+            };
+        });
 
-            res.status(201).send(
-                JSON.stringify({
-                    //userId: userId,
-                    budgets: budgets
-                })
-            );
-        } else {
-            const budgets = [];
-            res.status(400).send(JSON.stringify({
-                "budgets": budgets
-            }));
-        }
+        res.status(201).send(
+            JSON.stringify({
+                //userId: userId,
+                budgets: budgets
+            })
+        );
+
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
@@ -628,30 +618,25 @@ app.post('/GetOneOffs', async (req, res) => {
 
         // check if the one-off already exists
         const oneOffDocs = await userRef.collection(oneOffCollection).get();
-        if (!oneOffDocs.empty) {
-            const oneOffs = oneOffDocs.docs.map((curOneOff) => {
-                return {
-                    name: curOneOff.get('name'),
-                    categoryId: curOneOff.get('categoryId'),
-                    color: curOneOff.get('color'),
-                    price: curOneOff.get('price'),
-                    date: curOneOff.get('date'),
-                    id: curOneOff.id
-                };
-            });
+        
+        const oneOffs = oneOffDocs.docs.map((curOneOff) => {
+            return {
+                name: curOneOff.get('name'),
+                categoryId: curOneOff.get('categoryId'),
+                color: curOneOff.get('color'),
+                price: curOneOff.get('price'),
+                date: curOneOff.get('date'),
+                id: curOneOff.id
+            };
+        });
 
-            res.status(201).send(
-                JSON.stringify({
-                    //userId: userId,
-                    oneOffs: oneOffs
-                })
-            );
-        } else {
-            const oneOffs = [];
-            res.status(400).send(JSON.stringify({
-                "oneOffs": oneOffs
-            }));
-        }
+        res.status(201).send(
+            JSON.stringify({
+                //userId: userId,
+                oneOffs: oneOffs
+            })
+        );
+
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
@@ -799,26 +784,21 @@ app.post('/GetCategories', async (req, res) => {
 
         // check if the one-off already exists
         const categoryDocs = await userRef.collection(categoryCollection).get();
-        if (!categoryDocs.empty) {
-            const categories = categoryDocs.docs.map((curCategory) => {
-                return {
-                    name: curCategory.get('name'),
-                    id: curCategory.id
-                };
-            });
+        
+        const categories = categoryDocs.docs.map((curCategory) => {
+            return {
+                name: curCategory.get('name'),
+                id: curCategory.id
+            };
+        });
 
-            res.status(201).send(
-                JSON.stringify({
-                    //userId: userId,
-                    categories: categories
-                })
-            );
-        } else {
-            const categories = [];
-            res.status(400).send(JSON.stringify({
+        res.status(201).send(
+            JSON.stringify({
+                //userId: userId,
                 "categories": categories
-            }));
-        }
+            })
+        );
+
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }

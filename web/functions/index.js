@@ -342,51 +342,6 @@ app.post('/CreateBudget', async (req, res) => {
         const userId = req.body.userId;
         const userRef = db.collection(userCollection).doc(`${userId}`);
 
-        /*  // make expectedPrice string into an integer
-        const expectedPrice = parseInt(req.body.expectedPrice);
-
-        // make actualPrice string into an integer
-        const actualPrice = parseInt(req.body.actualPrice);
-
-        const newBudget = {
-            name: req.body.name,
-            categoryId: req.body.categoryId,
-            expectedPrice: expectedPrice,
-            actualPrice: actualPrice,
-            startDate: req.body.startDate
-            // recurrence: req.body.recurrence
-        };
-
-        const budgetDoc = userRef.collection(budgetCollection).doc();
-        const id = budgetDoc.id;
-        await budgetDoc.set(newBudget);
-
-        const editedBudget = {
-            name: req.body.name,
-            categoryId: req.body.categoryId,
-            expectedPrice: expectedPrice,
-            actualPrice: actualPrice,
-            startDate: req.body.startDate,
-            // recurrence: req.body.recurrence,
-            id: id
-        };
-
-        await userRef
-            .collection(budgetCollection)
-            .doc(`${id}`)
-            .update(editedBudget);
-        res.status(201).send(
-            JSON.stringify({
-                userId: userId,
-                id: id,
-                name: req.body.name,
-                categoryId: req.body.categoryId,
-                expectedPrice: expectedPrice,
-                actualPrice: actualPrice,
-                startDate: req.body.startDate
-                // recurrence: req.body.recurrence
-            })
-        );*/
         const newBudget = {
             name: req.body.name,
             categoryId: req.body.categoryId,
@@ -397,11 +352,11 @@ app.post('/CreateBudget', async (req, res) => {
         };
         const budgetDoc = userRef.collection(budgetCollection).doc();
         await budgetDoc.set(newBudget);
-        const budgetId = budgetDoc.id;
+        const id = budgetDoc.id;
         newBudget.budgetId = budgetDoc.id;
         await userRef
             .collection(budgetCollection)
-            .doc(`${budgetId}`)
+            .doc(`${id}`)
             .update(newBudget);
         res.status(201).send(JSON.stringify(newBudget));
     } catch (error) {

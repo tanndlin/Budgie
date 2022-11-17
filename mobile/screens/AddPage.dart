@@ -1,5 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobile/screens/LoginPage.dart';
+
+import '../base_client.dart';
+import '../models/budget.dart';
+
+import 'package:mobile/global.dart' as global;
+
+final String id = global.userId;
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -10,11 +21,25 @@ class AddPage extends StatefulWidget {
 
 class _AddPageState extends State<AddPage> {
   // budget fields
+  // FirebaseAuth auth = FirebaseAuth.instance;
+
   final budgetName = TextEditingController();
   final budgetCategory = TextEditingController();
   final budgetExpected = TextEditingController();
   final budgetActual = TextEditingController();
   final budgetStart = TextEditingController();
+
+  void clearLogSignFields() {
+    budgetName.clear();
+    budgetCategory.clear();
+    budgetExpected.clear();
+    budgetActual.clear();
+    budgetStart.clear();
+  }
+
+  _showToast(msg, error) => Fluttertoast.showToast(
+    msg: msg, fontSize: 18, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) :  Colors.green.withOpacity(.9), textColor: Colors.white,);
+
 
   int selectedIndex = 2;
   List<String> routes = ['/MainPage', '/Budget', '/AddPage', '/CalendarView', '/AccountManager'];
@@ -243,8 +268,34 @@ class _AddPageState extends State<AddPage> {
                                                     style: ButtonStyle(
                                                       foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
                                                     ),
-                                                    onPressed: () {
+                                                    onPressed: () async {
                                                       // ADD BUDGET
+                                                      print(id);
+                                                      if (budgetName.text == "" || budgetActual.text == "" || budgetExpected.text == "")
+                                                      {
+                                                          _showToast("Fill fields", true);
+                                                      }
+                                                      else
+                                                      {
+                                                        var budget = Budget(
+                                                            userId: id,
+                                                            name: budgetName.text,
+                                                            actualPrice: int.parse(budgetActual.text),
+                                                            expectedPrice: int.parse(budgetExpected.text)
+                                                        );
+                                                        print(budgetToJson(budget));
+                                                        var response = await BaseClient().postBudget(budget).catchError((err) {print("Fail");});
+                                                        if (response == null) {
+                                                          _showToast("Could not add", true);
+                                                          print("response null");
+                                                        }
+
+                                                        _showToast("Added", false);
+                                                        print("success");
+                                                      }
+
+                                                      clearLogSignFields();
+
                                                     },
                                                     child: const Text(
                                                       'Add Budget',

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget{
+
   const MainPage({super.key});
   @override
   State<MainPage> createState() => _MainPageState();
@@ -10,6 +11,7 @@ class MainPage extends StatefulWidget{
 class _MainPageState extends State<MainPage> {
   int selectedIndex = 0;
   List<String> routes = ['/MainPage', '/DisplayPage', '/AddPage', '/CalendarView', '/AccountManager'];
+
   @override
   Widget build(BuildContext context) {
     // List<Widget> widgetOptions = <Widget>[

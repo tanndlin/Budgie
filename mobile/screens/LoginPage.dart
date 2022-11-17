@@ -6,9 +6,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobile/screens/MainPage.dart';
 import 'firebase_options.dart';
 import 'package:crypt/crypt.dart';
 
+import 'package:mobile/global.dart' as global;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,6 +21,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   FirebaseAuth user_auth = FirebaseAuth.instance;
+
   final _controllerEmail = TextEditingController();
   final _controllerPass = TextEditingController();
   final _controllerEmail_Reg = TextEditingController();
@@ -42,6 +45,13 @@ class _LoginPageState extends State<LoginPage> {
     _controllerEmail_Reg.clear();
     _controllerPass_Reg.clear();
     _controllerPass_Confirm.clear();
+  }
+
+  _getUser() async {
+    User user = await user_auth.currentUser!;
+    // print(user);
+    // print(user.uid);
+    global.userId = user.uid;
   }
 
   @override
@@ -79,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
       error = true;
     }
     _showToast();
-    
+
     if (reg_verification == "Good"){
       clearLogSignFields();
       Navigator.pop(context, true);
@@ -109,11 +119,15 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
     _showToast();
+
     if(login_verification == "good")
     {
       clearLogSignFields();
+      _getUser();
+      // print(global.userId);
       print('Good login');
       Navigator.pushNamed(context, '/MainPage');
+      // Navigator.push(context, new MaterialPageRoute(builder: context) => new MainPage(curUser));
     }
   }
 

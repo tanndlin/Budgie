@@ -16,8 +16,8 @@ class Routes {
   
   // routes of pages in the app
   static Map<String, Widget Function(BuildContext)> get getroutes => {
-    '/': (context) => const AddPage(),
-    // '/': (context) => const LoginPage(),
+    // '/': (context) => const AddPage(),
+    '/': (context) => const LoginPage(),
     LOGINPAGE: (context) => const LoginPage(),
     ADDPAGE: (context) => const AddPage(),
     MAINPAGE: (context) => const MainPage(),

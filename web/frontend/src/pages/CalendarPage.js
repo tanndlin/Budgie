@@ -64,7 +64,9 @@ function CalendarPage(props) {
 
         hydrate(
             'GetCategories',
-            props.setCategories,
+            (cats) => {
+                props.setCategories([...cats, { id: -1, name: 'All' }]);
+            },
             props.pushNotification('Retrieving Categories', 'Please wait...')
         );
     };

@@ -40,20 +40,34 @@ app.post('/CreateUserProfile', async (req, res) => {
         await db.collection(userCollection).doc(`${userId}`).set({});
         const userRef = db.collection(userCollection).doc(`${userId}`);
 
-        if((req.body.firstName != "") || (req.body.firstName != " ") || (req.body.firstName != NULL)) {
+        if (
+            req.body.firstName !== '' ||
+            req.body.firstName !== ' ' ||
+            req.body.firstName !== null
+        ) {
             firstName = req.body.firstName;
-        } 
-        else {firstName = "";}
-
-        if((req.body.lastName != "") || (req.body.lastName != " ") || (req.body.lastName != NULL)) {
+        } else {
+            {
+                firstName = '';
+        
+        if (
+            req.body.lastName != '' ||
+            req.body.lastName != ' ' ||
+            req.body.lastName != NULL
+        ) {
             lastName = req.body.lastName;
         }
         else {lastName = "";}
 
-        if((req.body.expectedIncome != "") || (req.body.expectedIncome != " ") || (req.body.expectedIncome != NULL)) {
+            if (
+                req.body.expectedIncome != '' ||
+                req.body.expectedIncome != ' ' ||
+                req.body.expectedIncome != NULL
+            ) {
             expectedIncome = parseInt(req.body.expectedIncome);
+            }
+            expectedIncome = '';
         }
-        else {expectedIncome = "";}
 
         const newProfile = {
             firstName: req.body.firstName,
@@ -72,10 +86,11 @@ app.post('/CreateUserProfile', async (req, res) => {
                 expectedIncome: expectedIncome
             })
         );
+    
+        }
     } catch (error) {
-        res.status(400).send(`${error.message}`);
-    }
-});
+    res.status(400).send(`${error.message}`);
+};
 
 // get user profile info
 app.post('/GetUserProfile', async (req, res) => {

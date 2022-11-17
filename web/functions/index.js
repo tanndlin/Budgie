@@ -41,9 +41,9 @@ app.post('/CreateUserProfile', async (req, res) => {
         const userRef = db.collection(userCollection).doc(`${userId}`);
 
             const newProfile = {
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                expectedIncome: expectedIncome
+                firstName: req.body.firstName ?? "",
+                lastName: req.body.lastName ?? "",
+                expectedIncome: expectedIncome ?? ""
             };
 
             // add the user's profile to the database
@@ -105,9 +105,9 @@ app.post('/EditUserProfile', async (req, res) => {
         if (userRef.exists) {
 
             const newProfile = {
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                expectedIncome: expectedIncome
+                firstName: req.body.firstName ?? "",
+                lastName: req.body.lastName ?? "",
+                expectedIncome: expectedIncome ?? ""
             };
 
             // add the user's profile to the database

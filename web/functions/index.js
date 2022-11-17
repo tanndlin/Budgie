@@ -779,7 +779,7 @@ app.post('', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
     try {
-        const userId = req.body.userId;
+        const _userId = req.body.userId;
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
@@ -790,7 +790,7 @@ app.post('', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
     try {
-        const userId = req.body.userId;
+        const _userId = req.body.userId;
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
@@ -801,7 +801,7 @@ app.post('', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
     try {
-        const userId = req.body.userId;
+        const _userId = req.body.userId;
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }

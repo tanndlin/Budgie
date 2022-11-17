@@ -156,6 +156,9 @@ function CreateBillPopUp(props) {
                             <label htmlFor="Category">Category</label>
                             <span className="h-[26px]">
                                 <Dropdown
+                                    className="smallDropdown-parent h-26 bg-white rounded-md"
+                                    controlClassName="slim h-26"
+                                    placeholderClassName="slim h-26"
                                     options={props.categories.map((c) => {
                                         return {
                                             value: c.name,

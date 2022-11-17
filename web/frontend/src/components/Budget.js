@@ -45,9 +45,7 @@ function Budget(props) {
             { ...budget, userId: props.user.userId },
             () => {
                 props.setBudgets(
-                    props.budgets.map((b) =>
-                        b.id === budget.id ? budget : b
-                    )
+                    props.budgets.map((b) => (b.id === budget.id ? budget : b))
                 );
             },
             (err) => {

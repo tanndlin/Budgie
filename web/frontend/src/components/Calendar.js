@@ -230,10 +230,13 @@ export function BigCalendar(props) {
                     className="container m-auto mt-5 min-h-500 bg-[#BBE9E7] bg-opacity-50 p-3 rounded-md"
                     onClick={handleCalendarClick}
                 >
-                    <header className="flex flex-row justify-between font-bold mb-3 border-black border-b-2 p-1">
+                    <header className="grid grid-cols-3 font-bold mb-3 border-black border-b-2 p-1">
                         <h1 className="text-2xl">Bills</h1>
 
                         <Dropdown
+                            className="smallDropdown-parent h-26 w-40 bg-white rounded-md mx-auto"
+                            controlClassName="slim h-26"
+                            placeholderClassName="slim h-26"
                             options={props.categories.map((c) => {
                                 return {
                                     value: c.name,
@@ -251,14 +254,9 @@ export function BigCalendar(props) {
                                 );
                                 props.setCategorySortID(category.id);
                             }}
-                            className="dropdown"
-                            controlClassName="dropdown-control"
-                            menuClassName="dropdown-menu"
-                            arrowClassName="dropdown-arrow"
-                            placeholderClassName="dropdown-placeholder"
                         />
 
-                        <span className="text-md">
+                        <span className="ml-auto text-md">
                             <h2 data-testid="billSum">
                                 {'Total:  $' +
                                     (Object.entries(props.bills)

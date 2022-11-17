@@ -25,7 +25,7 @@ function EdittableText(props) {
     });
 
     return (
-        <div>
+        <div className={props.className}>
             <input
                 id={props.id}
                 onChange={onChange}

@@ -132,6 +132,10 @@ function CalendarPage(props) {
     };
 
     React.useEffect(() => {
+        if (props.user) {
+            return;
+        }
+
         props.setUser(state.user);
         hydrateCalendar();
     }, []);

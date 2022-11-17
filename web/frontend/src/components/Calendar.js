@@ -282,13 +282,15 @@ export function BigCalendar(props) {
                         endAccessor="end"
                         eventPropGetter={eventStyleGetter}
                     />
-                    <footer className="border-black border-t-2 p-1 mt-3 flex flex-row gap-4">
+                    <footer className="border-black border-t-2 p-1 mt-3 flex flex-row justify-between gap-4">
                         <input
                             className="px-2 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md"
                             type="button"
                             value="Add Bill"
                             onClick={createNew}
                         />
+
+                        <p>Ctrl + Click to mark as paid</p>
                     </footer>
                 </div>
             </section>

@@ -57,7 +57,7 @@ input[type='number'] {
     color: black !important;
 }
 
-.arrow:hover {
+#divider:hover {
     fill: #3818fd;
 }
 

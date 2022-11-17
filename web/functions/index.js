@@ -64,7 +64,7 @@ app.post('/CreateUserProfile', async (req, res) => {
         // add the user's profile to the database
         await userRef.update(newProfile);
 
-        res.status(200).send(
+        res.status(201).send(
             JSON.stringify({
                 userId: userId,
                 firstName: req.body.firstName,
@@ -90,7 +90,7 @@ app.post('/GetUserProfile', async (req, res) => {
             const firstName = userRef.get('firstName');
             const lastName = userRef.get('lastName');
             const expectedIncome = userRef.get('expectedIncome');
-            res.status(200).send(
+            res.status(201).send(
                 JSON.stringify({
                     userId: userId,
                     firstName: firstName,
@@ -164,7 +164,7 @@ app.post('/RemoveUserProfile', async (req, res) => {
         // if the user exists, then delete the user
         if (userRef.exists) {
             await db.collection('users').doc(`${userId}`).delete();
-            res.status(200).send('User has been deleted');
+            res.status(201).send('User has been deleted');
         } else {
             res.status(400).send("User doesn't exist");
         }
@@ -264,7 +264,7 @@ app.post('/GetBills', async (req, res) => {
                 };
             });
 
-            res.status(200).send(
+            res.status(201).send(
                 JSON.stringify({
                     //userId: userId,
                     bills: bills
@@ -320,7 +320,7 @@ app.post('/EditBill', async (req, res) => {
             .doc(`${id}`)
             .update(editedBill);
 
-        res.status(200).send(
+        res.status(201).send(
             JSON.stringify({
                 userId: userId,
                 id: id,
@@ -354,7 +354,7 @@ app.post('/RemoveBill', async (req, res) => {
 
         if (billDoc.exists) {
             await userRef.collection(billCollection).doc(`${id}`).delete();
-            res.status(200).send(
+            res.status(201).send(
                 JSON.stringify({
                     userId: userId,
                     id: `${id} has been deleted`
@@ -466,7 +466,7 @@ app.post('/GetBudgets', async (req, res) => {
                 };
             });
 
-            res.status(200).send(
+            res.status(201).send(
                 JSON.stringify({
                     //userId: userId,
                     budgets: budgets
@@ -518,7 +518,7 @@ app.post('/EditBudget', async (req, res) => {
             .collection(budgetCollection)
             .doc(`${id}`)
             .update(editedBudget);
-        res.status(200).send(
+        res.status(201).send(
             JSON.stringify({
                 userId: id,
                 id: id,
@@ -550,7 +550,7 @@ app.post('/RemoveBudget', async (req, res) => {
 
         if (budgetDoc.exists) {
             await userRef.collection(budgetCollection).doc(`${id}`).delete();
-            res.status(200).send(
+            res.status(201).send(
                 JSON.stringify({
                     userId: userId,
                     budgetId: `${id} has been deleted`
@@ -640,7 +640,7 @@ app.post('/GetOneOffs', async (req, res) => {
                 };
             });
 
-            res.status(200).send(
+            res.status(201).send(
                 JSON.stringify({
                     //userId: userId,
                     oneOffs: oneOffs
@@ -725,7 +725,7 @@ app.post('/RemoveOneOff', async (req, res) => {
 
         if (oneOffDoc.exists) {
             await userRef.collection(oneOffCollection).doc(`${id}`).delete();
-            res.status(200).send(
+            res.status(201).send(
                 JSON.stringify({
                     userId: userId,
                     id: `${id} has been deleted`
@@ -807,7 +807,7 @@ app.post('/GetCategories', async (req, res) => {
                 };
             });
 
-            res.status(200).send(
+            res.status(201).send(
                 JSON.stringify({
                     //userId: userId,
                     categories: categories
@@ -819,6 +819,61 @@ app.post('/GetCategories', async (req, res) => {
                 "categories": categories
             }));
         }
+    } catch (error) {
+        res.status(400).send(`${error.message}`);
+    }
+});
+
+//delete user
+app.post('', (req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try {
+
+    } catch (error) {
+        res.status(400).send(`${error.message}`);
+    }
+});
+
+//send verification email
+app.post('', (req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try {
+
+    } catch (error) {
+        res.status(400).send(`${error.message}`);
+    }
+});
+
+//send authentication email
+app.post('', (req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try {
+
+    } catch (error) {
+        res.status(400).send(`${error.message}`);
+    }
+});
+
+//reset password
+app.post('', (req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try {
+
+    } catch (error) {
+        res.status(400).send(`${error.message}`);
+    }
+});
+
+//reset email
+app.post('', (req,res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try {
+
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }

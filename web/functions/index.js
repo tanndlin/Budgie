@@ -673,12 +673,12 @@ app.post('/CreateCategory', async (req, res) => {
 
             // add it to the category table
             const categoryDoc = userRef.collection(categoryCollection).doc();
-            const categoryId = categoryDoc.id;
+            const id = categoryDoc.id;
             await categoryDoc.set(newCategory);
 
             const editedCategory = {
                 name: categoryName,
-                categoryId: categoryId
+                id: id
             };
 
             await categoryDoc.update(editedCategory);
@@ -687,7 +687,7 @@ app.post('/CreateCategory', async (req, res) => {
                 JSON.stringify({
                     userId: userId,
                     categoryName: categoryName,
-                    categoryId: categoryId
+                    id: id
                 })
             );
         } else {

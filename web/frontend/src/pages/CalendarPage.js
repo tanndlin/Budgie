@@ -15,119 +15,57 @@ function CalendarPage(props) {
             return;
         }
 
-        // const hydrate = (url, callback) => {
-        //     sendRequest(
-        //         url,
-        //         { userId: state.user.userId },
-        //         (res) => {
-        //             const parsed = JSON.parse(res.responseText);
-        //             callback(parsed);
-        //         },
-        //         (err) => {
-        //             console.log(url, err);
-        //         }
-        //     );
-        // };
+        const hydrate = (url, callback, notifId) => {
+            sendRequest(
+                url,
+                { userId: state.user.userId },
+                (res) => {
+                    const parsed = JSON.parse(res.responseText);
 
-        // hydrate('GetBills', props.setBills);
-        // hydrate('GetBudgets', props.setBudgets);
-        // hydrate('GetOneOffs', props.setOneOffs);
-        // hydrate('GetCategories', props.setCategories);
+                    const ret = Object.values(parsed)[0].map((item) => {
+                        const obj = {};
+                        Object.keys(item).forEach((key) => {
+                            // If the value is a date, convert it to a Date object
+                            if (key.toLowerCase().includes('date')) {
+                                obj[key] = new Date(item[key]);
+                            } else {
+                                obj[key] = item[key];
+                            }
+                        });
+                        return obj;
+                    });
 
-        const billNotifID = props.pushNotification(
-            'Retrieving Bills',
-            'Please wait...'
-        );
+                    callback(ret);
+                    props.removeNotification(notifId);
+                },
+                (err) => {
+                    console.log(url, err);
+                }
+            );
+        };
 
-        sendRequest(
+        hydrate(
             'GetBills',
-            { userId: state.user.userId },
-            (res) => {
-                const { bills } = JSON.parse(res.responseText);
-                props.setBills(
-                    bills.map((b) => ({
-                        ...b,
-                        startDate: new Date(b.startDate),
-                        endDate: new Date(b.endDate)
-                    }))
-                );
-
-                props.removeNotification(billNotifID);
-            },
-            (err) => {
-                console.log('GetBills', err);
-            }
+            props.setBills,
+            props.pushNotification('Retrieving Bills', 'Please wait...')
         );
 
-        const budgetNotifID = props.pushNotification(
-            'Retrieving Budgets',
-            'Please wait...'
-        );
-
-        sendRequest(
+        hydrate(
             'GetBudgets',
-            { userId: state.user.userId },
-            (res) => {
-                const { budgets } = JSON.parse(res.responseText);
-                props.setBudgets(
-                    budgets.map((b) => ({
-                        ...b,
-                        startDate: new Date(b.startDate)
-                    }))
-                );
-
-                props.removeNotification(budgetNotifID);
-            },
-            (err) => {
-                console.log('GetBudgets', err);
-            }
+            props.setBudgets,
+            props.pushNotification('Retrieving Budgets', 'Please wait...')
         );
 
-        const oneOffNotifID = props.pushNotification(
-            'Retrieving One Offs',
-            'Please wait...'
-        );
-
-        sendRequest(
+        hydrate(
             'GetOneOffs',
-            { userId: state.user.userId },
-            (res) => {
-                const { oneOffs } = JSON.parse(res.responseText);
-                props.setExtras(
-                    oneOffs.map((o) => ({
-                        ...o,
-                        date: new Date(o.date)
-                    }))
-                );
-
-                props.removeNotification(oneOffNotifID);
-            },
-            (err) => {
-                console.log('GetOneOffs', err);
-            }
+            props.setExtras,
+            props.pushNotification('Retrieving One Offs', 'Please wait...')
         );
 
-        const categoryNotifID = props.pushNotification(
-            'Retrieving Categories',
-            'Please wait...'
-        );
-
-        sendRequest(
+        hydrate(
             'GetCategories',
-            { userId: state.user.userId },
-            (res) => {
-                const { categories } = JSON.parse(res.responseText);
-                props.setCategories([
-                    ...categories,
-                    { categoryId: -1, name: 'All' }
-                ]);
-
-                props.removeNotification(categoryNotifID);
-            },
-            (err) => {
-                console.log('GetCategories', err);
-                props.removeNotification(categoryNotifID);
-            }
+            props.setCategories,
+            props.pushNotification('Retrieving Categories', 'Please wait...')
         );
     };
 

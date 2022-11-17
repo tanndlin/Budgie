@@ -1,5 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import 'package:mobile/global.dart' as global;
+import 'package:percent_indicator/linear_percent_indicator.dart';
+
+import '../base_client.dart';
+import '../models/budget.dart';
 
 class DisplayPage extends StatefulWidget {
   const DisplayPage({super.key});
@@ -11,6 +18,14 @@ class DisplayPage extends StatefulWidget {
 class _DisplayPageState extends State<DisplayPage> {
   int selectedIndex = 1;
   List<String> routes = ['/MainPage', '/DisplayPage', '/AddPage', '/CalendarView', '/AccountManager'];
+
+  //0 - budgets, 1 - bills, 2 - extras, 3 - clear
+  List<bool> isSelected = [false, false, false, false];
+
+  double budgetPercent = 0.5;
+
+  _showToast(msg, error) => Fluttertoast.showToast(
+    msg: msg, fontSize: 18, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) :  Colors.green.withOpacity(.9), textColor: Colors.white,);
 
 
   @override
@@ -63,6 +78,128 @@ class _DisplayPageState extends State<DisplayPage> {
               ),
             ),
           ),
+
+          body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 10.0,),
+                  // WHOLE PAGE
+                  Padding(
+                      padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          // BUDGET WIDGET
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height:  MediaQuery.of(context).size.height,
+                            decoration: BoxDecoration(
+                              color: Color(0x55b3e5fc),
+
+                            ),
+                            child: Column(
+                              // crossAxisAlignment: CrossAxisAlignment.start,
+                              // mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 10.0),
+                                  child:  Column(
+                                    children: <Widget>[
+                                      const Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text('Add', style: TextStyle(fontSize: 30,  fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                                      ),
+                                      const SizedBox(height: 20.0,),
+                                      ToggleButtons(
+                                        isSelected: isSelected,
+                                        // selectedColor: Colors.white70,
+                                        fillColor: Colors.white70,
+                                        borderRadius: BorderRadius.circular(8),
+                                        // renderBorder: false,
+                                        borderColor: Colors.black54,
+                                        selectedBorderColor: Colors.black,
+                                        splashColor: Colors.transparent,
+                                        children: const <Widget>[
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 12),
+                                            child: Text('Budget', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 12),
+                                            child: Text('Bill', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 12),
+                                            child: Text('Extras', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 12),
+                                            child: Text('Clear', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                                          ),
+                                        ],
+                                        onPressed: (int newIndex) {
+                                          setState(() {
+                                            for (int index = 0; index < isSelected.length; index++)
+                                            {
+                                              print(newIndex);
+                                              if (index == newIndex) {
+                                                isSelected[index] = true;
+                                              }
+                                              else{
+                                                isSelected[index] = false;
+                                              }
+                                              print(isSelected);
+                                            }
+                                          });
+
+                                        },
+                                      ),
+                                      // BUDGET FIELDS
+                                      Visibility(
+                                        // name, category, spent, total
+                                          visible: isSelected[0],
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 15),
+                                            child: Column(
+                                              children: [
+                                                //  Budget name
+                                                SizedBox(height: 20.0),
+                                                LinearPercentIndicator(
+                                                  lineHeight: 20.0,
+                                                  percent: budgetPercent,
+                                                  progressColor: budgetPercent <= 0.5 ? Colors.green : Colors.redAccent.shade400,
+                                                  backgroundColor: Colors.white,
+                                                ),
+
+                                              ],
+                                            ),
+                                          )
+
+                                      ),
+                                      // BILL FIELDS
+                                      Visibility(
+                                          visible: isSelected[1],
+                                          child: Text("Add Bill"),
+                                      ),
+                                      // Budget visible
+                                      Visibility(
+                                        visible: isSelected[2],
+                                        child: Text("Add Extra"),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                        ],
+                      )
+                  ),
+                ],
+              )
+          ),
+
           // BOTTOM NAV
           bottomNavigationBar: BottomNavigationBar(
             elevation: 0,

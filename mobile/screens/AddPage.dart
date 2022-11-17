@@ -42,7 +42,7 @@ class _AddPageState extends State<AddPage> {
 
 
   int selectedIndex = 2;
-  List<String> routes = ['/MainPage', '/Budget', '/AddPage', '/CalendarView', '/AccountManager'];
+  List<String> routes = ['/MainPage', '/DisplayPage', '/AddPage', '/CalendarView', '/AccountManager'];
 
   //0 - budgets, 1 - bills, 2 - extras, 3 - clear
   List<bool> isSelected = [false, false, false, false];
@@ -311,7 +311,124 @@ class _AddPageState extends State<AddPage> {
                                       // Budget visible
                                       Visibility(
                                         visible: isSelected[1],
-                                        child: Text("Add Bill"),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 15),
+                                            child: Column(
+                                              children: [
+                                                //  Budget name
+                                                SizedBox(height: 20.0),
+                                                Padding(
+                                                  //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
+                                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                                  child: TextField(
+                                                    controller: budgetName,
+                                                    decoration: InputDecoration(
+                                                        focusColor: const Color(0xFF2D4B03),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        prefixIcon: const Icon(Icons.list_alt_rounded),
+                                                        labelText: 'Budget Name',
+                                                        hintText: 'Name'),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  // padding: const EdgeInsets.only(
+                                                  //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
+                                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                                  child: TextField(
+                                                    controller: budgetActual,
+                                                    decoration: InputDecoration(
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        prefixIcon: Icon(Icons.currency_exchange_outlined) ,
+                                                        labelText: 'Spent Amount',
+                                                        hintText: 'Spent'),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  // padding: const EdgeInsets.only(
+                                                  //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
+                                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                                  child: TextField(
+                                                    controller: budgetExpected,
+                                                    decoration: InputDecoration(
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        prefixIcon: Icon(Icons.currency_exchange_outlined) ,
+                                                        labelText: 'Total Amount',
+                                                        hintText: 'Total'),
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 20.0,
+                                                ),
+                                                Container(
+                                                  alignment: Alignment.center,
+                                                  height: 50,
+                                                  width: 180,
+                                                  decoration: BoxDecoration(
+                                                    color: const Color(0xFF020100), border: Border.all(width: 2, color: const Color(0xFF2D4B03)), borderRadius: BorderRadius.circular(20),
+                                                  ),
+                                                  child: TextButton(
+                                                    style: ButtonStyle(
+                                                      foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                                                    ),
+                                                    onPressed: () async {
+                                                      // ADD BUDGET
+                                                      print(id);
+                                                      if (budgetName.text == "" || budgetActual.text == "" || budgetExpected.text == "")
+                                                      {
+                                                        _showToast("Fill fields", true);
+                                                      }
+                                                      else
+                                                      {
+                                                        var budget = Budget(
+                                                            userId: id,
+                                                            name: budgetName.text,
+                                                            actualPrice: int.parse(budgetActual.text),
+                                                            expectedPrice: int.parse(budgetExpected.text)
+                                                        );
+                                                        print(budgetToJson(budget));
+                                                        var response = await BaseClient().postBudget(budget).catchError((err) {print("Fail");});
+                                                        if (response == null) {
+                                                          _showToast("Could not add", true);
+                                                          print("response null");
+                                                        }
+
+                                                        _showToast("Added", false);
+                                                        print("success");
+                                                      }
+
+                                                      clearLogSignFields();
+
+                                                    },
+                                                    child: const Text(
+                                                      'Add Budget',
+                                                      style: TextStyle(fontSize: 23, color: Color(0xFFE3E9E7), fontWeight: FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
                                       ),
                                       // Budget visible
                                       Visibility(

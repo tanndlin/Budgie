@@ -28,4 +28,19 @@ class BaseClient
       return Future.error("Fail");
     }
   }
+
+  Future<dynamic> postBill(dynamic object) async {
+    var url = Uri.parse(baseUrl + '/CreateBill');
+
+    var _payload = jsonEncode(object);
+
+    var response = await client.post(url, body: _payload, headers: _setHeaders());
+    if (response.statusCode == 201){
+      print("api success");
+      return response.body;
+    } else {
+      print("api fail");
+      return Future.error("Fail");
+    }
+  }
 }

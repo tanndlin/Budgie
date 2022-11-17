@@ -290,7 +290,7 @@ export function BigCalendar(props) {
                             onClick={createNew}
                         />
 
-                        <p>Ctrl + Click to mark as paid</p>
+                        <p>Ctrl + Click to toggle paid</p>
                     </footer>
                 </div>
             </section>

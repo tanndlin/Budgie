@@ -353,7 +353,7 @@ app.post('/CreateBudget', async (req, res) => {
         const budgetDoc = userRef.collection(budgetCollection).doc();
         await budgetDoc.set(newBudget);
         const id = budgetDoc.id;
-        newBudget.budgetId = budgetDoc.id;
+        newBudget.id = budgetDoc.id;
         await userRef
             .collection(budgetCollection)
             .doc(`${id}`)

@@ -40,6 +40,7 @@ app.post('/CreateUserProfile', async (req, res) => {
         await db.collection(userCollection).doc(`${userId}`).set({});
         const userRef = db.collection(userCollection).doc(`${userId}`);
 
+<<<<<<< HEAD
         const newProfile = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
@@ -57,6 +58,25 @@ app.post('/CreateUserProfile', async (req, res) => {
                 expectedIncome: expectedIncome
             })
         );
+=======
+            const newProfile = {
+                firstName: req.body.firstName ?? "",
+                lastName: req.body.lastName ?? "",
+                expectedIncome: expectedIncome ?? ""
+            };
+
+            // add the user's profile to the database
+            await userRef.update(newProfile);
+
+            res.status(201).send(
+                JSON.stringify({
+                    userId: userId,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    expectedIncome: expectedIncome
+                })
+            );
+>>>>>>> 546d52eb5944148fa7055a11cd888c02e7bba896
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
@@ -103,9 +123,9 @@ app.post('/EditUserProfile', async (req, res) => {
         // if the user exists, then edit the profile info for said user
         if (userRef.exists) {
             const newProfile = {
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                expectedIncome: expectedIncome
+                firstName: req.body.firstName ?? "",
+                lastName: req.body.lastName ?? "",
+                expectedIncome: expectedIncome ?? ""
             };
 
             // add the user's profile to the database
@@ -797,28 +817,6 @@ app.post('', (req, res) => {
 });
 
 // send authentication email
-app.post('', (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
-
-    try {
-        const userId = req.body.userId;
-    } catch (error) {
-        res.status(400).send(`${error.message}`);
-    }
-});
-
-// reset password
-app.post('', (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
-
-    try {
-        const userId = req.body.userId;
-    } catch (error) {
-        res.status(400).send(`${error.message}`);
-    }
-});
-
-// reset email
 app.post('', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 

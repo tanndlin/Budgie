@@ -90,7 +90,8 @@ app.post('/CreateUserProfile', async (req, res) => {
         }
     } catch (error) {
     res.status(400).send(`${error.message}`);
-};
+    }
+});
 
 // get user profile info
 app.post('/GetUserProfile', async (req, res) => {
@@ -825,6 +826,9 @@ app.post('', (req,res) => {
 
     try {
 
+        const userId = req.body.userId;
+
+
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
@@ -835,6 +839,9 @@ app.post('', (req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
     try {
+
+        const userId = req.body.userId;
+        
 
     } catch (error) {
         res.status(400).send(`${error.message}`);
@@ -847,6 +854,9 @@ app.post('', (req,res) => {
 
     try {
 
+        const userId = req.body.userId;
+
+
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
@@ -858,6 +868,9 @@ app.post('', (req,res) => {
 
     try {
 
+        const userId = req.body.userId;
+
+
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
@@ -868,6 +881,9 @@ app.post('', (req,res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
     try {
+
+        const userId = req.body.userId;
+
 
     } catch (error) {
         res.status(400).send(`${error.message}`);

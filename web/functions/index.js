@@ -34,11 +34,14 @@ app.post('/CreateUserProfile', async (req, res) => {
 
     try {
         const userId = req.body.userId;
-        const expectedIncome = parseInt(req.body.expectedIncome);
+        let expectedIncome = parseInt(req.body.expectedIncome);
 
         // when a new user signs up, they will be added to the userCollection
         await db.collection(userCollection).doc(`${userId}`).set({});
         const userRef = db.collection(userCollection).doc(`${userId}`);
+
+        let firstName = '';
+        let lastName = '';
 
         if (
             req.body.firstName !== '' ||
@@ -49,47 +52,47 @@ app.post('/CreateUserProfile', async (req, res) => {
         } else {
             {
                 firstName = '';
-        
-        if (
-            req.body.lastName != '' ||
-            req.body.lastName != ' ' ||
-            req.body.lastName != NULL
-        ) {
-            lastName = req.body.lastName;
-        }
-        else {lastName = "";}
 
-            if (
-                req.body.expectedIncome != '' ||
-                req.body.expectedIncome != ' ' ||
-                req.body.expectedIncome != NULL
-            ) {
-            expectedIncome = parseInt(req.body.expectedIncome);
+                if (
+                    req.body.lastName !== '' ||
+                    req.body.lastName !== ' ' ||
+                    req.body.lastName != null
+                ) {
+                    lastName = req.body.lastName;
+                } else {
+                    lastName = '';
+                }
+
+                if (
+                    req.body.expectedIncome !== '' ||
+                    req.body.expectedIncome !== ' ' ||
+                    req.body.expectedIncome !== null
+                ) {
+                    expectedIncome = parseInt(req.body.expectedIncome);
+                }
+                expectedIncome = '';
             }
-            expectedIncome = '';
-        }
 
-        const newProfile = {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            expectedIncome: expectedIncome
-        };
-
-        // add the user's profile to the database
-        await userRef.update(newProfile);
-
-        res.status(201).send(
-            JSON.stringify({
-                userId: userId,
+            const newProfile = {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 expectedIncome: expectedIncome
-            })
-        );
-    
+            };
+
+            // add the user's profile to the database
+            await userRef.update(newProfile);
+
+            res.status(201).send(
+                JSON.stringify({
+                    userId: userId,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    expectedIncome: expectedIncome
+                })
+            );
         }
     } catch (error) {
-    res.status(400).send(`${error.message}`);
+        res.status(400).send(`${error.message}`);
     }
 });
 
@@ -128,26 +131,43 @@ app.post('/EditUserProfile', async (req, res) => {
 
     try {
         const userId = req.body.userId;
-        const expectedIncome = parseInt(req.body.expectedIncome);
+        let expectedIncome = parseInt(req.body.expectedIncome);
         const userRef = await db.collection('users').doc(`${userId}`).get();
+
+        let firstName = '';
+        let lastName = '';
 
         // if the user exists, then edit the profile info for said user
         if (userRef.exists) {
-
-            if((req.body.firstName != "") || (req.body.firstName != " ") || (req.body.firstName != NULL)) {
+            if (
+                req.body.firstName !== '' ||
+                req.body.firstName !== ' ' ||
+                req.body.firstName !== null
+            ) {
                 firstName = req.body.firstName;
-            } 
-            else {firstName = "";}
-    
-            if((req.body.lastName != "") || (req.body.lastName != " ") || (req.body.lastName != NULL)) {
+            } else {
+                firstName = '';
+            }
+
+            if (
+                req.body.lastName !== '' ||
+                req.body.lastName !== ' ' ||
+                req.body.lastName !== null
+            ) {
                 lastName = req.body.lastName;
+            } else {
+                lastName = '';
             }
-            else {lastName = "";}
-    
-            if((req.body.expectedIncome != "") || (req.body.expectedIncome != " ") || (req.body.expectedIncome != NULL)) {
+
+            if (
+                req.body.expectedIncome !== '' ||
+                req.body.expectedIncome !== ' ' ||
+                req.body.expectedIncome !== null
+            ) {
                 expectedIncome = parseInt(req.body.expectedIncome);
+            } else {
+                expectedIncome = '';
             }
-            else {expectedIncome = "";}
 
             const newProfile = {
                 firstName: `${req.body.firstName}`,
@@ -263,7 +283,7 @@ app.post('/GetBills', async (req, res) => {
 
         // check if the one-off already exists
         const billDocs = await userRef.collection(billCollection).get();
-        
+
         const bills = billDocs.docs.map((curBill) => {
             const isPaid = curBill.get('isPaid');
 
@@ -282,11 +302,10 @@ app.post('/GetBills', async (req, res) => {
 
         res.status(201).send(
             JSON.stringify({
-                //userId: userId,
+                // userId: userId,
                 bills: bills
             })
         );
-
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
@@ -437,8 +456,8 @@ app.post('/CreateBudget', async (req, res) => {
             categoryId: req.body.categoryId,
             expectedPrice: +req.body.expectedPrice,
             actualPrice: +req.body.actualPrice,
-            startDate: req.body.startDate,
-            //recurrence: req.body.recurrence
+            startDate: req.body.startDate
+            // recurrence: req.body.recurrence
         };
         const budgetDoc = userRef.collection(budgetCollection).doc();
         await budgetDoc.set(newBudget);
@@ -464,7 +483,7 @@ app.post('/GetBudgets', async (req, res) => {
 
         // check if the one-off already exists
         const budgetDocs = await userRef.collection(budgetCollection).get();
-        
+
         const budgets = budgetDocs.docs.map((curBudget) => {
             return {
                 name: curBudget.get('name'),
@@ -479,11 +498,10 @@ app.post('/GetBudgets', async (req, res) => {
 
         res.status(201).send(
             JSON.stringify({
-                //userId: userId,
+                // userId: userId,
                 budgets: budgets
             })
         );
-
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
@@ -634,7 +652,7 @@ app.post('/GetOneOffs', async (req, res) => {
 
         // check if the one-off already exists
         const oneOffDocs = await userRef.collection(oneOffCollection).get();
-        
+
         const oneOffs = oneOffDocs.docs.map((curOneOff) => {
             return {
                 name: curOneOff.get('name'),
@@ -648,11 +666,10 @@ app.post('/GetOneOffs', async (req, res) => {
 
         res.status(201).send(
             JSON.stringify({
-                //userId: userId,
+                // userId: userId,
                 oneOffs: oneOffs
             })
         );
-
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
@@ -800,7 +817,7 @@ app.post('/GetCategories', async (req, res) => {
 
         // check if the one-off already exists
         const categoryDocs = await userRef.collection(categoryCollection).get();
-        
+
         const categories = categoryDocs.docs.map((curCategory) => {
             return {
                 name: curCategory.get('name'),
@@ -810,81 +827,65 @@ app.post('/GetCategories', async (req, res) => {
 
         res.status(201).send(
             JSON.stringify({
-                //userId: userId,
-                "categories": categories
+                // userId: userId,
+                categories: categories
             })
         );
-
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
 });
 
-//delete user
-app.post('', (req,res) => {
+// delete user
+app.post('', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
     try {
-
         const userId = req.body.userId;
-
-
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
 });
 
-//send verification email
-app.post('', (req,res) => {
+// send verification email
+app.post('', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
     try {
-
         const userId = req.body.userId;
-        
-
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
 });
 
-//send authentication email
-app.post('', (req,res) => {
+// send authentication email
+app.post('', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
     try {
-
         const userId = req.body.userId;
-
-
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
 });
 
-//reset password
-app.post('', (req,res) => {
+// reset password
+app.post('', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
     try {
-
         const userId = req.body.userId;
-
-
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }
 });
 
-//reset email
-app.post('', (req,res) => {
+// reset email
+app.post('', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
     try {
-
         const userId = req.body.userId;
-
-
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }

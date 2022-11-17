@@ -19,7 +19,6 @@ function BudgetsView(props) {
             (res) => {
                 const budget = JSON.parse(res.responseText);
                 props.setBudgets([...props.budgets, budget]);
-                console.log([...props.budgets, budget]);
             },
             (err) => {
                 console.log(err);

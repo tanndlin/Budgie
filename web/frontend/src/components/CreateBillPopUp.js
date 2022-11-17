@@ -14,11 +14,10 @@ function CreateBillPopUp(props) {
             startDate: props.startDate,
             endDate: props.endDate,
             recurrence: 'monthly',
-            isPaid: []
+            isPaid: props.isPaid ?? []
         };
 
         const isNew = !props.id;
-        console.log(props.id);
         if (isNew) {
             sendRequest(
                 'CreateBill',
@@ -36,11 +35,11 @@ function CreateBillPopUp(props) {
         } else {
             sendRequest(
                 'EditBill',
-                { ...bill, billId: props.id, userId: props.user.userId },
+                { ...bill, id: props.id, userId: props.user.userId },
                 (res) => {
                     console.log('Editted bill', res);
                     const resBill = JSON.parse(res.responseText);
-                    bill.billId = resBill.billId;
+                    bill.id = resBill.id;
                     props.pushEvent(bill);
                 },
                 (err) => {
@@ -157,6 +156,9 @@ function CreateBillPopUp(props) {
                             <label htmlFor="Category">Category</label>
                             <span className="h-[26px]">
                                 <Dropdown
+                                    className="smallDropdown-parent h-26 bg-white rounded-md"
+                                    controlClassName="slim h-26"
+                                    placeholderClassName="slim h-26"
                                     options={props.categories.map((c) => {
                                         return {
                                             value: c.name,

@@ -45,9 +45,7 @@ function Budget(props) {
             { ...budget, userId: props.user.userId },
             () => {
                 props.setBudgets(
-                    props.budgets.map((b) =>
-                        b.budgetId === budget.budgetId ? budget : b
-                    )
+                    props.budgets.map((b) => (b.id === budget.id ? budget : b))
                 );
             },
             (err) => {
@@ -60,7 +58,7 @@ function Budget(props) {
         <div className="grid grid-cols-1 w-[232px] p-4">
             <span className="flex justify-between relative">
                 <EdittableText
-                    id={`${budget.budgetId}-name`}
+                    id={`${budget.id}-name`}
                     type="text"
                     value={budget.name}
                     onChange={(e) => {
@@ -88,7 +86,7 @@ function Budget(props) {
             <span className="m-auto flex">
                 <h3 className="font-bold">$</h3>
                 <EdittableText
-                    id={`${budget.budgetId}-actual`}
+                    id={`${budget.id}-actual`}
                     type="number"
                     value={budget.actualPrice}
                     max={budget.expectedPrice}
@@ -101,7 +99,7 @@ function Budget(props) {
                 <p className="mx-1 my-px p-0">out of</p>
                 <h3 className="font-bold">$</h3>
                 <EdittableText
-                    id={`${budget.budgetId}-expected`}
+                    id={`${budget.id}-expected`}
                     type="number"
                     value={budget.expectedPrice}
                     onChange={(e) => {

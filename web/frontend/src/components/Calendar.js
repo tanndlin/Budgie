@@ -50,7 +50,7 @@ export function BigCalendar(props) {
 
             const editState = () => {
                 const newState = props.bills.map((b) => {
-                    if (b.billId !== bill.billId) {
+                    if (b.id !== bill.id) {
                         return b;
                     }
 
@@ -99,12 +99,12 @@ export function BigCalendar(props) {
     }
 
     function deleteBill() {
-        const id = currentBill.billId;
+        const id = currentBill.id;
         sendRequest(
             'RemoveBill',
-            { billId: id, userId: props.user.userId },
+            { id: id, userId: props.user.userId },
             (_res) => {
-                const newState = props.bills.filter((b) => b.billId !== id);
+                const newState = props.bills.filter((b) => b.id !== id);
                 props.setBills(newState);
                 closeModal();
             },
@@ -220,7 +220,8 @@ export function BigCalendar(props) {
                             deleteBill,
                             isEdit,
                             categories: props.categories,
-                            id: currentBill?.billId
+                            id: currentBill?.id,
+                            isPaid: currentBill?.isPaid
                         }}
                     />
                 </SideBar>
@@ -229,10 +230,13 @@ export function BigCalendar(props) {
                     className="container m-auto mt-5 min-h-500 bg-[#BBE9E7] bg-opacity-50 p-3 rounded-md"
                     onClick={handleCalendarClick}
                 >
-                    <header className="flex flex-row justify-between font-bold mb-3 border-black border-b-2 p-1">
+                    <header className="grid grid-cols-3 font-bold mb-3 border-black border-b-2 p-1">
                         <h1 className="text-2xl">Bills</h1>
 
                         <Dropdown
+                            className="smallDropdown-parent h-26 w-40 bg-white rounded-md mx-auto"
+                            controlClassName="slim h-26"
+                            placeholderClassName="slim h-26"
                             options={props.categories.map((c) => {
                                 return {
                                     value: c.name,
@@ -250,14 +254,9 @@ export function BigCalendar(props) {
                                 );
                                 props.setCategorySortID(category.id);
                             }}
-                            className="dropdown"
-                            controlClassName="dropdown-control"
-                            menuClassName="dropdown-menu"
-                            arrowClassName="dropdown-arrow"
-                            placeholderClassName="dropdown-placeholder"
                         />
 
-                        <span className="text-md">
+                        <span className="ml-auto text-md">
                             <h2 data-testid="billSum">
                                 {'Total:  $' +
                                     (Object.entries(props.bills)
@@ -283,13 +282,15 @@ export function BigCalendar(props) {
                         endAccessor="end"
                         eventPropGetter={eventStyleGetter}
                     />
-                    <footer className="border-black border-t-2 p-1 mt-3 flex flex-row gap-4">
+                    <footer className="border-black border-t-2 p-1 mt-3 flex flex-row justify-between gap-4">
                         <input
                             className="px-2 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md"
                             type="button"
                             value="Add Bill"
                             onClick={createNew}
                         />
+
+                        <p>Ctrl + Click to toggle paid</p>
                     </footer>
                 </div>
             </section>

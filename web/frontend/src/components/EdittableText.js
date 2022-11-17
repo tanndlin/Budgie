@@ -21,7 +21,8 @@ function EdittableText(props) {
     useEffect(() => {
         const span = document.getElementById('fakeSpan');
         span.innerHTML = `${props.value}`.replace(/\s/g, '&nbsp;');
-        document.getElementById(props.id).style.width = span.offsetWidth + 'px';
+        document.getElementById(props.id).style.width =
+            span.offsetWidth + 10 + 'px';
     });
 
     return (

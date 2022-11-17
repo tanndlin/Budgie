@@ -30,11 +30,9 @@ function ExtraneousView(props) {
     function deleteExtra(extra) {
         sendRequest(
             'RemoveOneOff',
-            { userId: props.user.userId, oneOffId: extra.oneOffId },
+            { userId: props.user.userId, id: extra.id },
             () => {
-                props.setExtras(
-                    props.extras.filter((e) => e.oneOffId !== extra.oneOffId)
-                );
+                props.setExtras(props.extras.filter((e) => e.id !== extra.id));
             },
             (err) => {
                 console.log(err);
@@ -70,6 +68,7 @@ function ExtraneousView(props) {
                     })
                     .map((extra) => (
                         <Extra
+                            key={extra.id}
                             user={props.user}
                             extra={extra}
                             extras={props.extras}

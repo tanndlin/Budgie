@@ -28,9 +28,11 @@ function Divider(props) {
                 alt="Wood Texture"
             />
             <div className="relative mx-32 mb-5">
-                <div className="absolute inset-x-0 top-5 text-center text-[#3B3548] text-6xl">
-                    {props.dividerToggle ? 'Sign Up' : 'Log In'}
-                </div>
+                <span className="absolute inset-x-0 top-5 flex">
+                    <p className="text-center text-6xl m-auto">
+                        {props.dividerToggle ? 'Sign Up' : 'Log In'}
+                    </p>
+                </span>
             </div>
 
             <img

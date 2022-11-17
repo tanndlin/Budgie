@@ -806,25 +806,3 @@ app.post('', (req, res) => {
         res.status(400).send(`${error.message}`);
     }
 });
-
-// reset password
-app.post('', (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
-
-    try {
-        const userId = req.body.userId;
-    } catch (error) {
-        res.status(400).send(`${error.message}`);
-    }
-});
-
-// reset email
-app.post('', (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
-
-    try {
-        const userId = req.body.userId;
-    } catch (error) {
-        res.status(400).send(`${error.message}`);
-    }
-});

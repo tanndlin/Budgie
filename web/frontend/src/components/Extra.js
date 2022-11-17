@@ -12,9 +12,7 @@ function Extra(props) {
             { ...extra, userId: props.user.userId },
             () => {
                 props.setExtras(
-                    props.extras.map((e) =>
-                        e.id === extra.id ? extra : e
-                    )
+                    props.extras.map((e) => (e.id === extra.id ? extra : e))
                 );
             },
             (err) => {

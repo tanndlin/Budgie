@@ -43,6 +43,19 @@ function Category(props) {
         );
     };
 
+    if (category.id === -1) {
+        return (
+            <div className="bg-[#b2c6ec] bg-opacity-[.7] rounded-md shadow-lg relative pr-16 pl-4 py-4">
+                <h1 className="w-full border-b-2 border-black font-bold">
+                    All
+                </h1>
+
+                <h2 className="mt-4">Items using this Category</h2>
+                <p>{getReferences()}</p>
+            </div>
+        );
+    }
+
     return (
         <div className="bg-[#b2c6ec] bg-opacity-[.7] rounded-md shadow-lg relative pr-16 pl-4 py-4">
             <EdittableText

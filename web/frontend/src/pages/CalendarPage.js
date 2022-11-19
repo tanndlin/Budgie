@@ -92,7 +92,7 @@ function CalendarPage(props) {
 
     return (
         <div className="h-screen">
-            <main className="min-h-minus-header">
+            <main className="min-h-minus-header pb-40">
                 <BigCalendar
                     user={props.user}
                     bills={props.bills}

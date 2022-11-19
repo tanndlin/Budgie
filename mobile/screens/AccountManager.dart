@@ -88,121 +88,124 @@ class _AccountManagerState extends State<AccountManager> {
           ),
 
           body: SingleChildScrollView(
-              child: Column(
-                  children: [
-                    const SizedBox(height: 10.0,),
-                    Padding(
-                        padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                        child: Column(
-                          children: <Widget> [
+              child: Column(children: [
+            const SizedBox(
+              height: 10.0,
+            ),
+            Padding(
+                padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                child: Column(children: <Widget>[
+                  Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 380,
+                      decoration: BoxDecoration(
+                          color: Color(0xddb3e5fc),
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                                blurRadius: 8,
+                                offset: Offset(0, 15),
+                                color: Color(0xffe3e9e7).withOpacity(.5),
+                                spreadRadius: -9)
+                          ]),
+                      child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 10.0, top: 30.0, right: 10.0, bottom: 20.0),
+                          child: Column(children: <Widget>[
                             Container(
+                              height: 200.0,
+                              width: 200.0,
+                              decoration: const BoxDecoration(
+                                  color: Colors.black, shape: BoxShape.circle),
+                            ),
+                            SizedBox(height: 30),
+                            Container(
+                              height: 50.0,
                               width: MediaQuery.of(context).size.width,
-                              height: 380,
-                              decoration: BoxDecoration(
-                              color: Color(0xddb3e5fc),
-                              borderRadius: BorderRadius.circular(8),
-                              boxShadow: [ BoxShadow(
-                                  blurRadius: 8,
-                                  offset: Offset(0, 15),
-                                  color: Color(0xffe3e9e7).withOpacity(.5),
-                                  spreadRadius: -9)]
-                              ),
-
-                              child: Column(
-                                children: <Widget> [
-                                  Container(
-                                    child: Image.asset('assets/images/profile_icon.png'),
-                                  ),
-
-                                  Container(
-                                    child: const Text("Full Name")
-                                  ),
-
-                                  Container(
-                                      child: const Text("Email")
-                                  )
-                                ]
-                              )
+                              color: Colors.transparent,
+                              child: const Center(
+                                  child: Text("Alan Nguyen",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF2D4B03)))),
                             ),
-
-                            SizedBox(height: 10),
-
-                            SizedBox(
-                              width : MediaQuery.of(context).size.width,
-                              height: 70,
-                              child: TextButton(
-                                  child: const Text(
-                                      "Edit Profile",
-                                      style: TextStyle(fontSize: 20)
-                                  ),
-                                  style: ButtonStyle(
-                                      padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
-                                      foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                                      backgroundColor: MaterialStateProperty.all<Color>(Color(0xddb3e5fc)),
-                                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8.0),
-                                          )
-                                      )
-                                  ),
-                                  onPressed: () => null
-                              ),
-                              ),
-
-                            SizedBox(height: 10),
-
-                            SizedBox(
-                              width : MediaQuery.of(context).size.width,
-                              height: 70,
-                              child: TextButton(
-                                  child: const Text(
-                                      "Reset Password",
-                                      style: TextStyle(fontSize: 20)
-                                  ),
-                                  style: ButtonStyle(
-                                      padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
-                                      foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                                      backgroundColor: MaterialStateProperty.all<Color>(Color(0xddb3e5fc)),
-                                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8.0),
-                                          )
-                                      )
-                                  ),
-                                  onPressed: () => null
-                              ),
+                            Container(
+                              height: 50.0,
+                              width: MediaQuery.of(context).size.width,
+                              color: Colors.transparent,
+                              child: const Center(
+                                  child: Text("example123@gmail.com",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF2D4B03)))),
                             ),
-
-                            SizedBox(height: 10),
-
-                            SizedBox(
-                              width : MediaQuery.of(context).size.width,
-                              height: 70,
-                              child: TextButton(
-                                  child: const Text(
-                                      "Logout",
-                                      style: TextStyle(fontSize: 20)
-                                  ),
-                                  style: ButtonStyle(
-                                      padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
-                                      foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                                      backgroundColor: MaterialStateProperty.all<Color>(Color(0xddb3e5fc)),
-                                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8.0),
-                                          )
-                                      )
-                                  ),
-                                  onPressed: () => null
-                              ),
-                            )
-
-                          ]
-                        )
-                    ),
-                  ]
-              )
-          ),
+                          ]))),
+                  SizedBox(height: 10),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 70,
+                    child: TextButton(
+                        child: const Text("Edit Profile",
+                            style: TextStyle(fontSize: 20)),
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.all(15)),
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.black),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Color(0xddb3e5fc)),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ))),
+                        onPressed: () => null),
+                  ),
+                  SizedBox(height: 10),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 70,
+                    child: TextButton(
+                        child: const Text("Reset Password",
+                            style: TextStyle(fontSize: 20)),
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.all(15)),
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.black),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Color(0xddb3e5fc)),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ))),
+                        onPressed: () => null),
+                  ),
+                  SizedBox(height: 10),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 70,
+                    child: TextButton(
+                        child: const Text("Logout",
+                            style: TextStyle(fontSize: 20)),
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.all(15)),
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.black),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Color(0xddb3e5fc)),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ))),
+                        onPressed: () => null),
+                  )
+                ])),
+          ])),
           // BOTTOM NAV
           bottomNavigationBar: BottomNavigationBar(
             elevation: 0,

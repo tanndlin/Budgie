@@ -138,7 +138,7 @@ class _DisplayPageState extends State<DisplayPage> {
                           // BUDGET WIDGET
                           Container(
                             width: MediaQuery.of(context).size.width,
-                            height:  MediaQuery.of(context).size.height,
+                            // height:  MediaQuery.of(context).size.height,
                             decoration: BoxDecoration(
                               color: Color(0x55b3e5fc),
 
@@ -198,7 +198,7 @@ class _DisplayPageState extends State<DisplayPage> {
                                               for (Budget b in allBudgets) {
                                                 print(b);
                                               }
-                                              
+
                                               setState(() {
                                                 getAllBudgets = allBudgets;
                                               });
@@ -227,28 +227,29 @@ class _DisplayPageState extends State<DisplayPage> {
                                       Visibility(
                                         // name, category, spent, total
                                           visible: isSelected[0],
-                                          child: SingleChildScrollView(
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Flexible(
-                                                  child: ListView.separated(
-                                                    physics: NeverScrollableScrollPhysics(),
-                                                    scrollDirection: Axis.vertical,
-                                                    shrinkWrap: true,
-                                                    itemCount: getAllBudgets.length,
-                                                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                                                    itemBuilder: (context, index) {
-                                                      return _buildBudgetCard(index);
-                                                    },
-                                                    separatorBuilder: (context, index) => const Divider(),
-                                                  ),
+                                          child: Column(
+                                            // mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                                ListView.separated(
+                                                  physics: NeverScrollableScrollPhysics(),
+                                                  scrollDirection: Axis.vertical,
+                                                  shrinkWrap: true,
+                                                  itemCount: getAllBudgets.length,
+                                                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                                                  itemBuilder: (context, index) {
+                                                    return _buildBudgetCard(index);
+                                                    // return ListTile(
+                                                    //     selected:index==0,
+                                                    //     selectedTileColor:Colors.green,
+                                                    //     title: Padding(padding:EdgeInsets.all(30.0), child:Text('${getAllBudgets[index].name}')),
+                                                    //     onTap:() { print('on tapped'); }
+                                                    // );
+                                                  },
+                                                  separatorBuilder: (context, index) => const Divider(),
                                                 ),
 
-                                              ],
-                                            ),
+                                            ],
                                           ),
-
 
                                           // child: Padding(
                                           //   padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 10.0),

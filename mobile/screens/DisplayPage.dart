@@ -46,7 +46,7 @@ class _DisplayPageState extends State<DisplayPage> {
     Widget _buildBudgetCard(int index) => Container(
           padding:  EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0, bottom: 5.0),
           width: MediaQuery.of(context).size.width,
-          height: 100,
+          height: 140,
           decoration: BoxDecoration(
               color: Color(0xddb3e5fc),
               borderRadius: BorderRadius.circular(8),
@@ -57,26 +57,48 @@ class _DisplayPageState extends State<DisplayPage> {
                   spreadRadius: -9)]
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               //  Text
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Text("${getAllBudgets[index].name}"),
-                  Text("${getAllBudgets[index].categoryId}"),
-                  Text("${getAllBudgets[index].startDate}"),
+                  Text(
+                    "${getAllBudgets[index].name}", style: TextStyle(fontSize: 18, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                  Container(
+                    // padding: EdgeInsets.symmetric(horizontal: 5.0),
+                    child: Row(
+                      // crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        TextButton(onPressed: (){}, child: Icon(Icons.edit, color: Color(0xFF2D4B03),)),
+                        TextButton(onPressed: (){}, child: Icon(Icons.arrow_drop_down_circle_outlined, color: Color(0xFF2D4B03),)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("${getAllBudgets[index].startDate}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                  SizedBox(width: 10.0,),
+                  Text("${getAllBudgets[index].actualPrice}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                  SizedBox(width: 10.0,),
+                  Text("of", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                  SizedBox(width: 10.0,),
+                  Text("${getAllBudgets[index].expectedPrice}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
                 ],
               ),
               SizedBox(height: 10.0,),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("${getAllBudgets[index].actualPrice}"),
-                  Text("of"),
-                  Text("${getAllBudgets[index].expectedPrice}"),
+                  Text("${(getAllBudgets[index].actualPrice/getAllBudgets[index].expectedPrice)*100}%", textAlign: TextAlign.center, style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
                 ],
               ),
-              SizedBox(height: 10.0,),
               LinearPercentIndicator(
                 lineHeight: 20.0,
                 percent: (getAllBudgets[index].actualPrice/getAllBudgets[index].expectedPrice),

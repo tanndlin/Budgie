@@ -47,9 +47,22 @@ function BudgetsView(props) {
     function resetBudgets() {
         props.setBudgets(
             props.budgets.map((b) => {
-                return { ...b, spent: 0 };
+                return { ...b, actualPrice: 0 };
             })
         );
+
+        props.budgets.forEach((b) => {
+            sendRequest(
+                'EditBudget',
+                { ...b, actualPrice: 0, userId: props.user.userId },
+                (res) => {
+                    console.log(res.responseText);
+                },
+                (err) => {
+                    console.log(err);
+                }
+            );
+        });
     }
 
     return (

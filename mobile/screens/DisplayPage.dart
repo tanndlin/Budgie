@@ -92,7 +92,6 @@ class _DisplayPageState extends State<DisplayPage> {
                   Text("${getAllBudgets[index].expectedPrice}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
                 ],
               ),
-              SizedBox(height: 10.0,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -221,6 +220,10 @@ class _DisplayPageState extends State<DisplayPage> {
                                                 print(b);
                                               }
 
+                                              if (allBudgets.length == 0)
+                                                {
+                                                  _showToast("No budgets", true);
+                                                }
                                               setState(() {
                                                 getAllBudgets = allBudgets;
                                               });

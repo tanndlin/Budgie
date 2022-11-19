@@ -50,7 +50,7 @@ function Extra(props) {
                     type="number"
                     value={props.extra.price}
                     onChange={(e) => {
-                        props.extra.price = e.target.value;
+                        props.extra.price = +e.target.value;
                         props.setExtras([...props.extras]);
                     }}
                     onBlur={editMe}

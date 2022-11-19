@@ -81,7 +81,7 @@ function Account(props) {
                         value={expectedIncome}
                         onBlur={editProfile}
                         onChange={(e) => {
-                            setExpectedIncome(e.target.value);
+                            setExpectedIncome(+e.target.value);
                         }}
                         className="inline"
                     />

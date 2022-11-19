@@ -91,7 +91,7 @@ function Budget(props) {
                     value={budget.actualPrice}
                     max={budget.expectedPrice}
                     onChange={(e) => {
-                        budget.actualPrice = e.target.value;
+                        budget.actualPrice = +e.target.value;
                         props.setBudgets([...props.budgets]);
                     }}
                     onBlur={editMe}
@@ -103,7 +103,7 @@ function Budget(props) {
                     type="number"
                     value={budget.expectedPrice}
                     onChange={(e) => {
-                        budget.expectedPrice = e.target.value;
+                        budget.expectedPrice = +e.target.value;
                         props.setBudgets([...props.budgets]);
                     }}
                     onBlur={editMe}

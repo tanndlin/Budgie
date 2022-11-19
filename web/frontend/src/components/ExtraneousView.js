@@ -89,7 +89,21 @@ function ExtraneousView(props) {
                     className="px-2 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md"
                     type="button"
                     value="Remove Extras"
-                    onClick={() => props.setExtras([])}
+                    onClick={() => {
+                        props.setExtras([]);
+                        props.extras.forEach((p) => {
+                            sendRequest(
+                                'RemoveOneOff',
+                                { userId: props.user.userId, id: p.id },
+                                (res) => {
+                                    console.log(res.responseText);
+                                },
+                                (err) => {
+                                    console.log(err);
+                                }
+                            );
+                        });
+                    }}
                 />
             </footer>
         </article>

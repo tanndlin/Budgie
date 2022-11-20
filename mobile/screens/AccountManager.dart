@@ -13,6 +13,7 @@ class AccountManager extends StatefulWidget {
 
 class _AccountManagerState extends State<AccountManager> {
   String fullName = "Please Edit Profile First!";
+  String initials = "XD";
   final _firstName = TextEditingController();
   final _lastName = TextEditingController();
   int selectedIndex = 4;
@@ -139,8 +140,11 @@ class _AccountManagerState extends State<AccountManager> {
                           ),
                           onPressed: () {
                             setState(() {
+                              initials = _firstName.text[0] + _lastName.text[0];
                               fullName = _firstName.text + " " + _lastName.text;
                             });
+                            initials = _firstName.text[0] + _lastName.text[0];
+                            fullName = _firstName.text + " " + _lastName.text;
                             Navigator.of(context).pop();
                           },
                           child: const Text(
@@ -243,8 +247,18 @@ class _AccountManagerState extends State<AccountManager> {
                             Container(
                               height: 200.0,
                               width: 200.0,
-                              decoration: const BoxDecoration(
-                                  color: Colors.black, shape: BoxShape.circle),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.black)),
+                              child: Center(
+                                child: Text(
+                                    '$initials',
+                                    key: ValueKey(initials),
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 100,
+                                        color: Color(0xFF2D4B03)))),
                             ),
                             SizedBox(height: 30),
                             Container(
@@ -253,7 +267,8 @@ class _AccountManagerState extends State<AccountManager> {
                               color: Colors.transparent,
                               child: Center(
                                   child: Text(
-                                      fullName,
+                                      '$fullName',
+                                      key: ValueKey(fullName),
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
                                           fontSize: 28,
@@ -265,7 +280,7 @@ class _AccountManagerState extends State<AccountManager> {
                               width: MediaQuery.of(context).size.width,
                               color: Colors.transparent,
                               child: Center(
-                                  child: Text(email,
+                                  child: Text('$email',
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
                                           fontSize: 20,

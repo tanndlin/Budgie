@@ -1,5 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+
 
 class AccountManager extends StatefulWidget {
   const AccountManager({super.key});
@@ -29,6 +33,11 @@ class _AccountManagerState extends State<AccountManager> {
       print(index);
       selectedIndex = index;
       Navigator.pushNamed(context, routes[index]);
+    }
+
+    void _logout() async {
+      FirebaseAuth.instance.signOut();
+      Navigator.pushNamed(context, '/LoginPage');
     }
 
     return Container(
@@ -149,8 +158,26 @@ class _AccountManagerState extends State<AccountManager> {
                     width: MediaQuery.of(context).size.width,
                     height: 70,
                     child: TextButton(
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.all(15)),
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.black),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Color(0xddb3e5fc)),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ))),
+                        onPressed: () => null,
                         child: const Text("Edit Profile",
-                            style: TextStyle(fontSize: 20)),
+                            style: TextStyle(fontSize: 20))),
+                  ),
+                  SizedBox(height: 10),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 70,
+                    child: TextButton(
                         style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(
                                 EdgeInsets.all(15)),
@@ -162,35 +189,15 @@ class _AccountManagerState extends State<AccountManager> {
                                 RoundedRectangleBorder>(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
                             ))),
-                        onPressed: () => null),
-                  ),
-                  SizedBox(height: 10),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 70,
-                    child: TextButton(
+                        onPressed: () => null,
                         child: const Text("Reset Password",
-                            style: TextStyle(fontSize: 20)),
-                        style: ButtonStyle(
-                            padding: MaterialStateProperty.all<EdgeInsets>(
-                                EdgeInsets.all(15)),
-                            foregroundColor:
-                                MaterialStateProperty.all<Color>(Colors.black),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                Color(0xddb3e5fc)),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ))),
-                        onPressed: () => null),
+                            style: TextStyle(fontSize: 20))),
                   ),
                   SizedBox(height: 10),
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: 70,
                     child: TextButton(
-                        child: const Text("Logout",
-                            style: TextStyle(fontSize: 20)),
                         style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(
                                 EdgeInsets.all(15)),
@@ -202,7 +209,9 @@ class _AccountManagerState extends State<AccountManager> {
                                 RoundedRectangleBorder>(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
                             ))),
-                        onPressed: () => null),
+                        onPressed: () => _logout(),
+                        child: const Text("Logout",
+                            style: TextStyle(fontSize: 20))),
                   )
                 ])),
           ])),

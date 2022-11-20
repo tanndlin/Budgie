@@ -40,6 +40,16 @@ class _AccountManagerState extends State<AccountManager> {
       Navigator.pushNamed(context, '/LoginPage');
     }
 
+    String getEmail(String? myString) {
+      if (myString == null) {
+        return '';
+      }
+      return myString;
+    }
+
+    String email = getEmail(FirebaseAuth.instance.currentUser?.email);
+    String fullName = "Please Edit Profile First!";
+
     return Container(
         // BACKGROUND AND APPBAR
         decoration: const BoxDecoration(
@@ -132,10 +142,10 @@ class _AccountManagerState extends State<AccountManager> {
                               height: 50.0,
                               width: MediaQuery.of(context).size.width,
                               color: Colors.transparent,
-                              child: const Center(
-                                  child: Text("Alan Nguyen",
+                              child: Center(
+                                  child: Text(fullName,
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 28,
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xFF2D4B03)))),
@@ -144,10 +154,10 @@ class _AccountManagerState extends State<AccountManager> {
                               height: 50.0,
                               width: MediaQuery.of(context).size.width,
                               color: Colors.transparent,
-                              child: const Center(
-                                  child: Text("example123@gmail.com",
+                              child: Center(
+                                  child: Text(email,
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xFF2D4B03)))),

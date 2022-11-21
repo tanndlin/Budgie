@@ -27,7 +27,7 @@ function AccountPage(props) {
     const ChangeBackgroundToggle2 = () => {
         if (backgroundToggle2 == null) {
             setBackgroundToggle2(true);
-        } else if (backgroundToggle2 == false) {
+        } else if (backgroundToggle2 === false) {
             setBackgroundToggle2(true);
         } else {
             // backgroundToggle2 == true

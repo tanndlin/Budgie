@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { pretty, sendOutsideRequest } from '../common/Requests';
+import { verifyEmail, verifyPassword } from '../common/verify';
+import VerifiedInput from './VerifiedInput';
 
 function SignUp(props) {
     const [email, setEmail] = useState('');
@@ -66,27 +68,29 @@ function SignUp(props) {
                     className="grid grid-rows-4 h-1/2 place-items-center"
                     onSubmit={doSignUp}
                 >
-                    <input
-                        className="px-1 placeholder-[#4D4D4D] rounded-md"
-                        type="text"
+                    <VerifiedInput
                         placeholder="Email"
-                        onChange={(e) => setEmail(e.target.value)}
                         value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        validator={verifyEmail}
                     />
-                    <input
-                        className="px-1 placeholder-[#4D4D4D] rounded-md"
-                        type="password"
+
+                    <VerifiedInput
                         placeholder="Password"
-                        onChange={(e) => setPassword(e.target.value)}
                         value={password}
-                    />
-                    <input
-                        className="px-1 placeholder-[#4D4D4D] rounded-md"
                         type="password"
-                        placeholder="Password"
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        value={confirmPassword}
+                        onChange={(e) => setPassword(e.target.value)}
+                        validator={verifyPassword}
                     />
+
+                    <VerifiedInput
+                        placeholder="Confirm Password"
+                        value={confirmPassword}
+                        type="password"
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        validator={(val) => val === password}
+                    />
+
                     <input
                         className="w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md"
                         type="submit"

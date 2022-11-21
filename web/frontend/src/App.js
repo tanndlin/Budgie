@@ -89,7 +89,7 @@ function App() {
                 <Route
                     path="/"
                     element={
-                        <div className="min-h-screen">
+                        <div className="h-screen">
                             <Header {...headerProps(false)} />
                             <LoginPage {...props} />
                         </div>
@@ -99,7 +99,7 @@ function App() {
                 <Route
                     path="/calendar"
                     element={
-                        <div className="min-h-screen">
+                        <div className="h-screen">
                             <Header {...headerProps(true)} />
                             <CalendarPage {...props} />
                         </div>
@@ -109,7 +109,7 @@ function App() {
                 <Route
                     path="/account"
                     element={
-                        <div className="min-h-screen">
+                        <div className="h-screen">
                             <Header {...headerProps(true)} />
                             <AccountPage {...props} />
                         </div>

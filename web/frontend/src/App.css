@@ -221,3 +221,19 @@ input[type='number'] {
     padding: 1.25rem;
     filter: brightness(1.1);
 }
+
+.valid {
+  /* background-color: green; */
+  background-image: url('./img/check-icon.png');
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.invalid {
+  /* background-color: red; */
+  background-image: url('./img/x-icon.png');
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+}

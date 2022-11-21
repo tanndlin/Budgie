@@ -204,3 +204,11 @@ input[type='number'] {
     display: inline-block;
     min-width: 6em;
 }
+
+.notificationProvider{
+    display:none;
+}
+
+.notificationProvider:has(div){
+    display:grid
+}

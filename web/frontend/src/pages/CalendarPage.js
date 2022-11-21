@@ -90,7 +90,7 @@ function CalendarPage(props) {
     const ChangeBackgroundToggle = () => {
         if (backgroundToggle == null) {
             setBackgroundToggle(true);
-        } else if (backgroundToggle == false) {
+        } else if (backgroundToggle === false) {
             setBackgroundToggle(true);
         } else {
             // backgroundToggle == true

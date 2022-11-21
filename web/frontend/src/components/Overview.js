@@ -33,18 +33,25 @@ function Overview(props) {
         return a > b ? 'text-red-700' : 'text-green-700';
     };
 
+    const OverviewSection = (props) => {
+        return (
+            <span className="p-2 bg-[#b2c6ec] bg-opacity-[.7] rounded-md shadow-lg expand">
+                <h3 className="text-xl">{props.title}</h3>
+                {props.children}
+            </span>
+        );
+    };
+
     return (
-        <section className="grid grid-flow-row gap-4 pl-6">
+        <section className="flex flex-col gap-4 mx-6">
             <h2 className="text-2xl w-full text-center ">Overview</h2>
-            <span>
-                <h3 className="text-xl">Sum of Bills</h3>
+            <OverviewSection title="Sum Of Bills">
                 <p>
                     <b>{`$${sumOfBills()}`}</b>
                 </p>
-            </span>
+            </OverviewSection>
 
-            <span>
-                <h3 className="text-xl">Sum of Budgets</h3>
+            <OverviewSection title="Sum of Budgets">
                 <p
                     className={`inline ${getColor(
                         sumOfActual(),
@@ -56,17 +63,15 @@ function Overview(props) {
                 <p className="inline">
                     <b>{` / $${sumOfExpected()}`}</b>
                 </p>
-            </span>
+            </OverviewSection>
 
-            <span>
-                <h3 className="text-xl">Sum of One Offs</h3>
+            <OverviewSection title="Sum of One Offs">
                 <p>
                     <b>{`$${sumOfOneOffs()}`}</b>
                 </p>
-            </span>
+            </OverviewSection>
 
-            <span>
-                <h3 className="text-xl">Total vs Income</h3>
+            <OverviewSection title="Total vs Income">
                 <p
                     className={`inline ${getColor(
                         total(),
@@ -78,7 +83,7 @@ function Overview(props) {
                 <p className="inline">
                     <b>{` / $${props.user.expectedIncome}`}</b>
                 </p>
-            </span>
+            </OverviewSection>
         </section>
     );
 }

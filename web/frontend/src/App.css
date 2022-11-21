@@ -212,3 +212,12 @@ input[type='number'] {
 .notificationProvider:has(div){
     display:grid
 }
+
+.expand{
+    transition: 300ms;
+}
+
+.expand:hover{
+    padding: 1.25rem;
+    filter: brightness(1.1);
+}

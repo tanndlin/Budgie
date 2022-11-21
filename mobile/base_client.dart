@@ -59,6 +59,7 @@ class BaseClient
     var _payload = jsonEncode(object);
 
     var response = await client.post(url, body: _payload, headers: _setHeaders());
+    print(response.statusCode);
     if (response.statusCode == 201){
       print("api success");
       return response.body;

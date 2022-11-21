@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile/screens/LoginPage.dart';
 
 import '../base_client.dart';
+import '../models/bill.dart';
 import '../models/budget.dart';
 
 import 'package:mobile/global.dart' as global;
@@ -29,12 +30,22 @@ class _AddPageState extends State<AddPage> {
   final budgetActual = TextEditingController();
   final budgetStart = TextEditingController();
 
-  void clearLogSignFields() {
+  final billName = TextEditingController();
+  final billPrice = TextEditingController();
+  final billCategory = TextEditingController();
+  DateTime _billDateStart = DateTime.now();
+  DateTime _billDateEnd = DateTime.now();
+
+  void clearFields() {
     budgetName.clear();
     budgetCategory.clear();
     budgetExpected.clear();
     budgetActual.clear();
     budgetStart.clear();
+
+    billName.clear();
+    billPrice.clear();
+    billCategory.clear();
   }
 
   _showToast(msg, error) => Fluttertoast.showToast(
@@ -295,7 +306,7 @@ class _AddPageState extends State<AddPage> {
                                                         print("success");
                                                       }
 
-                                                      clearLogSignFields();
+                                                      clearFields();
 
                                                     },
                                                     child: const Text(
@@ -309,7 +320,7 @@ class _AddPageState extends State<AddPage> {
                                           )
 
                                       ),
-                                      // Budget visible
+                                      // Bill visible
                                       Visibility(
                                         visible: isSelected[1],
                                           child: Padding(
@@ -322,7 +333,7 @@ class _AddPageState extends State<AddPage> {
                                                   //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
                                                   padding: const EdgeInsets.symmetric(vertical: 10),
                                                   child: TextField(
-                                                    controller: budgetName,
+                                                    controller: billName,
                                                     decoration: InputDecoration(
                                                         focusColor: const Color(0xFF2D4B03),
                                                         enabledBorder: OutlineInputBorder(
@@ -334,7 +345,7 @@ class _AddPageState extends State<AddPage> {
                                                           borderRadius: BorderRadius.circular(50.0),
                                                         ),
                                                         prefixIcon: const Icon(Icons.list_alt_rounded),
-                                                        labelText: 'Budget Name',
+                                                        labelText: 'Bill Name',
                                                         hintText: 'Name'),
                                                   ),
                                                 ),
@@ -343,7 +354,7 @@ class _AddPageState extends State<AddPage> {
                                                   //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
                                                   padding: EdgeInsets.symmetric(vertical: 10),
                                                   child: TextField(
-                                                    controller: budgetActual,
+                                                    controller: billPrice,
                                                     decoration: InputDecoration(
                                                         enabledBorder: OutlineInputBorder(
                                                           borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
@@ -354,28 +365,62 @@ class _AddPageState extends State<AddPage> {
                                                           borderRadius: BorderRadius.circular(50.0),
                                                         ),
                                                         prefixIcon: Icon(Icons.currency_exchange_outlined) ,
-                                                        labelText: 'Spent Amount',
-                                                        hintText: 'Spent'),
+                                                        labelText: 'Price',
+                                                        hintText: 'Price'),
                                                   ),
                                                 ),
                                                 Padding(
-                                                  // padding: const EdgeInsets.only(
-                                                  //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
+                                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: <Widget>[
+                                                        Text(
+                                                          'Start Date: ${_billDateStart.month}/${_billDateStart.day}/${_billDateStart.year}',
+                                                          style: TextStyle(fontSize: 17, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),
+                                                        ),
+                                                        ElevatedButton(
+                                                          onPressed: () async {
+                                                          DateTime? newDate = await showDatePicker(
+                                                            context: context,
+                                                            initialDate: _billDateStart,
+                                                            firstDate: DateTime(1900),
+                                                            lastDate: DateTime(2222),
+                                                          );
+
+                                                          if (newDate == null) return;
+
+                                                          setState(() => _billDateStart = newDate);
+                                                          },
+                                                          child: Text('Select Date'),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                ),
+                                                Padding(
                                                   padding: EdgeInsets.symmetric(vertical: 10),
-                                                  child: TextField(
-                                                    controller: budgetExpected,
-                                                    decoration: InputDecoration(
-                                                        enabledBorder: OutlineInputBorder(
-                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
-                                                          borderRadius: BorderRadius.circular(50.0),
-                                                        ),
-                                                        focusedBorder: OutlineInputBorder(
-                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
-                                                          borderRadius: BorderRadius.circular(50.0),
-                                                        ),
-                                                        prefixIcon: Icon(Icons.currency_exchange_outlined) ,
-                                                        labelText: 'Total Amount',
-                                                        hintText: 'Total'),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        'End Date: ${_billDateEnd.month}/${_billDateEnd.day}/${_billDateEnd.year}',
+                                                        style: TextStyle(fontSize: 17, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),
+                                                      ),
+                                                      ElevatedButton(
+                                                        onPressed: () async {
+                                                          DateTime? newDate = await showDatePicker(
+                                                            context: context,
+                                                            initialDate: _billDateEnd,
+                                                            firstDate: DateTime(1900),
+                                                            lastDate: DateTime(2222),
+                                                          );
+
+                                                          if (newDate == null) return;
+
+                                                          setState(() => _billDateEnd = newDate);
+                                                        },
+                                                        child: Text('Select Date'),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                                 const SizedBox(
@@ -395,20 +440,22 @@ class _AddPageState extends State<AddPage> {
                                                     onPressed: () async {
                                                       // ADD BUDGET
                                                       print(id);
-                                                      if (budgetName.text == "" || budgetActual.text == "" || budgetExpected.text == "")
+                                                      if (billName.text == "" || billPrice.text == "")
                                                       {
                                                         _showToast("Fill fields", true);
                                                       }
                                                       else
                                                       {
-                                                        var budget = Budget(
-                                                            userId: id,
-                                                            name: budgetName.text,
-                                                            actualPrice: num.parse(budgetActual.text),
-                                                            expectedPrice: num.parse(budgetExpected.text)
+                                                        var bill = Bill(
+                                                          userId: id,
+                                                          name: billName.text,
+                                                          price: num.parse(billPrice.text),
+                                                          startDate: _billDateStart.toString(),
+                                                          endDate: _billDateEnd.toString(),
+                                                          color: "#ffffff",
                                                         );
-                                                        print(budgetToJson(budget));
-                                                        var response = await BaseClient().postBudget(budget).catchError((err) {print("Fail");});
+                                                        print(billToJson(bill));
+                                                        var response = await BaseClient().postBill(bill).catchError((err) {print("Fail");});
                                                         if (response == null) {
                                                           _showToast("Could not add", true);
                                                           print("response null");
@@ -418,11 +465,15 @@ class _AddPageState extends State<AddPage> {
                                                         print("success");
                                                       }
 
-                                                      clearLogSignFields();
+                                                      clearFields();
+                                                      setState(() {
+                                                        _billDateStart = DateTime.now();
+                                                        _billDateEnd = DateTime.now();
+                                                      });
 
                                                     },
                                                     child: const Text(
-                                                      'Add Budget',
+                                                      'Add Bill',
                                                       style: TextStyle(fontSize: 23, color: Color(0xFFE3E9E7), fontWeight: FontWeight.bold),
                                                     ),
                                                   ),

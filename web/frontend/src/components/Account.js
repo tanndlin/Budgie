@@ -90,14 +90,14 @@ function Account(props) {
 
             <span className="grid grid-cols-2 place-items-center pt-4">
                 <input
-                    className="w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md"
+                    className="w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md shadow-md"
                     type="submit"
                     value="Reset Password"
                     onClick={resetPassword}
                 />
 
                 <input
-                    className="w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md"
+                    className="w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md shadow-md"
                     type="submit"
                     value="Log Out"
                     onClick={() => {

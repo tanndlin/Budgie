@@ -4,6 +4,10 @@ import Account from '../components/Account';
 import CategoryView from '../components/CategoryView';
 
 function AccountPage(props) {
+    if (!props.user) {
+        window.location.href = '/';
+    }
+
     return (
         <main className="min-h-minus-header py-10 flex flex-col gap-10">
             <article className="mx-auto p-8  h-4/5 min-h-[520px] container min-w-[770px] max-w-[1200px] bg-[#BBE9E7] bg-opacity-50 rounded-md">

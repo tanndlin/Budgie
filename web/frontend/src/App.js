@@ -30,15 +30,14 @@ function App() {
     ]);
 
     const [notifications, setNotifications] = React.useState([]);
-    const [notifId, setNotifId] = React.useState(0);
 
+    let notifId = 0;
     const pushNotification = (title, message) => {
         const notification = {
-            id: notifId,
+            id: notifId++,
             title: title,
             message: message
         };
-        setNotifId(notifId + 1);
 
         setNotifications((notifications) => [...notifications, notification]);
         return notification.id;

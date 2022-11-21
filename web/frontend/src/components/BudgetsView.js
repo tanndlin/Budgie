@@ -115,13 +115,13 @@ function BudgetsView(props) {
             </section>
             <footer className="border-black border-t-2 p-1 flex flex-row gap-4">
                 <input
-                    className="px-2 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md"
+                    className="px-2 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md shadow-md"
                     type="button"
                     value="Add Budget"
                     onClick={newBudget}
                 />
                 <input
-                    className="px-2 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md"
+                    className="px-2 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md shadow-md"
                     type="button"
                     value="Reset Budgets"
                     onClick={resetBudgets}

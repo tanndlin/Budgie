@@ -30,15 +30,14 @@ function App() {
     ]);
 
     const [notifications, setNotifications] = React.useState([]);
-    const [notifId, setNotifId] = React.useState(0);
 
+    let notifId = 0;
     const pushNotification = (title, message) => {
         const notification = {
-            id: notifId,
+            id: notifId++,
             title: title,
             message: message
         };
-        setNotifId(notifId + 1);
 
         setNotifications((notifications) => [...notifications, notification]);
         return notification.id;
@@ -90,7 +89,7 @@ function App() {
                 <Route
                     path="/"
                     element={
-                        <div className="h-screen">
+                        <div className="min-h-screen">
                             <Header {...headerProps(false)} />
                             <LoginPage {...props} />
                         </div>
@@ -100,7 +99,7 @@ function App() {
                 <Route
                     path="/calendar"
                     element={
-                        <div className="h-screen">
+                        <div className="min-h-screen">
                             <Header {...headerProps(true)} />
                             <CalendarPage {...props} />
                         </div>
@@ -110,7 +109,7 @@ function App() {
                 <Route
                     path="/account"
                     element={
-                        <div className="h-screen">
+                        <div className="min-h-screen">
                             <Header {...headerProps(true)} />
                             <AccountPage {...props} />
                         </div>

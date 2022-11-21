@@ -10,7 +10,7 @@ import '../models/budget.dart';
 
 import 'package:mobile/global.dart' as global;
 
-final String id = global.userId;
+String id = global.userId;
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -269,6 +269,7 @@ class _AddPageState extends State<AddPage> {
                                                       foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
                                                     ),
                                                     onPressed: () async {
+                                                      id = global.userId;
                                                       // ADD BUDGET
                                                       print(id);
                                                       if (budgetName.text == "" || budgetActual.text == "" || budgetExpected.text == "")
@@ -280,8 +281,8 @@ class _AddPageState extends State<AddPage> {
                                                         var budget = Budget(
                                                             userId: id,
                                                             name: budgetName.text,
-                                                            actualPrice: int.parse(budgetActual.text),
-                                                            expectedPrice: int.parse(budgetExpected.text)
+                                                            actualPrice: double.parse(budgetActual.text),
+                                                            expectedPrice: double.parse(budgetExpected.text)
                                                         );
                                                         print(budgetToJson(budget));
                                                         var response = await BaseClient().postBudget(budget).catchError((err) {print("Fail");});
@@ -403,8 +404,8 @@ class _AddPageState extends State<AddPage> {
                                                         var budget = Budget(
                                                             userId: id,
                                                             name: budgetName.text,
-                                                            actualPrice: int.parse(budgetActual.text),
-                                                            expectedPrice: int.parse(budgetExpected.text)
+                                                            actualPrice: num.parse(budgetActual.text),
+                                                            expectedPrice: num.parse(budgetExpected.text)
                                                         );
                                                         print(budgetToJson(budget));
                                                         var response = await BaseClient().postBudget(budget).catchError((err) {print("Fail");});

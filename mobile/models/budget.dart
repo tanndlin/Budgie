@@ -34,16 +34,16 @@ class Budget {
   String? userId;
   String name;
   String? categoryId;
-  int expectedPrice;
-  int actualPrice;
+  num expectedPrice;
+  num actualPrice;
   String? startDate;
   String? id;
 
   factory Budget.fromJson(Map<String, dynamic> json) => Budget(
     name: json["name"] as String,
     categoryId: json["categoryId"] as String,
-    expectedPrice: json["expectedPrice"] as int,
-    actualPrice: json["actualPrice"] as int,
+    expectedPrice: json["expectedPrice"] as num,
+    actualPrice: json["actualPrice"] as num,
     startDate: json["startDate"] as String,
     id: json["id"] as String,
   );

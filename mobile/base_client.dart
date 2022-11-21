@@ -6,9 +6,9 @@ import 'package:mobile/global.dart' as global;
 
 const String baseUrl = 'https://us-central1-cop4331-large-project-27.cloudfunctions.net/webApi';
 
-final String id = global.userId;
+// final String id = global.userId;
 
-final Map getData = {
+Map getData(String id) => {
   "userId": id
 };
 
@@ -38,10 +38,10 @@ class BaseClient
   }
 
   // parameter user id
-  Future<dynamic> getBudgets() async {
+  Future<dynamic> getBudgets(String id) async {
     var url = Uri.parse(baseUrl + '/GetBudgets');
 
-    var _payload = jsonEncode(getData);
+    var _payload = jsonEncode(getData(id));
 
     var response = await client.post(url, body: _payload, headers: _setHeaders());
     if (response.statusCode == 201){

@@ -10,7 +10,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../base_client.dart';
 import '../models/budget.dart';
 
-final String id = global.userId;
+String id = global.userId;
 
 class DisplayPage extends StatefulWidget {
   const DisplayPage({super.key});
@@ -85,11 +85,11 @@ class _DisplayPageState extends State<DisplayPage> {
                 children: [
                   Text("${getAllBudgets[index].startDate}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
                   SizedBox(width: 10.0,),
-                  Text("${getAllBudgets[index].actualPrice}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                  Text("${(getAllBudgets[index].actualPrice)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
                   SizedBox(width: 10.0,),
                   Text("of", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
                   SizedBox(width: 10.0,),
-                  Text("${getAllBudgets[index].expectedPrice}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                  Text("${(getAllBudgets[index].expectedPrice)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
                 ],
               ),
               Row(
@@ -205,15 +205,17 @@ class _DisplayPageState extends State<DisplayPage> {
                                           ),
                                         ],
                                         onPressed: (int newIndex) async {
+                                          id = global.userId;
                                           if (newIndex == 0)
                                           {
-                                            var response = await BaseClient().getBudgets().catchError((err) {print("Fail");});
+                                            var response = await BaseClient().getBudgets(id).catchError((err) {print("Fail");});
                                             if (response == null) {
                                               _showToast("Could not get", true);
                                               print("response null");
                                             }
                                             else {
                                               print("Got budgets");
+                                              print(id);
                                               print(response);
                                               List<Budget> allBudgets = getBudgetsFromJson(response);
                                               for (Budget b in allBudgets) {

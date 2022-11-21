@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import BackgroundImage from '../img/divider_v2.jpg';
 
 function AccountPage(props) {
@@ -17,10 +18,37 @@ function AccountPage(props) {
         }
     }
 
+    const backgroundImage = 'fixed h-full w-full opacity-70 object-fill';
+    let [backgroundToggle2, setBackgroundToggle2] = useState(() => {
+        const saved = localStorage.getItem("backgroundToggle2");
+        const initialValue = JSON.parse(saved);
+        return initialValue || null;
+    });
+    const ChangeBackgroundToggle2 = () => {
+        if (backgroundToggle2 == null) {
+            setBackgroundToggle2(true);
+        } else if (backgroundToggle2 == false) {
+            setBackgroundToggle2(true);
+        } else {
+            // backgroundToggle2 == true
+            setBackgroundToggle2(false);
+        }
+        return backgroundToggle2;
+    };
+    useEffect(() => {
+        localStorage.setItem("backgroundToggle2", JSON.stringify(backgroundToggle2))
+    }, [backgroundToggle2]);
+
     return (
         <div className=''>
-            <img className='fixed h-full w-full opacity-70 object-fill' src={BackgroundImage} alt='Wooden Texture' />
+            { !backgroundToggle2 && (
+                <img className={backgroundImage} src={BackgroundImage} alt='Wooden Texture' />
+            )}
             <div className="fixed h-full w-full object-fill overflow-y-auto snap-x scroll-smooth">
+                <div className='mt-5 max-w-[175px] m-auto bg-[#BBE9E7] bg-opacity-90 p-3 rounded-md'>
+                    <input className='font-bold text-center hover:text-[#189DFD]' type='button' value='Background Toggle'
+                        onClick={() => ChangeBackgroundToggle2()} />
+                </div>
                 <article className="m-auto my-5 container bg-[#BBE9E7] bg-opacity-90 p-3 rounded-md">
                     <div className="flex flex-row justify-between font-bold border-black border-b-2 p-1">
                         <h1 className="text-2xl">Account Information:</h1>

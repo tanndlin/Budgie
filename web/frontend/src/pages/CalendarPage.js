@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import BigCalendar from '../components/Calendar';
 import BudgetsView from '../components/BudgetsView';
 import ExtraneousView from '../components/ExtraneousView';
@@ -20,6 +21,27 @@ function CalendarPage(props) {
         }
     }
 
+    const backgroundImage = 'fixed h-full w-full opacity-70 object-fill';
+    let [backgroundToggle, setBackgroundToggle] = useState(() => {
+        const saved = localStorage.getItem("backgroundToggle");
+        const initialValue = JSON.parse(saved);
+        return initialValue || null;
+    });
+    const ChangeBackgroundToggle = () => {
+        if (backgroundToggle == null) {
+            setBackgroundToggle(true);
+        } else if (backgroundToggle == false) {
+            setBackgroundToggle(true);
+        } else {
+            // backgroundToggle == true
+            setBackgroundToggle(false);
+        }
+        return backgroundToggle;
+    };
+    useEffect(() => {
+        localStorage.setItem("backgroundToggle", JSON.stringify(backgroundToggle))
+    }, [backgroundToggle]);
+
     // Does both operations because 2 setstates overwrite each other
     function modifyEvents(add, remove) {
         if (remove) {
@@ -32,8 +54,14 @@ function CalendarPage(props) {
 
     return (
         <div className=''>
-            <img className='fixed h-full w-full opacity-70 object-fill' src={BackgroundImage} alt='Wooden Texture' />
-            <div className="fixed h-full w-full object-fill overflow-y-auto snap-x scroll-smooth">
+            { !backgroundToggle && (
+                <img className={backgroundImage} src={BackgroundImage} alt='Wooden Texture' />
+            )}
+            <div className="fixed h-full w-full overflow-y-auto snap-x scroll-smooth">
+                <div className='mt-5 max-w-[175px] m-auto bg-[#BBE9E7] bg-opacity-90 p-3 rounded-md'>
+                    <input className='font-bold text-center hover:text-[#189DFD]' type='button' value='Background Toggle'
+                        onClick={() => ChangeBackgroundToggle()} />
+                </div>
                 <div className='snap-end'>
                     <BigCalendar bills={props.bills} modifyEvents={modifyEvents} />
                 </div>

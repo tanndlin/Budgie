@@ -25,7 +25,7 @@ function App() {
   };
 
   const headerProps = (shouldShowNav) => ({
-    ...props, showNav: shouldShowNav,
+    ...props, showNav: shouldShowNav
   });
 
   return (

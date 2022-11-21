@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { BigCalendar } from '../components/Calendar';
 import BudgetsView from '../components/BudgetsView';
 import ExtraneousView from '../components/ExtraneousView';
-import { useLocation } from 'react-router-dom';
 import { sendRequest } from '../common/Requests';
 import BackgroundImage from '../img/divider.jpg';
 
@@ -81,6 +81,30 @@ function CalendarPage(props) {
         hydrateCalendar();
     }, []);
 
+    const backgroundImage = 'fixed h-full w-full opacity-70 object-fill';
+    const [backgroundToggle, setBackgroundToggle] = useState(() => {
+        const saved = localStorage.getItem('backgroundToggle');
+        const initialValue = JSON.parse(saved);
+        return initialValue || null;
+    });
+    const ChangeBackgroundToggle = () => {
+        if (backgroundToggle == null) {
+            setBackgroundToggle(true);
+        } else if (backgroundToggle == false) {
+            setBackgroundToggle(true);
+        } else {
+            // backgroundToggle == true
+            setBackgroundToggle(false);
+        }
+        return backgroundToggle;
+    };
+    useEffect(() => {
+        localStorage.setItem(
+            'backgroundToggle',
+            JSON.stringify(backgroundToggle)
+        );
+    }, [backgroundToggle]);
+
     // Does both operations because 2 setstates overwrite each other
     function modifyEvents(add, remove) {
         if (remove) {
@@ -93,11 +117,13 @@ function CalendarPage(props) {
 
     return (
         <main className="min-h-minus-header pb-40">
-            <img
-                className="fixed h-full w-full opacity-70 object-fill"
-                src={BackgroundImage}
-                alt="Background image"
-            />
+            {!backgroundToggle && (
+                <img
+                    className={backgroundImage}
+                    src={BackgroundImage}
+                    alt="Wooden Texture"
+                />
+            )}
             <div className="fixed h-full w-full object-fill overflow-y-auto snap-x scroll-smooth">
                 <div className="snap-end">
                     <BigCalendar

@@ -77,7 +77,12 @@ function CreateBillPopUp(props) {
     }
 
     return (
-        <section className="flex container h-full bg-[#BBE9E7] bg-opacity-50 rounded-md relative">
+        <section
+            className={
+                'flex container h-full relative sidebar' +
+                (props.isOpen ? '' : ' sidebarClose')
+            }
+        >
             <input
                 className="absolute top-0 right-0 cursor-pointer text-[36px] font-bold mr-4"
                 type="button"
@@ -87,7 +92,12 @@ function CreateBillPopUp(props) {
                 }}
             />
 
-            <div className="p-4 my-4 h-3/4 m-auto bg-[#b2c6ec] bg-opacity-[.7] rounded-md">
+            <div
+                className={
+                    'p-4 my-4 h-3/4 m-auto bg-[#b2c6ec] bg-opacity-[.7] rounded-md duration-500' +
+                    (props.isOpen ? '' : ' sideBarChildClose')
+                }
+            >
                 <h1 className="text-center text-[#3B3548] text-6xl mb-4">
                     Bill
                 </h1>
@@ -96,89 +106,81 @@ function CreateBillPopUp(props) {
                     onSubmit={editEvent}
                     className="grid grid-cols-3 gap-4 place-items-center"
                 >
-                    <div className="grid grid-rows-2">
-                        <span className="flex flex-col">
-                            <label htmlFor="Name">Name</label>
-                            <input
-                                className="w-48 px-1 placeholder-[#4D4D4D] rounded-md"
-                                type="text"
-                                id="nameInput"
-                                placeholder="Name"
-                                onChange={nameChange}
-                                value={props.name}
-                            />
-                        </span>
-                    </div>
+                    <span className="flex flex-col">
+                        <label htmlFor="Name">Name</label>
+                        <input
+                            className="w-48 px-1 placeholder-[#4D4D4D] rounded-md"
+                            type="text"
+                            id="nameInput"
+                            placeholder="Name"
+                            onChange={nameChange}
+                            value={props.name}
+                        />
+                    </span>
 
-                    <div className="grid grid-rows-2">
-                        <span className="flex flex-col">
-                            <label htmlFor="Start Date">Start Date</label>
-                            <input
-                                className="w-48 px-1 placeholder-[#4D4D4D] rounded-md"
-                                type="date"
-                                id="startDateDateInput"
-                                onChange={startDateChange}
-                                value={
-                                    props.startDate.toISOString().split('T')[0]
-                                }
-                            />
-                        </span>
+                    <span className="flex flex-col">
+                        <label htmlFor="Start Date">Start Date</label>
+                        <input
+                            className="w-48 px-1 placeholder-[#4D4D4D] rounded-md"
+                            type="date"
+                            id="startDateDateInput"
+                            onChange={startDateChange}
+                            value={props.startDate.toISOString().split('T')[0]}
+                        />
+                    </span>
 
-                        <span className="flex flex-col">
-                            <label htmlFor="End Date">End Date</label>
-                            <input
-                                className="w-48 px-1 placeholder-[#4D4D4D] rounded-md"
-                                type="date"
-                                id="endDateInput"
-                                onChange={endDateChange}
-                                value={
-                                    props.endDate.toISOString().split('T')[0]
-                                }
-                            />
-                        </span>
-                    </div>
+                    <span className="flex flex-col">
+                        <label htmlFor="Price">Price</label>
+                        <input
+                            className="w-48 px-1 placeholder-[#4D4D4D] rounded-md"
+                            type="number"
+                            id="priceInput"
+                            onChange={priceChange}
+                            value={props.price}
+                        />
+                    </span>
 
-                    <div className="grid grid-rows-2">
-                        <span className="flex flex-col">
-                            <label htmlFor="Price">Price</label>
-                            <input
-                                className="w-48 px-1 placeholder-[#4D4D4D] rounded-md"
-                                type="number"
-                                id="priceInput"
-                                onChange={priceChange}
-                                value={props.price}
-                            />
-                        </span>
+                    <p></p>
 
-                        <span className="flex flex-col">
-                            <label htmlFor="Category">Category</label>
-                            <span className="h-[26px]">
-                                <Dropdown
-                                    className="smallDropdown-parent h-26 bg-white rounded-md"
-                                    controlClassName="slim h-26"
-                                    placeholderClassName="slim h-26"
-                                    options={props.categories.map((c) => {
-                                        return {
-                                            value: c.name,
-                                            label: c.name
-                                        };
-                                    })}
-                                    onChange={(e) => {
-                                        props.setCategoryID(
-                                            props.categories.find(
-                                                (c) => c.name === e.value
-                                            ).id
-                                        );
-                                    }}
-                                    value={
+                    <span className="flex flex-col">
+                        <label htmlFor="End Date">End Date</label>
+                        <input
+                            className="w-48 px-1 placeholder-[#4D4D4D] rounded-md"
+                            type="date"
+                            id="endDateInput"
+                            onChange={endDateChange}
+                            value={props.endDate.toISOString().split('T')[0]}
+                        />
+                    </span>
+
+                    <span className="flex flex-col">
+                        <label htmlFor="Category">Category</label>
+                        <span className="h-[26px]">
+                            <Dropdown
+                                className="smallDropdown-parent h-26 bg-white rounded-md w-48"
+                                controlClassName="slim h-26"
+                                placeholderClassName="slim h-26"
+                                options={props.categories.map((c) => {
+                                    return {
+                                        value: c.name,
+                                        label: c.name
+                                    };
+                                })}
+                                onChange={(e) => {
+                                    props.setCategoryID(
                                         props.categories.find(
-                                            (c) => c.id === props.categoryId
-                                        ).name
-                                    }
-                                />
-                            </span>
+                                            (c) => c.name === e.value
+                                        ).id
+                                    );
+                                }}
+                                value={
+                                    props.categories.find(
+                                        (c) => c.id === props.categoryId
+                                    ).name
+                                }
+                            />
                         </span>
-                    </div>
+                    </span>
 
                     <p></p>
                     <input

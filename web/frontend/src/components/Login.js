@@ -18,7 +18,6 @@ function Login(props) {
                 expectedIncome: 2000
             },
             (res) => {
-                console.log(res);
                 const user = JSON.parse(res.responseText);
                 props.removeNotification(id);
                 callback(user);
@@ -30,8 +29,6 @@ function Login(props) {
     };
 
     const navigateToHome = (user) => {
-        console.log('navigating');
-        console.log(user);
         navigate('/calendar', { state: { user } });
     };
 
@@ -51,7 +48,6 @@ function Login(props) {
             payload,
             (res) => {
                 const { localId } = JSON.parse(res.responseText);
-                console.log(localId);
 
                 const id = props.pushNotification(
                     'Retrieving Profile',
@@ -63,13 +59,10 @@ function Login(props) {
                     { userId: localId },
                     (res) => {
                         props.removeNotification(id);
-                        console.log(res.responseText);
                         const user = JSON.parse(res.responseText);
-                        console.log(user);
                         navigateToHome(user);
                     },
                     (err) => {
-                        console.log('here');
                         console.log(err);
                         if (err !== "User doesn't exist") {
                             setMessage(err);

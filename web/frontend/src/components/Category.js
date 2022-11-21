@@ -14,7 +14,6 @@ function Category(props) {
 
     const deleteMe = (category) => {
         const numRefs = getReferences(category);
-        console.log(numRefs);
 
         if (numRefs > 0) {
             const id = props.pushNotification(

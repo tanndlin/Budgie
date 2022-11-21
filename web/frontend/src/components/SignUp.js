@@ -29,10 +29,7 @@ function SignUp(props) {
         sendOutsideRequest(
             URL,
             payload,
-            (res) => {
-                const { localId } = JSON.parse(res.responseText);
-                console.log(localId);
-
+            (_res) => {
                 setMessage('Account created successfully');
                 props.setLoginEmail(email);
 

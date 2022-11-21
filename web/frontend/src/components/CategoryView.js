@@ -19,14 +19,11 @@ function CategoryView(props) {
             name: getNewName()
         };
 
-        console.log('Sending Request');
         sendRequest(
             'CreateCategory',
             { ...newCat, userId: props.user.userId },
             (res) => {
-                console.log(res.responseText);
                 const resCat = JSON.parse(res.responseText);
-                console.log(resCat);
                 props.setCategories([...props.categories, resCat]);
             },
             (err) => {

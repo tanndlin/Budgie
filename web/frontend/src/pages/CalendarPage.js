@@ -36,7 +36,6 @@ function CalendarPage(props) {
                     });
 
                     callback(ret);
-                    console.log('removing notif: ', notifId);
                     props.removeNotification(notifId);
                 },
                 (err) => {

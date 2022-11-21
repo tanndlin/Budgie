@@ -23,7 +23,6 @@ function CreateBillPopUp(props) {
                 'CreateBill',
                 { ...bill, userId: props.user.userId },
                 (res) => {
-                    console.log('Saved new bill', res);
                     const resBill = JSON.parse(res.responseText);
                     bill.id = resBill.id;
                     props.pushEvent(bill);
@@ -37,7 +36,6 @@ function CreateBillPopUp(props) {
                 'EditBill',
                 { ...bill, id: props.id, userId: props.user.userId },
                 (res) => {
-                    console.log('Editted bill', res);
                     const resBill = JSON.parse(res.responseText);
                     bill.id = resBill.id;
                     props.pushEvent(bill);

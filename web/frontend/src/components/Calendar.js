@@ -1,7 +1,6 @@
 import React from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import SideBar from './SideBar';
 import Dropdown from 'react-dropdown';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -201,31 +200,6 @@ export function BigCalendar(props) {
     return (
         <div className="flex min-h-9/10 mb-5">
             <section className="flex flex-col container m-auto">
-                <SideBar isOpen={isOpen}>
-                    <CreateBillPopUp
-                        {...{
-                            user: props.user,
-                            name,
-                            startDate,
-                            endDate,
-                            price,
-                            categoryId,
-                            setCategoryID,
-                            setPrice,
-                            setName,
-                            setStartDate,
-                            setEndDate,
-                            closeModal,
-                            pushEvent,
-                            deleteBill,
-                            isEdit,
-                            categories: props.categories,
-                            id: currentBill?.id,
-                            isPaid: currentBill?.isPaid
-                        }}
-                    />
-                </SideBar>
-
                 <div
                     className="container m-auto mt-5 min-h-500 bg-[#BBE9E7] bg-opacity-50 p-3 rounded-md"
                     onClick={handleCalendarClick}
@@ -292,6 +266,29 @@ export function BigCalendar(props) {
 
                         <p>Ctrl + Click to toggle paid</p>
                     </footer>
+                    <CreateBillPopUp
+                        {...{
+                            isOpen,
+                            user: props.user,
+                            name,
+                            startDate,
+                            endDate,
+                            price,
+                            categoryId,
+                            setCategoryID,
+                            setPrice,
+                            setName,
+                            setStartDate,
+                            setEndDate,
+                            closeModal,
+                            pushEvent,
+                            deleteBill,
+                            isEdit,
+                            categories: props.categories,
+                            id: currentBill?.id,
+                            isPaid: currentBill?.isPaid
+                        }}
+                    />
                 </div>
             </section>
         </div>

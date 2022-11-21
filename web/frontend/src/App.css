@@ -105,41 +105,20 @@ input[type='number'] {
 
 .sidebar {
     height: auto;
-    transition: 300ms;
+    transition: 500ms;
     max-height: 1000px;
-}
-
-.sidebarOpen {
-    animation: slideOpen 300ms forwards;
+    opacity: 1;
+    animation: slideIn 0.5s ease-in-out;
 }
 
 .sidebarClose {
-    animation: slideClose 300ms forwards;
     max-height: 0px;
+    opacity: 0;
+    transition: 500ms;
 }
 
-@keyframes slideOpen {
-    0% {
-        max-height: 0px;
-        transform: scaleY(0);
-    }
-    100% {
-        max-height: 1000px;
-        transform: scaleY(1);
-    }
-}
-
-@keyframes slideClose {
-    0% {
-        opacity: 1;
-        transform: scaleY(1);
-    }
-    100% {
-        display: none;
-        opacity: 0;
-        transform: scaleY(0);
-        transform: rotateX(90deg);
-    }
+.sideBarChildClose{
+    transform: scaleY(0);
 }
 
 .slim-parent {

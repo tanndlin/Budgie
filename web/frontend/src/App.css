@@ -12,40 +12,15 @@ input[type='number'] {
     min-height: 500px;
     height: 100%;
     width: 100%;
-    background-image: url("img/paper_v3.jpg");
+    background-color: white;
 }
+
 .rbc-day-bg {
-    min-height: 500px;
-    height: 100%;
-    width: 100%;
-    background-image: url("img/paper_v3.jpg");
     background-blend-mode: luminosity;
 }
-.rbc-today {
-  background-color: rgba(178, 198, 236, 1) !important;
-}
-.rbc-off-range {
-    min-height: 500px;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(187, 233, 231, .3);
-    background-image: url("img/paper_v3.jpg");
-    background-blend-mode: luminosity;
-}
-.rbc-events-container {
-    min-height: 500px;
-    height: 100%;
-    width: 100%;
-    background-image: url("img/paper_v3.jpg");
-}
-.rbc-header {
-    min-height: 500px;
-    height: 100%;
-    width: 100%;
-    background-image: url("img/paper_v3.jpg");
-}
-.rbc-time-view .rbc-row {
-    background-image: url("img/paper_v3.jpg");
+
+.paper{
+    background-image: url("img/paper_v3.jpg")
 }
 
 .editable {

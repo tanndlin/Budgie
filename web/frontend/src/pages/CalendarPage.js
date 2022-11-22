@@ -81,8 +81,6 @@ function CalendarPage(props) {
         hydrateCalendar();
     }, []);
 
-    const backgroundImage = 'fixed h-full w-full opacity-70 object-fill';
-
     // Does both operations because 2 setstates overwrite each other
     function modifyEvents(add, remove) {
         if (remove) {
@@ -93,11 +91,18 @@ function CalendarPage(props) {
         }
     }
 
+    const opacity = () => {
+        if (props.backgroundToggle) {
+            return 'bg-opacity-90';
+        }
+        return 'bg-opacity-50';
+    };
+
     return (
         <main className="min-h-minus-header pb-40">
             {props.backgroundToggle && (
                 <img
-                    className={backgroundImage}
+                    className={'fixed h-full w-full opacity-70 object-fill'}
                     src={BackgroundImage}
                     alt="Wooden Texture"
                 />
@@ -112,6 +117,7 @@ function CalendarPage(props) {
                         categories={props.categories}
                         categorySortID={categorySortID}
                         setCategorySortID={setCategorySortID}
+                        opacity={opacity()}
                     />
                 </div>
                 <div className="snap-end">
@@ -121,6 +127,7 @@ function CalendarPage(props) {
                         setBudgets={props.setBudgets}
                         categories={props.categories}
                         categorySortID={categorySortID}
+                        opacity={opacity()}
                     />
                 </div>
                 <div className="snap-end">
@@ -130,6 +137,7 @@ function CalendarPage(props) {
                         setExtras={props.setExtras}
                         categories={props.categories}
                         categorySortID={categorySortID}
+                        opacity={opacity()}
                     />
                 </div>
             </div>

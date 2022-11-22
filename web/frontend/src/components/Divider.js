@@ -15,7 +15,7 @@ function Divider(props) {
         <div
             id="divider"
             className={
-                'duration-300 w-1/2 min-h-[348px] absolute right-0 group transform h-full bg-gradient-to-br from-[#479CE0] via-[#9ECFA2] to-[#E7E233]' +
+                'duration-300 w-1/2 min-h-[348px] absolute right-0 group transform h-full' +
                 (props.dividerToggle ? '' : dividerPositionClass)
             }
             onClick={() => {
@@ -23,7 +23,7 @@ function Divider(props) {
             }}
         >
             <img
-                className="absolute rounded-md h-full w-full opacity-[0.7]"
+                className="absolute rounded-md h-full w-full"
                 src={DividerImage}
                 alt="Wood Texture"
             />

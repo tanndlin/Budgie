@@ -25,7 +25,6 @@ input[type='number'] {
 }
 
 .rbc-off-range {
-    min-height: 500px;
     background-color: rgba(187, 233, 231, .3);
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { BigCalendar } from '../components/Calendar';
 import BudgetsView from '../components/BudgetsView';
@@ -82,28 +82,6 @@ function CalendarPage(props) {
     }, []);
 
     const backgroundImage = 'fixed h-full w-full opacity-70 object-fill';
-    const [backgroundToggle, setBackgroundToggle] = useState(() => {
-        const saved = localStorage.getItem('backgroundToggle');
-        const initialValue = JSON.parse(saved);
-        return initialValue || null;
-    });
-    const ChangeBackgroundToggle = () => {
-        if (backgroundToggle == null) {
-            setBackgroundToggle(true);
-        } else if (backgroundToggle === false) {
-            setBackgroundToggle(true);
-        } else {
-            // backgroundToggle == true
-            setBackgroundToggle(false);
-        }
-        return backgroundToggle;
-    };
-    useEffect(() => {
-        localStorage.setItem(
-            'backgroundToggle',
-            JSON.stringify(backgroundToggle)
-        );
-    }, [backgroundToggle]);
 
     // Does both operations because 2 setstates overwrite each other
     function modifyEvents(add, remove) {
@@ -117,7 +95,7 @@ function CalendarPage(props) {
 
     return (
         <main className="min-h-minus-header pb-40">
-            {!backgroundToggle && (
+            {props.backgroundToggle && (
                 <img
                     className={backgroundImage}
                     src={BackgroundImage}

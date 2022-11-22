@@ -61,6 +61,19 @@ function App() {
         }, 1000);
     };
 
+    const [backgroundToggle, setBackgroundToggle] = React.useState(() => {
+        const saved = localStorage.getItem('backgroundToggle');
+        const initialValue = JSON.parse(saved);
+        return initialValue ?? false;
+    });
+
+    React.useEffect(() => {
+        localStorage.setItem(
+            'backgroundToggle',
+            JSON.stringify(backgroundToggle)
+        );
+    }, [backgroundToggle]);
+
     const props = {
         user,
         setUser,
@@ -74,12 +87,14 @@ function App() {
         setCategories,
         notifications,
         pushNotification,
-        removeNotification
+        removeNotification,
+        backgroundToggle,
+        setBackgroundToggle
     };
 
-    const headerProps = (shouldShowNav) => ({
+    const headerProps = (showNav) => ({
         ...props,
-        showNav: shouldShowNav
+        showNav
     });
 
     return (

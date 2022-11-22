@@ -2,7 +2,7 @@ import React from 'react';
 import Overview from '../components/Overview';
 import Account from '../components/Account';
 import CategoryView from '../components/CategoryView';
-import BackgroundImage from '../img/divider.jpg';
+import BackgroundImage from '../img/divider_v2.jpg';
 
 function AccountPage(props) {
     if (!props.user) {

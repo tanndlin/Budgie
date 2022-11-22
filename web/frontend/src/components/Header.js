@@ -12,6 +12,15 @@ function Header(props) {
 
             {props.showNav && (
                 <span className="flex flex-cols gap-x-3 m-auto">
+                    {/* // TODO: Move this somewhere else */}
+                    <input
+                        className="font-bold text-center hover:text-[#189DFD]"
+                        type="button"
+                        value="Toggle Background"
+                        onClick={() =>
+                            props.setBackgroundToggle(!props.backgroundToggle)
+                        }
+                    />
                     <Link
                         className="font-bold hover:text-[#189DFD]"
                         to={{

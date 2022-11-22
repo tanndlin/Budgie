@@ -201,7 +201,7 @@ export function BigCalendar(props) {
         <div className="flex min-h-9/10 mb-5">
             <section className="flex flex-col container m-auto">
                 <div
-                    className="container m-auto mt-5 min-h-500 bg-[#BBE9E7] bg-opacity-50 p-3 rounded-md"
+                    className={`container m-auto mt-5 min-h-500 bg-[#BBE9E7] ${props.opacity} p-3 rounded-md`}
                     onClick={handleCalendarClick}
                 >
                     <header className="grid grid-cols-3 font-bold mb-3 border-black border-b-2 p-1">

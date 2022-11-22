@@ -1,9 +1,10 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { BigCalendar } from '../components/Calendar';
 import BudgetsView from '../components/BudgetsView';
 import ExtraneousView from '../components/ExtraneousView';
-import { useLocation } from 'react-router-dom';
 import { sendRequest } from '../common/Requests';
+import BackgroundImage from '../img/divider.jpg';
 
 function CalendarPage(props) {
     const [categorySortID, setCategorySortID] = React.useState(-1);
@@ -90,36 +91,57 @@ function CalendarPage(props) {
         }
     }
 
+    const opacity = () => {
+        if (props.backgroundToggle) {
+            return 'bg-opacity-90';
+        }
+        return 'bg-opacity-50';
+    };
+
     return (
-        <div className="h-screen">
-            <main className="min-h-minus-header pb-40">
-                <BigCalendar
-                    user={props.user}
-                    bills={props.bills}
-                    setBills={props.setBills}
-                    modifyEvents={modifyEvents}
-                    categories={props.categories}
-                    categorySortID={categorySortID}
-                    setCategorySortID={setCategorySortID}
+        <main className="min-h-minus-header pb-40">
+            {props.backgroundToggle && (
+                <img
+                    className={'fixed h-full w-full opacity-70 object-fill'}
+                    src={BackgroundImage}
+                    alt="Wooden Texture"
                 />
-
-                <BudgetsView
-                    user={props.user}
-                    budgets={props.budgets}
-                    setBudgets={props.setBudgets}
-                    categories={props.categories}
-                    categorySortID={categorySortID}
-                />
-
-                <ExtraneousView
-                    user={props.user}
-                    extras={props.extras}
-                    setExtras={props.setExtras}
-                    categories={props.categories}
-                    categorySortID={categorySortID}
-                />
-            </main>
-        </div>
+            )}
+            <div className="fixed h-full w-full object-fill overflow-y-auto snap-x scroll-smooth">
+                <div className="snap-end">
+                    <BigCalendar
+                        user={props.user}
+                        bills={props.bills}
+                        setBills={props.setBills}
+                        modifyEvents={modifyEvents}
+                        categories={props.categories}
+                        categorySortID={categorySortID}
+                        setCategorySortID={setCategorySortID}
+                        opacity={opacity()}
+                    />
+                </div>
+                <div className="snap-end">
+                    <BudgetsView
+                        user={props.user}
+                        budgets={props.budgets}
+                        setBudgets={props.setBudgets}
+                        categories={props.categories}
+                        categorySortID={categorySortID}
+                        opacity={opacity()}
+                    />
+                </div>
+                <div className="snap-end">
+                    <ExtraneousView
+                        user={props.user}
+                        extras={props.extras}
+                        setExtras={props.setExtras}
+                        categories={props.categories}
+                        categorySortID={categorySortID}
+                        opacity={opacity()}
+                    />
+                </div>
+            </div>
+        </main>
     );
 }
 

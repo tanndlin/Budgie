@@ -15,6 +15,14 @@ input[type='number'] {
     background-color: white;
 }
 
+.rbc-day-bg {
+    background-blend-mode: luminosity;
+}
+
+.paper{
+    background-image: url("img/paper_v3.jpg")
+}
+
 .editable {
     all: unset;
     margin: 0;

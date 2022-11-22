@@ -36,10 +36,6 @@ function Account(props) {
         return;
     };
 
-    const resetPassword = () => {
-        return;
-    };
-
     return (
         <div className="grid grid-flow-row gap-4 pl-6">
             <h2 className="text-2xl w-full text-center">My Info</h2>
@@ -86,24 +82,6 @@ function Account(props) {
                         className="inline"
                     />
                 </span>
-            </span>
-
-            <span className="grid grid-cols-2 place-items-center pt-4">
-                <input
-                    className="w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md shadow-md"
-                    type="submit"
-                    value="Reset Password"
-                    onClick={resetPassword}
-                />
-
-                <input
-                    className="w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md shadow-md"
-                    type="submit"
-                    value="Log Out"
-                    onClick={() => {
-                        window.location.href = '/';
-                    }}
-                />
             </span>
         </div>
     );

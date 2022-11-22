@@ -244,3 +244,38 @@ input[type='number'] {
   background-repeat: no-repeat;
   background-position: center;
 }
+
+.background-toggle{
+    background-color: #555;
+    border-radius: 2rem;
+    width:80px;
+    height:40px;
+}
+
+.indicator{
+    background-color: #189DFD;
+    border-radius: 2rem;
+    width:40px;
+    height:40px;
+    display: block;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: margin-left 500ms;
+}
+
+.indicator:hover{
+    cursor: pointer;
+    background-color: #3818FD;
+}
+
+.indicator-on{
+    margin-left:40px;
+    background-image: url('./img/image-icon.png');
+    background-size: 20px;
+}
+
+.indicator-off{
+    margin-left:0px;
+    background-image: url('./img/no-image-icon.png');
+    background-size: 40px;
+}

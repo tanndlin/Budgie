@@ -1,20 +1,254 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:calendar_view/calendar_view.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:mobile/global.dart' as global;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import '../models/bill.dart';
+import '../base_client.dart';
 
-DateTime get _now => DateTime.now();
+String id = global.userId;
+final formKey = GlobalKey<FormState>();
+final billName = TextEditingController();
+final billPrice = TextEditingController();
+final billCategory = TextEditingController();
+DateTime _billDateStart = DateTime.now();
+DateTime _billDateEnd = DateTime.now();
+
+showAddBillDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext dialogContext) {
+      return Dialog(
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+            child: Column(
+              children: [
+                const Text('Add Bill', style: TextStyle(fontSize: 35,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2D4B03)),),
+                const SizedBox(height: 10.0,),
+                Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          controller: billName,
+                          decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(width: 2,
+                                    color: Color(0xFF2D4B03)),
+                                borderRadius: BorderRadius.circular(
+                                    10.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(width: 2,
+                                    color: Color(0xFF000000)),
+                                borderRadius: BorderRadius.circular(
+                                    10.0),
+                              ),
+                              prefixIcon: const Icon(
+                                  Icons.list_alt_rounded),
+                              labelText: 'Bill Name',
+                              hintText: 'Enter Bill Name'),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          controller: billPrice,
+                          decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(width: 2,
+                                    color: Color(0xFF2D4B03)),
+                                borderRadius: BorderRadius.circular(
+                                    10.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(width: 2,
+                                    color: Color(0xFF000000)),
+                                borderRadius: BorderRadius.circular(
+                                    10.0),
+                              ),
+                              prefixIcon: const Icon(
+                                  Icons.currency_exchange_outlined),
+                              labelText: 'Bill Price',
+                              hintText: 'Price'),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Start Date: ${_billDateStart.month}/${_billDateStart
+                                  .day}/${_billDateStart.year}',
+                              style: TextStyle(fontSize: 17,
+                                  color: Color(0xFF2D4B03),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                DateTime? newDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: _billDateStart,
+                                  firstDate: DateTime(1900),
+                                  lastDate: DateTime(2222),
+                                );
+
+                                if (newDate == null) return;
+
+                                //setState(() => _billDateStart = newDate);
+                              },
+                              child: Text('Select Date'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'End Date: ${_billDateEnd.month}/${_billDateEnd
+                                  .day}/${_billDateEnd.year}',
+                              style: TextStyle(fontSize: 17,
+                                  color: Color(0xFF2D4B03),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                DateTime? newDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: _billDateEnd,
+                                  firstDate: DateTime(1900),
+                                  lastDate: DateTime(2222),
+                                );
+
+                                if (newDate == null) return;
+
+                                //setState(() => _billDateEnd = newDate);
+                              },
+                              child: Text('Select Date'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        height: 50,
+                        width: 180,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF020100),
+                          border: Border.all(
+                              width: 2, color: const Color(0xFF2D4B03)),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: TextButton(
+                          style: ButtonStyle(
+                            foregroundColor: MaterialStateProperty.all<Color>(
+                                Colors.black),
+                          ),
+                          onPressed: () async {
+                            // ADD BUDGET
+                            print(id);
+                            if (billName.text == "" || billPrice.text == "") {
+                              _showToast("Fill fields", true);
+                            }
+                            else {
+                              var bill = Bill(
+                                userId: id,
+                                name: billName.text,
+                                price: num.parse(billPrice.text),
+                                startDate: _billDateStart.toString(),
+                                endDate: _billDateEnd.toString(),
+                                color: "#ffffff",
+                              );
+                              print(billToJson(bill));
+                              var response = await BaseClient()
+                                  .postBill(bill)
+                                  .catchError((err) {
+                                print("Fail");
+                              });
+                              if (response == null) {
+                                _showToast("Could not add", true);
+                                print("response null");
+                              }
+
+                              _showToast("Added", false);
+                              print("success");
+                            }
+
+                            clearFields();
+                            //setState(() {
+                            //_billDateStart = DateTime.now();
+                            //_billDateEnd = DateTime.now();
+                            // });
+
+                          },
+                          child: const Text(
+                            'Add Bill',
+                            style: TextStyle(fontSize: 23,
+                                color: Color(0xFFE3E9E7),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+
+void clearFields() {
+  billName.clear();
+  billPrice.clear();
+  billCategory.clear();
+}
 
 class CalendarView extends StatefulWidget {
   const CalendarView({super.key});
 
   @override
-  State<CalendarView> createState() => _CalendarViewState();
+  _CalendarViewState createState() => _CalendarViewState();
 }
+_showToast(msg, error) => Fluttertoast.showToast(
+  msg: msg, fontSize: 18, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) :  Colors.green.withOpacity(.9), textColor: Colors.white,);
 
 class _CalendarViewState extends State<CalendarView> {
   int selectedIndex = 3;
   List<String> routes = ['/MainPage', '/DisplayPage', '/AddPage', '/CalendarView', '/AccountManager'];
+  late Map<DateTime, List<Bill>> selectedBills;
 
+  CalendarFormat format = CalendarFormat.month;
+  DateTime selectedDay = DateTime.now();
+  DateTime focusedDay = DateTime.now();
+
+  @override
+  void initState(){
+    super.initState();
+    selectedBills={};
+  }
+
+  List<Bill> _getEventsfromDay(DateTime date){
+    return selectedBills[date]??[];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,51 +312,30 @@ class _CalendarViewState extends State<CalendarView> {
             ),
           ),
 
-          body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 10.0,),
-                  // WHOLE PAGE
-                  Padding(
-                      padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          // BUDGET WIDGET
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            // height:  MediaQuery.of(context).size.height,
-                            decoration: BoxDecoration(
-                              color: Color(0x55b3e5fc),
+          body: TableCalendar(
+            focusedDay: selectedDay,
+            firstDay: DateTime(2000, 1, 1),
+            lastDay: DateTime(2050, 12, 31),
+            calendarFormat: format,
+            onFormatChanged: (CalendarFormat _format)
+              {
+                setState((){format=_format;});
+              },
 
-                            ),
-                            child: Column(
-                              // crossAxisAlignment: CrossAxisAlignment.start,
-                              // mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 10.0),
-                                  child:  Column(
-                                    children: <Widget>[
-                                      const Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text('Display', style: TextStyle(fontSize: 30,  fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
-                                      ),
-                                      const SizedBox(height: 20.0,),
-                                      CalendarView(),
-                                      // BUDGET FIELD
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+            daysOfWeekVisible: true,
+            onDaySelected: (DateTime selectDay, DateTime focusDay){
+              setState(() {
+                selectedDay=selectDay;
+                focusedDay=focusDay;
+              });
+            },
 
-                        ],
-                      )
-                  ),
-                ],
-              )
+            selectedDayPredicate: (DateTime date){
+              return isSameDay(selectedDay, date);
+            },
+
+            eventLoader: _getEventsfromDay,
+
           ),
           // BOTTOM NAV
           bottomNavigationBar: BottomNavigationBar(
@@ -140,7 +353,11 @@ class _CalendarViewState extends State<CalendarView> {
               BottomNavigationBarItem(icon: Icon(Icons.account_circle, size: 35.0), label: 'Account'),
             ],
           ),
-        )
+          floatingActionButton: FloatingActionButton.extended(
+            label: Text("Add Bill"),
+              onPressed: (){showAddBillDialog(context);},
+        ),
+        ),
     );
   }
 

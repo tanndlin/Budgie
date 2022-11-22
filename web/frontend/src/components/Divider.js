@@ -11,7 +11,6 @@ function Divider(props) {
     const leftClassName = arrowClassName + '-rotate-90 left';
     const rightClassName = arrowClassName + 'rotate-90 right';
 
-    // to do: add on-click function for forgot password
     return (
         <div
             id="divider"
@@ -28,6 +27,14 @@ function Divider(props) {
                 src={DividerImage}
                 alt="Wood Texture"
             />
+            <div className="relative mx-32 mb-5">
+                <span className="absolute inset-x-0 top-5 flex">
+                    <p className="text-center text-6xl m-auto">
+                        {props.dividerToggle ? 'Sign Up' : 'Log In'}
+                    </p>
+                </span>
+            </div>
+
             <img
                 id="bwLogo"
                 className="absolute h-full w-full"

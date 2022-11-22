@@ -24,7 +24,7 @@ input[type='number'] {
     background-color: rgba(178, 198, 236, 1);
 }
 
-.rbc-off-range {
+.rbc-off-range-bg {
     background-color: rgba(187, 233, 231, .3);
 }
 

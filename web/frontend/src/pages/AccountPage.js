@@ -3,6 +3,7 @@ import Overview from '../components/Overview';
 import Account from '../components/Account';
 import CategoryView from '../components/CategoryView';
 import BackgroundImage from '../img/divider_v2.jpg';
+import Settings from '../components/Settings';
 
 function AccountPage(props) {
     if (!props.user) {
@@ -27,7 +28,7 @@ function AccountPage(props) {
             )}
             <div className="fixed h-full w-full object-fill overflow-y-auto snap-x scroll-smooth py-10 flex flex-col gap-10">
                 <article
-                    className={`mx-auto p-8 h-4/5 min-h-[520px] container min-w-[770px] max-w-[1200px] bg-[#BBE9E7] ${opacity()} rounded-md`}
+                    className={`mx-auto p-8 container min-w-[770px] max-w-[1200px] bg-[#BBE9E7] ${opacity()} rounded-md`}
                 >
                     <header className="grid grid-cols-3 font-bold mb-3 border-black border-b-2 p-1">
                         <h1 className="text-2xl">My Account</h1>
@@ -40,6 +41,7 @@ function AccountPage(props) {
                             </aside>
                         </section>
                     </div>
+                    <Settings {...props} />
                 </article>
 
                 <article

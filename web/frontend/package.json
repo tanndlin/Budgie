@@ -4,11 +4,14 @@
   "private": true,
   "homepage": "https://cop4331-large-project-27.web.app/",
   "dependencies": {
+    "@firebase/auth": "^0.20.11",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "babel-eslint": "^10.1.0",
+    "env-cmd": "^10.1.0",
     "eslint-config-prettier": "^8.5.0",
+    "firebase": "^9.14.0",
     "react": "^18.2.0",
     "react-big-calendar": "^1.5.0",
     "react-circular-progressbar": "^2.1.0",
@@ -20,8 +23,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "env-cmd -f .env react-scripts start",
+    "build": "env-cmd -f .env react-scripts build",
     "test": "react-scripts test",
     "coverage": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject",

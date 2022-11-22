@@ -4,7 +4,7 @@ import { BigCalendar } from '../components/Calendar';
 import BudgetsView from '../components/BudgetsView';
 import ExtraneousView from '../components/ExtraneousView';
 import { sendRequest } from '../common/Requests';
-import BackgroundImage from '../img/divider.jpg';
+import BackgroundImage from '../img/divider_v2.jpg';
 
 function CalendarPage(props) {
     const [categorySortID, setCategorySortID] = React.useState(-1);

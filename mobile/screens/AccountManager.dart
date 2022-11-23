@@ -3,6 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:mobile/global.dart' as global;
+import 'package:mobile/models/create_profile.dart';
+import '../base_client.dart';
+import '../models/budget.dart';
+import 'package:flutter/services.dart';
+
+String id = global.userId;
+String firstName = "";
+String lastName = "";
+String initials = "";
+int expectedIncome = 0;
 
 class AccountManager extends StatefulWidget {
   const AccountManager({super.key});
@@ -12,15 +23,19 @@ class AccountManager extends StatefulWidget {
 }
 
 class _AccountManagerState extends State<AccountManager> {
-  String fullName = "Please Edit Profile First!";
-  String initials = "XD";
+
+  // Execute this if GetProfile returns null profile
+  CreateProfile newProfile = CreateProfile(userId: id, firstName: firstName, lastName: lastName, expectedIncome: expectedIncome);
+
   final _firstName = TextEditingController();
   final _lastName = TextEditingController();
+  final _expectedIncome = TextEditingController();
   int selectedIndex = 4;
+
   List<String> routes = [
     '/MainPage',
-    '/Budget',
-    '/BillPage',
+    '/DisplayPage',
+    '/AddPage',
     '/CalendarView',
     '/AccountManager'
   ];
@@ -39,6 +54,7 @@ class _AccountManagerState extends State<AccountManager> {
     }
 
     void _logout() async {
+      global.userId = "";
       FirebaseAuth.instance.signOut();
       Navigator.pushNamed(context, '/LoginPage');
     }
@@ -50,9 +66,22 @@ class _AccountManagerState extends State<AccountManager> {
       return myString;
     }
 
+    void getInfo() async {
+      id = global.userId;
+      var response = await BaseClient().createProfile(id).catchError((err) {
+        print("Fail");
+      });
+      if (response == null) {
+      } else {
+        print("Created Profile");
+        print(id);
+        print(response);
+      }
+    }
+
     String email = getEmail(FirebaseAuth.instance.currentUser?.email);
 
-    editProfile(BuildContext context){
+    editProfile(BuildContext context) {
       showDialog(
           context: context,
           builder: (BuildContext dialogContext) {
@@ -68,61 +97,86 @@ class _AccountManagerState extends State<AccountManager> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Edit Profile', style: TextStyle(fontSize: 35,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF2D4B03)),),
-                      const SizedBox(height: 10.0,),
+                      const Text(
+                        'Edit Profile',
+                        style: TextStyle(
+                            fontSize: 35,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF2D4B03)),
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
                       Form(
                           child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextField(
-                                  controller: _firstName,
-                                  decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 2,
-                                            color: Color(0xFF2D4B03)),
-                                        borderRadius: BorderRadius.circular(
-                                            10.0),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 2,
-                                            color: Color(0xFF000000)),
-                                        borderRadius: BorderRadius.circular(
-                                            10.0),
-                                      ),
-                                      labelText: 'First Name',
-                                      hintText: 'First Name'),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextField(
-                                  controller: _lastName,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 2,
-                                            color: Color(0xFF2D4B03)),
-                                        borderRadius: BorderRadius.circular(
-                                            10.0),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 2,
-                                            color: Color(0xFF000000)),
-                                        borderRadius: BorderRadius.circular(
-                                            10.0),
-                                      ),
-                                      labelText: 'Last Name',
-                                      hintText: 'Last Name'),
-                                ),
-                              ),
-                            ],
-                          )
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextField(
+                              controller: _firstName,
+                              decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        width: 2, color: Color(0xFF2D4B03)),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        width: 2, color: Color(0xFF000000)),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  labelText: 'First Name',
+                                  hintText: 'First Name'),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextField(
+                              controller: _lastName,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        width: 2, color: Color(0xFF2D4B03)),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        width: 2, color: Color(0xFF000000)),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  labelText: 'Last Name',
+                                  hintText: 'Last Name'),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                              controller: _expectedIncome,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        width: 2, color: Color(0xFF2D4B03)),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        width: 2, color: Color(0xFF000000)),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  labelText: 'Expected Income',
+                                  hintText: 'Expected Income'),
+                            ),
+                          ),
+                        ],
+                      )),
+                      const SizedBox(
+                        height: 10.0,
                       ),
-                      const SizedBox(height: 10.0,),
                       Container(
                         alignment: Alignment.center,
                         height: 50,
@@ -135,21 +189,28 @@ class _AccountManagerState extends State<AccountManager> {
                         ),
                         child: TextButton(
                           style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all<Color>(
-                                Colors.black),
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.black),
                           ),
                           onPressed: () {
+
+                            // On Pressed it should just edit profile depending on what's in here
                             setState(() {
                               initials = _firstName.text[0] + _lastName.text[0];
-                              fullName = _firstName.text + " " + _lastName.text;
+                              firstName = _firstName.text;
+                              lastName = _lastName.text;
+                              expectedIncome = int.parse(_expectedIncome.text);
                             });
                             initials = _firstName.text[0] + _lastName.text[0];
-                            fullName = _firstName.text + " " + _lastName.text;
+                            firstName = _firstName.text;
+                            lastName = _lastName.text;
+                            expectedIncome = int.parse(_expectedIncome.text);
                             Navigator.of(context).pop();
                           },
                           child: const Text(
                             'Finish',
-                            style: TextStyle(fontSize: 20,
+                            style: TextStyle(
+                                fontSize: 20,
                                 color: Color(0xFFE3E9E7),
                                 fontWeight: FontWeight.bold),
                           ),
@@ -251,14 +312,13 @@ class _AccountManagerState extends State<AccountManager> {
                                   shape: BoxShape.circle,
                                   border: Border.all(color: Colors.black)),
                               child: Center(
-                                child: Text(
-                                    '$initials',
-                                    key: ValueKey(initials),
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 100,
-                                        color: Color(0xFF2D4B03)))),
+                                  child: Text('$initials',
+                                      key: ValueKey(initials),
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 100,
+                                          color: Color(0xFF2D4B03)))),
                             ),
                             SizedBox(height: 30),
                             Container(
@@ -266,9 +326,8 @@ class _AccountManagerState extends State<AccountManager> {
                               width: MediaQuery.of(context).size.width,
                               color: Colors.transparent,
                               child: Center(
-                                  child: Text(
-                                      '$fullName',
-                                      key: ValueKey(fullName),
+                                  child: Text(firstName + " " + lastName,
+                                      key: ValueKey(firstName + lastName),
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
                                           fontSize: 28,
@@ -276,11 +335,23 @@ class _AccountManagerState extends State<AccountManager> {
                                           color: Color(0xFF2D4B03)))),
                             ),
                             Container(
-                              height: 50.0,
+                              height: 25.0,
                               width: MediaQuery.of(context).size.width,
                               color: Colors.transparent,
                               child: Center(
                                   child: Text('$email',
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF2D4B03)))),
+                            ),
+                            Container(
+                              height: 25.0,
+                              width: MediaQuery.of(context).size.width,
+                              color: Colors.transparent,
+                              child: Center(
+                                  child: Text('Income: \$$expectedIncome',
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
                                           fontSize: 20,

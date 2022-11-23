@@ -6,9 +6,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobile/screens/MainPage.dart';
 import 'firebase_options.dart';
 import 'package:crypt/crypt.dart';
 
+import 'package:mobile/global.dart' as global;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,6 +21,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   FirebaseAuth user_auth = FirebaseAuth.instance;
+
   final _controllerEmail = TextEditingController();
   final _controllerPass = TextEditingController();
   final _controllerEmail_Reg = TextEditingController();
@@ -31,11 +34,25 @@ class _LoginPageState extends State<LoginPage> {
   bool error = false;
   String result = "";
 
-
   String email = "";
   String password = "";
   String login_verification = "";
   String reg_verification = "";
+
+  void clearLogSignFields() {
+    _controllerEmail.clear();
+    _controllerPass.clear();
+    _controllerEmail_Reg.clear();
+    _controllerPass_Reg.clear();
+    _controllerPass_Confirm.clear();
+  }
+
+  _getUser() async {
+    User user = await user_auth.currentUser!;
+    // print(user);
+    // print(user.uid);
+    global.userId = user.uid;
+  }
 
   @override
   void dispose() {
@@ -72,8 +89,9 @@ class _LoginPageState extends State<LoginPage> {
       error = true;
     }
     _showToast();
-    
+
     if (reg_verification == "Good"){
+      clearLogSignFields();
       Navigator.pop(context, true);
     }
   }
@@ -101,22 +119,22 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
     _showToast();
+
     if(login_verification == "good")
     {
+      clearLogSignFields();
+      _getUser();
+      // print(global.userId);
       print('Good login');
       Navigator.pushNamed(context, '/MainPage');
-      // Navigator.pushNamed(context, '/MainPageNav');
+      // Navigator.push(context, new MaterialPageRoute(builder: context) => new MainPage(curUser));
     }
   }
 
 
   @override
   Widget build(BuildContext context) {
-    // final formKey = GlobalKey<FormState>();
-    // final dialogKey = GlobalKey<Dialog>();
 
-    // void showToast() => Fluttertoast.showToast(
-    //     msg: result, fontSize: 20, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) : Colors.green.withOpacity(.8), textColor: Colors.white);
 
     showSignUpDialog(BuildContext context){
       showDialog(
@@ -407,8 +425,8 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const SizedBox(width: 240),
                   MaterialButton(
+                    padding: EdgeInsets.only(left: 50.0),
                     child: const Text('Forgot Password', style: TextStyle(fontSize: 18, color: Color(0xFF2D4B03), decoration: TextDecoration.underline)),
                     onPressed: (){
                         showForgotPassword(context);
@@ -463,6 +481,8 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         this.error = false;
                         this.result = "";
+                        clearLogSignFields();
+
                         showSignUpDialog(context);
                       },
                       child: const Text(
@@ -472,6 +492,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(
+                height: 80,
               ),
             ],
           ),

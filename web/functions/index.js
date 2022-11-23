@@ -656,19 +656,19 @@ app.post('/CreateCategory', async (req, res) => {
         const userId = req.body.userId;
         const userRef = db.collection(userCollection).doc(`${userId}`);
         const nameInput = req.body.name;
-        const categoryName = nameInput.toUpperCase();
+        // const categoryName = nameInput.toUpperCase();
 
         // get category of the bill
         const categoryExist = await userRef
             .collection(categoryCollection)
-            .where('name', '==', `${categoryName}`)
+            .where('name', '==', `${nameInput}`)
             .get();
 
         // if this category collection or the specific category doesn't exist
         if (categoryExist.empty) {
             // make a new category
             const newCategory = {
-                name: categoryName
+                name: nameInput
             };
 
             // add it to the category table
@@ -677,7 +677,7 @@ app.post('/CreateCategory', async (req, res) => {
             await categoryDoc.set(newCategory);
 
             const editedCategory = {
-                name: categoryName,
+                name: nameInput,
                 id: id
             };
 
@@ -686,12 +686,86 @@ app.post('/CreateCategory', async (req, res) => {
             res.status(201).send(
                 JSON.stringify({
                     userId: userId,
-                    categoryName: categoryName,
+                    categoryName: nameInput,
                     id: id
                 })
             );
         } else {
             res.send('This category already exists');
+        }
+    } catch (error) {
+        res.status(400).send(`${error.message}`);
+    }
+});
+
+// edit category
+app.post('/EditCategory', async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try {
+        const userId = req.body.userId;
+        const userRef = db.collection(userCollection).doc(`${userId}`);
+        const id = req.body.id;
+        const nameInput = req.body.name;
+
+        // get name of the category
+        const categoryExist = await userRef
+            .collection(categoryCollection)
+            .doc(`${id}`)
+            .get();
+
+        // if this category does exist
+        if (!categoryExist.empty) {
+            // update its info in the table
+
+            const editedCategory = {
+                name: req.body.name,
+                id: id
+            };
+
+            await userRef
+                .collection(categoryCollection)
+                .doc(`${id}`)
+                .update(editedCategory);
+
+            res.status(201).send(
+                JSON.stringify({
+                    userId: userId,
+                    categoryName: nameInput,
+                    id: id
+                })
+            );
+        } else {
+            res.status(400).send("This category doesn't exist");
+        }
+    } catch (error) {
+        res.status(400).send(`${error.message}`);
+    }
+});
+
+// delete category
+app.post('/RemoveCategory', async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    try {
+        const userId = req.body.userId;
+        const userRef = db.collection(userCollection).doc(`${userId}`);
+        const id = req.body.id;
+        const categoryDoc = await userRef
+            .collection(categoryCollection)
+            .doc(`${id}`)
+            .get();
+
+        if (categoryDoc.exists) {
+            await userRef.collection(categoryCollection).doc(`${id}`).delete();
+            res.status(201).send(
+                JSON.stringify({
+                    userId: userId,
+                    id: `${id} has been deleted`
+                })
+            );
+        } else {
+            res.status(400).send("Category doesn't exist");
         }
     } catch (error) {
         res.status(400).send(`${error.message}`);

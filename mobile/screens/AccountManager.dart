@@ -22,10 +22,28 @@ class AccountManager extends StatefulWidget {
   State<AccountManager> createState() => _AccountManagerState();
 }
 
-class _AccountManagerState extends State<AccountManager> {
+class _AccountManagerState extends State<AccountManager>{
 
-  // Execute this if GetProfile returns null profile
-  CreateProfile newProfile = CreateProfile(userId: id, firstName: firstName, lastName: lastName, expectedIncome: expectedIncome);
+  void getInfo() async {
+    id = global.userId;
+    var response = await BaseClient().getProfile(id).catchError((err) {
+      print("Fail");
+    });
+    if (response.firstName == null || response.firstName == "") {
+      print("Profile doesn't exist");
+      // Execute this if GetProfile returns null profile
+      var newProfile = CreateProfile(
+          userId: id,
+          firstName: firstName,
+          lastName: lastName,
+          expectedIncome: expectedIncome
+      );
+    } else {
+      print("Got Profile");
+      print(id);
+      print(response);
+    }
+  }
 
   final _firstName = TextEditingController();
   final _lastName = TextEditingController();
@@ -64,19 +82,6 @@ class _AccountManagerState extends State<AccountManager> {
         return '';
       }
       return myString;
-    }
-
-    void getInfo() async {
-      id = global.userId;
-      var response = await BaseClient().createProfile(id).catchError((err) {
-        print("Fail");
-      });
-      if (response == null) {
-      } else {
-        print("Created Profile");
-        print(id);
-        print(response);
-      }
     }
 
     String email = getEmail(FirebaseAuth.instance.currentUser?.email);

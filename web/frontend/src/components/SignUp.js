@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import { pretty, sendOutsideRequest } from '../common/Requests';
 import { verifyEmail, verifyPassword } from '../common/verify';
 import VerifiedInput from './VerifiedInput';
+import {
+    createUserWithEmailAndPassword,
+    sendEmailVerification
+} from 'firebase/auth';
+import { auth } from '../common/firebaseConfig';
 
 function SignUp(props) {
     const [email, setEmail] = useState('');
@@ -18,35 +22,25 @@ function SignUp(props) {
             return;
         }
 
-        const URL =
-            'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC7OHvwvqRgrOvgYoy2C5sgnXSZ02xLZPc';
-        const payload = {
-            email: email,
-            password: password,
-            returnSecureToken: true
-        };
-
-        sendOutsideRequest(
-            URL,
-            payload,
-            (_res) => {
-                setMessage('Account created successfully');
-                props.setLoginEmail(email);
-
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(() => {
                 setEmail('');
                 setPassword('');
                 setConfirmPassword('');
 
-                setTimeout(() => {
-                    props.setDividerToggle(true);
-                    setMessage('');
-                }, 1000);
-            },
-            (err) => {
-                console.log(err);
-                setMessage(pretty(err.message));
-            }
-        );
+                sendEmailVerification(auth.currentUser)
+                    .then(() => {
+                        setMessage(
+                            'An email has been sent to you. Please verify your email address.'
+                        );
+                    })
+                    .catch((error) => {
+                        setMessage(error.message);
+                    });
+            })
+            .catch((error) => {
+                setMessage(error.message);
+            });
     };
 
     return (
@@ -96,7 +90,7 @@ function SignUp(props) {
                     />
                 </form>
                 <footer className="flex">
-                    <span className="m-auto">{message}</span>
+                    <span className="m-auto text-center px-4">{message}</span>
                 </footer>
             </div>
         </section>

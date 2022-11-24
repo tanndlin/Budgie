@@ -2,7 +2,8 @@ import React from 'react';
 
 function SideBar(props) {
     const defaultClassName =
-        'container m-auto mt-4 sidebar' + (props.isOpen ? '' : ' sidebarClose');
+        'container mx-auto sidebar grid place-items-center' +
+        (props.isOpen ? '' : ' sidebarClose');
     const className =
         defaultClassName + (props.className ? ` ${props.className}` : '');
 

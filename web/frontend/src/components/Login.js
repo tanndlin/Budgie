@@ -1,21 +1,22 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { pretty, sendOutsideRequest, sendRequest } from '../common/Requests';
-
+import { sendRequest } from '../common/Requests';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../common/firebaseConfig';
 function Login(props) {
     const [password, setPassword] = React.useState('');
     const [message, setMessage] = React.useState('');
     const navigate = useNavigate();
 
-    const createUserProfile = (localId, callback) => {
+    const createUserProfile = (uid, callback) => {
         const id = props.pushNotification('Creating Profile', 'Please wait...');
         sendRequest(
             'CreateUserProfile',
             {
-                userId: localId,
-                firstName: 'Tanner',
-                lastName: 'Sandlin',
-                expectedIncome: 2000
+                userId: uid,
+                firstName: 'First Name',
+                lastName: 'Last Name',
+                expectedIncome: 0
             },
             (res) => {
                 const user = JSON.parse(res.responseText);
@@ -32,52 +33,50 @@ function Login(props) {
         navigate('/calendar', { state: { user } });
     };
 
-    const doLogin = async (e) => {
-        e.preventDefault();
+    const proceed = (uid) => {
+        const id = props.pushNotification(
+            'Retrieving Profile',
+            'Please wait...'
+        );
 
-        const URL =
-            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC7OHvwvqRgrOvgYoy2C5sgnXSZ02xLZPc';
-        const payload = {
-            email: props.email,
-            password: password,
-            returnSecureToken: true
-        };
-
-        sendOutsideRequest(
-            URL,
-            payload,
+        sendRequest(
+            'GetUserProfile',
+            { userId: uid },
             (res) => {
-                const { localId } = JSON.parse(res.responseText);
-
-                const id = props.pushNotification(
-                    'Retrieving Profile',
-                    'Please wait...'
-                );
-
-                sendRequest(
-                    'GetUserProfile',
-                    { userId: localId },
-                    (res) => {
-                        props.removeNotification(id);
-                        const user = JSON.parse(res.responseText);
-                        navigateToHome(user);
-                    },
-                    (err) => {
-                        console.log(err);
-                        if (err !== "User doesn't exist") {
-                            setMessage(err);
-                            return;
-                        }
-
-                        createUserProfile(localId, navigateToHome);
-                    }
-                );
+                props.removeNotification(id);
+                const user = JSON.parse(res.responseText);
+                navigateToHome(user);
             },
             (err) => {
                 console.log(err);
-                setMessage(pretty(err.message));
+                if (err !== "User doesn't exist") {
+                    setMessage(err);
+                    return;
+                }
+
+                createUserProfile(uid, navigateToHome);
             }
         );
+    };
+
+    const doLogin = async (e) => {
+        e.preventDefault();
+
+        signInWithEmailAndPassword(auth, props.email, password)
+            .then((userCredential) => {
+                const uid = userCredential.user.uid;
+
+                if (!userCredential.user.emailVerified) {
+                    setMessage('Please verify your email address.');
+                    return;
+                }
+
+                proceed(uid);
+            })
+            .catch((error) => {
+                console.log(error);
+                setMessage(error.message);
+            });
     };
 
     function openSidebar(e) {

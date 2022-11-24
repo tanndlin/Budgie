@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { verifyEmail, verifyPassword } from '../common/verify';
 import VerifiedInput from './VerifiedInput';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+    createUserWithEmailAndPassword,
+    sendEmailVerification
+} from 'firebase/auth';
 import { auth } from '../common/firebaseConfig';
 
 function SignUp(props) {
@@ -21,17 +24,24 @@ function SignUp(props) {
 
         createUserWithEmailAndPassword(auth, email, password)
             .then(() => {
-                setMessage('An email has been sent to your email');
-                // props.setLoginEmail(email);
-
                 setEmail('');
                 setPassword('');
                 setConfirmPassword('');
 
-                setTimeout(() => {
-                    props.setDividerToggle(true);
-                    setMessage('');
-                }, 1000);
+                console.log(auth.currentUser);
+
+                sendEmailVerification(auth.currentUser, {
+                    url: 'https://www.budgie.live'
+                })
+                    .then(() => {
+                        setMessage(
+                            'An email has been sent to you. Please verify your email address.'
+                        );
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        setMessage(error.message);
+                    });
             })
             .catch((error) => {
                 setMessage(error.message);

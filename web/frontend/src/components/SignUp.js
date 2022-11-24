@@ -35,7 +35,6 @@ function SignUp(props) {
                         );
                     })
                     .catch((error) => {
-                        console.log(error);
                         setMessage(error.message);
                     });
             })

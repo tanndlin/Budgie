@@ -64,7 +64,6 @@ function Login(props) {
 
         signInWithEmailAndPassword(auth, props.email, password)
             .then((userCredential) => {
-                console.log(userCredential);
                 const uid = userCredential.user.uid;
 
                 if (!userCredential.user.emailVerified) {

@@ -19,7 +19,7 @@ function ForgotPassword(props) {
     };
 
     return (
-        <section className="relative flex container bg-[#BBE9E7] bg-opacity-50 rounded-md shadow-lg">
+        <section className="relative mb-4 flex container bg-[#BBE9E7] bg-opacity-50 rounded-md shadow-lg">
             <input
                 className="absolute top-0 right-0 cursor-pointer text-[36px] font-bold mr-4"
                 type="button"
@@ -28,22 +28,22 @@ function ForgotPassword(props) {
             />
             <div className="container w-3/4 py-4 my-4 h-3/4 m-auto bg-[#b2c6ec] bg-opacity-[.7] rounded-md shadow-lg">
                 <h1
-                    className="text-center text-[#3B3548] text-6xl mb-4"
+                    className="text-center text-[#3B3548] text-4xl mb-4"
                     data-testid="loginHeader"
                 >
                     Forgot Password
                 </h1>
                 <div className="flex flex-row">
-                    <p className="text-[#1A1A1A] text-center px-4 w-1/4 border-r-2 border-black">
+                    <p className="text-[#1A1A1A] text-center px-4 w-2/5 border-r-2 border-black">
                         Enter your email address and we will send you a link to
                         reset your password.
                     </p>
 
-                    <form className="w-3/4">
+                    <form className="w-3/5">
                         <span className="grid place-items-center">
                             <input
                                 type="email"
-                                className="w-3/4 max-w-[400px] mt-8 h-10 placeholder-[#4D4D4D] rounded-md p-2"
+                                className="w-3/4 max-w-[400px] mt-8 h-6 placeholder-[#4D4D4D] rounded-md p-2"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="Email"

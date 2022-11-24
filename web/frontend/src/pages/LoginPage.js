@@ -6,46 +6,33 @@ import SideBar from '../components/SideBar';
 import ForgotPassword from '../components/ForgotPassword';
 
 const LoginPage = (props) => {
-    const defaultSidebarClassName = 'max-w-[960px] m-auto mt-0';
-
     const [loginEmail, setLoginEmail] = React.useState('');
     const [dividerToggle, setDividerToggle] = React.useState(true);
     const [isOpen, setIsOpen] = React.useState(false);
     const [sidebarClassName, setSidebarClassName] = React.useState(
-        defaultSidebarClassName + ' sidebarClose'
+        ' forgotPasswordClosed'
     );
 
     const openSidebar = () => {
         setIsOpen(true);
-        setSidebarClassName(defaultSidebarClassName + ' sidebarOpen');
 
         setTimeout(() => {
-            setSidebarClassName(defaultSidebarClassName);
-        }, 300);
+            setSidebarClassName('');
+        }, 100);
     };
 
     const closeSidebar = () => {
-        setSidebarClassName(defaultSidebarClassName + ' sidebarClose');
+        setSidebarClassName(' forgotPasswordClosed');
 
         setTimeout(() => {
             setIsOpen(false);
-        }, 300);
-    };
-
-    const getClassName = () => {
-        const defaultClassName =
-            'grid grid-cols-2 w-3/4 max-w-[960px] m-auto relative min-w-[500px] h-3/4 max-h-[615px]';
-        if (!isOpen) {
-            return defaultClassName;
-        } else {
-            return `${defaultClassName} mb-4`;
-        }
+        }, 500);
     };
 
     return (
         <article className="min-h-minus-header h-1 flex flex-col">
             <main className="flex flex-col h-full">
-                <section className={getClassName()}>
+                <section className="grid grid-cols-2 w-3/4 max-w-[960px] m-auto relative min-w-[500px] h-3/4 max-h-[615px]">
                     <Login
                         email={loginEmail}
                         setEmail={setLoginEmail}
@@ -70,7 +57,10 @@ const LoginPage = (props) => {
                     />
                 </section>
                 {isOpen && (
-                    <SideBar className={sidebarClassName} isOpen={isOpen}>
+                    <SideBar
+                        className={`forgotPassword${sidebarClassName}`}
+                        isOpen={isOpen}
+                    >
                         <ForgotPassword closeSidebar={closeSidebar} />
                     </SideBar>
                 )}

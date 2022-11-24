@@ -95,7 +95,7 @@ function CreateBillPopUp(props) {
             <div
                 className={
                     'p-4 my-4 h-3/4 m-auto bg-[#b2c6ec] bg-opacity-[.7] rounded-md duration-500' +
-                    (props.isOpen ? '' : ' sideBarChildClose')
+                    (props.isOpen ? '' : ' sidebarChildClose')
                 }
             >
                 <h1 className="text-center text-[#3B3548] text-6xl mb-4">

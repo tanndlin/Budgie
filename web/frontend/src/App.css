@@ -145,8 +145,21 @@ input[type='number'] {
     transition: 500ms;
 }
 
-.sideBarChildClose{
+.sidebarChildClose{
     transform: scaleY(0);
+}
+
+.forgotPassword{
+    max-width: 960px;
+    /* margin-top: 1rem; */
+    transition: 500ms ease-in-out all;
+}
+
+.forgotPasswordClosed {
+    margin-top: 0;
+    max-height: 0px;
+    transform: scaleY(0);
+    opacity: 0;
 }
 
 .slim-parent {

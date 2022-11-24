@@ -12,17 +12,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - env: ${{ secrets.ENV_FILE }}
-      - run: cd web/frontend && npm ci && npm run build
+      - run: |
+          echo "${{ secrets.ENV_FILE }}" >> .env
+          cd web/frontend && npm ci && npm run build
   lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - env: ${{ secrets.ENV_FILE }}
-      - run: cd web/frontend && npm ci && npm run lint
+      - run: |
+          echo "${{ secrets.ENV_FILE }}" >> .env
+          cd web/frontend && npm ci && npm run lint
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - env: ${{ secrets.ENV_FILE }}
-      - run: cd web/frontend && npm ci && npm run test
+      - run: |
+          echo "${{ secrets.ENV_FILE }}" >> .env
+          cd web/frontend && npm ci && npm run test

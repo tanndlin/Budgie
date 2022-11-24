@@ -1,13 +1,21 @@
 import React from 'react';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../common/firebaseConfig';
 
 function ForgotPassword(props) {
     const [email, setEmail] = React.useState('');
-    // eslint-disable-next-line no-unused-vars
-    const [message, setMessage] = React.useState('Link was sent');
+    const [message, setMessage] = React.useState('');
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(email);
+
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                setMessage('Password reset email sent!');
+            })
+            .catch((error) => {
+                setMessage(error.message);
+            });
     };
 
     return (

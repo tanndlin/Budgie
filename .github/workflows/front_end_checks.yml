@@ -13,6 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
+          touch .env
           echo "${{ secrets.ENV_FILE }}" >> .env
           cd web/frontend && npm ci && npm run build
   lint:
@@ -20,6 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
+          touch .env
           echo "${{ secrets.ENV_FILE }}" >> .env
           cd web/frontend && npm ci && npm run lint
   test:
@@ -27,5 +29,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
+          touch .env
           echo "${{ secrets.ENV_FILE }}" >> .env
           cd web/frontend && npm ci && npm run test

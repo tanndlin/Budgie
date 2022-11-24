@@ -28,8 +28,6 @@ function SignUp(props) {
                 setPassword('');
                 setConfirmPassword('');
 
-                console.log(auth.currentUser);
-
                 sendEmailVerification(auth.currentUser)
                     .then(() => {
                         setMessage(

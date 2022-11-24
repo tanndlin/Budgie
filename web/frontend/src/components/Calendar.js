@@ -2,12 +2,13 @@ import React from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import Dropdown from 'react-dropdown';
+import CreateBillPopUp from './CreateBillPopUp';
+import { sendRequest } from '../common/Requests';
+import PaperImage from '../img/paper_v3.jpg';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-dropdown/style.css';
 import '../App.css';
-import CreateBillPopUp from './CreateBillPopUp';
-import { sendRequest } from '../common/Requests';
 
 const localizer = momentLocalizer(moment);
 
@@ -255,6 +256,11 @@ export function BigCalendar(props) {
                         startAccessor="start"
                         endAccessor="end"
                         eventPropGetter={eventStyleGetter}
+                        style={{
+                            backgroundImage: props.backgroundToggle
+                                ? `url(${PaperImage})`
+                                : 'none'
+                        }}
                     />
                     <footer className="border-black border-t-2 p-1 mt-3 flex flex-row justify-between gap-4">
                         <input

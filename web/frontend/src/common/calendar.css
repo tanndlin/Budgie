@@ -1,0 +1,30 @@
+.rbc-calendar {
+    min-height: 500px;
+    height: 100%;
+    width: 100%;
+    background-image: url("img/paper_v3.jpg");
+}
+
+.rbc-day-bg {
+    background-image: url("img/paper_v3.jpg");
+    background-blend-mode: luminosity;
+}
+
+.rbc-today {
+    background-color: rgba(178, 198, 236, 1);
+}
+
+.rbc-off-range-bg {
+    background-color: rgba(187, 233, 231, .3);
+}
+
+.rbc-events-container {
+    min-height: 500px;
+    height: 100%;
+    width: 100%;
+    background-image: url("img/paper_v3.jpg");
+}
+
+.rbc-header {
+    background-image: url("img/paper_v3.jpg");
+}

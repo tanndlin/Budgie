@@ -30,9 +30,7 @@ function SignUp(props) {
 
                 console.log(auth.currentUser);
 
-                sendEmailVerification(auth.currentUser, {
-                    url: 'https://www.budgie.live'
-                })
+                sendEmailVerification(auth.currentUser)
                     .then(() => {
                         setMessage(
                             'An email has been sent to you. Please verify your email address.'
@@ -95,7 +93,7 @@ function SignUp(props) {
                     />
                 </form>
                 <footer className="flex">
-                    <span className="m-auto">{message}</span>
+                    <span className="m-auto text-center px-4">{message}</span>
                 </footer>
             </div>
         </section>

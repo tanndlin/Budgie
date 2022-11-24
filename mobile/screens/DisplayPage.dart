@@ -26,8 +26,7 @@ class _DisplayPageState extends State<DisplayPage> {
   //0 - budgets, 1 - bills, 2 - extras, 3 - clear
   List<bool> isSelected = [false, false, false, false];
 
-  double budgetPercent = 0.8;
-  
+
   List<Budget> getAllBudgets = <Budget>[];
 
   _showToast(msg, error) => Fluttertoast.showToast(
@@ -174,7 +173,7 @@ class _DisplayPageState extends State<DisplayPage> {
                                     children: <Widget>[
                                       const Align(
                                         alignment: Alignment.centerLeft,
-                                        child: Text('Add', style: TextStyle(fontSize: 30,  fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                                        child: Text('Display', style: TextStyle(fontSize: 30,  fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
                                       ),
                                       const SizedBox(height: 20.0,),
                                       ToggleButtons(
@@ -293,12 +292,7 @@ class _DisplayPageState extends State<DisplayPage> {
                                               children: [
                                                 //  Budget name
                                                 SizedBox(height: 20.0),
-                                                LinearPercentIndicator(
-                                                  lineHeight: 20.0,
-                                                  percent: budgetPercent,
-                                                  progressColor: budgetPercent <= 0.5 ? Colors.green : Colors.redAccent.shade400,
-                                                  backgroundColor: Colors.white,
-                                                ),
+
                                               ],
                                             ),
                                           )
@@ -332,8 +326,8 @@ class _DisplayPageState extends State<DisplayPage> {
             onTap: onTabTapped,
             items: const [
               BottomNavigationBarItem(icon: Icon(Icons.home, size: 35.0,), label: 'Home'),
-              BottomNavigationBarItem(icon: Icon(Icons.addchart, size: 35.0), label: 'Budget'),
-              BottomNavigationBarItem(icon: Icon(Icons.add_circle_outline, size: 35.0), label: 'Bill'),
+              BottomNavigationBarItem(icon: Icon(Icons.addchart, size: 35.0), label: 'Display'),
+              BottomNavigationBarItem(icon: Icon(Icons.add_circle_outline, size: 35.0), label: 'Add'),
               BottomNavigationBarItem(icon: Icon(Icons.calendar_month, size: 35.0), label: 'Calendar'),
               BottomNavigationBarItem(icon: Icon(Icons.account_circle, size: 35.0), label: 'Account'),
             ],

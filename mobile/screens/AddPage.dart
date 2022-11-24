@@ -8,6 +8,7 @@ import 'package:mobile/screens/LoginPage.dart';
 import '../base_client.dart';
 import '../models/bill.dart';
 import '../models/budget.dart';
+import '../models/myCategory.dart';
 
 import 'package:mobile/global.dart' as global;
 
@@ -36,6 +37,8 @@ class _AddPageState extends State<AddPage> {
   DateTime _billDateStart = DateTime.now();
   DateTime _billDateEnd = DateTime.now();
 
+  final categoryAdd = TextEditingController();
+
   void clearFields() {
     budgetName.clear();
     budgetCategory.clear();
@@ -58,6 +61,46 @@ class _AddPageState extends State<AddPage> {
   //0 - budgets, 1 - bills, 2 - extras, 3 - clear
   List<bool> isSelected = [false, false, false, false];
 
+  List<MyCategory> getAllCategories = <MyCategory>[];
+  MyCategory? categoryValue;
+
+  Future<void> getAllCat()
+  async {
+    id = global.userId;
+
+    var response = await BaseClient().getCategories(id).catchError((err) {print("Fail");});
+    if (response == null) {
+      _showToast("Could not get", true);
+      print("response null");
+    }
+    else {
+      print("Got Categories");
+      print(id);
+      print(response);
+      List<MyCategory> allCategories = getCategoriesFromJson(response);
+      for (MyCategory c in allCategories) {
+        print(c.name);
+      }
+
+      if (allCategories.length == 0)
+      {
+        _showToast("No Categories", true);
+      }
+      // var addVal = MyCategory(name: "Add New");
+      // allCategories.add(addVal);
+      setState(() {
+        getAllCategories = allCategories;
+      });
+
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAllCat();
+  }
+
   @override
   Widget build(BuildContext context) {
     // List<Widget> widgetOptions = <Widget>[
@@ -69,6 +112,88 @@ class _AddPageState extends State<AddPage> {
       print(index);
       selectedIndex = index;
       Navigator.pushNamed(context, routes[index]);
+    }
+
+    showAddCategory(BuildContext context){
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              backgroundColor: const Color(0xFFFAFAFA),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              child: Container(
+                height: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Add Category', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                      const SizedBox( height: 10.0,),
+                      TextField(
+                        controller: categoryAdd,
+                        decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            prefixIcon: const Icon(Icons.list_outlined),
+                            labelText: 'Name',
+                            hintText: 'Name'),
+                      ),
+                      const SizedBox( height: 10.0,),
+                      Container(
+                        alignment: Alignment.center,
+                        height: 40,
+                        width: 320,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF020100), border: Border.all(width: 2, color: const Color(0xFF2D4B03)), borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextButton(
+                          style: ButtonStyle(
+                            foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                          ),
+                          onPressed: () async {
+                          //  Add category
+                            id = global.userId;
+                            var cat = MyCategory(
+                                userId: id,
+                                name: categoryAdd.text,
+                            );
+                            print("Json");
+                            print(myCategoryToJson(cat));
+                            var response = await BaseClient().postCategory(cat).catchError((err) {print("Fail");});
+                            if (response == null) {
+                              _showToast("Could not get", true);
+                              print("response null");
+                            }
+                            else {
+                              print("Add Category");
+                              print(id);
+                              print(response);
+                            }
+
+                            getAllCat();
+                            Navigator.pop(context, true);
+                          },
+                          child: const Text(
+                            'Add',
+                            style: TextStyle(fontSize: 20, color: Color(0xFFE3E9E7), fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
     }
 
     return Container(
@@ -133,7 +258,7 @@ class _AddPageState extends State<AddPage> {
                           // BUDGET WIDGET
                           Container(
                             width: MediaQuery.of(context).size.width,
-                            height:  MediaQuery.of(context).size.height,
+                            // height:  MediaQuery.of(context).size.height,
                             decoration: BoxDecoration(
                                 color: Color(0x55b3e5fc),
 
@@ -180,6 +305,8 @@ class _AddPageState extends State<AddPage> {
                                         ],
                                         onPressed: (int newIndex) {
                                           setState(() {
+
+                                            // getAllCat();
                                             for (int index = 0; index < isSelected.length; index++)
                                             {
                                               print(newIndex);
@@ -223,6 +350,63 @@ class _AddPageState extends State<AddPage> {
                                                         prefixIcon: const Icon(Icons.list_alt_rounded),
                                                         labelText: 'Budget Name',
                                                         hintText: 'Name'),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: <Widget>[
+                                                      SizedBox(
+                                                        width: 230.0,
+                                                        child: DropdownButtonFormField(
+                                                          decoration: InputDecoration(
+                                                            focusColor: const Color(0xFF2D4B03),
+                                                            enabledBorder: OutlineInputBorder(
+                                                              borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                                              borderRadius: BorderRadius.circular(50.0),
+                                                            ),
+                                                            focusedBorder: OutlineInputBorder(
+                                                              borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                                              borderRadius: BorderRadius.circular(50.0),
+                                                            ),
+                                                            prefixIcon: Icon(Icons.list),
+                                                          ),
+                                                          iconSize: 24,
+                                                          hint: Text('Choose Category'),
+                                                          isExpanded: true,
+                                                          style: TextStyle(color: Color(0xFF2D4B03), fontSize: 16),
+                                                          borderRadius: BorderRadius.circular(8),
+                                                          dropdownColor: Color(0xFFE3E9E7),
+                                                          items: getAllCategories.map((item) {
+                                                            return DropdownMenuItem<MyCategory>(
+                                                              child: Text(item.name),
+                                                              value: item,
+                                                            );
+                                                          }).toList(),
+                                                          onChanged: (newVal) {
+                                                            if (newVal != null)
+                                                            {
+                                                              setState(() {
+                                                                categoryValue = newVal as MyCategory?;
+                                                              });
+                                                            }
+                                                            print(categoryValue?.name);
+                                                          },
+                                                          value: categoryValue,
+                                                        ),
+                                                      ),
+                                                      IconButton(
+                                                        style: ButtonStyle(
+                                                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                                                        ),
+                                                        onPressed: ()  {
+                                                          showAddCategory(context);
+                                                        },
+                                                        icon: Icon(Icons.add_circle),
+                                                        iconSize: 40,
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                                 Padding(
@@ -293,7 +477,8 @@ class _AddPageState extends State<AddPage> {
                                                             userId: id,
                                                             name: budgetName.text,
                                                             actualPrice: double.parse(budgetActual.text),
-                                                            expectedPrice: double.parse(budgetExpected.text)
+                                                            expectedPrice: double.parse(budgetExpected.text),
+                                                            categoryId: categoryValue?.id,
                                                         );
                                                         print(budgetToJson(budget));
                                                         var response = await BaseClient().postBudget(budget).catchError((err) {print("Fail");});
@@ -510,8 +695,8 @@ class _AddPageState extends State<AddPage> {
             onTap: onTabTapped,
             items: const [
               BottomNavigationBarItem(icon: Icon(Icons.home, size: 35.0,), label: 'Home'),
-              BottomNavigationBarItem(icon: Icon(Icons.addchart, size: 35.0), label: 'Budget'),
-              BottomNavigationBarItem(icon: Icon(Icons.add_circle_outline, size: 35.0), label: 'Bill'),
+              BottomNavigationBarItem(icon: Icon(Icons.addchart, size: 35.0), label: 'Display'),
+              BottomNavigationBarItem(icon: Icon(Icons.add_circle_outline, size: 35.0), label: 'Add'),
               BottomNavigationBarItem(icon: Icon(Icons.calendar_month, size: 35.0), label: 'Calendar'),
               BottomNavigationBarItem(icon: Icon(Icons.account_circle, size: 35.0), label: 'Account'),
             ],

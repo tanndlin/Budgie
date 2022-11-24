@@ -68,4 +68,34 @@ class BaseClient
       return Future.error("Fail");
     }
   }
+
+  Future<dynamic> getCategories(String id) async {
+    var url = Uri.parse(baseUrl + '/GetCategories');
+
+    var _payload = jsonEncode(getData(id));
+
+    var response = await client.post(url, body: _payload, headers: _setHeaders());
+    if (response.statusCode == 201){
+      print("api success");
+      return response.body;
+    } else {
+      print("api fail");
+      return Future.error("Fail");
+    }
+  }
+
+  Future<dynamic> postCategory(dynamic object) async {
+    var url = Uri.parse(baseUrl + '/CreateCategory');
+
+    var _payload = jsonEncode(object);
+
+    var response = await client.post(url, body: _payload, headers: _setHeaders());
+    if (response.statusCode == 201){
+      print("api success");
+      return response.body;
+    } else {
+      print("api fail");
+      return Future.error("Fail");
+    }
+  }
 }

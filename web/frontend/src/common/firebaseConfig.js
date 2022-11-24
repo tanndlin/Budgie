@@ -10,6 +10,5 @@ export const config = {
     appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
-console.log(config);
 export const app = initializeApp(config);
 export const auth = getAuth(app);

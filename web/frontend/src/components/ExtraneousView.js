@@ -16,15 +16,15 @@ function ExtraneousView(props) {
             'CreateOneOff',
             { userId: props.user.userId, ...extra },
             (res) => {
-                const { oneOff } = JSON.parse(res.responseText);
-                props.setOneOffs([...props.oneOffs, oneOff]);
+                props.setExtras([
+                    ...props.extras,
+                    JSON.parse(res.responseText)
+                ]);
             },
             (err) => {
                 console.log(err);
             }
         );
-
-        props.setExtras([...props.extras, extra]);
     }
 
     function deleteExtra(extra) {

@@ -203,7 +203,6 @@ export function BigCalendar(props) {
             <section className="flex flex-col container m-auto">
                 <div
                     className={`container m-auto mt-5 min-h-500 bg-[#BBE9E7] ${props.opacity} p-3 rounded-md`}
-                    onClick={handleCalendarClick}
                 >
                     <header className="grid grid-cols-3 font-bold mb-3 border-black border-b-2 p-1">
                         <h1 className="text-2xl">Bills</h1>
@@ -247,21 +246,23 @@ export function BigCalendar(props) {
                             </h2>
                         </span>
                     </header>
-                    <Calendar
-                        localizer={localizer}
-                        events={getEventsFromBills(
-                            props.bills,
-                            props.categorySortID
-                        )}
-                        startAccessor="start"
-                        endAccessor="end"
-                        eventPropGetter={eventStyleGetter}
-                        style={{
-                            backgroundImage: props.backgroundToggle
-                                ? `url(${PaperImage})`
-                                : 'none'
-                        }}
-                    />
+                    <div onClick={handleCalendarClick}>
+                        <Calendar
+                            localizer={localizer}
+                            events={getEventsFromBills(
+                                props.bills,
+                                props.categorySortID
+                            )}
+                            startAccessor="start"
+                            endAccessor="end"
+                            eventPropGetter={eventStyleGetter}
+                            style={{
+                                backgroundImage: props.backgroundToggle
+                                    ? `url(${PaperImage})`
+                                    : 'none'
+                            }}
+                        />
+                    </div>
                     <footer className="border-black border-t-2 p-1 mt-3 flex flex-row justify-between gap-4">
                         <input
                             className="px-2 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md shadow-md"

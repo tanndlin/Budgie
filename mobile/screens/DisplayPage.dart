@@ -9,6 +9,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import '../base_client.dart';
 import '../models/budget.dart';
+import '../models/myCategory.dart';
 
 String id = global.userId;
 
@@ -32,6 +33,45 @@ class _DisplayPageState extends State<DisplayPage> {
   _showToast(msg, error) => Fluttertoast.showToast(
     msg: msg, fontSize: 18, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) :  Colors.green.withOpacity(.9), textColor: Colors.white,);
 
+  List<MyCategory> getAllCategories = <MyCategory>[];
+  MyCategory? categoryValue;
+
+  Future<void> getAllCat()
+  async {
+    id = global.userId;
+
+    var response = await BaseClient().getCategories(id).catchError((err) {print("Fail");});
+    if (response == null) {
+      _showToast("Could not get", true);
+      print("response null");
+    }
+    else {
+      print("Got Categories");
+      print(id);
+      print(response);
+      List<MyCategory> allCategories = getCategoriesFromJson(response);
+      for (MyCategory c in allCategories) {
+        print(c.name);
+      }
+
+      if (allCategories.length == 0)
+      {
+        _showToast("No Categories", true);
+      }
+      // var addVal = MyCategory(name: "Add New");
+      // allCategories.add(addVal);
+      setState(() {
+        getAllCategories = allCategories;
+      });
+
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAllCat();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +83,9 @@ class _DisplayPageState extends State<DisplayPage> {
     }
 
     Widget _buildBudgetCard(int index) => Container(
-          padding:  EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0, bottom: 5.0),
+          padding:  EdgeInsets.only(top: 2.0, left: 10.0, right: 10.0, bottom: 5.0),
           width: MediaQuery.of(context).size.width,
-          height: 140,
+          height: 150,
           decoration: BoxDecoration(
               color: Color(0xddb3e5fc),
               borderRadius: BorderRadius.circular(8),
@@ -57,6 +97,7 @@ class _DisplayPageState extends State<DisplayPage> {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               //  Text
               Row(
@@ -65,43 +106,42 @@ class _DisplayPageState extends State<DisplayPage> {
                     "${getAllBudgets[index].name}", style: TextStyle(fontSize: 18, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),
                   ),
                   Spacer(),
-                  Container(
-                    // padding: EdgeInsets.symmetric(horizontal: 5.0),
-                    child: Row(
-                      // crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        TextButton(onPressed: (){}, child: Icon(Icons.edit, color: Color(0xFF2D4B03),)),
-                        TextButton(onPressed: (){}, child: Icon(Icons.arrow_drop_down_circle_outlined, color: Color(0xFF2D4B03),)),
-                      ],
-                    ),
+                  // TextButton(onPressed: (){}, child: Icon(Icons.edit, color: Color(0xFF2D4B03))),
+                  IconButton(onPressed: () {}, icon: Icon(Icons.edit, color: Color(0xFF2D4B03), size: 20,), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+                  // Container(
+                  //   // padding: EdgeInsets.symmetric(horizontal: 5.0),
+                  //   child: Row(
+                  //     // crossAxisAlignment: CrossAxisAlignment.end,
+                  //     // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //     children: [
+                  //       TextButton(onPressed: (){}, child: Icon(Icons.edit, color: Color(0xFF2D4B03),)),
+                  //     ],
+                  //   ),
+                  // ),
+                ],
+              ),
+              Text("Category: ${findCategory(getAllCategories, getAllBudgets[index].categoryId)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+              Text("Start Date: ${getAllBudgets[index].startDate}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+              Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  LinearPercentIndicator(
+                    lineHeight: 20.0,
+                    percent: (getAllBudgets[index].actualPrice/getAllBudgets[index].expectedPrice),
+                    progressColor: (getAllBudgets[index].actualPrice/getAllBudgets[index].expectedPrice) <= 0.5 ? Colors.green.shade400 : Colors.red.shade500,
+                    backgroundColor: Colors.white70,
                   ),
+                  Text("${(getAllBudgets[index].actualPrice/getAllBudgets[index].expectedPrice)*100}%", textAlign: TextAlign.center, style: TextStyle(fontSize: 15, color: Color(0xFF000000), fontWeight: FontWeight.bold),),
                 ],
               ),
 
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("${getAllBudgets[index].startDate}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
-                  SizedBox(width: 10.0,),
-                  Text("${(getAllBudgets[index].actualPrice)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
-                  SizedBox(width: 10.0,),
-                  Text("of", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
-                  SizedBox(width: 10.0,),
-                  Text("${(getAllBudgets[index].expectedPrice)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
-                ],
-              ),
-              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("${(getAllBudgets[index].actualPrice/getAllBudgets[index].expectedPrice)*100}%", textAlign: TextAlign.center, style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                  Text("${(getAllBudgets[index].actualPrice)} of ${(getAllBudgets[index].expectedPrice)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                  SizedBox(width: 20.0,),
                 ],
-              ),
-              LinearPercentIndicator(
-                lineHeight: 20.0,
-                percent: (getAllBudgets[index].actualPrice/getAllBudgets[index].expectedPrice),
-                progressColor: (getAllBudgets[index].actualPrice/getAllBudgets[index].expectedPrice) <= 0.5 ? Colors.green : Colors.redAccent.shade400,
-                backgroundColor: Colors.white,
               ),
             ],
           ),
@@ -205,6 +245,7 @@ class _DisplayPageState extends State<DisplayPage> {
                                         ],
                                         onPressed: (int newIndex) async {
                                           id = global.userId;
+                                          getAllCat();
                                           if (newIndex == 0)
                                           {
                                             var response = await BaseClient().getBudgets(id).catchError((err) {print("Fail");});

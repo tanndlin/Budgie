@@ -1,5 +1,23 @@
 import 'dart:convert';
 
+String findCategory(List<MyCategory> list, String? id)
+{
+  String ret = "";
+
+  if (id == null)
+    return ret;
+
+  for (var i = 0; i < list.length; i++)
+  {
+    if (list[i].id == id)
+    {
+      // ret = list[i].name;
+      return list[i].name;
+    }
+  }
+  return ret;
+}
+
 List<MyCategory> getCategoriesFromJson(String str) {
   final jsonData = jsonDecode(str);
   List<MyCategory> result = <MyCategory>[];
@@ -40,4 +58,5 @@ class MyCategory {
     "userId": userId,
     "name": name,
   };
+
 }

@@ -29,7 +29,7 @@ class _AddPageState extends State<AddPage> {
   final budgetCategory = TextEditingController();
   final budgetExpected = TextEditingController();
   final budgetActual = TextEditingController();
-  final budgetStart = TextEditingController();
+  DateTime _budgetStartDate = DateTime.now();
 
   final billName = TextEditingController();
   final billPrice = TextEditingController();
@@ -44,7 +44,6 @@ class _AddPageState extends State<AddPage> {
     budgetCategory.clear();
     budgetExpected.clear();
     budgetActual.clear();
-    budgetStart.clear();
 
     billName.clear();
     billPrice.clear();
@@ -337,6 +336,7 @@ class _AddPageState extends State<AddPage> {
                                                   padding: const EdgeInsets.symmetric(vertical: 10),
                                                   child: TextField(
                                                     controller: budgetName,
+                                                    style: TextStyle(height: 0.5),
                                                     decoration: InputDecoration(
                                                         focusColor: const Color(0xFF2D4B03),
                                                         enabledBorder: OutlineInputBorder(
@@ -357,9 +357,11 @@ class _AddPageState extends State<AddPage> {
                                                   child: Row(
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: <Widget>[
-                                                      SizedBox(
+                                                      Container(
                                                         width: 230.0,
+                                                        height: 50,
                                                         child: DropdownButtonFormField(
+                                                          alignment: AlignmentDirectional.center,
                                                           decoration: InputDecoration(
                                                             focusColor: const Color(0xFF2D4B03),
                                                             enabledBorder: OutlineInputBorder(
@@ -372,15 +374,16 @@ class _AddPageState extends State<AddPage> {
                                                             ),
                                                             prefixIcon: Icon(Icons.list),
                                                           ),
+                                                          isDense: false,
                                                           iconSize: 24,
                                                           hint: Text('Choose Category'),
                                                           isExpanded: true,
-                                                          style: TextStyle(color: Color(0xFF2D4B03), fontSize: 16),
+                                                          style: TextStyle(color: Color(0xFF2D4B03), fontSize: 16, height: 0.5),
                                                           borderRadius: BorderRadius.circular(8),
                                                           dropdownColor: Color(0xFFE3E9E7),
                                                           items: getAllCategories.map((item) {
                                                             return DropdownMenuItem<MyCategory>(
-                                                              child: Text(item.name),
+                                                              child: Text(item.name, textAlign: TextAlign.center,),
                                                               value: item,
                                                             );
                                                           }).toList(),
@@ -414,6 +417,7 @@ class _AddPageState extends State<AddPage> {
                                                   //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
                                                   padding: EdgeInsets.symmetric(vertical: 10),
                                                   child: TextField(
+                                                    style: TextStyle(height: 0.5),
                                                     controller: budgetActual,
                                                     decoration: InputDecoration(
                                                         enabledBorder: OutlineInputBorder(
@@ -434,6 +438,7 @@ class _AddPageState extends State<AddPage> {
                                                   //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
                                                   padding: EdgeInsets.symmetric(vertical: 10),
                                                   child: TextField(
+                                                    style: TextStyle(height: 0.5),
                                                     controller: budgetExpected,
                                                     decoration: InputDecoration(
                                                         enabledBorder: OutlineInputBorder(
@@ -447,6 +452,33 @@ class _AddPageState extends State<AddPage> {
                                                         prefixIcon: Icon(Icons.currency_exchange_outlined) ,
                                                         labelText: 'Total Amount',
                                                         hintText: 'Total'),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        'Start Date: ${_budgetStartDate.month}/${_budgetStartDate.day}/${_budgetStartDate.year}',
+                                                        style: TextStyle(fontSize: 17, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),
+                                                      ),
+                                                      ElevatedButton(
+                                                        onPressed: () async {
+                                                          DateTime? newDate = await showDatePicker(
+                                                            context: context,
+                                                            initialDate: _budgetStartDate,
+                                                            firstDate: DateTime(1900),
+                                                            lastDate: DateTime(2222),
+                                                          );
+
+                                                          if (newDate == null) return;
+
+                                                          setState(() => _budgetStartDate = newDate);
+                                                        },
+                                                        child: Text('Select Date'),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                                 const SizedBox(
@@ -479,6 +511,7 @@ class _AddPageState extends State<AddPage> {
                                                             actualPrice: double.parse(budgetActual.text),
                                                             expectedPrice: double.parse(budgetExpected.text),
                                                             categoryId: categoryValue?.id,
+                                                            startDate: _budgetStartDate.toString(),
                                                         );
                                                         print(budgetToJson(budget));
                                                         var response = await BaseClient().postBudget(budget).catchError((err) {print("Fail");});

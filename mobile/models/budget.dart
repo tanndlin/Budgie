@@ -20,6 +20,8 @@ Budget budgetFromJson(String str) => Budget.fromJson(json.decode(str));
 
 String budgetToJson(Budget data) => json.encode(data.toJson());
 
+String budgetToJsonEdit(Budget data) => json.encode(data.toJsonEdit());
+
 class Budget {
   Budget({
     this.userId,
@@ -51,9 +53,28 @@ class Budget {
   Map<String, dynamic> toJson() => {
     "userId": userId,
     "name": name,
-    "categoryId": categoryId ?? "-1",
+    "categoryId": categoryId,
     "expectedPrice": expectedPrice,
     "actualPrice": actualPrice,
-    "startDate": startDate ?? "-1",
+    "startDate": startDate,
   };
+
+  Map<String, dynamic> toJsonEdit() => {
+    "userId": userId,
+    "name": name,
+    "categoryId": categoryId,
+    "expectedPrice": expectedPrice,
+    "actualPrice": actualPrice,
+    "startDate": startDate,
+    "id": id,
+  };
+
+  String justDate()
+  {
+    var split = this.startDate?.split(' ');
+    if (split != null)
+      return split.first;
+
+    return "";
+  }
 }

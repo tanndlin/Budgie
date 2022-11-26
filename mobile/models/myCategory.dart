@@ -18,6 +18,22 @@ String findCategory(List<MyCategory> list, String? id)
   return ret;
 }
 
+MyCategory? getCategory(List<MyCategory> list, String? id)
+{
+  if (id == null)
+    return null;
+
+  for (var i = 0; i < list.length; i++)
+  {
+    if (list[i].id == id)
+    {
+      // ret = list[i].name;
+      return list[i];
+    }
+  }
+  return null;
+}
+
 List<MyCategory> getCategoriesFromJson(String str) {
   final jsonData = jsonDecode(str);
   List<MyCategory> result = <MyCategory>[];

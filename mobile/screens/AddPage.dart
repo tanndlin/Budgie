@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile/screens/LoginPage.dart';
 
 import '../base_client.dart';
@@ -29,7 +30,8 @@ class _AddPageState extends State<AddPage> {
   final budgetCategory = TextEditingController();
   final budgetExpected = TextEditingController();
   final budgetActual = TextEditingController();
-  DateTime _budgetStartDate = DateTime.now();
+  final budgetStart = TextEditingController();
+  // DateTime _budgetStartDate = DateTime.now();
 
   final billName = TextEditingController();
   final billPrice = TextEditingController();
@@ -66,6 +68,7 @@ class _AddPageState extends State<AddPage> {
   Future<void> getAllCat()
   async {
     id = global.userId;
+    getAllCategories = <MyCategory>[];
 
     var response = await BaseClient().getCategories(id).catchError((err) {print("Fail");});
     if (response == null) {
@@ -304,7 +307,7 @@ class _AddPageState extends State<AddPage> {
                                         ],
                                         onPressed: (int newIndex) {
                                           setState(() {
-
+                                            budgetStart.text = DateFormat("MM-dd-yyyy").format(DateTime.now());
                                             // getAllCat();
                                             for (int index = 0; index < isSelected.length; index++)
                                             {
@@ -333,11 +336,11 @@ class _AddPageState extends State<AddPage> {
                                                 SizedBox(height: 20.0),
                                                 Padding(
                                                   //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
-                                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                                  padding: const EdgeInsets.symmetric(vertical: 8),
                                                   child: TextField(
                                                     controller: budgetName,
-                                                    style: TextStyle(height: 0.5),
                                                     decoration: InputDecoration(
+                                                        contentPadding: EdgeInsets.symmetric(vertical: 0),
                                                         focusColor: const Color(0xFF2D4B03),
                                                         enabledBorder: OutlineInputBorder(
                                                           borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
@@ -353,16 +356,59 @@ class _AddPageState extends State<AddPage> {
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                                  // padding: const EdgeInsets.only(
+                                                  //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
+                                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                                  child: TextField(
+                                                    controller: budgetActual,
+                                                    decoration: InputDecoration(
+                                                        contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        prefixIcon: Icon(Icons.currency_exchange_outlined) ,
+                                                        labelText: 'Spent Amount',
+                                                        hintText: 'Spent'),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  // padding: const EdgeInsets.only(
+                                                  //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
+                                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                                  child: TextField(
+                                                    controller: budgetExpected,
+                                                    decoration: InputDecoration(
+                                                        contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        prefixIcon: Icon(Icons.currency_exchange_outlined) ,
+                                                        labelText: 'Total Amount',
+                                                        hintText: 'Total'),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(vertical: 8),
                                                   child: Row(
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: <Widget>[
                                                       Container(
                                                         width: 230.0,
-                                                        height: 50,
+                                                        height: 52,
                                                         child: DropdownButtonFormField(
-                                                          alignment: AlignmentDirectional.center,
+                                                          alignment: Alignment.center,
                                                           decoration: InputDecoration(
+                                                            contentPadding: EdgeInsets.symmetric(horizontal: 4),
                                                             focusColor: const Color(0xFF2D4B03),
                                                             enabledBorder: OutlineInputBorder(
                                                               borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
@@ -375,15 +421,15 @@ class _AddPageState extends State<AddPage> {
                                                             prefixIcon: Icon(Icons.list),
                                                           ),
                                                           isDense: false,
+                                                          // isExpanded: true,
                                                           iconSize: 24,
                                                           hint: Text('Choose Category'),
-                                                          isExpanded: true,
-                                                          style: TextStyle(color: Color(0xFF2D4B03), fontSize: 16, height: 0.5),
                                                           borderRadius: BorderRadius.circular(8),
                                                           dropdownColor: Color(0xFFE3E9E7),
+                                                          style: TextStyle(color: Color(0xFF2D4B03), fontSize: 16),
                                                           items: getAllCategories.map((item) {
                                                             return DropdownMenuItem<MyCategory>(
-                                                              child: Text(item.name, textAlign: TextAlign.center,),
+                                                              child: Text(item.name),
                                                               value: item,
                                                             );
                                                           }).toList(),
@@ -408,18 +454,18 @@ class _AddPageState extends State<AddPage> {
                                                         },
                                                         icon: Icon(Icons.add_circle),
                                                         iconSize: 40,
+                                                        constraints: BoxConstraints(),
+                                                        padding: EdgeInsets.zero,
                                                       ),
                                                     ],
                                                   ),
                                                 ),
                                                 Padding(
-                                                  // padding: const EdgeInsets.only(
-                                                  //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
-                                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                                  padding: EdgeInsets.symmetric(vertical: 8),
                                                   child: TextField(
-                                                    style: TextStyle(height: 0.5),
-                                                    controller: budgetActual,
+                                                    controller: budgetStart,
                                                     decoration: InputDecoration(
+                                                        contentPadding: EdgeInsets.symmetric(vertical: 0),
                                                         enabledBorder: OutlineInputBorder(
                                                           borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
                                                           borderRadius: BorderRadius.circular(50.0),
@@ -428,61 +474,29 @@ class _AddPageState extends State<AddPage> {
                                                           borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
                                                           borderRadius: BorderRadius.circular(50.0),
                                                         ),
-                                                        prefixIcon: Icon(Icons.currency_exchange_outlined) ,
-                                                        labelText: 'Spent Amount',
-                                                        hintText: 'Spent'),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  // padding: const EdgeInsets.only(
-                                                  //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
-                                                  padding: EdgeInsets.symmetric(vertical: 10),
-                                                  child: TextField(
-                                                    style: TextStyle(height: 0.5),
-                                                    controller: budgetExpected,
-                                                    decoration: InputDecoration(
-                                                        enabledBorder: OutlineInputBorder(
-                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
-                                                          borderRadius: BorderRadius.circular(50.0),
-                                                        ),
-                                                        focusedBorder: OutlineInputBorder(
-                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
-                                                          borderRadius: BorderRadius.circular(50.0),
-                                                        ),
-                                                        prefixIcon: Icon(Icons.currency_exchange_outlined) ,
-                                                        labelText: 'Total Amount',
-                                                        hintText: 'Total'),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.symmetric(vertical: 10),
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: <Widget>[
-                                                      Text(
-                                                        'Start Date: ${_budgetStartDate.month}/${_budgetStartDate.day}/${_budgetStartDate.year}',
-                                                        style: TextStyle(fontSize: 17, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),
-                                                      ),
-                                                      ElevatedButton(
-                                                        onPressed: () async {
-                                                          DateTime? newDate = await showDatePicker(
-                                                            context: context,
-                                                            initialDate: _budgetStartDate,
-                                                            firstDate: DateTime(1900),
-                                                            lastDate: DateTime(2222),
-                                                          );
-
-                                                          if (newDate == null) return;
-
-                                                          setState(() => _budgetStartDate = newDate);
-                                                        },
-                                                        child: Text('Select Date'),
-                                                      ),
-                                                    ],
+                                                        prefixIcon: Icon(Icons.calendar_month) ,
+                                                        labelText: 'Start Date',
+                                                        hintText: 'Start'),
+                                                    readOnly: true,
+                                                    onTap: () async {
+                                                      DateTime? pickedDate = await showDatePicker(
+                                                          context: context,
+                                                          initialDate: DateFormat("MM-dd-yyyy").parse(budgetStart.text),
+                                                          firstDate: DateTime(1900),
+                                                          lastDate: DateTime(2222)
+                                                      );
+                                                      if (pickedDate != null)
+                                                      {
+                                                        String formatDate = DateFormat("MM-dd-yyyy").format(pickedDate);
+                                                        setState(() {
+                                                          budgetStart.text = formatDate;
+                                                        });
+                                                      }
+                                                    },
                                                   ),
                                                 ),
                                                 const SizedBox(
-                                                  height: 20.0,
+                                                  height: 10.0,
                                                 ),
                                                 Container(
                                                   alignment: Alignment.center,
@@ -508,10 +522,10 @@ class _AddPageState extends State<AddPage> {
                                                         var budget = Budget(
                                                             userId: id,
                                                             name: budgetName.text,
-                                                            actualPrice: double.parse(budgetActual.text),
-                                                            expectedPrice: double.parse(budgetExpected.text),
+                                                            actualPrice: num.parse(budgetActual.text),
+                                                            expectedPrice: num.parse(budgetExpected.text),
                                                             categoryId: categoryValue?.id,
-                                                            startDate: _budgetStartDate.toString(),
+                                                            startDate: budgetStart.text,
                                                         );
                                                         print(budgetToJson(budget));
                                                         var response = await BaseClient().postBudget(budget).catchError((err) {print("Fail");});

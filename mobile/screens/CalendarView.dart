@@ -73,8 +73,8 @@ class _CalendarViewState extends State<CalendarView> {
             onTap: onTabTapped,
             items: const [
               BottomNavigationBarItem(icon: Icon(Icons.home, size: 35.0,), label: 'Home'),
-              BottomNavigationBarItem(icon: Icon(Icons.addchart, size: 35.0), label: 'Budget'),
-              BottomNavigationBarItem(icon: Icon(Icons.add_circle_outline, size: 35.0), label: 'Bill'),
+              BottomNavigationBarItem(icon: Icon(Icons.addchart, size: 35.0), label: 'Display'),
+              BottomNavigationBarItem(icon: Icon(Icons.add_circle_outline, size: 35.0), label: 'Add'),
               BottomNavigationBarItem(icon: Icon(Icons.calendar_month, size: 35.0), label: 'Calendar'),
               BottomNavigationBarItem(icon: Icon(Icons.account_circle, size: 35.0), label: 'Account'),
             ],

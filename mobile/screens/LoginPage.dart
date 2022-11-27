@@ -7,13 +7,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile/screens/MainPage.dart';
+import '../models/create_profile.dart';
 import 'firebase_options.dart';
 import 'package:crypt/crypt.dart';
 import '../base_client.dart';
 import '../models/budget.dart';
-import 'package:flutter/services.dart';
-
 import 'package:mobile/global.dart' as global;
+
+String id = global.userId;
+String firstName = "";
+String lastName = "";
+String initials = "";
+int expectedIncome = 0;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -41,6 +46,28 @@ class _LoginPageState extends State<LoginPage> {
   String password = "";
   String login_verification = "";
   String reg_verification = "";
+
+  void getInfo() async {
+    id = global.userId;
+    var response = await BaseClient().getUserProfile(id).catchError((err) {
+      print("Profile doesn't exist");
+    });
+
+    if (response == null)
+      {
+        print("no response");
+        // Execute this if GetProfile returns null profile
+        var newProfile = CreateProfile(
+            userId: global.userId,
+            firstName: "firstName",
+            lastName: "lastName",
+            expectedIncome: 0);
+      }
+    else
+      {
+        print(response);
+      }
+  }
 
   void clearLogSignFields() {
     _controllerEmail.clear();
@@ -127,6 +154,7 @@ class _LoginPageState extends State<LoginPage> {
     {
       clearLogSignFields();
       _getUser();
+      getInfo();
       // print(global.userId);
       print('Good login');
       Navigator.pushNamed(context, '/MainPage');

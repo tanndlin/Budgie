@@ -26,23 +26,15 @@ class _AccountManagerState extends State<AccountManager>{
 
   void getInfo() async {
     id = global.userId;
-    var response = await BaseClient().getProfile(id).catchError((err) {
-      print("Fail");
-    });
-    if (response.firstName == null || response.firstName == "") {
+    var response = await BaseClient().getUserProfile(id).catchError((err) {
       print("Profile doesn't exist");
       // Execute this if GetProfile returns null profile
       var newProfile = CreateProfile(
-          userId: id,
-          firstName: firstName,
-          lastName: lastName,
-          expectedIncome: expectedIncome
-      );
-    } else {
-      print("Got Profile");
-      print(id);
-      print(response);
-    }
+          userId: global.userId,
+          firstName: "firstName",
+          lastName: "lastName",
+          expectedIncome: 0);
+    });
   }
 
   final _firstName = TextEditingController();

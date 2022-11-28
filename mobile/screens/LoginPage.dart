@@ -370,10 +370,10 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 60.0, bottom: 30.0),
+                padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                 child: Center(
                   child: SizedBox(
-                      width: 200,
+                      width: 150,
                       height: 150,
                       /*decoration: BoxDecoration(
                         color: Colors.red,
@@ -387,6 +387,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: TextField(
                   controller: _controllerEmail,
                   decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 0),
                     focusColor: const Color(0xFF2D4B03),
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
@@ -403,12 +404,13 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(
-                    left: 15.0, right: 15.0, top: 15, bottom: 10.0),
+                    left: 15.0, right: 15.0, top: 15, bottom: 5.0),
                 //padding: EdgeInsets.symmetric(horizontal: 15),
                 child: TextField(
                   controller: _controllerPass,
                   obscureText: true,
                   decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 0),
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
                         borderRadius: BorderRadius.circular(50.0),
@@ -423,10 +425,10 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   MaterialButton(
-                    padding: EdgeInsets.only(left: 50.0),
+                    padding: EdgeInsets.only(right: 20.0),
                     child: const Text('Forgot Password', style: TextStyle(fontSize: 18, color: Color(0xFF2D4B03), decoration: TextDecoration.underline)),
                     onPressed: (){
                         showForgotPassword(context);
@@ -435,7 +437,7 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               const SizedBox(
-                height: 30,
+                height: 5,
               ),
               Container(
                 alignment: Alignment.center,
@@ -459,39 +461,42 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(
-                height: 80,
+                height: 30,
               ),
-              Column(
-                // mainAxisAlignment: MainAxisAlignment,
-                children: <Widget>[
-                  const SizedBox(height: 20),
-                  const Text('Don\'t have an account?', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03))),
-                  const SizedBox(height: 10),
-                  Container(
-                    alignment: Alignment.center,
-                    height: 50,
-                    width: 150,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF020100), border: Border.all(width: 2, color: const Color(0xFF2D4B03)), borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: TextButton(
-                      style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    const Text('Don\'t have an account?', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03))),
+                    const SizedBox(height: 10),
+                    Container(
+                      // alignment: Alignment.center,
+                      height: 45,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF020100), border: Border.all(width: 2, color: const Color(0xFF2D4B03)), borderRadius: BorderRadius.circular(20),
                       ),
-                      onPressed: () {
-                        this.error = false;
-                        this.result = "";
-                        clearLogSignFields();
+                      child: TextButton(
+                        style: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                        ),
+                        onPressed: () {
+                          this.error = false;
+                          this.result = "";
+                          clearLogSignFields();
 
-                        showSignUpDialog(context);
-                      },
-                      child: const Text(
-                        'Sign Up',
-                        style: TextStyle(fontSize: 20, color: Color(0xFFE3E9E7), fontWeight: FontWeight.bold),
+                          showSignUpDialog(context);
+                        },
+                        child: const Text(
+                          'Sign Up',
+                          style: TextStyle(fontSize: 18, color: Color(0xFFE3E9E7), fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 80,

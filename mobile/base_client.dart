@@ -13,6 +13,11 @@ Map getData(String id) => {
   "userId": id
 };
 
+Map getDeleteData(String userId, String? id) => {
+  "userId": userId,
+  "id": id,
+};
+
 class BaseClient
 {
   var client = http.Client();
@@ -59,6 +64,21 @@ class BaseClient
     var url = Uri.parse(baseUrl + '/EditBudget');
 
     var _payload = budgetToJsonEdit(object);
+
+    var response = await client.post(url, body: _payload, headers: _setHeaders());
+    if (response.statusCode == 201){
+      print("api success");
+      return response.body;
+    } else {
+      print("api fail");
+      return Future.error("Fail");
+    }
+  }
+
+  Future<dynamic> deleteBudget(String userId, String? id) async {
+    var url = Uri.parse(baseUrl + '/RemoveBudget');
+
+    var _payload = jsonEncode(getDeleteData(userId, id));
 
     var response = await client.post(url, body: _payload, headers: _setHeaders());
     if (response.statusCode == 201){

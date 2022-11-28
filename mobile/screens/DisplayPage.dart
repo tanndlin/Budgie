@@ -108,6 +108,25 @@ class _DisplayPageState extends State<DisplayPage> {
     }
   }
 
+  Future<void> deleteBudget(int index)
+  async {
+    id = global.userId;
+    String? budgetId = getAllBudgets[index].id;
+    print("Remove");
+    print(getAllBudgets[index].name);
+    var response = await BaseClient().deleteBudget(id, budgetId).catchError((err) {print("Fail");});
+    if (response == null) {
+      _showToast("Could not remove", true);
+      print("response null");
+    }
+    else {
+      print("success");
+      _showToast("Deleted", false);
+      getAllBud();
+      getAllCat();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -123,7 +142,7 @@ class _DisplayPageState extends State<DisplayPage> {
       Navigator.pushNamed(context, routes[index]);
     }
 
-    showAddCategory(BuildContext context){
+    void showAddCategory(BuildContext context){
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -205,7 +224,7 @@ class _DisplayPageState extends State<DisplayPage> {
           });
     }
 
-    showBudgetEditDialog(int index, BuildContext context){
+    void showBudgetEditDialog(int index, BuildContext context){
       setState(() {
         budgetName.text = getAllBudgets[index].name;
         budgetActual.text = getAllBudgets[index].actualPrice.toString();
@@ -344,7 +363,7 @@ class _DisplayPageState extends State<DisplayPage> {
                             width: 220.0,
                             height: 52,
                             child: DropdownButtonFormField(
-                              alignment: Alignment.center,
+                              // alignment: Alignment.center,
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 4),
                                 focusColor: const Color(0xFF2D4B03),
@@ -364,7 +383,7 @@ class _DisplayPageState extends State<DisplayPage> {
                               hint: Text('Choose Category'),
                               borderRadius: BorderRadius.circular(8),
                               dropdownColor: Color(0xFFE3E9E7),
-                              style: TextStyle(color: Color(0xFF2D4B03), fontSize: 16),
+                              style: TextStyle(color: Color(0xFF000000), fontSize: 16),
                               items: getAllCategories.map((item) {
                                 return DropdownMenuItem<MyCategory>(
                                   child: Text(item.name),
@@ -459,6 +478,89 @@ class _DisplayPageState extends State<DisplayPage> {
           });
     }
 
+    void showBudgetDeleteDialog(int index, BuildContext context)
+    {
+      String deleteName = getAllBudgets[index].name;
+
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              backgroundColor: const Color(0xFFFAFAFA),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              child: Container(
+                height: 150,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox( height: 10.0,),
+                      Text('Are you sure to delete?', style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Color(0xFFFF0000)),),
+                      Text('\"${deleteName}\"', style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Color(0xFFFF0000)),),
+                      const SizedBox( height: 10.0,),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                          Container(
+                          alignment: Alignment.center,
+                          height: 40,
+                          width: 60,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF00FF00), border: Border.all(width: 2, color: const Color(0xFF000000)), borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextButton(
+                              style: ButtonStyle(
+                                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                              ),
+                              onPressed: () async {
+                                Navigator.pop(context, true);
+                              },
+                              child: const Text(
+                                'No',
+                                style: TextStyle(fontSize: 20, color: Color(0xFF000000), fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 40,
+                          width: 60,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFF0000), border: Border.all(width: 2, color: const Color(0xFF000000)), borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextButton(
+                              style: ButtonStyle(
+                                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                              ),
+                              onPressed: () async {
+                                deleteBudget(index);
+                                Navigator.pop(context, true);
+                              },
+                              child: const Text(
+                                'Yes',
+                                style: TextStyle(fontSize: 20, color: Color(0xFF000000), fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                        ),
+                          ],
+                        ),
+                      ),
+
+                     const SizedBox(height: 10.0),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
+    }
+
     Widget _buildBudgetCard(int index) => Container(
           padding:  EdgeInsets.only(top: 2.0, left: 10.0, right: 10.0, bottom: 5.0),
           width: MediaQuery.of(context).size.width,
@@ -484,7 +586,9 @@ class _DisplayPageState extends State<DisplayPage> {
                   ),
                   Spacer(),
                   // TextButton(onPressed: (){}, child: Icon(Icons.edit, color: Color(0xFF2D4B03))),
-                  IconButton(onPressed: () { showBudgetEditDialog(index, context);}, icon: Icon(Icons.edit, color: Color(0xFF2D4B03), size: 20,), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+                  IconButton(onPressed: () { showBudgetEditDialog(index, context);}, icon: Icon(Icons.edit, color: Color(0xFF2D4B03), size: 25,), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+                  SizedBox(width: 15.0,),
+                  IconButton(onPressed: () { showBudgetDeleteDialog(index, context);}, icon: Icon(Icons.delete, color: Color(0xFF2D4B03), size: 25,), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
                   // Container(
                   //   // padding: EdgeInsets.symmetric(horizontal: 5.0),
                   //   child: Row(

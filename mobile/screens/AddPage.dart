@@ -406,7 +406,7 @@ class _AddPageState extends State<AddPage> {
                                                         width: 230.0,
                                                         height: 52,
                                                         child: DropdownButtonFormField(
-                                                          alignment: Alignment.center,
+                                                          // alignment: Alignment.center,
                                                           decoration: InputDecoration(
                                                             contentPadding: EdgeInsets.symmetric(horizontal: 4),
                                                             focusColor: const Color(0xFF2D4B03),
@@ -426,7 +426,7 @@ class _AddPageState extends State<AddPage> {
                                                           hint: Text('Choose Category'),
                                                           borderRadius: BorderRadius.circular(8),
                                                           dropdownColor: Color(0xFFE3E9E7),
-                                                          style: TextStyle(color: Color(0xFF2D4B03), fontSize: 16),
+                                                          style: TextStyle(color: Color(0xFF000000), fontSize: 16),
                                                           items: getAllCategories.map((item) {
                                                             return DropdownMenuItem<MyCategory>(
                                                               child: Text(item.name),
@@ -539,6 +539,9 @@ class _AddPageState extends State<AddPage> {
                                                       }
 
                                                       clearFields();
+                                                      setState(() {
+                                                        budgetStart.text =  DateFormat("MM-dd-yyyy").format(DateTime.now());
+                                                      });
 
                                                     },
                                                     child: const Text(

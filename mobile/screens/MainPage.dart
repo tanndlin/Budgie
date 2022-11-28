@@ -1,5 +1,17 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import 'package:mobile/global.dart' as global;
+import 'package:percent_indicator/linear_percent_indicator.dart';
+import '../base_client.dart';
+import '../models/budget.dart';
+import '../models/myCategory.dart';
+
+String id = global.userId;
+int budIndex = 0;
 
 class MainPage extends StatefulWidget{
 
@@ -11,6 +23,87 @@ class MainPage extends StatefulWidget{
 class _MainPageState extends State<MainPage> {
   int selectedIndex = 0;
   List<String> routes = ['/MainPage', '/DisplayPage', '/AddPage', '/CalendarView', '/AccountManager'];
+
+  List<Budget> getAllBudgets = <Budget>[];
+
+  List<MyCategory> getAllCategories = <MyCategory>[];
+  MyCategory? categoryValue;
+
+  _showToast(msg, error) => Fluttertoast.showToast(
+    msg: msg, fontSize: 18, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) :  Colors.green.withOpacity(.9), textColor: Colors.white,);
+
+  Future<void> getAllBud()
+  async {
+    id = global.userId;
+    getAllBudgets = <Budget>[];
+
+    var response = await BaseClient().getBudgets(id).catchError((err) {print("Fail");});
+    if (response == null) {
+      _showToast("Could not get", true);
+      print("response null");
+    }
+    else {
+      print("Got budgets");
+      print(id);
+      print(response);
+      List<Budget> allBudgets = getBudgetsFromJson(response);
+      for (Budget b in allBudgets) {
+        print(b);
+      }
+
+      if (allBudgets.length == 0)
+      {
+        _showToast("No budgets", true);
+      }
+
+      setState(() {
+        getAllBudgets = allBudgets;
+        budIndex = Random().nextInt(getAllBudgets.length);
+      });
+      print(getAllBudgets.length);
+
+
+    }
+  }
+
+  Future<void> getAllCat()
+  async {
+    id = global.userId;
+    // getAllCategories = <MyCategory>[];
+
+    var response = await BaseClient().getCategories(id).catchError((err) {print("Fail");});
+    if (response == null) {
+      _showToast("Could not get", true);
+      print("response null");
+    }
+    else {
+      print("Got Categories");
+      print(id);
+      print(response);
+      List<MyCategory> allCategories = getCategoriesFromJson(response);
+      for (MyCategory c in allCategories) {
+        print(c.name);
+      }
+
+      if (allCategories.length == 0)
+      {
+        _showToast("No Categories", true);
+      }
+      // var addVal = MyCategory(name: "Add New");
+      // allCategories.add(addVal);
+      setState(() {
+        getAllCategories = allCategories;
+      });
+
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAllCat();
+    getAllBud();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +187,7 @@ class _MainPageState extends State<MainPage> {
                     // BUDGET WIDGET
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      height: 280,
+                      height: 250,
                       decoration: BoxDecoration(
                           color: Color(0xddb3e5fc),
                           borderRadius: BorderRadius.circular(8),
@@ -109,7 +202,7 @@ class _MainPageState extends State<MainPage> {
                         // mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Padding(
-                            padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 10.0),
+                            padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
                             child:  Column(
                               children: <Widget>[
                                 const Align(
@@ -128,8 +221,52 @@ class _MainPageState extends State<MainPage> {
                                       child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
                                     ),
                                   ],
-                                )
-                                // BudgetCircle();
+                                ),
+                                Container(
+                                  padding:  EdgeInsets.only(top: 2.0, left: 10.0, right: 10.0, bottom: 5.0),
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 150,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xddb3e5fc),
+                                      borderRadius: BorderRadius.circular(8),
+                                      boxShadow: [ BoxShadow(
+                                          blurRadius: 8,
+                                          offset: Offset(0, 15),
+                                          color: Color(0xffe3e9e7).withOpacity(.5),
+                                          spreadRadius: -9)]
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: <Widget>[
+                                      //  Text
+                                      Text(
+                                        "${getAllBudgets[budIndex].name}", style: TextStyle(fontSize: 18, color: Colors.blueAccent.shade700, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                                      ),
+                                      Text("Category: ${findCategory(getAllCategories, getAllBudgets[budIndex].categoryId)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                                      Text("Start Date: ${getAllBudgets[budIndex].justDate()}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                                      Stack(
+                                        alignment: Alignment.center,
+                                        children: <Widget>[
+                                          LinearPercentIndicator(
+                                            lineHeight: 20.0,
+                                            percent: (getAllBudgets[budIndex].actualPrice/getAllBudgets[budIndex].expectedPrice),
+                                            progressColor: (getAllBudgets[budIndex].actualPrice/getAllBudgets[budIndex].expectedPrice) <= 0.5 ? Colors.green.shade400 : Colors.red.shade500,
+                                            backgroundColor: Colors.white70,
+                                          ),
+                                          Text("${(getAllBudgets[budIndex].actualPrice/getAllBudgets[budIndex].expectedPrice)*100}%", textAlign: TextAlign.center, style: TextStyle(fontSize: 15, color: Color(0xFF000000), fontWeight: FontWeight.bold),),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Text("${(getAllBudgets[budIndex].actualPrice)} of ${(getAllBudgets[budIndex].expectedPrice)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),

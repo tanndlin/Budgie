@@ -82,7 +82,6 @@ class _AccountManagerState extends State<AccountManager> {
 
   final _firstName = TextEditingController();
   final _lastName = TextEditingController();
-  final _expectedIncome = TextEditingController();
   int selectedIndex = 4;
 
   List<String> routes = [
@@ -494,10 +493,10 @@ class _AccountManagerState extends State<AccountManager> {
                   ),
                   label: 'Home'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.addchart, size: 35.0), label: 'Budget'),
+                  icon: Icon(Icons.addchart, size: 35.0), label: 'Display'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.add_circle_outline, size: 35.0),
-                  label: 'Bill'),
+                  label: 'Add'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.calendar_month, size: 35.0),
                   label: 'Calendar'),

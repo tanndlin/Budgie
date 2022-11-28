@@ -23,6 +23,8 @@ Bill billFromJson(String str) => Bill.fromJson(json.decode(str));
 
 String billToJson(Bill data) => json.encode(data.toJson());
 
+String billToJsonEdit(Bill data) => json.encode(data.toJsonEdit());
+
 class Bill {
   Bill({
     this.userId,
@@ -40,9 +42,11 @@ class Bill {
 
   String? userId;
   String name;
+  String? userId;
   String? categoryId;
   String? color;
   String? recurrence;
+  String? id;
   num price;
   String startDate;
   String endDate;
@@ -74,4 +78,32 @@ class Bill {
     "isPaid": isPaid ?? <String>[],
     "recurrence": recurrence ?? "monthly",
   };
+
+  Map<String, dynamic> toJsonEdit() => {
+    "userId": userId,
+    "name": name,
+    "categoryId": categoryId,
+    "price": price,
+    "startDate": startDate,
+    "endDate": endDate,
+    "id": id,
+  };
+
+  String justStartDate()
+  {
+    var split = this.startDate.split(' ');
+    if (split != null)
+      return split.first;
+
+    return "";
+  }
+
+  String justEndDate()
+  {
+    var split = this.endDate.split(' ');
+    if (split != null)
+      return split.first;
+
+    return "";
+  }
 }

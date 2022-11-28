@@ -46,11 +46,12 @@ class _AddPageState extends State<AddPage> {
 
   final categoryAdd = TextEditingController();
 
+  final categoryAdd = TextEditingController();
+
   void clearFields() {
     budgetName.clear();
     budgetExpected.clear();
     budgetActual.clear();
-    budgetStart.clear();
 
     billName.clear();
     billPrice.clear();

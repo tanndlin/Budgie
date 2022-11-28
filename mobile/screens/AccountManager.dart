@@ -28,10 +28,9 @@ class _AccountManagerState extends State<AccountManager> {
 
   void getInfo() async {
     var response = await BaseClient().getUserProfile(global.userId).catchError((err) {
-      print("lmao");
+      print("Profile not found!");
     });
     if (response == null) {
-      print("no response");
       // Execute this if GetProfile returns null profile
       var newProfile = CreateProfile(
           userId: global.userId,
@@ -40,7 +39,7 @@ class _AccountManagerState extends State<AccountManager> {
           expectedIncome: 0);
 
       var response_2 = await BaseClient().createProfile(newProfile).catchError((err) {
-        print("lmao twice");
+        print("Profile not created!");
       });
 
       final data = jsonDecode(response_2);
@@ -48,7 +47,7 @@ class _AccountManagerState extends State<AccountManager> {
       lastName = data['lastName'];
       initials = firstName[0] + lastName[0];
       expectedIncome = data['expectedIncome'];
-      print("data copied");
+      print("Data copied");
 
       setState(() {
         firstName = data['firstName'];
@@ -240,7 +239,18 @@ class _AccountManagerState extends State<AccountManager> {
                             foregroundColor:
                                 MaterialStateProperty.all<Color>(Colors.black),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
+
+                            var editedProfile = CreateProfile(
+                                userId: global.userId,
+                                firstName: _firstName.text,
+                                lastName: _lastName.text,
+                                expectedIncome: int.parse(_expectedIncome.text));
+
+                            var response_3 = await BaseClient().editProfile(editedProfile).catchError((err) {
+                              print("Profile not created!");
+                            });
+
                             // On Pressed it should just edit profile depending on what's in here
                             setState(() {
                               initials = _firstName.text[0] + _lastName.text[0];

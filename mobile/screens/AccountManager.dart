@@ -4,10 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:mobile/global.dart' as global;
-import '../base_client.dart';
-import '../models/budget.dart';
-
-String id = global.userId;
 
 
 class AccountManager extends StatefulWidget {
@@ -18,14 +14,10 @@ class AccountManager extends StatefulWidget {
 }
 
 class _AccountManagerState extends State<AccountManager> {
-
   String fullName = "Please Edit Profile First!";
   String initials = "XD";
-  String expectedIncome = "";
-
   final _firstName = TextEditingController();
   final _lastName = TextEditingController();
-  final _expectedIncome = TextEditingController();
   int selectedIndex = 4;
   List<String> routes = [
     '/MainPage',
@@ -130,28 +122,6 @@ class _AccountManagerState extends State<AccountManager> {
                                       hintText: 'Last Name'),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextField(
-                                  controller: _expectedIncome,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 2,
-                                            color: Color(0xFF2D4B03)),
-                                        borderRadius: BorderRadius.circular(
-                                            10.0),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 2,
-                                            color: Color(0xFF000000)),
-                                        borderRadius: BorderRadius.circular(
-                                            10.0),
-                                      ),
-                                      labelText: 'Expected Income',
-                                      hintText: 'Expected Income'),
-                                ),
-                              ),
                             ],
                           )
                       ),
@@ -175,11 +145,9 @@ class _AccountManagerState extends State<AccountManager> {
                             setState(() {
                               initials = _firstName.text[0] + _lastName.text[0];
                               fullName = _firstName.text + " " + _lastName.text;
-                              expectedIncome = _expectedIncome.text;
                             });
                             initials = _firstName.text[0] + _lastName.text[0];
                             fullName = _firstName.text + " " + _lastName.text;
-                            expectedIncome = _expectedIncome.text;
                             Navigator.of(context).pop();
                           },
                           child: const Text(
@@ -287,7 +255,7 @@ class _AccountManagerState extends State<AccountManager> {
                                   border: Border.all(color: Colors.black)),
                               child: Center(
                                 child: Text(
-                                    '${initials}',
+                                    '$initials',
                                     key: ValueKey(initials),
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
@@ -302,7 +270,7 @@ class _AccountManagerState extends State<AccountManager> {
                               color: Colors.transparent,
                               child: Center(
                                   child: Text(
-                                      '${fullName}',
+                                      '$fullName',
                                       key: ValueKey(fullName),
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
@@ -311,23 +279,11 @@ class _AccountManagerState extends State<AccountManager> {
                                           color: Color(0xFF2D4B03)))),
                             ),
                             Container(
-                              height: 25.0,
+                              height: 50.0,
                               width: MediaQuery.of(context).size.width,
                               color: Colors.transparent,
                               child: Center(
-                                  child: Text('${email}',
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFF2D4B03)))),
-                            ),
-                            Container(
-                              height: 25.0,
-                              width: MediaQuery.of(context).size.width,
-                              color: Colors.transparent,
-                              child: Center(
-                                  child: Text('Income: \$$expectedIncome',
+                                  child: Text('$email',
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
                                           fontSize: 20,
@@ -382,11 +338,11 @@ class _AccountManagerState extends State<AccountManager> {
                     child: TextButton(
                         style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(
-                                const EdgeInsets.all(15)),
+                                EdgeInsets.all(15)),
                             foregroundColor:
                                 MaterialStateProperty.all<Color>(Colors.black),
                             backgroundColor: MaterialStateProperty.all<Color>(
-                                const Color(0xddb3e5fc)),
+                                Color(0xddb3e5fc)),
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
@@ -400,7 +356,7 @@ class _AccountManagerState extends State<AccountManager> {
           // BOTTOM NAV
           bottomNavigationBar: BottomNavigationBar(
             elevation: 0,
-            selectedItemColor: const Color(0xFF2D4B03),
+            selectedItemColor: Color(0xFF2D4B03),
             unselectedItemColor: Colors.black,
             showSelectedLabels: true,
             currentIndex: selectedIndex,
@@ -413,10 +369,10 @@ class _AccountManagerState extends State<AccountManager> {
                   ),
                   label: 'Home'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.addchart, size: 35.0), label: 'Budget'),
+                  icon: Icon(Icons.addchart, size: 35.0), label: 'Display'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.add_circle_outline, size: 35.0),
-                  label: 'Bill'),
+                  label: 'Add'),
               BottomNavigationBarItem(
                   icon: Icon(Icons.calendar_month, size: 35.0),
                   label: 'Calendar'),

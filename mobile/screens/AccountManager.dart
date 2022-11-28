@@ -35,25 +35,30 @@ class _AccountManagerState extends State<AccountManager> {
       // Execute this if GetProfile returns null profile
       var newProfile = CreateProfile(
           userId: global.userId,
-          firstName: "firstName",
-          lastName: "lastName",
+          firstName: "FirstName",
+          lastName: "LastName",
           expectedIncome: 0);
 
       var response_2 = await BaseClient().createProfile(newProfile).catchError((err) {
         print("lmao twice");
       });
 
-      final data = jsonDecode(response);
+      final data = jsonDecode(response_2);
       firstName = data['firstName'];
       lastName = data['lastName'];
       initials = firstName[0] + lastName[0];
       expectedIncome = data['expectedIncome'];
+      print("data copied");
 
       setState(() {
         firstName = data['firstName'];
+        print("firstname set");
         lastName = data['lastName'];
+        print("lastname set");
         initials = firstName[0] + lastName[0];
+        print("initials set");
         expectedIncome = data['expectedIncome'];
+        print("income set");
       });
 
     }

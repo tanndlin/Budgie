@@ -11,6 +11,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../base_client.dart';
 import '../models/budget.dart';
 import '../models/myCategory.dart';
+import '../models/myExtra.dart';
 
 String id = global.userId;
 
@@ -26,8 +27,11 @@ class _DisplayPageState extends State<DisplayPage> {
   late var budgetCategory = TextEditingController();
   late var budgetExpected = TextEditingController();
   late var budgetActual = TextEditingController();
-  DateTime _budgetStartDate = DateTime.now();
   late var budgetStart = TextEditingController();
+
+  late var extraName = TextEditingController();
+  late var extraPrice = TextEditingController();
+  late var extraDate = TextEditingController();
 
   final categoryAdd = TextEditingController();
 
@@ -39,6 +43,7 @@ class _DisplayPageState extends State<DisplayPage> {
 
 
   List<Budget> getAllBudgets = <Budget>[];
+  List<MyExtra> getAllExtras = <MyExtra>[];
 
   _showToast(msg, error) => Fluttertoast.showToast(
     msg: msg, fontSize: 18, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) :  Colors.green.withOpacity(.9), textColor: Colors.white,);
@@ -49,7 +54,7 @@ class _DisplayPageState extends State<DisplayPage> {
   Future<void> getAllBud()
   async {
     id = global.userId;
-    getAllBudgets = <Budget>[];
+    // getAllBudgets = <Budget>[];
 
     var response = await BaseClient().getBudgets(id).catchError((err) {print("Fail");});
     if (response == null) {
@@ -62,7 +67,7 @@ class _DisplayPageState extends State<DisplayPage> {
       print(response);
       List<Budget> allBudgets = getBudgetsFromJson(response);
       for (Budget b in allBudgets) {
-        print(b);
+        print(b.name);
       }
 
       if (allBudgets.length == 0)
@@ -105,6 +110,36 @@ class _DisplayPageState extends State<DisplayPage> {
         getAllCategories = allCategories;
       });
 
+    }
+  }
+
+  Future<void> getAllExt()
+  async {
+    id = global.userId;
+
+    var response = await BaseClient().getExtras(id).catchError((err) {print("Fail");});
+    if (response == null) {
+      _showToast("Could not get", true);
+      print("response null");
+    }
+    else {
+      print("Got Extras");
+      print(id);
+      print(response);
+      List<MyExtra> allExtras = getExtrasFromJson(response);
+
+      if (allExtras.length == 0)
+      {
+        _showToast("No budgets", true);
+      }
+      setState(() {
+        getAllExtras = allExtras;
+      });
+
+      for (MyExtra e in getAllExtras)
+      {
+          print(e.name);
+      }
     }
   }
 
@@ -561,6 +596,254 @@ class _DisplayPageState extends State<DisplayPage> {
           });
     }
 
+    void showExtraEditDialog(int index, BuildContext context)
+    {
+      setState(() {
+        extraName.text = getAllExtras[index].name;
+        extraPrice.text = getAllExtras[index].price.toString();
+        extraDate.text = getAllExtras[index].date;
+
+        categoryValue = getCategory(getAllCategories, getAllExtras[index].categoryId);
+
+      });
+
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              backgroundColor: const Color(0xFFFAFAFA),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              child: Container(
+                height: 400,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 10.0,),
+                      const Text('Edit Extra', style: TextStyle(fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF2D4B03)),),
+                      const SizedBox(height: 10.0,),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                        child: TextField(
+                          controller: extraName,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(vertical: 0),
+                              focusColor: const Color(0xFF2D4B03),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    width: 2, color: Color(0xFF2D4B03)),
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    width: 2, color: Color(0xFF000000)),
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                              prefixIcon: const Icon(Icons.list_alt_rounded),
+                              labelText: 'Extra Name',
+                              hintText: 'Name'),
+                        ),
+                      ),
+                      Padding(
+                        // padding: const EdgeInsets.only(
+                        //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                        child: TextField(
+                          controller: extraPrice,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(vertical: 0),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    width: 2, color: Color(0xFF2D4B03)),
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    width: 2, color: Color(0xFF000000)),
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                              prefixIcon: Icon(
+                                  Icons.currency_exchange_outlined),
+                              labelText: 'Price Amount',
+                              hintText: 'Price'),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                        child: TextField(
+                          controller: extraDate,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(vertical: 0),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    width: 2, color: Color(0xFF2D4B03)),
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    width: 2, color: Color(0xFF000000)),
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                              prefixIcon: Icon(Icons.calendar_month),
+                              labelText: 'Date',
+                              hintText: 'Date'),
+                          readOnly: true,
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.parse(extraDate.text),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2222)
+                            );
+                            if (pickedDate != null) {
+                              String formatDate = DateFormat("MM-dd-yyyy")
+                                  .format(pickedDate);
+                              setState(() {
+                                extraDate.text = formatDate;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                      Padding(padding: EdgeInsets.symmetric(vertical: 4)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            width: 220.0,
+                            height: 52,
+                            child: DropdownButtonFormField(
+                              // alignment: Alignment.center,
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 4),
+                                focusColor: const Color(0xFF2D4B03),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 2, color: Color(0xFF2D4B03)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 2, color: Color(0xFF000000)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                prefixIcon: Icon(Icons.list),
+                              ),
+                              isDense: false,
+                              // isExpanded: true,
+                              iconSize: 24,
+                              hint: Text('Choose Category'),
+                              borderRadius: BorderRadius.circular(8),
+                              dropdownColor: Color(0xFFE3E9E7),
+                              style: TextStyle(
+                                  color: Color(0xFF000000), fontSize: 16),
+                              items: getAllCategories.map((item) {
+                                return DropdownMenuItem<MyCategory>(
+                                  child: Text(item.name),
+                                  value: item,
+                                );
+                              }).toList(),
+                              onChanged: (newVal) {
+                                if (newVal != null) {
+                                  setState(() {
+                                    categoryValue = newVal as MyCategory?;
+                                  });
+                                }
+                                print(categoryValue?.name);
+                              },
+                              value: categoryValue,
+                            ),
+                          ),
+                          IconButton(
+                            style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.black),
+                            ),
+                            onPressed: () {
+                              showAddCategory(context);
+                            },
+                            icon: Icon(Icons.add_circle),
+                            iconSize: 40,
+                            constraints: BoxConstraints(),
+                            padding: EdgeInsets.zero,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8.0,),
+                      Container(
+                        alignment: Alignment.center,
+                        height: 40,
+                        width: 320,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF020100),
+                          border: Border.all(width: 2, color: const Color(
+                              0xFF2D4B03)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextButton(
+                          style: ButtonStyle(
+                            foregroundColor: MaterialStateProperty.all<Color>(
+                                Colors.black),
+                          ),
+                          onPressed: () async {
+                            //  Add category
+                            id = global.userId;
+                            print(id);
+                            if (extraDate.text == "" ||
+                                extraName.text == "" ||
+                                extraPrice.text == "") {
+                              _showToast("Fill fields", true);
+                            }
+                            else {
+                              var extra = MyExtra(
+                                userId: id,
+                                id: getAllExtras[index].id,
+                                name: extraName.text,
+                                price: num.parse(extraPrice.text),
+                                categoryId: categoryValue?.id,
+                                date: extraDate.text,
+                              );
+                              print("EDIT:::::");
+                              print(myExtraToJson(extra));
+                              var response = await BaseClient().editExtra(extra).catchError((err) {
+                                print("Fail");
+                              });
+                              if (response == null) {
+                                _showToast("Could not edit extra", true);
+                                print("response null");
+                              }
+
+                              _showToast("Edited", false);
+                              print("success");
+                            }
+
+                            getAllCat();
+                            getAllExt();
+                            Navigator.pop(context, true);
+                          },
+                          child: const Text(
+                            'Edit',
+                            style: TextStyle(fontSize: 20,
+                                color: Color(0xFFE3E9E7),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10.0,),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
+    }
+
     Widget _buildBudgetCard(int index) => Container(
           padding:  EdgeInsets.only(top: 2.0, left: 10.0, right: 10.0, bottom: 5.0),
           width: MediaQuery.of(context).size.width,
@@ -626,6 +909,53 @@ class _DisplayPageState extends State<DisplayPage> {
               ),
             ],
           ),
+    );
+
+    Widget _buildExtraCard(int index) => Container(
+      padding:  EdgeInsets.only(top: 2.0, left: 10.0, right: 10.0, bottom: 5.0),
+      width: MediaQuery.of(context).size.width,
+      height: 150,
+      decoration: BoxDecoration(
+          color: Color(0xddb3e5fc),
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [ BoxShadow(
+              blurRadius: 8,
+              offset: Offset(0, 15),
+              color: Color(0xffe3e9e7).withOpacity(.5),
+              spreadRadius: -9)]
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          //  Text
+          Row(
+            children: <Widget>[
+              Text(
+                "${getAllExtras[index].name}", style: TextStyle(fontSize: 18, color: Colors.blueAccent.shade700, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+              ),
+              Spacer(),
+              // TextButton(onPressed: (){}, child: Icon(Icons.edit, color: Color(0xFF2D4B03))),
+              IconButton(onPressed: () { showExtraEditDialog(index, context);}, icon: Icon(Icons.edit, color: Color(0xFF2D4B03), size: 25,), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+              SizedBox(width: 15.0,),
+              IconButton(onPressed: () { showBudgetDeleteDialog(index, context);}, icon: Icon(Icons.delete, color: Color(0xFF2D4B03), size: 25,), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+              // Container(
+              //   // padding: EdgeInsets.symmetric(horizontal: 5.0),
+              //   child: Row(
+              //     // crossAxisAlignment: CrossAxisAlignment.end,
+              //     // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //     children: [
+              //       TextButton(onPressed: (){}, child: Icon(Icons.edit, color: Color(0xFF2D4B03),)),
+              //     ],
+              //   ),
+              // ),
+            ],
+          ),
+          Text("Price: \$${getAllExtras[index].price}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+          Text("Category: ${findCategory(getAllCategories, getAllExtras[index].categoryId)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+          Text("Date: ${getAllExtras[index].justDate()}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+        ],
+      ),
     );
 
     return Container(
@@ -730,6 +1060,11 @@ class _DisplayPageState extends State<DisplayPage> {
                                           {
                                             getAllBud();
                                           }
+
+                                          if (newIndex == 2)
+                                          {
+                                            getAllExt();
+                                          }
                                           print(newIndex);
                                           setState(()  {
                                             for (int index = 0; index < isSelected.length; index++)
@@ -774,12 +1109,6 @@ class _DisplayPageState extends State<DisplayPage> {
 
                                             ],
                                           ),
-
-                                          // child: Padding(
-                                          //   padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 10.0),
-                                          //   child:
-                                          // )
-
                                       ),
                                       // BILL FIELDS
                                       Visibility(
@@ -798,7 +1127,29 @@ class _DisplayPageState extends State<DisplayPage> {
                                       // Budget visible
                                       Visibility(
                                         visible: isSelected[2],
-                                        child: Text("Add Extra"),
+                                        child: Column(
+                                          // mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            ListView.separated(
+                                              physics: NeverScrollableScrollPhysics(),
+                                              scrollDirection: Axis.vertical,
+                                              shrinkWrap: true,
+                                              itemCount: getAllExtras.length,
+                                              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                                              itemBuilder: (context, index) {
+                                                return _buildExtraCard(index);
+                                                // return ListTile(
+                                                //     selected:index==0,
+                                                //     selectedTileColor:Colors.green,
+                                                //     title: Padding(padding:EdgeInsets.all(30.0), child:Text('${getAllBudgets[index].name}')),
+                                                //     onTap:() { print('on tapped'); }
+                                                // );
+                                              },
+                                              separatorBuilder: (context, index) => const Divider(),
+                                            ),
+
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),

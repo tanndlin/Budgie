@@ -16,9 +16,11 @@ class AccountManager extends StatefulWidget {
 class _AccountManagerState extends State<AccountManager> {
   String fullName = "Please Edit Profile First!";
   String initials = "XD";
+
   final _firstName = TextEditingController();
   final _lastName = TextEditingController();
   int selectedIndex = 4;
+
   List<String> routes = [
     '/MainPage',
     '/DisplayPage',
@@ -26,6 +28,15 @@ class _AccountManagerState extends State<AccountManager> {
     '/CalendarView',
     '/AccountManager'
   ];
+
+  @override
+  void initState()
+  {
+    super.initState();
+    // call get user profile
+    // if exists change the full name and initials
+    // else the user will edit using the
+  }
 
   @override
   Widget build(BuildContext context) {

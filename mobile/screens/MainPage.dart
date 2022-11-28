@@ -21,6 +21,8 @@ class MainPage extends StatefulWidget{
 }
 
 class _MainPageState extends State<MainPage> {
+  late Future<int> gotData;
+
   int selectedIndex = 0;
   List<String> routes = ['/MainPage', '/DisplayPage', '/AddPage', '/CalendarView', '/AccountManager'];
 
@@ -32,12 +34,40 @@ class _MainPageState extends State<MainPage> {
   _showToast(msg, error) => Fluttertoast.showToast(
     msg: msg, fontSize: 18, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) :  Colors.green.withOpacity(.9), textColor: Colors.white,);
 
-  Future<void> getAllBud()
+  Future<int> getData()
   async {
     id = global.userId;
-    getAllBudgets = <Budget>[];
+    // getAllBudgets = <Budget>[];
 
-    var response = await BaseClient().getBudgets(id).catchError((err) {print("Fail");});
+    id = global.userId;
+    // getAllCategories = <MyCategory>[];
+
+    var response = await BaseClient().getCategories(id).catchError((err) {print("Fail");});
+    if (response == null) {
+      _showToast("Could not get", true);
+      print("response null");
+    }
+    else {
+      print("Got Categories");
+      print(id);
+      print(response);
+      List<MyCategory> allCategories = getCategoriesFromJson(response);
+      for (MyCategory c in allCategories) {
+        print(c.name);
+      }
+
+      if (allCategories.length == 0)
+      {
+        _showToast("No Categories", true);
+      }
+
+      setState(() {
+        getAllCategories = allCategories;
+      });
+
+    }
+
+    response = await BaseClient().getBudgets(id).catchError((err) {print("Fail");});
     if (response == null) {
       _showToast("Could not get", true);
       print("response null");
@@ -61,48 +91,17 @@ class _MainPageState extends State<MainPage> {
         budIndex = Random().nextInt(getAllBudgets.length);
       });
       print(getAllBudgets.length);
-
-
     }
+
+    return budIndex;
   }
 
-  Future<void> getAllCat()
-  async {
-    id = global.userId;
-    // getAllCategories = <MyCategory>[];
-
-    var response = await BaseClient().getCategories(id).catchError((err) {print("Fail");});
-    if (response == null) {
-      _showToast("Could not get", true);
-      print("response null");
-    }
-    else {
-      print("Got Categories");
-      print(id);
-      print(response);
-      List<MyCategory> allCategories = getCategoriesFromJson(response);
-      for (MyCategory c in allCategories) {
-        print(c.name);
-      }
-
-      if (allCategories.length == 0)
-      {
-        _showToast("No Categories", true);
-      }
-      // var addVal = MyCategory(name: "Add New");
-      // allCategories.add(addVal);
-      setState(() {
-        getAllCategories = allCategories;
-      });
-
-    }
-  }
 
   @override
   void initState() {
     super.initState();
-    getAllCat();
-    getAllBud();
+
+    gotData = getData();
   }
 
   @override
@@ -121,8 +120,349 @@ class _MainPageState extends State<MainPage> {
       Navigator.pushNamed(context, routes[index]);
     }
 
-    void _logout(){
-      Navigator.pushNamed(context, '/LoginPage');
+    Widget getWidgetsWithData()
+    {
+      return Column(
+        children: [
+          const SizedBox(height: 10.0,),
+          // WHOLE PAGE
+          Padding(
+              padding: EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Column(
+                children: <Widget>[
+                  // BUDGET WIDGET
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 250,
+                    decoration: BoxDecoration(
+                        color: Color(0xddb3e5fc),
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [ BoxShadow(
+                            blurRadius: 8,
+                            offset: Offset(0, 15),
+                            color: Color(0xffe3e9e7).withOpacity(.5),
+                            spreadRadius: -9)]
+                    ),
+                    child: Column(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
+                          child:  Column(
+                            children: <Widget>[
+                              const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text('Welcome!', style: TextStyle(fontSize: 20,  fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Your Budgets', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
+                                  TextButton(
+                                    onPressed: () {
+                                      // display budgets
+                                      _goToDisplay();
+                                    },
+                                    child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                padding:  EdgeInsets.only(top: 2.0, left: 10.0, right: 10.0, bottom: 5.0),
+                                width: MediaQuery.of(context).size.width,
+                                height: 150,
+                                decoration: BoxDecoration(
+                                    color: Color(0xddb3e5fc),
+                                    borderRadius: BorderRadius.circular(8),
+                                    boxShadow: [ BoxShadow(
+                                        blurRadius: 8,
+                                        offset: Offset(0, 15),
+                                        color: Color(0xffe3e9e7).withOpacity(.5),
+                                        spreadRadius: -9)]
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    //  Text
+                                    Text(
+                                      "${getAllBudgets[budIndex].name}", style: TextStyle(fontSize: 18, color: Colors.blueAccent.shade700, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                                    ),
+                                    Text("Category: ${findCategory(getAllCategories, getAllBudgets[budIndex].categoryId)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                                    Text("Start Date: ${getAllBudgets[budIndex].justDate()}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                                    Stack(
+                                      alignment: Alignment.center,
+                                      children: <Widget>[
+                                        LinearPercentIndicator(
+                                          lineHeight: 20.0,
+                                          percent: (getAllBudgets[budIndex].actualPrice/getAllBudgets[budIndex].expectedPrice),
+                                          progressColor: (getAllBudgets[budIndex].actualPrice/getAllBudgets[budIndex].expectedPrice) <= 0.5 ? Colors.green.shade400 : Colors.red.shade500,
+                                          backgroundColor: Colors.white70,
+                                        ),
+                                        Text("${(getAllBudgets[budIndex].actualPrice/getAllBudgets[budIndex].expectedPrice)*100}%", textAlign: TextAlign.center, style: TextStyle(fontSize: 15, color: Color(0xFF000000), fontWeight: FontWeight.bold),),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text("${(getAllBudgets[budIndex].actualPrice)} of ${(getAllBudgets[budIndex].expectedPrice)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 15.0,),
+                  // BILL WIDGET
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 200,
+                    decoration: BoxDecoration(
+                        color: Color(0xddb3e5fc),
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [ BoxShadow(
+                            blurRadius: 8,
+                            offset: Offset(0, 15),
+                            color: Color(0xffe3e9e7).withOpacity(.5),
+                            spreadRadius: -9)]
+                    ),
+                    child: Column(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 10.0),
+                          child:  Column(
+                            children: <Widget>[
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Your Bills', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
+                                  TextButton(
+                                    onPressed: () {
+                                      // display bills
+                                      _goToDisplay();
+                                    },
+                                    child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
+                                  ),
+                                ],
+                              )
+                              // BudgetCircle();
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 15.0,),
+                  // BILL WIDGET
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 180,
+                    decoration: BoxDecoration(
+                        color: Color(0xddb3e5fc),
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [ BoxShadow(
+                            blurRadius: 8,
+                            offset: Offset(0, 15),
+                            color: Color(0xffe3e9e7).withOpacity(.5),
+                            spreadRadius: -9)]
+                    ),
+                    child: Column(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 10.0),
+                          child:  Column(
+                            children: <Widget>[
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Your Extras', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
+                                  TextButton(
+                                    onPressed: () {
+                                      // display one-off
+                                      _goToDisplay();
+                                    },
+                                    child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
+                                  ),
+                                ],
+                              )
+                              // BudgetCircle();
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+          ),
+        ],
+      );
+    }
+
+    Widget getWidgetsNoData()
+    {
+      return Column(
+        children: [
+          const SizedBox(height: 10.0,),
+          // WHOLE PAGE
+          Padding(
+              padding: EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Column(
+                children: <Widget>[
+                  // BUDGET WIDGET
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 250,
+                    decoration: BoxDecoration(
+                        color: Color(0xddb3e5fc),
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [ BoxShadow(
+                            blurRadius: 8,
+                            offset: Offset(0, 15),
+                            color: Color(0xffe3e9e7).withOpacity(.5),
+                            spreadRadius: -9)]
+                    ),
+                    child: Column(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
+                          child:  Column(
+                            children: <Widget>[
+                              const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text('Welcome!', style: TextStyle(fontSize: 20,  fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Your Budgets', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
+                                  TextButton(
+                                    onPressed: () {
+                                      // display budgets
+                                      _goToDisplay();
+                                    },
+                                    child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                "No budgets", style: TextStyle(fontSize: 18, color: Colors.blueAccent.shade700, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 15.0,),
+                  // BILL WIDGET
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 200,
+                    decoration: BoxDecoration(
+                        color: Color(0xddb3e5fc),
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [ BoxShadow(
+                            blurRadius: 8,
+                            offset: Offset(0, 15),
+                            color: Color(0xffe3e9e7).withOpacity(.5),
+                            spreadRadius: -9)]
+                    ),
+                    child: Column(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 10.0),
+                          child:  Column(
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Your Bills', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
+                                  TextButton(
+                                    onPressed: () {
+                                      // display bills
+                                      _goToDisplay();
+                                    },
+                                    child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                "No bills", style: TextStyle(fontSize: 18, color: Colors.blueAccent.shade700, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 15.0,),
+                  // BILL WIDGET
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 180,
+                    decoration: BoxDecoration(
+                        color: Color(0xddb3e5fc),
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [ BoxShadow(
+                            blurRadius: 8,
+                            offset: Offset(0, 15),
+                            color: Color(0xffe3e9e7).withOpacity(.5),
+                            spreadRadius: -9)]
+                    ),
+                    child: Column(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 10.0),
+                          child:  Column(
+                            children: <Widget>[
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('Your Extras', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
+                                  TextButton(
+                                    onPressed: () {
+                                      // display one-off
+                                      _goToDisplay();
+                                    },
+                                    child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                "No extras", style: TextStyle(fontSize: 18, color: Colors.blueAccent.shade700, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+          ),
+        ],
+      );
     }
 
     return Container(
@@ -176,194 +516,27 @@ class _MainPageState extends State<MainPage> {
         ),
 
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 10.0,),
-              // WHOLE PAGE
-              Padding(
-                padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                child: Column(
-                  children: <Widget>[
-                    // BUDGET WIDGET
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 250,
-                      decoration: BoxDecoration(
-                          color: Color(0xddb3e5fc),
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [ BoxShadow(
-                              blurRadius: 8,
-                              offset: Offset(0, 15),
-                              color: Color(0xffe3e9e7).withOpacity(.5),
-                              spreadRadius: -9)]
-                      ),
-                      child: Column(
-                        // crossAxisAlignment: CrossAxisAlignment.start,
-                        // mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
-                            child:  Column(
-                              children: <Widget>[
-                                const Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text('Welcome!', style: TextStyle(fontSize: 20,  fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Your Budgets', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
-                                    TextButton(
-                                      onPressed: () {
-                                        // display budgets
-                                        _goToDisplay();
-                                      },
-                                      child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  padding:  EdgeInsets.only(top: 2.0, left: 10.0, right: 10.0, bottom: 5.0),
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xddb3e5fc),
-                                      borderRadius: BorderRadius.circular(8),
-                                      boxShadow: [ BoxShadow(
-                                          blurRadius: 8,
-                                          offset: Offset(0, 15),
-                                          color: Color(0xffe3e9e7).withOpacity(.5),
-                                          spreadRadius: -9)]
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: <Widget>[
-                                      //  Text
-                                      Text(
-                                        "${getAllBudgets[budIndex].name}", style: TextStyle(fontSize: 18, color: Colors.blueAccent.shade700, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
-                                      ),
-                                      Text("Category: ${findCategory(getAllCategories, getAllBudgets[budIndex].categoryId)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
-                                      Text("Start Date: ${getAllBudgets[budIndex].justDate()}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
-                                      Stack(
-                                        alignment: Alignment.center,
-                                        children: <Widget>[
-                                          LinearPercentIndicator(
-                                            lineHeight: 20.0,
-                                            percent: (getAllBudgets[budIndex].actualPrice/getAllBudgets[budIndex].expectedPrice),
-                                            progressColor: (getAllBudgets[budIndex].actualPrice/getAllBudgets[budIndex].expectedPrice) <= 0.5 ? Colors.green.shade400 : Colors.red.shade500,
-                                            backgroundColor: Colors.white70,
-                                          ),
-                                          Text("${(getAllBudgets[budIndex].actualPrice/getAllBudgets[budIndex].expectedPrice)*100}%", textAlign: TextAlign.center, style: TextStyle(fontSize: 15, color: Color(0xFF000000), fontWeight: FontWeight.bold),),
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Text("${(getAllBudgets[budIndex].actualPrice)} of ${(getAllBudgets[budIndex].expectedPrice)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 15.0,),
-                    // BILL WIDGET
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 200,
-                      decoration: BoxDecoration(
-                          color: Color(0xddb3e5fc),
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [ BoxShadow(
-                              blurRadius: 8,
-                              offset: Offset(0, 15),
-                              color: Color(0xffe3e9e7).withOpacity(.5),
-                              spreadRadius: -9)]
-                      ),
-                      child: Column(
-                        // crossAxisAlignment: CrossAxisAlignment.start,
-                        // mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 10.0),
-                            child:  Column(
-                              children: <Widget>[
-
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Your Bills', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
-                                    TextButton(
-                                      onPressed: () {
-                                        // display bills
-                                        _goToDisplay();
-                                      },
-                                      child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
-                                    ),
-                                  ],
-                                )
-                                // BudgetCircle();
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 15.0,),
-                    // BILL WIDGET
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 180,
-                      decoration: BoxDecoration(
-                          color: Color(0xddb3e5fc),
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [ BoxShadow(
-                              blurRadius: 8,
-                              offset: Offset(0, 15),
-                              color: Color(0xffe3e9e7).withOpacity(.5),
-                              spreadRadius: -9)]
-                      ),
-                      child: Column(
-                        // crossAxisAlignment: CrossAxisAlignment.start,
-                        // mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 10.0),
-                            child:  Column(
-                              children: <Widget>[
-
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Your Extras', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
-                                    TextButton(
-                                      onPressed: () {
-                                        // display one-off
-                                        _goToDisplay();
-                                      },
-                                      child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
-                                    ),
-                                  ],
-                                )
-                                // BudgetCircle();
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )
-              ),
-            ],
-          )
+          child: FutureBuilder<int?>(
+            future: gotData,
+            builder: (context, snapshot) {
+              if (snapshot.hasData && getAllBudgets.length > 0)
+              {
+                return getWidgetsWithData();
+              }
+              else if (snapshot.hasData && getAllBudgets.length == 0)
+              {
+                return getWidgetsNoData();
+              }
+              else if (snapshot.hasError)
+              {
+                return getWidgetsNoData();
+              }
+              else
+              {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
         ),
 
         // BOTTOM NAV

@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:mobile/global.dart' as global;
 import 'package:mobile/models/budget.dart';
 
+import 'models/myExtra.dart';
+
 const String baseUrl = 'https://us-central1-cop4331-large-project-27.cloudfunctions.net/webApi';
 
 // final String id = global.userId;
@@ -125,6 +127,52 @@ class BaseClient
     var url = Uri.parse(baseUrl + '/CreateCategory');
 
     var _payload = jsonEncode(object);
+
+    var response = await client.post(url, body: _payload, headers: _setHeaders());
+    if (response.statusCode == 201){
+      print("api success");
+      return response.body;
+    } else {
+      print("api fail");
+      return Future.error("Fail");
+    }
+  }
+
+  Future<dynamic> postExtra(dynamic object) async {
+    var url = Uri.parse(baseUrl + '/CreateOneOff');
+
+    var _payload = jsonEncode(object);
+
+    var response = await client.post(url, body: _payload, headers: _setHeaders());
+    print(response.statusCode);
+    if (response.statusCode == 201){
+      print("api success");
+      return response.body;
+    } else {
+      print("api fail");
+      return Future.error("Fail");
+    }
+  }
+
+  Future<dynamic> getExtras(String id) async {
+    var url = Uri.parse(baseUrl + '/GetOneOffs');
+
+    var _payload = jsonEncode(getData(id));
+
+    var response = await client.post(url, body: _payload, headers: _setHeaders());
+    if (response.statusCode == 201){
+      print("api success");
+      return response.body;
+    } else {
+      print("api fail");
+      return Future.error("Fail");
+    }
+  }
+
+  Future<dynamic> editExtra(MyExtra object) async {
+    var url = Uri.parse(baseUrl + '/EditOneoff');
+
+    var _payload = myExtraToJsonEdit(object);
 
     var response = await client.post(url, body: _payload, headers: _setHeaders());
     if (response.statusCode == 201){

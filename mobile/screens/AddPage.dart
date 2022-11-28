@@ -13,6 +13,8 @@ import '../models/myCategory.dart';
 
 import 'package:mobile/global.dart' as global;
 
+import '../models/myExtra.dart';
+
 String id = global.userId;
 
 class AddPage extends StatefulWidget {
@@ -27,7 +29,6 @@ class _AddPageState extends State<AddPage> {
   // FirebaseAuth auth = FirebaseAuth.instance;
 
   final budgetName = TextEditingController();
-  final budgetCategory = TextEditingController();
   final budgetExpected = TextEditingController();
   final budgetActual = TextEditingController();
   final budgetStart = TextEditingController();
@@ -35,21 +36,31 @@ class _AddPageState extends State<AddPage> {
 
   final billName = TextEditingController();
   final billPrice = TextEditingController();
-  final billCategory = TextEditingController();
-  DateTime _billDateStart = DateTime.now();
-  DateTime _billDateEnd = DateTime.now();
+  final _billDateStart = TextEditingController();
+  final _billDateEnd = TextEditingController();
+
+  final extraName = TextEditingController();
+  final extraPrice = TextEditingController();
+  final extraDate = TextEditingController();
 
   final categoryAdd = TextEditingController();
 
   void clearFields() {
     budgetName.clear();
-    budgetCategory.clear();
     budgetExpected.clear();
     budgetActual.clear();
+    budgetStart.clear();
 
     billName.clear();
     billPrice.clear();
-    billCategory.clear();
+    _billDateStart.clear();
+    _billDateEnd.clear();
+
+    extraName.clear();
+    extraPrice.clear();
+    extraDate.clear();
+
+    categoryAdd.clear();
   }
 
   _showToast(msg, error) => Fluttertoast.showToast(
@@ -308,6 +319,9 @@ class _AddPageState extends State<AddPage> {
                                         onPressed: (int newIndex) {
                                           setState(() {
                                             budgetStart.text = DateFormat("MM-dd-yyyy").format(DateTime.now());
+                                            _billDateStart.text = DateFormat("MM-dd-yyyy").format(DateTime.now());
+                                            _billDateEnd.text = DateFormat("MM-dd-yyyy").format(DateTime.now());
+                                            extraDate.text = DateFormat("MM-dd-yyyy").format(DateTime.now());
                                             // getAllCat();
                                             for (int index = 0; index < isSelected.length; index++)
                                             {
@@ -553,7 +567,6 @@ class _AddPageState extends State<AddPage> {
                                               ],
                                             ),
                                           )
-
                                       ),
                                       // Bill visible
                                       Visibility(
@@ -566,10 +579,11 @@ class _AddPageState extends State<AddPage> {
                                                 SizedBox(height: 20.0),
                                                 Padding(
                                                   //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
-                                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                                  padding: const EdgeInsets.symmetric(vertical: 8),
                                                   child: TextField(
                                                     controller: billName,
                                                     decoration: InputDecoration(
+                                                      contentPadding: EdgeInsets.symmetric(vertical: 0),
                                                         focusColor: const Color(0xFF2D4B03),
                                                         enabledBorder: OutlineInputBorder(
                                                           borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
@@ -587,10 +601,11 @@ class _AddPageState extends State<AddPage> {
                                                 Padding(
                                                   // padding: const EdgeInsets.only(
                                                   //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
-                                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                                  padding: EdgeInsets.symmetric(vertical: 8),
                                                   child: TextField(
                                                     controller: billPrice,
                                                     decoration: InputDecoration(
+                                                        contentPadding: EdgeInsets.symmetric(vertical: 0),
                                                         enabledBorder: OutlineInputBorder(
                                                           borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
                                                           borderRadius: BorderRadius.circular(50.0),
@@ -605,55 +620,134 @@ class _AddPageState extends State<AddPage> {
                                                   ),
                                                 ),
                                                 Padding(
-                                                    padding: EdgeInsets.symmetric(vertical: 10),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      children: <Widget>[
-                                                        Text(
-                                                          'Start Date: ${_billDateStart.month}/${_billDateStart.day}/${_billDateStart.year}',
-                                                          style: TextStyle(fontSize: 17, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),
+                                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                                  child: TextField(
+                                                    controller: _billDateStart,
+                                                    decoration: InputDecoration(
+                                                        contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                                          borderRadius: BorderRadius.circular(50.0),
                                                         ),
-                                                        ElevatedButton(
-                                                          onPressed: () async {
-                                                          DateTime? newDate = await showDatePicker(
-                                                            context: context,
-                                                            initialDate: _billDateStart,
-                                                            firstDate: DateTime(1900),
-                                                            lastDate: DateTime(2222),
-                                                          );
-
-                                                          if (newDate == null) return;
-
-                                                          setState(() => _billDateStart = newDate);
-                                                          },
-                                                          child: Text('Select Date'),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                                          borderRadius: BorderRadius.circular(50.0),
                                                         ),
-                                                      ],
-                                                    ),
+                                                        prefixIcon: Icon(Icons.calendar_month) ,
+                                                        labelText: 'Start Date',
+                                                        hintText: 'Start'),
+                                                    readOnly: true,
+                                                    onTap: () async {
+                                                      DateTime? pickedDate = await showDatePicker(
+                                                          context: context,
+                                                          initialDate: DateFormat("MM-dd-yyyy").parse(_billDateStart.text),
+                                                          firstDate: DateTime(1900),
+                                                          lastDate: DateTime(2222)
+                                                      );
+                                                      if (pickedDate != null)
+                                                      {
+                                                        String formatDate = DateFormat("MM-dd-yyyy").format(pickedDate);
+                                                        setState(() {
+                                                          _billDateStart.text = formatDate;
+                                                        });
+                                                      }
+                                                    },
+                                                  ),
                                                 ),
                                                 Padding(
-                                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                                  child: TextField(
+                                                    controller: _billDateEnd,
+                                                    decoration: InputDecoration(
+                                                        contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        prefixIcon: Icon(Icons.calendar_month) ,
+                                                        labelText: 'End Date',
+                                                        hintText: 'End'),
+                                                    readOnly: true,
+                                                    onTap: () async {
+                                                      DateTime? pickedDate = await showDatePicker(
+                                                          context: context,
+                                                          initialDate: DateFormat("MM-dd-yyyy").parse(_billDateEnd.text),
+                                                          firstDate: DateTime(1900),
+                                                          lastDate: DateTime(2222)
+                                                      );
+                                                      if (pickedDate != null)
+                                                      {
+                                                        String formatDate = DateFormat("MM-dd-yyyy").format(pickedDate);
+                                                        setState(() {
+                                                          _billDateEnd.text = formatDate;
+                                                        });
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(vertical: 8),
                                                   child: Row(
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: <Widget>[
-                                                      Text(
-                                                        'End Date: ${_billDateEnd.month}/${_billDateEnd.day}/${_billDateEnd.year}',
-                                                        style: TextStyle(fontSize: 17, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),
+                                                      Container(
+                                                        width: 230.0,
+                                                        height: 52,
+                                                        child: DropdownButtonFormField(
+                                                          // alignment: Alignment.center,
+                                                          decoration: InputDecoration(
+                                                            contentPadding: EdgeInsets.symmetric(horizontal: 4),
+                                                            focusColor: const Color(0xFF2D4B03),
+                                                            enabledBorder: OutlineInputBorder(
+                                                              borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                                              borderRadius: BorderRadius.circular(50.0),
+                                                            ),
+                                                            focusedBorder: OutlineInputBorder(
+                                                              borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                                              borderRadius: BorderRadius.circular(50.0),
+                                                            ),
+                                                            prefixIcon: Icon(Icons.list),
+                                                          ),
+                                                          isDense: false,
+                                                          // isExpanded: true,
+                                                          iconSize: 24,
+                                                          hint: Text('Choose Category'),
+                                                          borderRadius: BorderRadius.circular(8),
+                                                          dropdownColor: Color(0xFFE3E9E7),
+                                                          style: TextStyle(color: Color(0xFF000000), fontSize: 16),
+                                                          items: getAllCategories.map((item) {
+                                                            return DropdownMenuItem<MyCategory>(
+                                                              child: Text(item.name),
+                                                              value: item,
+                                                            );
+                                                          }).toList(),
+                                                          onChanged: (newVal) {
+                                                            if (newVal != null)
+                                                            {
+                                                              setState(() {
+                                                                categoryValue = newVal as MyCategory?;
+                                                              });
+                                                            }
+                                                            print(categoryValue?.name);
+                                                          },
+                                                          value: categoryValue,
+                                                        ),
                                                       ),
-                                                      ElevatedButton(
-                                                        onPressed: () async {
-                                                          DateTime? newDate = await showDatePicker(
-                                                            context: context,
-                                                            initialDate: _billDateEnd,
-                                                            firstDate: DateTime(1900),
-                                                            lastDate: DateTime(2222),
-                                                          );
-
-                                                          if (newDate == null) return;
-
-                                                          setState(() => _billDateEnd = newDate);
+                                                      IconButton(
+                                                        style: ButtonStyle(
+                                                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                                                        ),
+                                                        onPressed: ()  {
+                                                          showAddCategory(context);
                                                         },
-                                                        child: Text('Select Date'),
+                                                        icon: Icon(Icons.add_circle),
+                                                        iconSize: 40,
+                                                        constraints: BoxConstraints(),
+                                                        padding: EdgeInsets.zero,
                                                       ),
                                                     ],
                                                   ),
@@ -685,8 +779,8 @@ class _AddPageState extends State<AddPage> {
                                                           userId: id,
                                                           name: billName.text,
                                                           price: num.parse(billPrice.text),
-                                                          startDate: _billDateStart.toString(),
-                                                          endDate: _billDateEnd.toString(),
+                                                          startDate: _billDateStart.text,
+                                                          endDate: _billDateEnd.text,
                                                           color: "#ffffff",
                                                         );
                                                         print(billToJson(bill));
@@ -702,8 +796,8 @@ class _AddPageState extends State<AddPage> {
 
                                                       clearFields();
                                                       setState(() {
-                                                        _billDateStart = DateTime.now();
-                                                        _billDateEnd = DateTime.now();
+                                                        _billDateStart.text = DateFormat("MM-dd-yyyy").format(DateTime.now());
+                                                        _billDateEnd.text =  DateFormat("MM-dd-yyyy").format(DateTime.now());
                                                       });
 
                                                     },
@@ -720,7 +814,210 @@ class _AddPageState extends State<AddPage> {
                                       // Budget visible
                                       Visibility(
                                         visible: isSelected[2],
-                                        child: Text("Add Extra"),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 15),
+                                            child: Column(
+                                              children: [
+                                                //  Budget name
+                                                SizedBox(height: 20.0),
+                                                Padding(
+                                                  //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
+                                                  padding: const EdgeInsets.symmetric(vertical: 8),
+                                                  child: TextField(
+                                                    controller: extraName,
+                                                    decoration: InputDecoration(
+                                                        contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                                        focusColor: const Color(0xFF2D4B03),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        prefixIcon: const Icon(Icons.list_alt_rounded),
+                                                        labelText: 'Extra Name',
+                                                        hintText: 'Name'),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  // padding: const EdgeInsets.only(
+                                                  //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
+                                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                                  child: TextField(
+                                                    controller: extraPrice,
+                                                    decoration: InputDecoration(
+                                                        contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        prefixIcon: Icon(Icons.currency_exchange_outlined) ,
+                                                        labelText: 'Price Amount',
+                                                        hintText: 'Price'),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                                  child: TextField(
+                                                    controller: extraDate,
+                                                    decoration: InputDecoration(
+                                                        contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                                          borderRadius: BorderRadius.circular(50.0),
+                                                        ),
+                                                        prefixIcon: Icon(Icons.calendar_month) ,
+                                                        labelText: 'Start Date',
+                                                        hintText: 'Start'),
+                                                    readOnly: true,
+                                                    onTap: () async {
+                                                      DateTime? pickedDate = await showDatePicker(
+                                                          context: context,
+                                                          initialDate: DateFormat("MM-dd-yyyy").parse(extraDate.text),
+                                                          firstDate: DateTime(1900),
+                                                          lastDate: DateTime(2222)
+                                                      );
+                                                      if (pickedDate != null)
+                                                      {
+                                                        String formatDate = DateFormat("MM-dd-yyyy").format(pickedDate);
+                                                        setState(() {
+                                                          extraDate.text = formatDate;
+                                                        });
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        width: 230.0,
+                                                        height: 52,
+                                                        child: DropdownButtonFormField(
+                                                          // alignment: Alignment.center,
+                                                          decoration: InputDecoration(
+                                                            contentPadding: EdgeInsets.symmetric(horizontal: 4),
+                                                            focusColor: const Color(0xFF2D4B03),
+                                                            enabledBorder: OutlineInputBorder(
+                                                              borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                                              borderRadius: BorderRadius.circular(50.0),
+                                                            ),
+                                                            focusedBorder: OutlineInputBorder(
+                                                              borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                                              borderRadius: BorderRadius.circular(50.0),
+                                                            ),
+                                                            prefixIcon: Icon(Icons.list),
+                                                          ),
+                                                          isDense: false,
+                                                          // isExpanded: true,
+                                                          iconSize: 24,
+                                                          hint: Text('Choose Category'),
+                                                          borderRadius: BorderRadius.circular(8),
+                                                          dropdownColor: Color(0xFFE3E9E7),
+                                                          style: TextStyle(color: Color(0xFF000000), fontSize: 16),
+                                                          items: getAllCategories.map((item) {
+                                                            return DropdownMenuItem<MyCategory>(
+                                                              child: Text(item.name),
+                                                              value: item,
+                                                            );
+                                                          }).toList(),
+                                                          onChanged: (newVal) {
+                                                            if (newVal != null)
+                                                            {
+                                                              setState(() {
+                                                                categoryValue = newVal as MyCategory?;
+                                                              });
+                                                            }
+                                                            print(categoryValue?.name);
+                                                          },
+                                                          value: categoryValue,
+                                                        ),
+                                                      ),
+                                                      IconButton(
+                                                        style: ButtonStyle(
+                                                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                                                        ),
+                                                        onPressed: ()  {
+                                                          showAddCategory(context);
+                                                        },
+                                                        icon: Icon(Icons.add_circle),
+                                                        iconSize: 40,
+                                                        constraints: BoxConstraints(),
+                                                        padding: EdgeInsets.zero,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+
+                                                const SizedBox(
+                                                  height: 10.0,
+                                                ),
+                                                Container(
+                                                  alignment: Alignment.center,
+                                                  height: 50,
+                                                  width: 180,
+                                                  decoration: BoxDecoration(
+                                                    color: const Color(0xFF020100), border: Border.all(width: 2, color: const Color(0xFF2D4B03)), borderRadius: BorderRadius.circular(20),
+                                                  ),
+                                                  child: TextButton(
+                                                    style: ButtonStyle(
+                                                      foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                                                    ),
+                                                    onPressed: () async {
+                                                      id = global.userId;
+                                                      // ADD BUDGET
+                                                      print(id);
+                                                      if (extraName.text == "" || extraPrice.text == "" || extraDate.text == "")
+                                                      {
+                                                        _showToast("Fill fields", true);
+                                                      }
+                                                      else
+                                                      {
+                                                        var extra = MyExtra(
+                                                          userId: id,
+                                                          name: extraName.text,
+                                                          price: num.parse(extraPrice.text),
+                                                          categoryId: categoryValue?.id,
+                                                          date: extraDate.text,
+                                                        );
+                                                        print(myExtraToJson(extra));
+                                                        var response = await BaseClient().postExtra(extra).catchError((err) {print("Fail");});
+                                                        if (response == null) {
+                                                          _showToast("Could not add", true);
+                                                          print("response null");
+                                                        }
+
+                                                        _showToast("Added", false);
+                                                        print("success");
+                                                      }
+
+                                                      clearFields();
+                                                      setState(() {
+                                                        extraDate.text =  DateFormat("MM-dd-yyyy").format(DateTime.now());
+                                                      });
+
+                                                    },
+                                                    child: const Text(
+                                                      'Add Extra',
+                                                      style: TextStyle(fontSize: 23, color: Color(0xFFE3E9E7), fontWeight: FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )
                                       ),
                                     ],
                                   ),

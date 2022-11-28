@@ -9,9 +9,9 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../base_client.dart';
 import '../models/budget.dart';
 import '../models/myCategory.dart';
+import '../models/myExtra.dart';
 
 String id = global.userId;
-int budIndex = 0;
 
 class MainPage extends StatefulWidget{
 
@@ -23,10 +23,14 @@ class MainPage extends StatefulWidget{
 class _MainPageState extends State<MainPage> {
   late Future<int> gotData;
 
+  int budIndex = 0;
+  int extIndex = 0;
+
   int selectedIndex = 0;
   List<String> routes = ['/MainPage', '/DisplayPage', '/AddPage', '/CalendarView', '/AccountManager'];
 
   List<Budget> getAllBudgets = <Budget>[];
+  List<MyExtra> getAllExtras = <MyExtra>[];
 
   List<MyCategory> getAllCategories = <MyCategory>[];
   MyCategory? categoryValue;
@@ -38,8 +42,6 @@ class _MainPageState extends State<MainPage> {
   async {
     id = global.userId;
     // getAllBudgets = <Budget>[];
-
-    id = global.userId;
     // getAllCategories = <MyCategory>[];
 
     var response = await BaseClient().getCategories(id).catchError((err) {print("Fail");});
@@ -78,7 +80,7 @@ class _MainPageState extends State<MainPage> {
       print(response);
       List<Budget> allBudgets = getBudgetsFromJson(response);
       for (Budget b in allBudgets) {
-        print(b);
+        print(b.name);
       }
 
       if (allBudgets.length == 0)
@@ -91,6 +93,33 @@ class _MainPageState extends State<MainPage> {
         budIndex = Random().nextInt(getAllBudgets.length);
       });
       print(getAllBudgets.length);
+    }
+
+    response = await BaseClient().getExtras(id).catchError((err) {print("Fail");});
+    if (response == null) {
+      _showToast("Could not get", true);
+      print("response null");
+    }
+    else {
+      print("Got Extras");
+      print(id);
+      print(response);
+      List<MyExtra> allExtras = getExtrasFromJson(response);
+
+      if (allExtras.length == 0)
+      {
+        _showToast("No budgets", true);
+      }
+      setState(() {
+        getAllExtras = allExtras;
+        extIndex = Random().nextInt(getAllExtras.length);
+      });
+
+      for (MyExtra e in getAllExtras)
+      {
+        print(e.name);
+      }
+      print(getAllExtras.length);
     }
 
     return budIndex;
@@ -254,8 +283,7 @@ class _MainPageState extends State<MainPage> {
                                     child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
                                   ),
                                 ],
-                              )
-                              // BudgetCircle();
+                              ),
                             ],
                           ),
                         ),
@@ -266,7 +294,7 @@ class _MainPageState extends State<MainPage> {
                   // BILL WIDGET
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 180,
+                    height: 230,
                     decoration: BoxDecoration(
                         color: Color(0xddb3e5fc),
                         borderRadius: BorderRadius.circular(8),
@@ -284,7 +312,6 @@ class _MainPageState extends State<MainPage> {
                           padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0, bottom: 10.0),
                           child:  Column(
                             children: <Widget>[
-
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
@@ -297,8 +324,34 @@ class _MainPageState extends State<MainPage> {
                                     child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
                                   ),
                                 ],
-                              )
-                              // BudgetCircle();
+                              ),
+                              Container(
+                                padding:  EdgeInsets.only(top: 2.0, left: 10.0, right: 10.0, bottom: 5.0),
+                                width: MediaQuery.of(context).size.width,
+                                height: 150,
+                                decoration: BoxDecoration(
+                                    color: Color(0xddb3e5fc),
+                                    borderRadius: BorderRadius.circular(8),
+                                    boxShadow: [ BoxShadow(
+                                        blurRadius: 8,
+                                        offset: Offset(0, 15),
+                                        color: Color(0xffe3e9e7).withOpacity(.5),
+                                        spreadRadius: -9)]
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    //  Text
+                                    Text(
+                                      "${getAllExtras[extIndex].name}", style: TextStyle(fontSize: 18, color: Colors.blueAccent.shade700, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                                    ),
+                                    Text("Price: \$${getAllExtras[extIndex].price}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                                    Text("Category: ${findCategory(getAllCategories, getAllExtras[extIndex].categoryId)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                                    Text("Date: ${getAllExtras[extIndex].justDate()}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -519,11 +572,11 @@ class _MainPageState extends State<MainPage> {
           child: FutureBuilder<int?>(
             future: gotData,
             builder: (context, snapshot) {
-              if (snapshot.hasData && getAllBudgets.length > 0)
+              if (snapshot.hasData && getAllBudgets.length > 0 && getAllExtras.length > 0)
               {
                 return getWidgetsWithData();
               }
-              else if (snapshot.hasData && getAllBudgets.length == 0)
+              else if (snapshot.hasData && getAllBudgets.length == 0 && getAllExtras.length == 0)
               {
                 return getWidgetsNoData();
               }

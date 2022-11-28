@@ -20,13 +20,13 @@ class CreateProfile {
   String userId;
   String firstName;
   String lastName;
-  int expectedIncome;
+  num expectedIncome;
 
   factory CreateProfile.fromJson(Map<String, dynamic> json) => CreateProfile(
     userId: json["userId"] as String,
     firstName: json["firstName"] as String,
     lastName: json["lastName"] as String,
-    expectedIncome: json["expectedIncome"],
+    expectedIncome: json["expectedIncome"] as num,
   );
 
   Map<String, dynamic> toJson() => {

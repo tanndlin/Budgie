@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,20 +24,57 @@ class AccountManager extends StatefulWidget {
   State<AccountManager> createState() => _AccountManagerState();
 }
 
-class _AccountManagerState extends State<AccountManager>{
+class _AccountManagerState extends State<AccountManager> {
 
   void getInfo() async {
-    id = global.userId;
-    var response = await BaseClient().getUserProfile(id).catchError((err) {
-      print("Profile doesn't exist");
+    var response = await BaseClient().getUserProfile(global.userId).catchError((err) {
+      print("lmao");
+    });
+    if (response == null) {
+      print("no response");
       // Execute this if GetProfile returns null profile
       var newProfile = CreateProfile(
           userId: global.userId,
           firstName: "firstName",
           lastName: "lastName",
           expectedIncome: 0);
-    });
+
+      var response_2 = await BaseClient().createProfile(newProfile).catchError((err) {
+        print("lmao twice");
+      });
+
+      final data = jsonDecode(response);
+      firstName = data['firstName'];
+      lastName = data['lastName'];
+      initials = firstName[0] + lastName[0];
+      expectedIncome = data['expectedIncome'];
+
+      setState(() {
+        firstName = data['firstName'];
+        lastName = data['lastName'];
+        initials = firstName[0] + lastName[0];
+        expectedIncome = data['expectedIncome'];
+      });
+
+    }
+    else
+    {
+      print(response);
+      final data = jsonDecode(response);
+      firstName = data['firstName'];
+      lastName = data['lastName'];
+      initials = firstName[0] + lastName[0];
+      expectedIncome = data['expectedIncome'];
+
+      setState(() {
+        firstName = data['firstName'];
+        lastName = data['lastName'];
+        initials = firstName[0] + lastName[0];
+        expectedIncome = data['expectedIncome'];
+      });
+    }
   }
+
 
   final _firstName = TextEditingController();
   final _lastName = TextEditingController();
@@ -51,6 +90,10 @@ class _AccountManagerState extends State<AccountManager>{
   ];
 
   @override
+  initState()
+  {
+    getInfo();
+  }
   Widget build(BuildContext context) {
     // List<Widget> widgetOptions = <Widget>[
     //   MainPageNav();
@@ -75,6 +118,7 @@ class _AccountManagerState extends State<AccountManager>{
       }
       return myString;
     }
+
 
     String email = getEmail(FirebaseAuth.instance.currentUser?.email);
 
@@ -151,7 +195,9 @@ class _AccountManagerState extends State<AccountManager>{
                             padding: const EdgeInsets.all(8.0),
                             child: TextField(
                               keyboardType: TextInputType.number,
-                              inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
                               controller: _expectedIncome,
                               obscureText: false,
                               decoration: InputDecoration(
@@ -190,7 +236,6 @@ class _AccountManagerState extends State<AccountManager>{
                                 MaterialStateProperty.all<Color>(Colors.black),
                           ),
                           onPressed: () {
-
                             // On Pressed it should just edit profile depending on what's in here
                             setState(() {
                               initials = _firstName.text[0] + _lastName.text[0];

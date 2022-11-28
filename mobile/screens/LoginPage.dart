@@ -47,27 +47,12 @@ class _LoginPageState extends State<LoginPage> {
   String login_verification = "";
   String reg_verification = "";
 
-  void getInfo() async {
-    id = global.userId;
-    var response = await BaseClient().getUserProfile(id).catchError((err) {
-        print("lmao");
-    });
-
-    print(response.body);
-    if (response == null)
-      {
-        print("no response");
-        // Execute this if GetProfile returns null profile
-        var newProfile = CreateProfile(
-            userId: global.userId,
-            firstName: "firstName",
-            lastName: "lastName",
-            expectedIncome: 0);
-      }
-    else
-      {
-        print(response);
-      }
+  _getUser() async {
+    User user = await user_auth.currentUser!;
+    // print(user);
+    // print(user.uid);
+    global.userId = user.uid;
+    id = user.uid;
   }
 
   void clearLogSignFields() {
@@ -76,13 +61,6 @@ class _LoginPageState extends State<LoginPage> {
     _controllerEmail_Reg.clear();
     _controllerPass_Reg.clear();
     _controllerPass_Confirm.clear();
-  }
-
-  _getUser() async {
-    User user = await user_auth.currentUser!;
-    // print(user);
-    // print(user.uid);
-    global.userId = user.uid;
   }
 
   @override
@@ -155,8 +133,7 @@ class _LoginPageState extends State<LoginPage> {
     {
       clearLogSignFields();
       _getUser();
-      getInfo();
-      // print(global.userId);
+      //print(global.userId);
       print('Good login');
       Navigator.pushNamed(context, '/MainPage');
       // Navigator.push(context, new MaterialPageRoute(builder: context) => new MainPage(curUser));

@@ -50,9 +50,10 @@ class _LoginPageState extends State<LoginPage> {
   void getInfo() async {
     id = global.userId;
     var response = await BaseClient().getUserProfile(id).catchError((err) {
-      print("Profile doesn't exist");
+        print("lmao");
     });
 
+    print(response.body);
     if (response == null)
       {
         print("no response");

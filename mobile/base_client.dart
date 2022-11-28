@@ -119,7 +119,7 @@ class BaseClient
 
   Future<dynamic> getUserProfile(String id) async {
     var url = Uri.parse(baseUrl + '/GetUserProfile');
-    var _payload = jsonEncode(id);
+    var _payload = (getProfile(userId: id));
     var response = await client.post(url, body: _payload, headers: _setHeaders());
     if (response.statusCode == 201 || response.statusCode == 200){
       print("api success");

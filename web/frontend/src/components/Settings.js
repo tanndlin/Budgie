@@ -1,11 +1,10 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import BackgroundToggle from './BackgroundToggle';
+import { auth } from '../common/firebaseConfig';
+import { sendPasswordResetEmail } from 'firebase/auth';
 
 function Settings(props) {
-    const resetPassword = () => {
-        return;
-    };
-
     return (
         <footer>
             <h2 className="font-bold text-xl border-b-2 border-black mb-4">
@@ -16,13 +15,6 @@ function Settings(props) {
                 setBackgroundToggle={props.setBackgroundToggle}
             />
             <span className="flex gap-4 pt-4">
-                <input
-                    className="w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md shadow-md"
-                    type="submit"
-                    value="Reset Password"
-                    onClick={resetPassword}
-                />
-
                 <input
                     className="w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md shadow-md"
                     type="submit"

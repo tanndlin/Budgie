@@ -41,7 +41,7 @@ List<MyCategory> getCategoriesFromJson(String str) {
   final jsonData = jsonDecode(str);
   List<MyCategory> result = <MyCategory>[];
   print(jsonData);
-  jsonData["categories"].forEach((v) {print(v); print(jsonEncode(v));});
+  // jsonData["categories"].forEach((v) {print(v); print(jsonEncode(v));});
 
   jsonData["categories"].forEach((v) {
     String json = jsonEncode(v);

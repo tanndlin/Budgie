@@ -34,6 +34,11 @@ class _DisplayPageState extends State<DisplayPage> {
   late var extraPrice = TextEditingController();
   late var extraDate = TextEditingController();
 
+  late var billName = TextEditingController();
+  late var billPrice = TextEditingController();
+  late var _billDateStart = TextEditingController();
+  late var _billDateEnd = TextEditingController();
+
   final categoryAdd = TextEditingController();
 
   int selectedIndex = 1;
@@ -164,6 +169,7 @@ class _DisplayPageState extends State<DisplayPage> {
       {
         _showToast("No budgets", true);
       }
+
       setState(() {
         getAllBills = allBills;
       });
@@ -209,6 +215,25 @@ class _DisplayPageState extends State<DisplayPage> {
       print("success");
       _showToast("Deleted", false);
       getAllExt();
+      getAllCat();
+    }
+  }
+
+  Future<void> deleteBill(int index)
+  async {
+    id = global.userId;
+    String? extraId = getAllBills[index].id;
+    print("Remove");
+    print(getAllBills[index].name);
+    var response = await BaseClient().deleteBill(id, extraId).catchError((err) {print("Fail");});
+    if (response == null) {
+      _showToast("Could not remove", true);
+      print("response null");
+    }
+    else {
+      print("success");
+      _showToast("Deleted", false);
+      getAllBill();
       getAllCat();
     }
   }
@@ -978,10 +1003,371 @@ class _DisplayPageState extends State<DisplayPage> {
           });
     }
 
-    // void showBillEditDialog(int index, BuildContext context)
-    // {
-    //
-    // }
+    void showBillEditDialog(int index, BuildContext context)
+    {
+      setState(() {
+          billName.text = getAllBills[index].name;
+          billPrice.text = getAllBills[index].price.toString();
+          _billDateStart.text = getAllBills[index].startDate;
+          _billDateEnd.text = getAllBills[index].endDate;
+
+          categoryValue = getCategory(getAllCategories, getAllBills[index].categoryId);
+
+      });
+
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              backgroundColor: const Color(0xFFFAFAFA),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              child: Container(
+                height: 400,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 10.0,),
+                      const Text('Edit Bill', style: TextStyle(fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF2D4B03)),),
+                      const SizedBox(height: 10.0,),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                        child: TextField(
+                          controller: billName,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(vertical: 0),
+                              focusColor: const Color(0xFF2D4B03),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    width: 2, color: Color(0xFF2D4B03)),
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    width: 2, color: Color(0xFF000000)),
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                              prefixIcon: const Icon(Icons.list_alt_rounded),
+                              labelText: 'Extra Name',
+                              hintText: 'Name'),
+                        ),
+                      ),
+                      Padding(
+                        // padding: const EdgeInsets.only(
+                        //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                        child: TextField(
+                          controller: extraPrice,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(vertical: 0),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    width: 2, color: Color(0xFF2D4B03)),
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    width: 2, color: Color(0xFF000000)),
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                              prefixIcon: Icon(
+                                  Icons.currency_exchange_outlined),
+                              labelText: 'Price Amount',
+                              hintText: 'Price'),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                        child: TextField(
+                          controller: _billDateStart,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(vertical: 0),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    width: 2, color: Color(0xFF2D4B03)),
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    width: 2, color: Color(0xFF000000)),
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                              prefixIcon: Icon(Icons.calendar_month),
+                              labelText: 'Start Date',
+                              hintText: 'Start'),
+                          readOnly: true,
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.parse(_billDateStart.text),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2222)
+                            );
+                            if (pickedDate != null) {
+                              String formatDate = DateFormat("MM-dd-yyyy")
+                                  .format(pickedDate);
+                              setState(() {
+                                _billDateStart.text = formatDate;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                        child: TextField(
+                          controller: _billDateEnd,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(vertical: 0),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    width: 2, color: Color(0xFF2D4B03)),
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    width: 2, color: Color(0xFF000000)),
+                                borderRadius: BorderRadius.circular(50.0),
+                              ),
+                              prefixIcon: Icon(Icons.calendar_month),
+                              labelText: 'End Date',
+                              hintText: 'End'),
+                          readOnly: true,
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.parse(_billDateEnd.text),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2222)
+                            );
+                            if (pickedDate != null) {
+                              String formatDate = DateFormat("MM-dd-yyyy")
+                                  .format(pickedDate);
+                              setState(() {
+                                _billDateEnd.text = formatDate;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                      Padding(padding: EdgeInsets.symmetric(vertical: 4)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            width: 220.0,
+                            height: 52,
+                            child: DropdownButtonFormField(
+                              // alignment: Alignment.center,
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 0, horizontal: 4),
+                                focusColor: const Color(0xFF2D4B03),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 2, color: Color(0xFF2D4B03)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 2, color: Color(0xFF000000)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                prefixIcon: Icon(Icons.list),
+                              ),
+                              isDense: false,
+                              // isExpanded: true,
+                              iconSize: 24,
+                              hint: Text('Choose Category'),
+                              borderRadius: BorderRadius.circular(8),
+                              dropdownColor: Color(0xFFE3E9E7),
+                              style: TextStyle(
+                                  color: Color(0xFF000000), fontSize: 16),
+                              items: getAllCategories.map((item) {
+                                return DropdownMenuItem<MyCategory>(
+                                  child: Text(item.name),
+                                  value: item,
+                                );
+                              }).toList(),
+                              onChanged: (newVal) {
+                                if (newVal != null) {
+                                  setState(() {
+                                    categoryValue = newVal as MyCategory?;
+                                  });
+                                }
+                                print(categoryValue?.name);
+                              },
+                              value: categoryValue,
+                            ),
+                          ),
+                          IconButton(
+                            style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.black),
+                            ),
+                            onPressed: () {
+                              showAddCategory(context);
+                            },
+                            icon: Icon(Icons.add_circle),
+                            iconSize: 40,
+                            constraints: BoxConstraints(),
+                            padding: EdgeInsets.zero,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8.0,),
+                      Container(
+                        alignment: Alignment.center,
+                        height: 40,
+                        width: 320,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF020100),
+                          border: Border.all(width: 2, color: const Color(
+                              0xFF2D4B03)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextButton(
+                          style: ButtonStyle(
+                            foregroundColor: MaterialStateProperty.all<Color>(
+                                Colors.black),
+                          ),
+                          onPressed: () async {
+                            //  Add category
+                            id = global.userId;
+                            print(id);
+                            if (billName.text == "" || billPrice.text == "" || _billDateStart.text == "" || _billDateEnd.text == "") {
+                              _showToast("Fill fields", true);
+                            }
+                            else {
+                              var bill = Bill(
+                                id: getAllBills[index].id,
+                                userId: id,
+                                name: billName.text,
+                                price: num.parse(billPrice.text),
+                                startDate: _billDateStart.text,
+                                endDate: _billDateEnd.text,
+                                color: "#ffffff",
+                                categoryId: categoryValue?.id,
+                              );
+                              print(billToJsonEdit(bill));
+                              var response = await BaseClient().editBill(bill).catchError((err) {print("Fail");});
+                              if (response == null) {
+                                _showToast("Could not edit", true);
+                                print("response null");
+                              }
+
+                              _showToast("Edited", false);
+                              print("success");
+                            }
+
+                            getAllCat();
+                            getAllBill();
+                            Navigator.pop(context, true);
+                          },
+                          child: const Text(
+                            'Edit',
+                            style: TextStyle(fontSize: 20,
+                                color: Color(0xFFE3E9E7),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10.0,),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
+    }
+
+    void showBillDeleteDialog(int index, BuildContext context)
+    {
+      String deleteName = getAllBills[index].name;
+
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Dialog(
+                backgroundColor: const Color(0xFFFAFAFA),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                child: Container(
+                  height: 150,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox( height: 10.0,),
+                        Text('Are you sure to delete?', style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Color(0xFFFF0000)),),
+                        Text('\"${deleteName}\"', style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Color(0xFFFF0000)),),
+                        const SizedBox( height: 10.0,),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10, right: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                alignment: Alignment.center,
+                                height: 40,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF00FF00), border: Border.all(width: 2, color: const Color(0xFF000000)), borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: TextButton(
+                                  style: ButtonStyle(
+                                    foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                                  ),
+                                  onPressed: () async {
+                                    Navigator.pop(context, true);
+                                  },
+                                  child: const Text(
+                                    'No',
+                                    style: TextStyle(fontSize: 20, color: Color(0xFF000000), fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.center,
+                                height: 40,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFF0000), border: Border.all(width: 2, color: const Color(0xFF000000)), borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: TextButton(
+                                  style: ButtonStyle(
+                                    foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                                  ),
+                                  onPressed: () async {
+                                    deleteBill(index);
+                                    Navigator.pop(context, true);
+                                  },
+                                  child: const Text(
+                                    'Yes',
+                                    style: TextStyle(fontSize: 20, color: Color(0xFF000000), fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 10.0),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            });
+    }
 
     Widget _buildBudgetCard(int index) => Container(
           padding:  EdgeInsets.only(top: 2.0, left: 10.0, right: 10.0, bottom: 5.0),
@@ -1053,7 +1439,7 @@ class _DisplayPageState extends State<DisplayPage> {
     Widget _buildBillCard(int index) => Container(
       padding:  EdgeInsets.only(top: 2.0, left: 10.0, right: 10.0, bottom: 5.0),
       width: MediaQuery.of(context).size.width,
-      height: 150,
+      height: 180,
       decoration: BoxDecoration(
           color: Color(0xddb3e5fc),
           borderRadius: BorderRadius.circular(8),
@@ -1075,27 +1461,15 @@ class _DisplayPageState extends State<DisplayPage> {
               ),
               Spacer(),
               // TextButton(onPressed: (){}, child: Icon(Icons.edit, color: Color(0xFF2D4B03))),
-              IconButton(onPressed: () {
-                // showBillEditDialog(index, context);
-                },
-                icon: Icon(Icons.edit, color: Color(0xFF2D4B03), size: 25,), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+              IconButton(onPressed: () { showBillEditDialog(index, context);}, icon: Icon(Icons.edit, color: Color(0xFF2D4B03), size: 25,), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
               SizedBox(width: 15.0,),
-              IconButton(onPressed: () { showExtraDeleteDialog(index, context);}, icon: Icon(Icons.delete, color: Color(0xFF2D4B03), size: 25,), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
-              // Container(
-              //   // padding: EdgeInsets.symmetric(horizontal: 5.0),
-              //   child: Row(
-              //     // crossAxisAlignment: CrossAxisAlignment.end,
-              //     // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //     children: [
-              //       TextButton(onPressed: (){}, child: Icon(Icons.edit, color: Color(0xFF2D4B03),)),
-              //     ],
-              //   ),
-              // ),
+              IconButton(onPressed: () { showBillDeleteDialog(index, context);}, icon: Icon(Icons.delete, color: Color(0xFF2D4B03), size: 25,), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
             ],
           ),
           Text("Price: \$${getAllBills[index].price}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
           Text("Category: ${findCategory(getAllCategories, getAllBills[index].categoryId)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
-          Text("Date: ${getAllBills[index].startDate}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+          Text("Start Date: ${getAllBills[index].justStartDate()}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+          Text("End Date: ${getAllBills[index].justEndDate()}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
         ],
       ),
     );
@@ -1230,7 +1604,7 @@ class _DisplayPageState extends State<DisplayPage> {
                                         alignment: Alignment.centerLeft,
                                         child: Text('Display', style: TextStyle(fontSize: 30,  fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
                                       ),
-                                      const SizedBox(height: 20.0,),
+                                      const SizedBox(height: 10.0,),
                                       ToggleButtons(
                                         isSelected: isSelected,
                                         // selectedColor: Colors.white70,
@@ -1242,20 +1616,20 @@ class _DisplayPageState extends State<DisplayPage> {
                                         splashColor: Colors.transparent,
                                         children: const <Widget>[
                                           Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 12),
-                                            child: Text('Budget', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                                            padding: EdgeInsets.symmetric(horizontal: 8),
+                                            child: Text('Budget', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 12),
-                                            child: Text('Bill', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                                            padding: EdgeInsets.symmetric(horizontal: 8),
+                                            child: Text('Bill', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 12),
-                                            child: Text('Extras', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                                            padding: EdgeInsets.symmetric(horizontal: 8),
+                                            child: Text('Extra', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 12),
-                                            child: Text('Clear', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                                            padding: EdgeInsets.symmetric(horizontal: 8),
+                                            child: Text('Category', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
                                           ),
                                         ],
                                         onPressed: (int newIndex) async {
@@ -1276,6 +1650,11 @@ class _DisplayPageState extends State<DisplayPage> {
                                           }
                                           print(newIndex);
                                           setState(()  {
+                                            budgetStart.text = DateFormat("MM-dd-yyyy").format(DateTime.now());
+                                            _billDateStart.text = DateFormat("MM-dd-yyyy").format(DateTime.now());
+                                            _billDateEnd.text = DateFormat("MM-dd-yyyy").format(DateTime.now());
+                                            extraDate.text = DateFormat("MM-dd-yyyy").format(DateTime.now());
+
                                             for (int index = 0; index < isSelected.length; index++)
                                             {
 

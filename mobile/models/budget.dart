@@ -4,7 +4,7 @@ List<Budget> getBudgetsFromJson(String str) {
   final jsonData = jsonDecode(str);
   List<Budget> result = <Budget>[];
   print(jsonData);
-  jsonData["budgets"].forEach((v) {print(v); print(jsonEncode(v));});
+  // jsonData["budgets"].forEach((v) {print(v); print(jsonEncode(v));});
 
   jsonData["budgets"].forEach((v) {
     String json = jsonEncode(v);

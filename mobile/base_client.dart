@@ -3,8 +3,9 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:mobile/global.dart' as global;
-import 'package:mobile/models/budget.dart';
 import 'package:mobile/models/bill.dart';
+import 'package:mobile/models/budget.dart';
+
 import 'models/get_profile.dart';
 import 'models/myExtra.dart';
 
@@ -62,21 +63,6 @@ class BaseClient
     }
   }
 
-  Future<dynamic> getBills(String id) async {
-    var url = Uri.parse(baseUrl + '/GetBills');
-
-    var _payload = jsonEncode(getData(id));
-
-    var response = await client.post(url, body: _payload, headers: _setHeaders());
-    if (response.statusCode == 201){
-      print("api success");
-      return response.body;
-    } else {
-      print("api fail");
-      return Future.error("Fail");
-    }
-  }
-
   // parameter budget object
   Future<dynamic> editBudget(Budget object) async {
     var url = Uri.parse(baseUrl + '/EditBudget');
@@ -97,22 +83,6 @@ class BaseClient
     var url = Uri.parse(baseUrl + '/RemoveBudget');
 
     var _payload = jsonEncode(getDeleteData(userId, id));
-    
-    var response = await client.post(url, body: _payload, headers: _setHeaders());
-    if (response.statusCode == 201){
-      print("api success");
-      return response.body;
-    } else {
-      print("api fail");
-      return Future.error("Fail");
-    }
-  }
-
-
-  Future<dynamic> editBill(Bill object) async {
-    var url = Uri.parse(baseUrl + '/EditBill');
-
-    var _payload = billToJsonEdit(object);
 
     var response = await client.post(url, body: _payload, headers: _setHeaders());
     if (response.statusCode == 201){
@@ -139,7 +109,53 @@ class BaseClient
       return Future.error("Fail");
     }
   }
-  
+
+  Future<dynamic> getBills(String id) async {
+    var url = Uri.parse(baseUrl + '/GetBills');
+
+    var _payload = jsonEncode(getData(id));
+
+    var response = await client.post(url, body: _payload, headers: _setHeaders());
+    if (response.statusCode == 201){
+      print("api success");
+      return response.body;
+    } else {
+      print("api fail");
+      return Future.error("Fail");
+    }
+  }
+
+  // parameter budget object
+  Future<dynamic> editBill(Bill object) async {
+    var url = Uri.parse(baseUrl + '/EditBill');
+
+    var _payload = billToJsonEdit(object);
+
+    var response = await client.post(url, body: _payload, headers: _setHeaders());
+    if (response.statusCode == 201){
+      print("api success");
+      return response.body;
+    } else {
+      print("api fail");
+      return Future.error("Fail");
+    }
+  }
+
+  Future<dynamic> deleteBill(String userId, String? id) async {
+    var url = Uri.parse(baseUrl + '/RemoveBill');
+
+    var _payload = jsonEncode(getDeleteData(userId, id));
+
+    var response = await client.post(url, body: _payload, headers: _setHeaders());
+    if (response.statusCode == 201){
+      print("api success");
+      return response.body;
+    } else {
+      print("api fail");
+      return Future.error("Fail");
+    }
+  }
+
   Future<dynamic> getCategories(String id) async {
     var url = Uri.parse(baseUrl + '/GetCategories');
 
@@ -176,6 +192,7 @@ class BaseClient
     var _payload = jsonEncode(object);
 
     var response = await client.post(url, body: _payload, headers: _setHeaders());
+    print(response.statusCode);
     if (response.statusCode == 201){
       print("api success");
       return response.body;

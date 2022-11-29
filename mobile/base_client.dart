@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mobile/global.dart' as global;
 import 'package:mobile/models/budget.dart';
-
+import 'package:mobile/models/bill.dart';
 import 'models/get_profile.dart';
 import 'models/myExtra.dart';
 
@@ -139,37 +139,7 @@ class BaseClient
       return Future.error("Fail");
     }
   }
-
-  Future<dynamic> getBills(String id) async {
-    var url = Uri.parse(baseUrl + '/GetBills');
-   
-    var _payload = jsonEncode(getData(id));
-
-    var response = await client.post(url, body: _payload, headers: _setHeaders());
-    if (response.statusCode == 201){
-      print("api success");
-      return response.body;
-    } else {
-      print("api fail");
-      return Future.error("Fail");
-    }
-  }
   
-  Future<dynamic> getCategories(String id) async {
-    var url = Uri.parse(baseUrl + '/GetCategories');
-
-    var _payload = jsonEncode(getData(id));
-
-    var response = await client.post(url, body: _payload, headers: _setHeaders());
-    if (response.statusCode == 201){
-      print("api success");
-      return response.body;
-    } else {
-      print("api fail");
-      return Future.error("Fail");
-    }
-  }
-
   Future<dynamic> getCategories(String id) async {
     var url = Uri.parse(baseUrl + '/GetCategories');
 

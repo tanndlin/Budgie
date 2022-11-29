@@ -1,4 +1,5 @@
-// a fake request objects, with req.body set to take the JSON components
+// request objects with req.body set to take and, through the API endpoint, process the JSON components
+
 const userIdJSON = {
     body: {
         userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73'
@@ -34,7 +35,7 @@ const EditCategoryReq = {
     body: {
         userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
         name: 'vet',
-        id: ''
+        id: 'CSbHnxatAJJJLsPMm4no'
     }
 };
 
@@ -42,7 +43,7 @@ const CreateBillReq = {
     body: {
         userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
         name: 'Cat Vet',
-        categoryId: 'fEQyVD7Uf2j27wNYqLQG',
+        categoryId: 'CSbHnxatAJJJLsPMm4no',
         color: '#ffffff',
         price: 3000,
         startDate: '08-31-22',
@@ -55,9 +56,9 @@ const CreateBillReq = {
 const EditBillReq = {
     body: {
         userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
-        id: '',
+        id: '8XVsrx0tJ4opHqA1SDJL',
         name: 'Cat Vet',
-        categoryId: 'fEQyVD7Uf2j27wNYqLQG',
+        categoryId: 'CSbHnxatAJJJLsPMm4no',
         color: '#ffffff',
         price: 5200,
         startDate: '09-31-22',
@@ -70,7 +71,7 @@ const EditBillReq = {
 const RemoveBillReq = {
     body: {
         userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
-        id: ''
+        id: '8XVsrx0tJ4opHqA1SDJL'
     }
 };
 
@@ -78,7 +79,7 @@ const CreateBudgetReq = {
     body: {
         userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
         name: 'cat',
-        categoryId: '',
+        categoryId: 'CSbHnxatAJJJLsPMm4no',
         expectedPrice: 6000,
         actualPrice: 5200,
         startDate: '08-14-22'
@@ -88,9 +89,9 @@ const CreateBudgetReq = {
 const EditBudgetReq = {
     body: {
         userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
-        id: '',
+        id: 'KsOZrh5tiNc2bF2IFLVa',
         name: 'Garfield',
-        categoryId: '',
+        categoryId: 'CSbHnxatAJJJLsPMm4no',
         expectedPrice: 6000,
         actualPrice: 5200,
         startDate: '08-14-22'
@@ -100,7 +101,7 @@ const EditBudgetReq = {
 const RemoveBudgetReq = {
     body: {
         userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
-        id: ''
+        id: 'KsOZrh5tiNc2bF2IFLVa'
     }
 };
 
@@ -108,7 +109,7 @@ const CreateOneOffReq = {
     body: {
         userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
         name: 'flea medication',
-        categoryId: '',
+        categoryId: 'CSbHnxatAJJJLsPMm4no',
         color: '#ffffff',
         price: 500,
         date: '09-31-22'
@@ -118,9 +119,9 @@ const CreateOneOffReq = {
 const EditOneOffReq = {
     body: {
         userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
-        id: '',
+        id: 'fSFIXeYwHBD3WKMeRdx8',
         name: 'flea medication',
-        categoryId: '',
+        categoryId: 'CSbHnxatAJJJLsPMm4no',
         color: '#ffffff',
         price: 1000,
         date: '09-31-22'
@@ -130,13 +131,13 @@ const EditOneOffReq = {
 const RemoveOneOffReq = {
     body: {
         userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
-        id: ''
+        id: 'fSFIXeYwHBD3WKMeRdx8'
     }
 };
 
 const RemoveCategoryReq = {
     body: {
         userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
-        id: ''
+        id: 'CSbHnxatAJJJLsPMm4no'
     }
 };

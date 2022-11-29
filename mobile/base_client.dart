@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:mobile/global.dart' as global;
 import 'package:mobile/models/budget.dart';
 import 'package:mobile/models/get_profile.dart';
+import 'package:mobile/models/create_profile.dart';
+import 'models/bill.dart';
 
 const String baseUrl = 'https://us-central1-cop4331-large-project-27.cloudfunctions.net/webApi';
 
@@ -55,11 +57,41 @@ class BaseClient
     }
   }
 
+  Future<dynamic> getBills(String id) async {
+    var url = Uri.parse(baseUrl + '/GetBills');
+
+    var _payload = jsonEncode(getData(id));
+
+    var response = await client.post(url, body: _payload, headers: _setHeaders());
+    if (response.statusCode == 201){
+      print("api success");
+      return response.body;
+    } else {
+      print("api fail");
+      return Future.error("Fail");
+    }
+  }
+
   // parameter budget object
   Future<dynamic> editBudget(Budget object) async {
     var url = Uri.parse(baseUrl + '/EditBudget');
 
     var _payload = budgetToJsonEdit(object);
+
+    var response = await client.post(url, body: _payload, headers: _setHeaders());
+    if (response.statusCode == 201){
+      print("api success");
+      return response.body;
+    } else {
+      print("api fail");
+      return Future.error("Fail");
+    }
+  }
+
+  Future<dynamic> editBill(Bill object) async {
+    var url = Uri.parse(baseUrl + '/EditBill');
+
+    var _payload = billToJsonEdit(object);
 
     var response = await client.post(url, body: _payload, headers: _setHeaders());
     if (response.statusCode == 201){

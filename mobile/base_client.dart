@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:mobile/global.dart' as global;
 import 'package:mobile/models/bill.dart';
 import 'package:mobile/models/budget.dart';
-
+import 'package:mobile/models/bill.dart';
 import 'models/get_profile.dart';
 import 'models/myCategory.dart';
 import 'models/myExtra.dart';
@@ -172,9 +172,9 @@ class BaseClient
     }
   }
 
+
   Future<dynamic> postCategory(dynamic object) async {
     var url = Uri.parse(baseUrl + '/CreateCategory');
-
     var _payload = jsonEncode(object);
 
     var response = await client.post(url, body: _payload, headers: _setHeaders());

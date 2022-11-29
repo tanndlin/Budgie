@@ -289,7 +289,7 @@ class _AccountManagerState extends State<AccountManager> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0)),
               child: Container(
-                height: 250,
+                height: 230,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                   child: Column(

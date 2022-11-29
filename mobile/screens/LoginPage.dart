@@ -27,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   final _controllerEmail_Reg = TextEditingController();
   final _controllerPass_Reg = TextEditingController();
   final _controllerPass_Confirm = TextEditingController();
+  final _forgotEmail = TextEditingController();
 
   // register output to screen
   final formKey = GlobalKey<FormState>();
@@ -299,6 +300,7 @@ class _LoginPageState extends State<LoginPage> {
                       const Text('Reset Password', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
                       const SizedBox( height: 10.0,),
                       TextField(
+                        controller: _forgotEmail,
                         decoration: InputDecoration(
                             enabledBorder: OutlineInputBorder(
                               borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
@@ -324,7 +326,11 @@ class _LoginPageState extends State<LoginPage> {
                           style: ButtonStyle(
                             foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
                           ),
-                          onPressed: () { // SEND PASSWORD RESET EMAIL !!!!!!!!!!!!!!!!!
+                          onPressed: () async{ //
+                            await FirebaseAuth.instance
+                                .sendPasswordResetEmail(email: _forgotEmail.text);
+                            print("Email Sent");
+                            Navigator.pop(context);// SEND PASSWORD RESET EMAIL !!!!!!!!!!!!!!!!!
                           },
                           child: const Text(
                             'Send Email',

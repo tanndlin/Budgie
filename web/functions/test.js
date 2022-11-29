@@ -14,7 +14,7 @@ const test = require('firebase-functions-test')();
 const app = require('express');
 
 // initialize firebase in order to access its services
-admin.initializeApp(functions.config());
+admin.initializeApp(functions.config().firebase);
 adminInitStub = sinon.stub(admin, 'initializeApp');
 
 // define google cloud function name
@@ -30,11 +30,11 @@ const oneOffCollection = 'oneOffs';
 const userCollectionRef = db.collection(userCollection);
 
 const baseURL =
-    'https://us-central1-cop4331-large-project-27.cloudfunctions.net/webApi/';
+    'https://us-central1-cop4331-large-project-27.cloudfunctions.net/webApi';
 chai.use(chaiHttp);
 chai.should();
 
-describe('POST /CreateUserProfile', () => {
+describe('/CreateUserProfile', () => {
     const CreateUserProfileReq = {
         body: {
             userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
@@ -56,49 +56,39 @@ describe('POST /CreateUserProfile', () => {
         test.cleanup();
     });
 
-    it('should return the newly added profile info that is in the database', async () => {
-        const response = await request(baseURL)
+    it('should check that the response from the request is correct', async () => {
+        const res = await request(baseURL)
             .post('/CreateUserProfile')
             .send(CreateUserProfileReq);
 
-        assert.equal(response.body, {
-            // eslint-disable-next-line prettier/prettier, quotes
-                "userId": CreateUserProfileReq.body.userId,
-            // eslint-disable-next-line prettier/prettier, quotes
-                "firstName": `${CreateUserProfileReq.body.firstName}`,
-            // eslint-disable-next-line prettier/prettier, quotes
-                "lastName": `${CreateUserProfileReq.body.lastName}`,
-            // eslint-disable-next-line prettier/prettier, quotes
-                "expectedIncome": CreateUserProfileReq.body.expectedIncome
-        });
-        assert.equal(response.statusCode, 201);
-        assert.equal(response.body.error, null);
-
         assert.equal(
-            db
-                .collection(userCollection)
-                .doc(`${CreateUserProfileReq.body.userId}`).id,
-            CreateUserProfileReq.body.userId
+            res.body,
+            {
+                userId: CreateUserProfileReq.body.userId,
+                firstName: CreateUserProfileReq.body.firstName,
+                lastName: CreateUserProfileReq.body.lastName,
+                expectedIncome: CreateUserProfileReq.body.expectedIncome
+            },
+            'these userIds are equal'
         );
+        assert.equal(res.error, null);
+        assert.equal(res.statusCode, 201);
+    });
+
+    it('should return the newly added profile info that is in the database', async () => {
         assert.equal(
-            db
-                .collection(userCollection)
-                .doc(`${CreateUserProfileReq.body.userId}`)
-                .get('firstName'),
+            // eslint-disable-next-line prettier/prettier
+            userCollectionRef.doc(`${CreateUserProfileReq.body.userId}`).get('firstName'),
             CreateUserProfileReq.body.firstName
         );
         assert.equal(
-            db
-                .collection(userCollection)
-                .doc(`${CreateUserProfileReq.body.userId}`)
-                .get('lastName'),
+            // eslint-disable-next-line prettier/prettier
+            userCollectionRef.doc(`${CreateUserProfileReq.body.userId}`).get('lastName'),
             CreateUserProfileReq.body.lastName
         );
         assert.equal(
-            db
-                .collection(userCollection)
-                .doc(`${CreateUserProfileReq.body.userId}`)
-                .get('expectedIncome'),
+            // eslint-disable-next-line prettier/prettier
+            userCollectionRef.doc(`${CreateUserProfileReq.body.userId}`).get('expectedIncome'),
             CreateUserProfileReq.body.expectedIncome
         );
     });

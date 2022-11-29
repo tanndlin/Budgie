@@ -128,88 +128,6 @@ class _AddPageState extends State<AddPage> {
       Navigator.pushNamed(context, routes[index]);
     }
 
-    void showAddCategory(BuildContext context){
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Dialog(
-              backgroundColor: const Color(0xFFFAFAFA),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0)),
-              child: Container(
-                height: 200,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Add Category', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
-                      const SizedBox( height: 10.0,),
-                      TextField(
-                        controller: categoryAdd,
-                        decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            prefixIcon: const Icon(Icons.list_outlined),
-                            labelText: 'Name',
-                            hintText: 'Name'),
-                      ),
-                      const SizedBox( height: 10.0,),
-                      Container(
-                        alignment: Alignment.center,
-                        height: 40,
-                        width: 320,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF020100), border: Border.all(width: 2, color: const Color(0xFF2D4B03)), borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: TextButton(
-                          style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                          ),
-                          onPressed: () async {
-                          //  Add category
-                            id = global.userId;
-                            var cat = MyCategory(
-                                userId: id,
-                                name: categoryAdd.text,
-                            );
-                            print("Json");
-                            print(myCategoryToJson(cat));
-                            var response = await BaseClient().postCategory(cat).catchError((err) {print("Fail");});
-                            if (response == null) {
-                              _showToast("Could not get", true);
-                              print("response null");
-                            }
-                            else {
-                              print("Add Category");
-                              print(id);
-                              print(response);
-                            }
-
-                            getAllCat();
-                            Navigator.pop(context, true);
-                          },
-                          child: const Text(
-                            'Add',
-                            style: TextStyle(fontSize: 20, color: Color(0xFFE3E9E7), fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          });
-    }
-
     return Container(
       // BACKGROUND AND APPBAR
         decoration: const BoxDecoration(
@@ -418,7 +336,7 @@ class _AddPageState extends State<AddPage> {
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: <Widget>[
                                                       Container(
-                                                        width: 230.0,
+                                                        width: 290.0,
                                                         height: 52,
                                                         child: DropdownButtonFormField(
                                                           // alignment: Alignment.center,
@@ -459,18 +377,6 @@ class _AddPageState extends State<AddPage> {
                                                           },
                                                           value: categoryValue,
                                                         ),
-                                                      ),
-                                                      IconButton(
-                                                        style: ButtonStyle(
-                                                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                                                        ),
-                                                        onPressed: ()  {
-                                                          showAddCategory(context);
-                                                        },
-                                                        icon: Icon(Icons.add_circle),
-                                                        iconSize: 40,
-                                                        constraints: BoxConstraints(),
-                                                        padding: EdgeInsets.zero,
                                                       ),
                                                     ],
                                                   ),
@@ -696,7 +602,7 @@ class _AddPageState extends State<AddPage> {
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: <Widget>[
                                                       Container(
-                                                        width: 230.0,
+                                                        width: 290.0,
                                                         height: 52,
                                                         child: DropdownButtonFormField(
                                                           // alignment: Alignment.center,
@@ -737,18 +643,6 @@ class _AddPageState extends State<AddPage> {
                                                           },
                                                           value: categoryValue,
                                                         ),
-                                                      ),
-                                                      IconButton(
-                                                        style: ButtonStyle(
-                                                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                                                        ),
-                                                        onPressed: ()  {
-                                                          showAddCategory(context);
-                                                        },
-                                                        icon: Icon(Icons.add_circle),
-                                                        iconSize: 40,
-                                                        constraints: BoxConstraints(),
-                                                        padding: EdgeInsets.zero,
                                                       ),
                                                     ],
                                                   ),
@@ -926,7 +820,7 @@ class _AddPageState extends State<AddPage> {
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: <Widget>[
                                                       Container(
-                                                        width: 230.0,
+                                                        width: 290.0,
                                                         height: 52,
                                                         child: DropdownButtonFormField(
                                                           // alignment: Alignment.center,
@@ -967,18 +861,6 @@ class _AddPageState extends State<AddPage> {
                                                           },
                                                           value: categoryValue,
                                                         ),
-                                                      ),
-                                                      IconButton(
-                                                        style: ButtonStyle(
-                                                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                                                        ),
-                                                        onPressed: ()  {
-                                                          showAddCategory(context);
-                                                        },
-                                                        icon: Icon(Icons.add_circle),
-                                                        iconSize: 40,
-                                                        constraints: BoxConstraints(),
-                                                        padding: EdgeInsets.zero,
                                                       ),
                                                     ],
                                                   ),

@@ -7,6 +7,7 @@ import 'package:mobile/models/bill.dart';
 import 'package:mobile/models/budget.dart';
 
 import 'models/get_profile.dart';
+import 'models/myCategory.dart';
 import 'models/myExtra.dart';
 
 const String baseUrl = 'https://us-central1-cop4331-large-project-27.cloudfunctions.net/webApi';
@@ -175,6 +176,36 @@ class BaseClient
     var url = Uri.parse(baseUrl + '/CreateCategory');
 
     var _payload = jsonEncode(object);
+
+    var response = await client.post(url, body: _payload, headers: _setHeaders());
+    if (response.statusCode == 201){
+      print("api success");
+      return response.body;
+    } else {
+      print("api fail");
+      return Future.error("Fail");
+    }
+  }
+
+  Future<dynamic> editCategory(MyCategory object) async {
+    var url = Uri.parse(baseUrl + '/EditCategory');
+
+    var _payload = myCategoryToJsonEdit(object);
+
+    var response = await client.post(url, body: _payload, headers: _setHeaders());
+    if (response.statusCode == 201){
+      print("api success");
+      return response.body;
+    } else {
+      print("api fail");
+      return Future.error("Fail");
+    }
+  }
+
+  Future<dynamic> deleteCategory(String userId, String? id) async {
+    var url = Uri.parse(baseUrl + '/RemoveCategory');
+
+    var _payload = jsonEncode(getDeleteData(userId, id));
 
     var response = await client.post(url, body: _payload, headers: _setHeaders());
     if (response.statusCode == 201){

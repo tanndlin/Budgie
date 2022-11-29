@@ -57,6 +57,9 @@ MyCategory myCategoryFromJson(String str) => MyCategory.fromJson(json.decode(str
 
 String myCategoryToJson(MyCategory data) => json.encode(data.toJson());
 
+String myCategoryToJsonEdit(MyCategory data) => json.encode(data.toJsonEdit());
+
+
 class MyCategory {
   MyCategory({
     this.userId,
@@ -73,9 +76,16 @@ class MyCategory {
     id: json["id"],
   );
 
+
   Map<String, dynamic> toJson() => {
     "userId": userId,
     "name": name,
+  };
+
+  Map<String, dynamic> toJsonEdit() => {
+    "userId": userId,
+    "name": name,
+    "id": id,
   };
 
 }

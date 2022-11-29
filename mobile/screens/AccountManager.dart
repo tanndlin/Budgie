@@ -68,6 +68,9 @@ class _AccountManagerState extends State<AccountManager> {
       lastName = data['lastName'];
       initials = firstName[0] + lastName[0];
       expectedIncome = data['expectedIncome'];
+      _firstName.text = firstName;
+      _lastName.text = lastName;
+      _expectedIncome.text = expectedIncome.toString();
 
       setState(() {
         firstName = data['firstName'];

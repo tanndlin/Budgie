@@ -45,7 +45,7 @@ function AccountPage(props) {
                 </article>
 
                 <article
-                    className={`mx-auto p-8 flex container min-w-[770px] max-w-[1200px] bg-[#BBE9E7] ${opacity()} rounded-md`}
+                    className={`mx-auto mb-28 p-8 flex container min-w-[770px] max-w-[1200px] bg-[#BBE9E7] ${opacity()} rounded-md`}
                 >
                     <CategoryView {...props} />
                 </article>

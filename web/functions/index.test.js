@@ -7,20 +7,10 @@ const chai = require('chai');
 const assert = chai.assert;
 const sinon = require('../functions/node_modules/@sinonjs/commons/lib/prototypes');
 const supertest = require('../functions/node_modules/supertest');
-
-// at the top of test/index.test.js
-const test = require('firebase-functions-test')(
-    {
-        databaseURL:
-            'https://cop4331-large-project-27-default-rtdb.firebaseio.com',
-        storageBucket: 'cop4331-large-project-27.appspot.com',
-        projectId: 'cop4331-large-project-27'
-    },
-    '../functions/cop4331-large-project-27-firebase-adminsdk-swtw7-adaa0a55f0.json'
-);
+const test = require('firebase-functions-test');
 
 // initialize firebase in order to access its services
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp();
 
 // initialize the database and collections
 const db = admin.firestore();
@@ -33,6 +23,7 @@ const oneOffCollection = 'oneOffs';
 const userCollectionRef = db.collection(userCollection);
 
 let myFunctions;
+let request;
 
 before(() => {
     // require index.js and save the exports inside a namespace called myFunctions

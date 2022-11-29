@@ -59,7 +59,6 @@ class _AccountManagerState extends State<AccountManager> {
         expectedIncome = data['expectedIncome'];
         print("income set");
       });
-
     }
     else
     {
@@ -79,11 +78,12 @@ class _AccountManagerState extends State<AccountManager> {
     }
   }
 
-
   final _firstName = TextEditingController();
   final _lastName = TextEditingController();
   final _expectedIncome = TextEditingController();
-  int selectedIndex = 4;
+  final _currentEmail = TextEditingController();
+
+int selectedIndex = 4;
 
   List<String> routes = [
     '/MainPage',
@@ -281,6 +281,98 @@ class _AccountManagerState extends State<AccountManager> {
           });
     }
 
+    resetPassword(BuildContext context) {
+      showDialog(
+          context: context,
+          builder: (BuildContext dialogContext) {
+            return Dialog(
+              backgroundColor: const Color(0xFFFAFAFA),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              child: Container(
+                height: 230,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Reset Password',
+                        style: TextStyle(
+                            fontSize: 35,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF2D4B03)),
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Form(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TextField(
+                                  controller: _currentEmail,
+                                  decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                            width: 2, color: Color(0xFF2D4B03)),
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                            width: 2, color: Color(0xFF000000)),
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      labelText: 'Confirm Email',
+                                      hintText: 'Confirm Email'),
+                                ),
+                              ),
+                            ],
+                          )),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        height: 50,
+                        width: 320,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF020100),
+                          border: Border.all(
+                              width: 2, color: const Color(0xFF2D4B03)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextButton(
+                          style: ButtonStyle(
+                            foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.black),
+                          ),
+                          onPressed: () async {
+                            await FirebaseAuth.instance
+                                .sendPasswordResetEmail(email: _currentEmail.text);
+                            print("Email Sent");
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'Reset',
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Color(0xFFE3E9E7),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          });
+    }
+
     return Container(
       // BACKGROUND AND APPBAR
         decoration: const BoxDecoration(
@@ -452,7 +544,10 @@ class _AccountManagerState extends State<AccountManager> {
                                     RoundedRectangleBorder>(RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8.0),
                                 ))),
-                            onPressed: () => null,
+                            onPressed: () async
+                            {
+                              resetPassword(context);
+                            },
                             child: const Text("Reset Password",
                                 style: TextStyle(fontSize: 20))),
                       ),

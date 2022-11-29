@@ -29,6 +29,10 @@ function Overview(props) {
         return sumOfBills() + sumOfActual() + sumOfOneOffs();
     };
 
+    const expectedExpenses = () => {
+        return sumOfBills() + sumOfExpected() + sumOfOneOffs();
+    };
+
     const getColor = (a, b) => {
         return a > b ? 'text-red-700' : 'text-green-700';
     };
@@ -71,7 +75,16 @@ function Overview(props) {
                 </p>
             </OverviewSection>
 
-            <OverviewSection title="Total vs Income">
+            <OverviewSection title="Expected Expenses vs Income">
+                <p className="inline">
+                    <b>{`$${expectedExpenses()}`}</b>
+                </p>
+                <p className="inline">
+                    <b>{` / $${props.user.expectedIncome}`}</b>
+                </p>
+            </OverviewSection>
+
+            <OverviewSection title="Actual Expenses vs Income">
                 <p
                     className={`inline ${getColor(
                         total(),

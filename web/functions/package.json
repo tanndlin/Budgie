@@ -8,17 +8,19 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
     "lint": "eslint -c .eslintrc.json . --ext .js",
-    "test": "mocha --reporter spec"
+    "test": "jest"
   },
   "engines": {
     "node": "16"
   },
   "main": "index.js",
   "dependencies": {
+    "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "firebase": "^9.14.0",
     "firebase-admin": "^10.0.2",
-    "firebase-functions": "^4.0.2"
+    "firebase-functions": "^4.0.2",
+    "jest": "^29.3.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.19.1",

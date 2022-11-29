@@ -1,0 +1,142 @@
+// a fake request objects, with req.body set to take the JSON components
+const userIdJSON = {
+    body: {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73'
+    }
+};
+
+const CreateUserProfileReq = {
+    body: {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        firstName: 'sabrina',
+        lastName: 'lopez',
+        expectedIncome: 123456
+    }
+};
+
+const EditUserProfileReq = {
+    body: {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        firstName: 'sabrina',
+        lastName: 'lopez',
+        expectedIncome: 1234567890
+    }
+};
+
+const CreateCategoryReq = {
+    body: {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        name: 'cat vet'
+    }
+};
+
+const EditCategoryReq = {
+    body: {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        name: 'vet',
+        id: ''
+    }
+};
+
+const CreateBillReq = {
+    body: {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        name: 'Cat Vet',
+        categoryId: 'fEQyVD7Uf2j27wNYqLQG',
+        color: '#ffffff',
+        price: 3000,
+        startDate: '08-31-22',
+        endDate: '07-30-23',
+        recurrence: 'monthly',
+        isPaid: ['Aug', 'Sep', 'Oct']
+    }
+};
+
+const EditBillReq = {
+    body: {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        id: '',
+        name: 'Cat Vet',
+        categoryId: 'fEQyVD7Uf2j27wNYqLQG',
+        color: '#ffffff',
+        price: 5200,
+        startDate: '09-31-22',
+        endDate: '08-30-23',
+        recurrence: 'monthly',
+        isPaid: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    }
+};
+
+const RemoveBillReq = {
+    body: {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        id: ''
+    }
+};
+
+const CreateBudgetReq = {
+    body: {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        name: 'cat',
+        categoryId: '',
+        expectedPrice: 6000,
+        actualPrice: 5200,
+        startDate: '08-14-22'
+    }
+};
+
+const EditBudgetReq = {
+    body: {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        id: '',
+        name: 'Garfield',
+        categoryId: '',
+        expectedPrice: 6000,
+        actualPrice: 5200,
+        startDate: '08-14-22'
+    }
+};
+
+const RemoveBudgetReq = {
+    body: {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        id: ''
+    }
+};
+
+const CreateOneOffReq = {
+    body: {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        name: 'flea medication',
+        categoryId: '',
+        color: '#ffffff',
+        price: 500,
+        date: '09-31-22'
+    }
+};
+
+const EditOneOffReq = {
+    body: {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        id: '',
+        name: 'flea medication',
+        categoryId: '',
+        color: '#ffffff',
+        price: 1000,
+        date: '09-31-22'
+    }
+};
+
+const RemoveOneOffReq = {
+    body: {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        id: ''
+    }
+};
+
+const RemoveCategoryReq = {
+    body: {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        id: ''
+    }
+};

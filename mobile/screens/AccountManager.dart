@@ -59,7 +59,6 @@ class _AccountManagerState extends State<AccountManager> {
         expectedIncome = data['expectedIncome'];
         print("income set");
       });
-
     }
     else
     {
@@ -79,13 +78,10 @@ class _AccountManagerState extends State<AccountManager> {
     }
   }
 
-
   final _firstName = TextEditingController();
   final _lastName = TextEditingController();
   final _expectedIncome = TextEditingController();
-  final _currentPassword = TextEditingController();
-  final _newPassword = TextEditingController();
-  final _confirmNewPassword = TextEditingController();
+  final _currentEmail = TextEditingController();
   int selectedIndex = 4;
 
   List<String> routes = [
@@ -293,7 +289,7 @@ class _AccountManagerState extends State<AccountManager> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0)),
               child: Container(
-                height: 400,
+                height: 250,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                   child: Column(
@@ -317,7 +313,7 @@ class _AccountManagerState extends State<AccountManager> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: TextField(
-                                  controller: _currentPassword,
+                                  controller: _currentEmail,
                                   decoration: InputDecoration(
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: const BorderSide(
@@ -329,52 +325,8 @@ class _AccountManagerState extends State<AccountManager> {
                                             width: 2, color: Color(0xFF000000)),
                                         borderRadius: BorderRadius.circular(10.0),
                                       ),
-                                      labelText: 'Current Password',
-                                      hintText: 'Current Password'),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextField(
-                                  controller: _newPassword,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 2, color: Color(0xFF2D4B03)),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 2, color: Color(0xFF000000)),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      labelText: 'New Password',
-                                      hintText: 'New Password'),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextField(
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
-                                  controller: _confirmNewPassword,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 2, color: Color(0xFF2D4B03)),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 2, color: Color(0xFF000000)),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      labelText: 'Confirm New Password',
-                                      hintText: 'Confirm New Password'),
+                                      labelText: 'Confirm Email',
+                                      hintText: 'Confirm Email'),
                                 ),
                               ),
                             ],
@@ -398,32 +350,13 @@ class _AccountManagerState extends State<AccountManager> {
                             MaterialStateProperty.all<Color>(Colors.black),
                           ),
                           onPressed: () async {
-
-                            var editedProfile = CreateProfile(
-                                userId: global.userId,
-                                firstName: _firstName.text,
-                                lastName: _lastName.text,
-                                expectedIncome: int.parse(_expectedIncome.text));
-
-                            var response_3 = await BaseClient().editProfile(editedProfile).catchError((err) {
-                              print("Profile not created!");
-                            });
-
-                            // On Pressed it should just edit profile depending on what's in here
-                            setState(() {
-                              initials = _firstName.text[0] + _lastName.text[0];
-                              firstName = _firstName.text;
-                              lastName = _lastName.text;
-                              expectedIncome = int.parse(_expectedIncome.text);
-                            });
-                            initials = _firstName.text[0] + _lastName.text[0];
-                            firstName = _firstName.text;
-                            lastName = _lastName.text;
-                            expectedIncome = int.parse(_expectedIncome.text);
-                            Navigator.of(context).pop();
+                            await FirebaseAuth.instance
+                                .sendPasswordResetEmail(email: _currentEmail.text);
+                            print("Email Sent");
+                            Navigator.pop(context);
                           },
                           child: const Text(
-                            'Finish',
+                            'Reset',
                             style: TextStyle(
                                 fontSize: 20,
                                 color: Color(0xFFE3E9E7),
@@ -613,8 +546,6 @@ class _AccountManagerState extends State<AccountManager> {
                             onPressed: () async
                             {
                               resetPassword(context);
-                              await FirebaseAuth.instance
-                                  .sendPasswordResetEmail(email: getEmail(FirebaseAuth.instance.currentUser?.email));
                             },
                             child: const Text("Reset Password",
                                 style: TextStyle(fontSize: 20))),

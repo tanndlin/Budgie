@@ -41,7 +41,7 @@ List<MyCategory> getCategoriesFromJson(String str) {
   final jsonData = jsonDecode(str);
   List<MyCategory> result = <MyCategory>[];
   print(jsonData);
-  jsonData["categories"].forEach((v) {print(v); print(jsonEncode(v));});
+  // jsonData["categories"].forEach((v) {print(v); print(jsonEncode(v));});
 
   jsonData["categories"].forEach((v) {
     String json = jsonEncode(v);
@@ -56,6 +56,9 @@ List<MyCategory> getCategoriesFromJson(String str) {
 MyCategory myCategoryFromJson(String str) => MyCategory.fromJson(json.decode(str));
 
 String myCategoryToJson(MyCategory data) => json.encode(data.toJson());
+
+String myCategoryToJsonEdit(MyCategory data) => json.encode(data.toJsonEdit());
+
 
 class MyCategory {
   MyCategory({
@@ -73,9 +76,16 @@ class MyCategory {
     id: json["id"],
   );
 
+
   Map<String, dynamic> toJson() => {
     "userId": userId,
     "name": name,
+  };
+
+  Map<String, dynamic> toJsonEdit() => {
+    "userId": userId,
+    "name": name,
+    "id": id,
   };
 
 }

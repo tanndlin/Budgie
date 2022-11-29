@@ -42,7 +42,6 @@ class Bill {
 
   String? userId;
   String name;
-  String? userId;
   String? categoryId;
   String? color;
   String? recurrence;
@@ -50,7 +49,6 @@ class Bill {
   num price;
   String startDate;
   String endDate;
-  String? id;
   List<DateTime>? unPaid = <DateTime>[];
   // create instance of empty list
   List<dynamic>? isPaid = <DateTime>[];

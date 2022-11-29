@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
     msg: result, fontSize: 18, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) :  Colors.green.withOpacity(.9), textColor: Colors.white,);
 
   _register(String userEmail, String userPassword, String confirmPassword) async {
-    if (userPassword == confirmPassword){
+    if (userPassword == confirmPassword && userPassword.length >= 8){
       // Passwords match
       try{
         UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -84,9 +84,18 @@ class _LoginPageState extends State<LoginPage> {
       }
     } else {
     //  Passwords dont match
-      reg_verification = "Passwords do not match";
-      result = "Passwords do not match";
-      error = true;
+      if(userPassword != confirmPassword)
+        {
+          reg_verification = "Passwords do not match";
+          result = "Passwords do not match";
+          error = true;
+        }
+      else if((userPassword.length < 8))
+        {
+          reg_verification = "Passwords do not match";
+          result = "Password needs to be at least 8 characters!";
+          error = true;
+        }
     }
     _showToast();
 

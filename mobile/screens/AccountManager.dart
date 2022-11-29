@@ -82,7 +82,8 @@ class _AccountManagerState extends State<AccountManager> {
   final _lastName = TextEditingController();
   final _expectedIncome = TextEditingController();
   final _currentEmail = TextEditingController();
-  int selectedIndex = 4;
+
+int selectedIndex = 4;
 
   List<String> routes = [
     '/MainPage',

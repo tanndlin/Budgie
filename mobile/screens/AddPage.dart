@@ -50,6 +50,7 @@ class _AddPageState extends State<AddPage> {
     budgetName.clear();
     budgetExpected.clear();
     budgetActual.clear();
+    budgetStart.clear();
 
     billName.clear();
     billPrice.clear();
@@ -125,88 +126,6 @@ class _AddPageState extends State<AddPage> {
       print(index);
       selectedIndex = index;
       Navigator.pushNamed(context, routes[index]);
-    }
-
-    void showAddCategory(BuildContext context){
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Dialog(
-              backgroundColor: const Color(0xFFFAFAFA),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0)),
-              child: Container(
-                height: 200,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Add Category', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
-                      const SizedBox( height: 10.0,),
-                      TextField(
-                        controller: categoryAdd,
-                        decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            prefixIcon: const Icon(Icons.list_outlined),
-                            labelText: 'Name',
-                            hintText: 'Name'),
-                      ),
-                      const SizedBox( height: 10.0,),
-                      Container(
-                        alignment: Alignment.center,
-                        height: 40,
-                        width: 320,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF020100), border: Border.all(width: 2, color: const Color(0xFF2D4B03)), borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: TextButton(
-                          style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                          ),
-                          onPressed: () async {
-                          //  Add category
-                            id = global.userId;
-                            var cat = MyCategory(
-                                userId: id,
-                                name: categoryAdd.text,
-                            );
-                            print("Json");
-                            print(myCategoryToJson(cat));
-                            var response = await BaseClient().postCategory(cat).catchError((err) {print("Fail");});
-                            if (response == null) {
-                              _showToast("Could not get", true);
-                              print("response null");
-                            }
-                            else {
-                              print("Add Category");
-                              print(id);
-                              print(response);
-                            }
-
-                            getAllCat();
-                            Navigator.pop(context, true);
-                          },
-                          child: const Text(
-                            'Add',
-                            style: TextStyle(fontSize: 20, color: Color(0xFFE3E9E7), fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          });
     }
 
     return Container(
@@ -288,7 +207,7 @@ class _AddPageState extends State<AddPage> {
                                         alignment: Alignment.centerLeft,
                                         child: Text('Add', style: TextStyle(fontSize: 30,  fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
                                       ),
-                                      const SizedBox(height: 20.0,),
+                                      const SizedBox(height: 10.0,),
                                       ToggleButtons(
                                         isSelected: isSelected,
                                         // selectedColor: Colors.white70,
@@ -300,20 +219,20 @@ class _AddPageState extends State<AddPage> {
                                         splashColor: Colors.transparent,
                                         children: const <Widget>[
                                           Padding(
-                                              padding: EdgeInsets.symmetric(horizontal: 12),
-                                              child: Text('Budget', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                                              padding: EdgeInsets.symmetric(horizontal: 8),
+                                              child: Text('Budget', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 12),
-                                            child: Text('Bill', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                                            padding: EdgeInsets.symmetric(horizontal: 8),
+                                            child: Text('Bill', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 12),
-                                            child: Text('Extras', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                                            padding: EdgeInsets.symmetric(horizontal: 8),
+                                            child: Text('Extras', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
                                           ),
                                           Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 12),
-                                            child: Text('Clear', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                                            padding: EdgeInsets.symmetric(horizontal: 8),
+                                            child: Text('Category', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
                                           ),
                                         ],
                                         onPressed: (int newIndex) {
@@ -417,7 +336,7 @@ class _AddPageState extends State<AddPage> {
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: <Widget>[
                                                       Container(
-                                                        width: 230.0,
+                                                        width: 290.0,
                                                         height: 52,
                                                         child: DropdownButtonFormField(
                                                           // alignment: Alignment.center,
@@ -458,18 +377,6 @@ class _AddPageState extends State<AddPage> {
                                                           },
                                                           value: categoryValue,
                                                         ),
-                                                      ),
-                                                      IconButton(
-                                                        style: ButtonStyle(
-                                                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                                                        ),
-                                                        onPressed: ()  {
-                                                          showAddCategory(context);
-                                                        },
-                                                        icon: Icon(Icons.add_circle),
-                                                        iconSize: 40,
-                                                        constraints: BoxConstraints(),
-                                                        padding: EdgeInsets.zero,
                                                       ),
                                                     ],
                                                   ),
@@ -695,7 +602,7 @@ class _AddPageState extends State<AddPage> {
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: <Widget>[
                                                       Container(
-                                                        width: 230.0,
+                                                        width: 290.0,
                                                         height: 52,
                                                         child: DropdownButtonFormField(
                                                           // alignment: Alignment.center,
@@ -736,18 +643,6 @@ class _AddPageState extends State<AddPage> {
                                                           },
                                                           value: categoryValue,
                                                         ),
-                                                      ),
-                                                      IconButton(
-                                                        style: ButtonStyle(
-                                                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                                                        ),
-                                                        onPressed: ()  {
-                                                          showAddCategory(context);
-                                                        },
-                                                        icon: Icon(Icons.add_circle),
-                                                        iconSize: 40,
-                                                        constraints: BoxConstraints(),
-                                                        padding: EdgeInsets.zero,
                                                       ),
                                                     ],
                                                   ),
@@ -802,7 +697,7 @@ class _AddPageState extends State<AddPage> {
                                                           startDate: _billDateStart.text,
                                                           endDate: _billDateEnd.text,
                                                           color: "#ffffff",
-                                                          unPaid: unPaidList,
+                                                          // unPaid: unPaidList,
                                                           categoryId: categoryValue?.id,
                                                         );
                                                         print(billToJson(bill));
@@ -925,7 +820,7 @@ class _AddPageState extends State<AddPage> {
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: <Widget>[
                                                       Container(
-                                                        width: 230.0,
+                                                        width: 290.0,
                                                         height: 52,
                                                         child: DropdownButtonFormField(
                                                           // alignment: Alignment.center,
@@ -966,18 +861,6 @@ class _AddPageState extends State<AddPage> {
                                                           },
                                                           value: categoryValue,
                                                         ),
-                                                      ),
-                                                      IconButton(
-                                                        style: ButtonStyle(
-                                                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                                                        ),
-                                                        onPressed: ()  {
-                                                          showAddCategory(context);
-                                                        },
-                                                        icon: Icon(Icons.add_circle),
-                                                        iconSize: 40,
-                                                        constraints: BoxConstraints(),
-                                                        padding: EdgeInsets.zero,
                                                       ),
                                                     ],
                                                   ),
@@ -1040,6 +923,94 @@ class _AddPageState extends State<AddPage> {
                                               ],
                                             ),
                                           )
+                                      ),
+                                      Visibility(
+                                        visible: isSelected[3],
+                                        child:  Padding(
+                                          padding: EdgeInsets.symmetric(horizontal: 15),
+                                          child: Column(
+                                            children: [
+                                              //  Budget name
+                                              SizedBox(height: 20.0),
+                                              Padding(
+                                                //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
+                                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                                child: TextField(
+                                                  controller: categoryAdd,
+                                                  decoration: InputDecoration(
+                                                      contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                                      focusColor: const Color(0xFF2D4B03),
+                                                      enabledBorder: OutlineInputBorder(
+                                                        borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                                        borderRadius: BorderRadius.circular(50.0),
+                                                      ),
+                                                      focusedBorder: OutlineInputBorder(
+                                                        borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                                        borderRadius: BorderRadius.circular(50.0),
+                                                      ),
+                                                      prefixIcon: const Icon(Icons.list_alt_rounded),
+                                                      labelText: 'Name',
+                                                      hintText: 'Name'),
+                                                ),
+                                              ),
+                                              const SizedBox( height: 10.0,),
+                                              Container(
+                                                alignment: Alignment.center,
+                                                height: 50,
+                                                width: 180,
+                                                decoration: BoxDecoration(
+                                                  color: const Color(0xFF020100), border: Border.all(width: 2, color: const Color(0xFF2D4B03)), borderRadius: BorderRadius.circular(20),
+                                                ),
+                                                child: TextButton(
+                                                  style: ButtonStyle(
+                                                    foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                                                  ),
+                                                  onPressed: () async {
+                                                    id = global.userId;
+                                                    // ADD BUDGET
+                                                    print(id);
+                                                    if (categoryAdd.text == "")
+                                                    {
+                                                      _showToast("Fill field", true);
+                                                    }
+                                                    else
+                                                    {
+                                                      id = global.userId;
+                                                      var cat = MyCategory(
+                                                        userId: id,
+                                                        name: categoryAdd.text,
+                                                      );
+                                                      print("Json");
+                                                      print(myCategoryToJson(cat));
+                                                      var response = await BaseClient().postCategory(cat).catchError((err) {print("Fail");});
+                                                      if (response == null) {
+                                                        _showToast("Could not get", true);
+                                                        print("response null");
+                                                      }
+                                                      else {
+                                                        print("Add Category");
+                                                        print(id);
+                                                        print(response);
+                                                      }
+
+                                                      _showToast("Added", false);
+                                                      print("success");
+                                                    }
+
+                                                    clearFields();
+                                                    getAllCat();
+
+                                                  },
+                                                  child: const Text(
+                                                    'Add Category',
+                                                    style: TextStyle(fontSize: 23, color: Color(0xFFE3E9E7), fontWeight: FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 20.0,),
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),

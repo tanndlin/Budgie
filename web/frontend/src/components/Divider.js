@@ -27,9 +27,9 @@ function Divider(props) {
                 src={DividerImage}
                 alt="Wood Texture"
             />
-            <div className="relative mx-32 mb-5">
-                <span className="absolute inset-x-0 top-5 flex">
-                    <p className="text-center text-6xl m-auto">
+            <div className="relative mb-5 w-full">
+                <span className="absolute inset-x-0 top-5 flex w-full">
+                    <p className="text-center text-6xl m-auto w-full">
                         {props.dividerToggle ? 'Sign Up' : 'Log In'}
                     </p>
                 </span>

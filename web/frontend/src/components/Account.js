@@ -38,9 +38,9 @@ function Account(props) {
 
     return (
         <div className="grid grid-flow-row gap-4 pl-6">
-            <h2 className="text-2xl w-full text-center">My Info</h2>
+            <h2 className="text-2xl w-full text-center font-bold">My Info</h2>
             <span>
-                <h3 className="text-xl">First Name</h3>
+                <h3 className="text-2xl">First Name</h3>
                 <EdittableText
                     id="firstName"
                     type="text"
@@ -49,11 +49,12 @@ function Account(props) {
                     onChange={(e) => {
                         setFirstName(e.target.value);
                     }}
+                    className="text-xl"
                 />
             </span>
 
             <span>
-                <h2 className="text-xl">Last Name</h2>
+                <h2 className="text-2xl">Last Name</h2>
                 <EdittableText
                     id="lastName"
                     type="text"
@@ -62,13 +63,14 @@ function Account(props) {
                     onChange={(e) => {
                         setLastName(e.target.value);
                     }}
+                    className="text-xl"
                 />
             </span>
 
             <span>
-                <h2 className="text-xl">Expected Income per month</h2>
+                <h2 className="text-2xl">Expected Income per month</h2>
                 <span>
-                    <p className="inline">
+                    <p className="inline text-xl">
                         <b>$</b>
                     </p>
                     <EdittableText
@@ -79,7 +81,7 @@ function Account(props) {
                         onChange={(e) => {
                             setExpectedIncome(+e.target.value);
                         }}
-                        className="inline"
+                        className="inline text-xl"
                     />
                 </span>
             </span>

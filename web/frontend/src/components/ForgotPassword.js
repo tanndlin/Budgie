@@ -19,7 +19,7 @@ function ForgotPassword(props) {
     };
 
     return (
-        <section className="relative mb-4 flex container bg-[#BBE9E7] bg-opacity-50 rounded-md shadow-lg">
+        <section className="relative flex container bg-[#BBE9E7] bg-opacity-50 rounded-md shadow-lg">
             <input
                 className="absolute top-0 right-0 cursor-pointer text-[36px] font-bold mr-4"
                 type="button"

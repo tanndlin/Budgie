@@ -8,7 +8,7 @@ List<Bill> getBillsFromJson(String str) {
   final jsonData = jsonDecode(str);
   List<Bill> result = <Bill>[];
   print(jsonData);
-  jsonData["bills"].forEach((v) {print(v); print(jsonEncode(v));});
+  // jsonData["bills"].forEach((v) {print(v); print(jsonEncode(v));});
 
   jsonData["bills"].forEach((v) {
     String json = jsonEncode(v);
@@ -45,7 +45,6 @@ class Bill {
   String? categoryId;
   String? color;
   String? recurrence;
-  String? id;
   num price;
   String startDate;
   String endDate;
@@ -81,15 +80,18 @@ class Bill {
     "userId": userId,
     "name": name,
     "categoryId": categoryId,
+    "color": color ?? "#ffffff",
     "price": price,
     "startDate": startDate,
     "endDate": endDate,
+    "isPaid": isPaid ?? <String>[],
+    "recurrence": recurrence ?? "monthly",
     "id": id,
   };
 
   String justStartDate()
   {
-    var split = this.startDate.split(' ');
+    var split = this.startDate?.split(' ');
     if (split != null)
       return split.first;
 
@@ -98,7 +100,7 @@ class Bill {
 
   String justEndDate()
   {
-    var split = this.endDate.split(' ');
+    var split = this.endDate?.split(' ');
     if (split != null)
       return split.first;
 

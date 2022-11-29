@@ -27,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   final _controllerEmail_Reg = TextEditingController();
   final _controllerPass_Reg = TextEditingController();
   final _controllerPass_Confirm = TextEditingController();
+  final _forgotEmail = TextEditingController();
 
   // register output to screen
   final formKey = GlobalKey<FormState>();
@@ -65,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
     msg: result, fontSize: 18, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) :  Colors.green.withOpacity(.9), textColor: Colors.white,);
 
   _register(String userEmail, String userPassword, String confirmPassword) async {
-    if (userPassword == confirmPassword){
+    if (userPassword == confirmPassword && userPassword.length >= 8){
       // Passwords match
       try{
         UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -84,9 +85,18 @@ class _LoginPageState extends State<LoginPage> {
       }
     } else {
     //  Passwords dont match
-      reg_verification = "Passwords do not match";
-      result = "Passwords do not match";
-      error = true;
+      if(userPassword != confirmPassword)
+        {
+          reg_verification = "Passwords do not match";
+          result = "Passwords do not match";
+          error = true;
+        }
+      else if((userPassword.length < 8))
+        {
+          reg_verification = "Passwords do not match";
+          result = "Password needs to be at least 8 characters!";
+          error = true;
+        }
     }
     _showToast();
 
@@ -289,6 +299,7 @@ class _LoginPageState extends State<LoginPage> {
                       const Text('Reset Password', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
                       const SizedBox( height: 10.0,),
                       TextField(
+                        controller: _forgotEmail,
                         decoration: InputDecoration(
                             enabledBorder: OutlineInputBorder(
                               borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
@@ -314,7 +325,11 @@ class _LoginPageState extends State<LoginPage> {
                           style: ButtonStyle(
                             foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
                           ),
-                          onPressed: () { // SEND PASSWORD RESET EMAIL !!!!!!!!!!!!!!!!!
+                          onPressed: () async{ //
+                            await FirebaseAuth.instance
+                                .sendPasswordResetEmail(email: _forgotEmail.text);
+                            print("Email Sent");
+                            Navigator.pop(context);// SEND PASSWORD RESET EMAIL !!!!!!!!!!!!!!!!!
                           },
                           child: const Text(
                             'Send Email',

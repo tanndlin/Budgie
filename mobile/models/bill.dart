@@ -48,7 +48,6 @@ class Bill {
   num price;
   String startDate;
   String endDate;
-  String? id;
   List<DateTime>? unPaid = <DateTime>[];
   // create instance of empty list
   List<dynamic>? isPaid = <DateTime>[];

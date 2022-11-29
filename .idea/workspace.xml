@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7b3ddd1-0997-4ca4-8b57-2ace28bb2400" name="Changes" comment="categories - edit, delete">
+    <list default="true" id="a7b3ddd1-0997-4ca4-8b57-2ace28bb2400" name="Changes" comment="main page - show bill">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -81,7 +81,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669703488715</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="main page - show bill">
+      <created>1669704154527</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1669704154527</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -100,6 +107,7 @@
     <MESSAGE value="delete - extras" />
     <MESSAGE value="extras on main page" />
     <MESSAGE value="categories - edit, delete" />
-    <option name="LAST_COMMIT_MESSAGE" value="categories - edit, delete" />
+    <MESSAGE value="main page - show bill" />
+    <option name="LAST_COMMIT_MESSAGE" value="main page - show bill" />
   </component>
 </project>

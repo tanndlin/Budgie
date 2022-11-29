@@ -138,7 +138,7 @@ class _DisplayPageState extends State<DisplayPage> {
 
       if (allExtras.length == 0)
       {
-        _showToast("No budgets", true);
+        _showToast("No Extras", true);
       }
       setState(() {
         getAllExtras = allExtras;
@@ -168,7 +168,7 @@ class _DisplayPageState extends State<DisplayPage> {
 
       if (allBills.length == 0)
       {
-        _showToast("No budgets", true);
+        _showToast("No Bills", true);
       }
 
       setState(() {

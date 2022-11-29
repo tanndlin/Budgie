@@ -13,7 +13,7 @@ class Routes {
   static const String DISPLAYPAGE = '/DisplayPage';
   static const String ACCOUNTMANAGER = '/AccountManager';
   static const String CALENDARVIEW = '/CalendarView';
-
+  
   // routes of pages in the app
   static Map<String, Widget Function(BuildContext)> get getroutes => {
     // '/': (context) => const AddPage(),

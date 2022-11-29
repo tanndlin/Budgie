@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/screens/LoginPage.dart';
+import 'package:time_machine/time_machine.dart';
 
 import '../base_client.dart';
 import '../models/bill.dart';
@@ -127,7 +128,7 @@ class _AddPageState extends State<AddPage> {
       Navigator.pushNamed(context, routes[index]);
     }
 
-    showAddCategory(BuildContext context){
+    void showAddCategory(BuildContext context){
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -769,6 +770,26 @@ class _AddPageState extends State<AddPage> {
                                                     onPressed: () async {
                                                       // ADD BUDGET
                                                       print(id);
+                                                      List<DateTime> unPaidList = <DateTime>[];
+                                                      DateTime start = DateFormat("MM-dd-yyyy").parse(_billDateStart.text);
+                                                      DateTime end = DateFormat("MM-dd-yyyy").parse(_billDateEnd.text);
+                                                      unPaidList.add(start);
+                                                      Period diffP = LocalDate.dateTime(end).periodSince(LocalDate.dateTime(start));
+                                                      var diff = diffP.months;
+                                                      int counter = 0;
+
+                                                      while (counter < diff)
+                                                      {
+                                                        counter += 1;
+                                                        DateTime newDate = DateTime(start.year, start.month + counter, start.day);
+                                                        unPaidList.add(newDate);
+                                                      }
+
+                                                      for (DateTime d in unPaidList)
+                                                      {
+                                                        print(d.toString());
+                                                      }
+
                                                       if (billName.text == "" || billPrice.text == "")
                                                       {
                                                         _showToast("Fill fields", true);
@@ -782,6 +803,8 @@ class _AddPageState extends State<AddPage> {
                                                           startDate: _billDateStart.text,
                                                           endDate: _billDateEnd.text,
                                                           color: "#ffffff",
+                                                          unPaid: unPaidList,
+                                                          categoryId: categoryValue?.id,
                                                         );
                                                         print(billToJson(bill));
                                                         var response = await BaseClient().postBill(bill).catchError((err) {print("Fail");});

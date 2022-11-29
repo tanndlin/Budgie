@@ -9,6 +9,7 @@ import 'package:mobile/global.dart' as global;
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import '../base_client.dart';
+import '../models/bill.dart';
 import '../models/budget.dart';
 import '../models/myCategory.dart';
 import '../models/myExtra.dart';
@@ -44,6 +45,7 @@ class _DisplayPageState extends State<DisplayPage> {
 
   List<Budget> getAllBudgets = <Budget>[];
   List<MyExtra> getAllExtras = <MyExtra>[];
+  List<Bill> getAllBills = <Bill>[];
 
   _showToast(msg, error) => Fluttertoast.showToast(
     msg: msg, fontSize: 18, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) :  Colors.green.withOpacity(.9), textColor: Colors.white,);
@@ -139,6 +141,36 @@ class _DisplayPageState extends State<DisplayPage> {
       for (MyExtra e in getAllExtras)
       {
           print(e.name);
+      }
+    }
+  }
+
+  Future<void> getAllBill()
+  async {
+    id = global.userId;
+
+    var response = await BaseClient().getBills(id).catchError((err) {print("Fail");});
+    if (response == null) {
+      _showToast("Could not get", true);
+      print("response null");
+    }
+    else {
+      print("Got Bills");
+      print(id);
+      print(response);
+      List<Bill> allBills = getBillsFromJson(response);
+
+      if (allBills.length == 0)
+      {
+        _showToast("No budgets", true);
+      }
+      setState(() {
+        getAllBills = allBills;
+      });
+
+      for (Bill e in getAllBills)
+      {
+        print(e.name);
       }
     }
   }
@@ -946,6 +978,11 @@ class _DisplayPageState extends State<DisplayPage> {
           });
     }
 
+    // void showBillEditDialog(int index, BuildContext context)
+    // {
+    //
+    // }
+
     Widget _buildBudgetCard(int index) => Container(
           padding:  EdgeInsets.only(top: 2.0, left: 10.0, right: 10.0, bottom: 5.0),
           width: MediaQuery.of(context).size.width,
@@ -1011,6 +1048,56 @@ class _DisplayPageState extends State<DisplayPage> {
               ),
             ],
           ),
+    );
+
+    Widget _buildBillCard(int index) => Container(
+      padding:  EdgeInsets.only(top: 2.0, left: 10.0, right: 10.0, bottom: 5.0),
+      width: MediaQuery.of(context).size.width,
+      height: 150,
+      decoration: BoxDecoration(
+          color: Color(0xddb3e5fc),
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [ BoxShadow(
+              blurRadius: 8,
+              offset: Offset(0, 15),
+              color: Color(0xffe3e9e7).withOpacity(.5),
+              spreadRadius: -9)]
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          //  Text
+          Row(
+            children: <Widget>[
+              Text(
+                "${getAllBills[index].name}", style: TextStyle(fontSize: 18, color: Colors.blueAccent.shade700, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+              ),
+              Spacer(),
+              // TextButton(onPressed: (){}, child: Icon(Icons.edit, color: Color(0xFF2D4B03))),
+              IconButton(onPressed: () {
+                // showBillEditDialog(index, context);
+                },
+                icon: Icon(Icons.edit, color: Color(0xFF2D4B03), size: 25,), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+              SizedBox(width: 15.0,),
+              IconButton(onPressed: () { showExtraDeleteDialog(index, context);}, icon: Icon(Icons.delete, color: Color(0xFF2D4B03), size: 25,), padding: EdgeInsets.zero, constraints: BoxConstraints(),),
+              // Container(
+              //   // padding: EdgeInsets.symmetric(horizontal: 5.0),
+              //   child: Row(
+              //     // crossAxisAlignment: CrossAxisAlignment.end,
+              //     // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //     children: [
+              //       TextButton(onPressed: (){}, child: Icon(Icons.edit, color: Color(0xFF2D4B03),)),
+              //     ],
+              //   ),
+              // ),
+            ],
+          ),
+          Text("Price: \$${getAllBills[index].price}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+          Text("Category: ${findCategory(getAllCategories, getAllBills[index].categoryId)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+          Text("Date: ${getAllBills[index].startDate}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+        ],
+      ),
     );
 
     Widget _buildExtraCard(int index) => Container(
@@ -1082,6 +1169,21 @@ class _DisplayPageState extends State<DisplayPage> {
               'Budget',
               style: TextStyle(fontSize: 35, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),
             ),
+            actions: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(right: 20.0, bottom: 6.0),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/MainPage');
+                  },
+                  // child: Icon(Icons.logout, color: Color(0xFF2D4B03), size: 35.0,),
+                  child: Image.asset(
+                    'assets/images/budgie.png',
+                    scale: 0.1,
+                  ),
+                ),
+              )
+            ],
             automaticallyImplyLeading: false,
             flexibleSpace: Container(
               decoration: const BoxDecoration(
@@ -1163,6 +1265,11 @@ class _DisplayPageState extends State<DisplayPage> {
                                             getAllBud();
                                           }
 
+                                          if (newIndex == 1)
+                                          {
+                                            getAllBill();
+                                          }
+
                                           if (newIndex == 2)
                                           {
                                             getAllExt();
@@ -1215,16 +1322,29 @@ class _DisplayPageState extends State<DisplayPage> {
                                       // BILL FIELDS
                                       Visibility(
                                           visible: isSelected[1],
-                                          child:  Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 15),
-                                            child: Column(
+                                          child: Column(
                                               children: [
                                                 //  Budget name
-                                                SizedBox(height: 20.0),
+                                                ListView.separated(
+                                                  physics: NeverScrollableScrollPhysics(),
+                                                  scrollDirection: Axis.vertical,
+                                                  shrinkWrap: true,
+                                                  itemCount: getAllBills.length,
+                                                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                                                  itemBuilder: (context, index) {
+                                                    return _buildBillCard(index);
+                                                    // return ListTile(
+                                                    //     selected:index==0,
+                                                    //     selectedTileColor:Colors.green,
+                                                    //     title: Padding(padding:EdgeInsets.all(30.0), child:Text('${getAllBudgets[index].name}')),
+                                                    //     onTap:() { print('on tapped'); }
+                                                    // );
+                                                  },
+                                                  separatorBuilder: (context, index) => const Divider(),
+                                                ),
 
                                               ],
                                             ),
-                                          )
                                       ),
                                       // Budget visible
                                       Visibility(

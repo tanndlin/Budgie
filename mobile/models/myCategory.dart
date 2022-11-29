@@ -20,6 +20,9 @@ String findCategory(List<MyCategory> list, String? id)
 
 MyCategory? getCategory(List<MyCategory> list, String? id)
 {
+  MyCategory sample = MyCategory(name: "sample");
+  if (id == "-1")
+    return sample;
   if (id == null)
     return null;
 

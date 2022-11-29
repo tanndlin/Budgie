@@ -1,32 +1,43 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function EdittableText(props) {
+    function onBlur(e) {
+        if (!e.target.value) {
+            e.target.value =
+                props.type === 'number' ? 0 : 'Please Enter A Value';
+        }
+
+        props.onBlur && props.onBlur(e);
+    }
 
     function onChange(e) {
-        // const value = e.target.value;
-        // if (value > props.max) {
-        //     e.target.value = props.max;
-        // }
-
         props.onChange(e);
+
+        const span = document.getElementById('fakeSpan');
+        span.innerHTML = e.target.value.replace(/\s/g, '&nbsp;');
+        e.target.style.width = span.offsetWidth + 'px';
     }
 
-    function onBlur(e) {
-        if (!e.target.value)
-            e.target.value = '0';
-    }
+    useEffect(() => {
+        const span = document.getElementById('fakeSpan');
+        span.innerHTML = `${props.value}`.replace(/\s/g, '&nbsp;');
+        document.getElementById(props.id).style.width =
+            span.offsetWidth + 10 + 'px';
+    });
 
     return (
-        <input
-            onChange={onChange}
-            onBlur={onBlur}
-            className='font-bold editable'
-            type={props.type}
-            value={props.value}
-            style={{ width: `${Math.max(1, props.value.length)}ch` }}
-        />
+        <div className={props.className}>
+            <input
+                id={props.id}
+                onChange={onChange}
+                onBlur={onBlur}
+                className="font-bold editable"
+                type={props.type}
+                value={props.value}
+            />
+            <span id="fakeSpan"></span>
+        </div>
     );
-
 }
 
 export default EdittableText;

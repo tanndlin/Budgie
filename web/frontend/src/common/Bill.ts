@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 interface IBill extends IEvent {
-    lastPaidDate: Date;
+    isPaid: Date[];
     frequency: Number;
+    categoryId: Number;
 }
 
 interface IEvent {
-    title: string;
-    start: Date;
-    end: Date;
+    name: string;
+    startDate: Date;
+    endDate: Date;
     allDay?: boolean;
     resource?: any;
 }

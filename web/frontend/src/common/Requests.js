@@ -1,23 +1,17 @@
 export function sendRequest(path, payload, callback, errorCallback) {
-    const url = `budgie/api/${path}`;
+    const url = `https://us-central1-cop4331-large-project-27.cloudfunctions.net/webApi/${path}`;
 
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8');
 
     xhr.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            const { Error: err } = JSON.parse(xhr.responseText);
-            if (err) {
-                if (!errorCallback)
-                    console.log(`${url} threw unhandled error: ${err}`);
-                else
-                    errorCallback(err);
-                return
-            }
-
+        if (
+            this.readyState === 4 &&
+            (this.status === 200 || this.status === 201)
+        ) {
             callback(xhr);
-        } else {
+        } else if (this.readyState === 4 && this.status === 400) {
             errorCallback(xhr.responseText);
         }
     };
@@ -26,32 +20,36 @@ export function sendRequest(path, payload, callback, errorCallback) {
 }
 
 export function sendOutsideRequest(url, payload, callback, errorCallback) {
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8');
 
     xhr.onreadystatechange = function () {
         if (!xhr.responseText) {
             return;
         }
 
-        if (this.readyState === 4 && this.status === 200) {
+        if (
+            (this.readyState === 4 && this.status === 200) ||
+            this.status === 201
+        ) {
             callback(xhr);
             return;
         }
 
-
         const { error } = JSON.parse(xhr.responseText);
-        if (error)
+        if (error) {
             errorCallback(error);
+        }
     };
 
     xhr.send(JSON.stringify(payload));
 }
 
-
 export function pretty(s) {
-    if (!s) return s;
+    if (!s) {
+        return s;
+    }
 
     const ret = s.replace(/_/g, ' ').toLowerCase();
 

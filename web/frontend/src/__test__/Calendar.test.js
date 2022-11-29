@@ -1,69 +1,146 @@
-/* eslint-disable testing-library/no-node-access */
 import { render, screen } from '@testing-library/react';
-import BigCalendar from '../components/Calendar';
+import { BigCalendar, getEventsFromBills } from '../components/Calendar';
+import React from 'react';
 
 test('Events red on unpaid', () => {
-    render(<BigCalendar
-        bills={[{
-            title: 'Hello World',
-            start: new Date(),
-            end: new Date(),
-            lastPaid: null,
-        }]}
-    />);
+    const categories = [
+        {
+            name: 'All',
+            id: -1
+        }
+    ];
+    render(
+        <BigCalendar
+            bills={[
+                {
+                    name: 'Hello World',
+                    startDate: new Date(),
+                    endDate: new Date(),
+                    isPaid: []
+                }
+            ]}
+            categories={categories}
+            categorySortID={-1}
+        />
+    );
 
     const event = screen.getByText(/Hello World/);
     expect(event.parentElement).toHaveClass('unpaid');
 });
 
 test('Events green on paid', () => {
-    render(<BigCalendar
-        bills={[{
-            title: 'Hello World',
-            start: new Date(),
-            end: new Date(),
-            lastPaid: new Date(),
-        }]}
-    />);
+    const categories = [
+        {
+            name: 'All',
+            id: -1
+        }
+    ];
+
+    render(
+        <BigCalendar
+            bills={[
+                {
+                    name: 'Hello World',
+                    startDate: new Date(),
+                    endDate: new Date(),
+                    isPaid: [new Date()]
+                }
+            ]}
+            categories={categories}
+            categorySortID={-1}
+        />
+    );
 
     const event = screen.getByText(/Hello World/);
     expect(event.parentElement).toHaveClass('paid');
 });
 
 test('Sums total of bills', () => {
+    const categories = [
+        {
+            name: 'All',
+            id: -1
+        }
+    ];
+
     const bills = [];
     for (let i = 0; i < 10; i++) {
         bills.push({
-            title: 'Hello World',
-            start: new Date(),
-            end: new Date(),
-            amount: Math.floor(Math.random() * 100),
+            name: 'Hello World',
+            startDate: new Date(),
+            endDate: new Date(),
+            price: Math.floor(Math.random() * 100),
+            isPaid: []
         });
     }
 
-    render(<BigCalendar
-        bills={bills}
-    />);
+    render(
+        <BigCalendar
+            bills={bills}
+            categories={categories}
+            categorySortID={-1}
+        />
+    );
 
-
-    const sum = bills.reduce((acc, bill) => acc + bill.amount, 0);
+    const sum = bills.reduce((acc, bill) => acc + bill.price, 0);
     const checkContent = screen.getByTestId('billSum');
     expect(checkContent).toHaveTextContent(`$${sum} / month`);
 });
 
 test('Do not sum bills that no longer recur', () => {
-    render(<BigCalendar
-        bills={[
-            {
-                title: 'Hello World',
-                start: new Date(0),
-                end: new Date(0),
-                amount: 100,
-            }
-        ]}
-    />);
+    const categories = [
+        {
+            name: 'All',
+            id: -1
+        }
+    ];
 
+    render(
+        <BigCalendar
+            bills={[
+                {
+                    name: 'Hello World',
+                    startDate: new Date(0),
+                    endDate: new Date(0),
+                    price: 100,
+                    isPaid: []
+                }
+            ]}
+            categories={categories}
+            categorySortID={-1}
+        />
+    );
 
     const checkContent = screen.getByTestId('billSum');
     expect(checkContent).toHaveTextContent('$0 / month');
+});
+
+test('Events from Bills Exact Dates', () => {
+    const bills = [
+        {
+            name: 'Hello World',
+            startDate: new Date(Date.parse('01 Jan 2022')),
+            endDate: new Date(Date.parse('01 December 2022')),
+            price: 100,
+            isPaid: []
+        }
+    ];
+
+    const events = getEventsFromBills(bills);
+    expect(events).toHaveLength(12);
+});
+
+test('Events from Bills Cutoff', () => {
+    const bills = [
+        {
+            name: 'Hello World',
+            startDate: new Date(Date.parse('01 Jan 2022')),
+            endDate: new Date(Date.parse('30 November 2022')),
+            price: 100,
+            isPaid: []
+        }
+    ];
+
+    const events = getEventsFromBills(bills);
+    expect(events).toHaveLength(11);
 });

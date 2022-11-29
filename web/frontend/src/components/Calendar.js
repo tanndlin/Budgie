@@ -1,53 +1,89 @@
 import React from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import Modal from 'react-modal';
-import CreateEvent from './CreateEvent';
+import Dropdown from 'react-dropdown';
+import CreateBillPopUp from './CreateBillPopUp';
+import { sendRequest } from '../common/Requests';
+import PaperImage from '../img/paper_v3.jpg';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import 'react-dropdown/style.css';
 import '../App.css';
-import ModalStyles from '../common/ModalStyles';
 
 const localizer = momentLocalizer(moment);
 
-function BigCalendar(props) {
-    const [modalIsOpen, setIsOpen] = React.useState(false);
-    const [title, setTitle] = React.useState('');
-    const [start, setStart] = React.useState(formatDate(new Date()));
-    const [end, setEnd] = React.useState(formatDate(new Date()));
-    const [amount, setAmount] = React.useState(0);
+export function BigCalendar(props) {
+    const [isEdit, setIsEdit] = React.useState(false);
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [name, setName] = React.useState('');
+    const [startDate, setStartDate] = React.useState(formatDate(new Date()));
+    const [endDate, setEndDate] = React.useState(formatDate(new Date()));
+    const [price, setPrice] = React.useState(0);
     const [currentBill, setCurrentBill] = React.useState(null);
+    const [categoryId, setCategoryID] = React.useState(-1);
 
     function formatDate(date) {
-        // return date.toISOString().split('T')[0];
-        // return date;
         return new Date(date.getFullYear(), date.getMonth(), date.getDate());
     }
 
     function handleCalendarClick(e) {
         e.preventDefault();
-        if (!e.target.classList.contains('rbc-event-content'))
+        if (!e.target.classList.contains('rbc-event-content')) {
             return;
+        }
 
-        const month = new Date(document.querySelector('.rbc-toolbar-label').innerHTML);
+        const month = new Date(
+            document.querySelector('.rbc-toolbar-label').innerHTML
+        );
 
         if (e.ctrlKey) {
-            const bill = props.bills.find(bill => bill.title === e.target.innerHTML);
-            bill.paid = !bill.paid;
+            const bill = props.bills.find(
+                (bill) => `${bill.name} - ${bill.price}` === e.target.innerHTML
+            );
 
-            const day = bill.start.getDate();
-            const paidDate = new Date(month.getFullYear(), month.getMonth(), day, 1);
+            const paidDate = new Date(
+                month.getFullYear(),
+                month.getMonth(),
+                bill.startDate.getDate(),
+                0
+            );
 
             const editState = () => {
-                const newState = props.bills.map(b => {
-                    if (b.id === bill.id)
-                        return {
+                const newState = props.bills.map((b) => {
+                    if (b.id !== bill.id) {
+                        return b;
+                    }
+
+                    let { isPaid } = b;
+
+                    // Remove if exists
+                    if (isPaid.some((d) => datesAreSame(d, paidDate))) {
+                        isPaid = isPaid.filter(
+                            (d) => !datesAreSame(d, paidDate)
+                        );
+                    } else {
+                        // Add if not
+                        isPaid.push(paidDate);
+                    }
+
+                    sendRequest(
+                        'EditBill',
+                        {
                             ...b,
-                            lastPaid: paidDate,
-                        };
-
-                    return b;
-
+                            isPaid,
+                            userId: props.user.userId
+                        },
+                        (res) => {
+                            console.log(res);
+                        },
+                        (err) => {
+                            console.log(err);
+                        }
+                    );
+                    return {
+                        ...b,
+                        isPaid
+                    };
                 });
 
                 props.setBills(newState);
@@ -56,8 +92,26 @@ function BigCalendar(props) {
             return;
         }
 
-        const bill = props.bills.find((bill) => `${bill.title} - ${bill.amount}` === e.target.innerHTML);
+        const bill = props.bills.find(
+            (bill) => `${bill.name} - ${bill.price}` === e.target.innerHTML
+        );
         createEdit(bill);
+    }
+
+    function deleteBill() {
+        const id = currentBill.id;
+        sendRequest(
+            'RemoveBill',
+            { id: id, userId: props.user.userId },
+            (_res) => {
+                const newState = props.bills.filter((b) => b.id !== id);
+                props.setBills(newState);
+                closeModal();
+            },
+            (err) => {
+                console.log('Error deleting bill', err);
+            }
+        );
     }
 
     function openModal() {
@@ -66,25 +120,29 @@ function BigCalendar(props) {
 
     function closeModal() {
         setIsOpen(false);
+        setIsEdit(false);
 
         resetAllValues();
     }
 
     function resetAllValues() {
-        setTitle('');
-        setAmount(0);
-        setStart(formatDate(new Date()));
-        setEnd(formatDate(new Date()));
+        setName('');
+        setPrice(0);
+        setStartDate(formatDate(new Date()));
+        setEndDate(formatDate(new Date()));
         setCurrentBill(null);
+        setCategoryID(-1);
     }
 
     function createEdit(bill) {
-        setTitle(bill.title);
-        setStart(formatDate(bill.start));
-        setEnd(formatDate(bill.end));
-        setAmount(bill.amount);
+        setName(bill.name);
+        setStartDate(formatDate(bill.startDate));
+        setEndDate(formatDate(bill.endDate));
+        setPrice(bill.price);
         setCurrentBill(bill);
+        setCategoryID(bill.categoryId);
 
+        setIsEdit(true);
         openModal();
     }
 
@@ -99,105 +157,179 @@ function BigCalendar(props) {
         setCurrentBill(null);
     }
 
-    function eventStyleGetter(event, start, end, isSelected) {
-        return {
-            className: event.lastPaid >= start ? 'paid' : 'unpaid',
-        };
+    function datesAreSame(a, b) {
+        const d1 = new Date(a);
+        const d2 = new Date(b);
+
+        d1.setHours(0, 0, 0, 0);
+        d2.setHours(0, 0, 0, 0);
+
+        return d1.valueOf() === d2.valueOf();
     }
 
-    function getEventsFromBills() {
-        // Each bill will have multiple events for each pay date
-        const events = props.bills.map(bill => {
-            const payDates = [];
-            const startDate = new Date(bill.start);
-            const endDate = new Date(bill.end);
-
-            // Create an event for each pay date
-            while (startDate <= endDate) {
-                payDates.push({
-                    ...bill,
-                    start: new Date(startDate),
-                    end: new Date(startDate),
-                    title: `${bill.title} - ${bill.amount}`,
-                    allDay: true,
-                });
-
-                startDate.setMonth(startDate.getMonth() + bill.frequency);
-            }
-
-            return payDates;
-        }).flat();
-
-        return events;
+    function eventStyleGetter(event, start, _end, _isSelected) {
+        return {
+            className: event.isPaid.some((d) => datesAreSame(d, start))
+                ? 'paid'
+                : 'unpaid'
+        };
     }
 
     // Returns true if date is this month or later
     function billIsCurrent(bill) {
-        const { start, end } = bill;
+        const { startDate, endDate } = bill;
         const today = new Date();
 
-        if (start > today)
+        if (startDate > today) {
             return false;
+        }
 
-        if (end.getYear() < today.getYear())
+        if (endDate.getYear() < today.getYear()) {
             return false;
+        }
 
-        return end.getMonth() >= today.getMonth();
+        if (
+            endDate.getYear() === today.getYear() &&
+            endDate.getMonth() < today.getMonth()
+        ) {
+            return false;
+        }
+
+        return true;
     }
-
 
     return (
         <div className="flex min-h-9/10 mb-5">
-            <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                style={ModalStyles}
-                ariaHideApp={false}
-            >
-                <CreateEvent
-                    title={title}
-                    start={start}
-                    end={end}
-                    amount={amount}
-                    setAmount={setAmount}
-                    setTitle={setTitle}
-                    setStart={setStart}
-                    setEnd={setEnd}
-                    closeModal={closeModal}
-                    pushEvent={pushEvent}
-                />
-            </Modal>
-
             <section className="flex flex-col container m-auto">
                 <div
-                    className="container m-auto mt-5 min-h-500 bg-[#BBE9E7] bg-opacity-50 p-3 rounded-md"
-                    onClick={handleCalendarClick}
+                    className={`container m-auto mt-5 min-h-500 bg-[#BBE9E7] ${props.opacity} p-3 rounded-md`}
                 >
-                    <header className="flex flex-row justify-between font-bold mb-3 border-black border-b-2 p-1">
+                    <header className="grid grid-cols-3 font-bold mb-3 border-black border-b-2 p-1">
                         <h1 className="text-2xl">Bills</h1>
-                        <span className='text-md'>
-                            <h2 data-testid='billSum'>{
-                                `Total:  $${Object.entries(props.bills)
-                                    .filter(([key, bill]) => billIsCurrent(bill))
-                                    .reduce((acc, [key, bill]) =>
-                                        acc + +bill.amount, 0) ?? 0} / month`
-                            }</h2>
+
+                        <Dropdown
+                            className="smallDropdown-parent h-26 w-40 bg-white rounded-md mx-auto"
+                            controlClassName="slim h-26"
+                            placeholderClassName="slim h-26"
+                            options={props.categories.map((c) => {
+                                return {
+                                    value: c.name,
+                                    label: c.name
+                                };
+                            })}
+                            value={
+                                props.categories.find(
+                                    (c) => c.id === props.categorySortID
+                                )?.name
+                            }
+                            onChange={(e) => {
+                                const category = props.categories.find(
+                                    (c) => c.name === e.value
+                                );
+                                props.setCategorySortID(category.id);
+                            }}
+                        />
+
+                        <span className="ml-auto text-md">
+                            <h2 data-testid="billSum">
+                                {'Total:  $' +
+                                    (Object.entries(props.bills)
+                                        .filter(([_key, bill]) =>
+                                            billIsCurrent(bill)
+                                        )
+                                        .reduce(
+                                            (acc, [_key, bill]) =>
+                                                acc + +bill.price,
+                                            0
+                                        ) ?? 0) +
+                                    ' / month'}
+                            </h2>
                         </span>
                     </header>
-                    <Calendar
-                        localizer={localizer}
-                        events={getEventsFromBills(props.bills)}
-                        startAccessor="start"
-                        endAccessor="end"
-                        eventPropGetter={eventStyleGetter}
-                    />
-                    <footer className='border-black border-t-2 p-1 mt-3 flex flex-row gap-4'>
-                        <input className='px-2 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md' type='button' value='Add Bill'
-                            onClick={createNew} />
+                    <div onClick={handleCalendarClick}>
+                        <Calendar
+                            localizer={localizer}
+                            events={getEventsFromBills(
+                                props.bills,
+                                props.categorySortID
+                            )}
+                            startAccessor="start"
+                            endAccessor="end"
+                            eventPropGetter={eventStyleGetter}
+                            style={{
+                                backgroundImage: props.backgroundToggle
+                                    ? `url(${PaperImage})`
+                                    : 'none'
+                            }}
+                        />
+                    </div>
+                    <footer className="border-black border-t-2 p-1 mt-3 flex flex-row justify-between gap-4">
+                        <input
+                            className="px-2 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md shadow-md"
+                            type="button"
+                            value="Add Bill"
+                            onClick={createNew}
+                        />
+
+                        <p>Ctrl + Click to toggle paid</p>
                     </footer>
+                    <CreateBillPopUp
+                        {...{
+                            isOpen,
+                            user: props.user,
+                            name,
+                            startDate,
+                            endDate,
+                            price,
+                            categoryId,
+                            setCategoryID,
+                            setPrice,
+                            setName,
+                            setStartDate,
+                            setEndDate,
+                            closeModal,
+                            pushEvent,
+                            deleteBill,
+                            isEdit,
+                            categories: props.categories,
+                            id: currentBill?.id,
+                            isPaid: currentBill?.isPaid
+                        }}
+                    />
                 </div>
             </section>
         </div>
     );
 }
-export default BigCalendar;
+
+export function getEventsFromBills(bills, categorySortID) {
+    // Each bill will have multiple events for each pay date
+    return bills
+        .filter((bill) => {
+            if (categorySortID === -1 || bill.categoryId === -1) {
+                return true;
+            }
+
+            return bill.categoryId === categorySortID;
+        })
+        .map((bill) => {
+            const payDates = [];
+
+            const currentDate = new Date(bill.startDate);
+            // Create an event for each pay date
+            while (currentDate <= bill.endDate) {
+                payDates.push({
+                    ...bill,
+                    start: new Date(currentDate),
+                    end: new Date(currentDate),
+                    title: `${bill.name} - ${bill.price}`,
+                    allDay: true
+                });
+
+                currentDate.setMonth(currentDate.getMonth() + 1);
+            }
+
+            return payDates;
+        })
+        .flat();
+}

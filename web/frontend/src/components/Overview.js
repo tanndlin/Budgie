@@ -44,7 +44,7 @@ function Overview(props) {
 
     return (
         <section className="flex flex-col gap-4 mx-6">
-            <h2 className="text-2xl w-full text-center ">Overview</h2>
+            <h2 className="text-2xl w-full text-center font-bold">Overview</h2>
             <OverviewSection title="Sum Of Bills">
                 <p>
                     <b>{`$${sumOfBills()}`}</b>

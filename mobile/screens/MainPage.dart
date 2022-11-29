@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mobile/global.dart' as global;
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../base_client.dart';
+import '../models/bill.dart';
 import '../models/budget.dart';
 import '../models/myCategory.dart';
 import '../models/myExtra.dart';
@@ -25,12 +26,14 @@ class _MainPageState extends State<MainPage> {
 
   int budIndex = 0;
   int extIndex = 0;
+  int billIndex = 0;
 
   int selectedIndex = 0;
   List<String> routes = ['/MainPage', '/DisplayPage', '/AddPage', '/CalendarView', '/AccountManager'];
 
   List<Budget> getAllBudgets = <Budget>[];
   List<MyExtra> getAllExtras = <MyExtra>[];
+  List<Bill> getAllBills = <Bill>[];
 
   List<MyCategory> getAllCategories = <MyCategory>[];
   MyCategory? categoryValue;
@@ -93,6 +96,33 @@ class _MainPageState extends State<MainPage> {
         budIndex = Random().nextInt(getAllBudgets.length);
       });
       print(getAllBudgets.length);
+    }
+
+    response = await BaseClient().getBills(id).catchError((err) {print("Fail");});
+    if (response == null) {
+      _showToast("Could not get", true);
+      print("response null");
+    }
+    else {
+      print("Got Bills");
+      print(id);
+      print(response);
+      List<Bill> allBills = getBillsFromJson(response);
+
+      if (allBills.length == 0)
+      {
+        _showToast("No budgets", true);
+      }
+
+      setState(() {
+        getAllBills = allBills;
+        billIndex = Random().nextInt(getAllBills.length);
+      });
+
+      for (Bill e in getAllBills)
+      {
+        print(e.name);
+      }
     }
 
     response = await BaseClient().getExtras(id).catchError((err) {print("Fail");});
@@ -187,7 +217,7 @@ class _MainPageState extends State<MainPage> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('Your Budgets', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
+                                  Text('Your Budgets', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), fontWeight: FontWeight.bold, decoration: TextDecoration.underline),),
                                   TextButton(
                                     onPressed: () {
                                       // display budgets
@@ -252,7 +282,7 @@ class _MainPageState extends State<MainPage> {
                   // BILL WIDGET
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 200,
+                    height: 250,
                     decoration: BoxDecoration(
                         color: Color(0xddb3e5fc),
                         borderRadius: BorderRadius.circular(8),
@@ -274,7 +304,7 @@ class _MainPageState extends State<MainPage> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('Your Bills', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
+                                  Text('Your Bills', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), fontWeight: FontWeight.bold, decoration: TextDecoration.underline),),
                                   TextButton(
                                     onPressed: () {
                                       // display bills
@@ -283,6 +313,34 @@ class _MainPageState extends State<MainPage> {
                                     child: Text('See all', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), decoration: TextDecoration.underline),),
                                   ),
                                 ],
+                              ),
+                              Container(
+                                padding:  EdgeInsets.only(top: 2.0, left: 10.0, right: 10.0, bottom: 5.0),
+                                width: MediaQuery.of(context).size.width,
+                                height: 180,
+                                decoration: BoxDecoration(
+                                    color: Color(0xddb3e5fc),
+                                    borderRadius: BorderRadius.circular(8),
+                                    boxShadow: [ BoxShadow(
+                                        blurRadius: 8,
+                                        offset: Offset(0, 15),
+                                        color: Color(0xffe3e9e7).withOpacity(.5),
+                                        spreadRadius: -9)]
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    //  Text
+                                    Text(
+                                      "${getAllBills[billIndex].name}", style: TextStyle(fontSize: 18, color: Colors.blueAccent.shade700, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                                    ),
+                                    Text("Price: \$${getAllBills[billIndex].price}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                                    Text("Category: ${findCategory(getAllCategories, getAllBills[billIndex].categoryId)}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                                    Text("Start Date: ${getAllBills[billIndex].justStartDate()}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                                    Text("End Date: ${getAllBills[billIndex].justEndDate()}", style: TextStyle(fontSize: 15, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold),),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -315,7 +373,7 @@ class _MainPageState extends State<MainPage> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('Your Extras', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03)),),
+                                  Text('Your Extras', style: TextStyle(fontSize: 20,  color: Color(0xFF2D4B03), fontWeight: FontWeight.bold, decoration: TextDecoration.underline),),
                                   TextButton(
                                     onPressed: () {
                                       // display one-off
@@ -572,11 +630,12 @@ class _MainPageState extends State<MainPage> {
           child: FutureBuilder<int?>(
             future: gotData,
             builder: (context, snapshot) {
-              if (snapshot.hasData && getAllBudgets.length > 0 && getAllExtras.length > 0)
+              if (snapshot.hasData && getAllBudgets.length > 0 && getAllExtras.length > 0 && getAllBills.length > 0)
               {
+                print(snapshot.data);
                 return getWidgetsWithData();
               }
-              else if (snapshot.hasData && getAllBudgets.length == 0 && getAllExtras.length == 0)
+              else if (snapshot.hasData && getAllBudgets.length == 0 && getAllExtras.length == 0 && getAllBills.length == 0)
               {
                 return getWidgetsNoData();
               }

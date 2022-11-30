@@ -73,7 +73,7 @@ function CreateBillPopUp(props) {
     }
 
     function priceChange(e) {
-        props.setPrice(+e.target.value);
+        props.setPrice(e.target.value);
     }
 
     return (

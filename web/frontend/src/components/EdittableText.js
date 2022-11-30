@@ -7,6 +7,10 @@ function EdittableText(props) {
                 props.type === 'number' ? 0 : 'Please Enter A Value';
         }
 
+        if (props.type === 'number') {
+            props.onChange(+e);
+        }
+
         props.onBlur && props.onBlur(e);
     }
 
@@ -23,7 +27,7 @@ function EdittableText(props) {
         span.innerHTML = `${props.value}`.replace(/\s/g, '&nbsp;');
         document.getElementById(props.id).style.width =
             span.offsetWidth + 10 + 'px';
-    });
+    }, []);
 
     return (
         <div className={props.className}>

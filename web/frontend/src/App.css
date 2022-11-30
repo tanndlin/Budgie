@@ -228,6 +228,7 @@ input[type='number'] {
   background-size: 20px;
   background-repeat: no-repeat;
   background-position: center;
+  cursor: pointer;
 }
 
 .invalid {
@@ -236,6 +237,7 @@ input[type='number'] {
   background-size: 20px;
   background-repeat: no-repeat;
   background-position: center;
+  cursor: pointer;
 }
 
 .background-toggle{

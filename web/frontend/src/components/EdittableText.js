@@ -8,7 +8,8 @@ function EdittableText(props) {
         }
 
         if (props.type === 'number') {
-            props.onChange(+e);
+            e.target.value = +e.target.value;
+            props.onChange(e);
         }
 
         props.onBlur && props.onBlur(e);

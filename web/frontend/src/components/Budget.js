@@ -54,6 +54,17 @@ function Budget(props) {
         );
     }
 
+    const pendDelete = () => {
+        props.pushNotification(
+            'Are You Sure?',
+            `Deleting ${budget.name} cannot be undone`,
+            true,
+            () => {
+                props.deleteBudget(budget);
+            }
+        );
+    };
+
     return (
         <div className="grid grid-cols-1 w-[232px] p-4">
             <span className="flex justify-between relative">
@@ -72,7 +83,7 @@ function Budget(props) {
                     className="absolute -top-2 right-0 cursor-pointer text-[24px] font-bold hover:text-red-500"
                     type="button"
                     value="&times;"
-                    onClick={() => props.deleteBudget(budget)}
+                    onClick={pendDelete}
                 />
             </span>
             <span className="w-[200px] h-[200px]">

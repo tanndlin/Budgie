@@ -801,34 +801,15 @@ app.post('/GetCategories', async (req, res) => {
     }
 });
 
-// delete user
-app.post('', (req, res) => {
+// delete user from authentication
+app.post('/DeleteUser', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
 
     try {
-        const _userId = req.body.userId;
-    } catch (error) {
-        res.status(400).send(`${error.message}`);
-    }
-});
+        const userId = req.body.userId;
+        admin.auth().deleteUser(`${userId}`);
 
-// send verification email
-app.post('', (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
-
-    try {
-        const _userId = req.body.userId;
-    } catch (error) {
-        res.status(400).send(`${error.message}`);
-    }
-});
-
-// send authentication email
-app.post('', (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
-
-    try {
-        const _userId = req.body.userId;
+        res.status(201).send('User was deleted');
     } catch (error) {
         res.status(400).send(`${error.message}`);
     }

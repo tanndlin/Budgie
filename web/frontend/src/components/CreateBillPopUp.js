@@ -97,6 +97,17 @@ function CreateBillPopUp(props) {
         props.setPrice(e.target.value);
     }
 
+    const pendDelete = () => {
+        props.pushNotification(
+            'Are You Sure?',
+            `Deleting ${props.name} cannot be undone`,
+            true,
+            () => {
+                props.deleteBill(props.id);
+            }
+        );
+    };
+
     return (
         <section
             className={
@@ -217,7 +228,7 @@ function CreateBillPopUp(props) {
                             id="deleteButton"
                             className="w-40 h-10 bg-[#f13232] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md"
                             value="Delete Bill"
-                            onClick={props.deleteBill}
+                            onClick={pendDelete}
                         />
                     )}
                     {!props.isEdit && <p></p>}

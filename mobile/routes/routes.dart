@@ -3,7 +3,7 @@ import 'package:mobile/screens/LoginPage.dart';
 import 'package:mobile/screens/AddPage.dart';
 import 'package:mobile/screens/DisplayPage.dart';
 import 'package:mobile/screens/AccountManager.dart';
-import 'package:mobile/screens/CalendarView.dart';
+import 'package:mobile/screens/MyCalendarView.dart';
 import 'package:mobile/screens/MainPage.dart';
 
 class Routes {
@@ -23,6 +23,6 @@ class Routes {
     MAINPAGE: (context) => const MainPage(),
     DISPLAYPAGE: (context) => const DisplayPage(),
     ACCOUNTMANAGER: (context) => const AccountManager(),
-    CALENDARVIEW: (context) => const CalendarView(),
+    CALENDARVIEW: (context) => const MyCalendarView(),
   };
 }

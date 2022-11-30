@@ -139,144 +139,146 @@ int selectedIndex = 4;
                   borderRadius: BorderRadius.circular(20.0)),
               child: Container(
                 height: 400,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Edit Profile',
-                        style: TextStyle(
-                            fontSize: 35,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF2D4B03)),
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      Form(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextField(
-                                  controller: _firstName,
-                                  decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 2, color: Color(0xFF2D4B03)),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 2, color: Color(0xFF000000)),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      labelText: 'First Name',
-                                      hintText: 'First Name'),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextField(
-                                  controller: _lastName,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 2, color: Color(0xFF2D4B03)),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 2, color: Color(0xFF000000)),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      labelText: 'Last Name',
-                                      hintText: 'Last Name'),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextField(
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
-                                  controller: _expectedIncome,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 2, color: Color(0xFF2D4B03)),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 2, color: Color(0xFF000000)),
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      labelText: 'Expected Income',
-                                      hintText: 'Expected Income'),
-                                ),
-                              ),
-                            ],
-                          )),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        height: 50,
-                        width: 320,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF020100),
-                          border: Border.all(
-                              width: 2, color: const Color(0xFF2D4B03)),
-                          borderRadius: BorderRadius.circular(10),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Edit Profile',
+                          style: TextStyle(
+                              fontSize: 35,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF2D4B03)),
                         ),
-                        child: TextButton(
-                          style: ButtonStyle(
-                            foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.black),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Form(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextField(
+                                    controller: _firstName,
+                                    decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              width: 2, color: Color(0xFF2D4B03)),
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              width: 2, color: Color(0xFF000000)),
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                        labelText: 'First Name',
+                                        hintText: 'First Name'),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextField(
+                                    controller: _lastName,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              width: 2, color: Color(0xFF2D4B03)),
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              width: 2, color: Color(0xFF000000)),
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                        labelText: 'Last Name',
+                                        hintText: 'Last Name'),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextField(
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    controller: _expectedIncome,
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              width: 2, color: Color(0xFF2D4B03)),
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                              width: 2, color: Color(0xFF000000)),
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                        labelText: 'Expected Income',
+                                        hintText: 'Expected Income'),
+                                  ),
+                                ),
+                              ],
+                            )),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 50,
+                          width: 320,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF020100),
+                            border: Border.all(
+                                width: 2, color: const Color(0xFF2D4B03)),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          onPressed: () async {
+                          child: TextButton(
+                            style: ButtonStyle(
+                              foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.black),
+                            ),
+                            onPressed: () async {
 
-                            var editedProfile = CreateProfile(
-                                userId: global.userId,
-                                firstName: _firstName.text,
-                                lastName: _lastName.text,
-                                expectedIncome: int.parse(_expectedIncome.text));
+                              var editedProfile = CreateProfile(
+                                  userId: global.userId,
+                                  firstName: _firstName.text,
+                                  lastName: _lastName.text,
+                                  expectedIncome: int.parse(_expectedIncome.text));
 
-                            var response_3 = await BaseClient().editProfile(editedProfile).catchError((err) {
-                              print("Profile not created!");
-                            });
+                              var response_3 = await BaseClient().editProfile(editedProfile).catchError((err) {
+                                print("Profile not created!");
+                              });
 
-                            // On Pressed it should just edit profile depending on what's in here
-                            setState(() {
+                              // On Pressed it should just edit profile depending on what's in here
+                              setState(() {
+                                initials = _firstName.text[0] + _lastName.text[0];
+                                firstName = _firstName.text;
+                                lastName = _lastName.text;
+                                expectedIncome = int.parse(_expectedIncome.text);
+                              });
                               initials = _firstName.text[0] + _lastName.text[0];
                               firstName = _firstName.text;
                               lastName = _lastName.text;
                               expectedIncome = int.parse(_expectedIncome.text);
-                            });
-                            initials = _firstName.text[0] + _lastName.text[0];
-                            firstName = _firstName.text;
-                            lastName = _lastName.text;
-                            expectedIncome = int.parse(_expectedIncome.text);
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text(
-                            'Finish',
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Color(0xFFE3E9E7),
-                                fontWeight: FontWeight.bold),
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text(
+                              'Finish',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color(0xFFE3E9E7),
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -299,121 +299,22 @@ class _DisplayPageState extends State<DisplayPage> {
                   borderRadius: BorderRadius.circular(20.0)),
               child: Container(
                 height: 400,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox( height: 10.0,),
-                      const Text('Edit Budget', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
-                      const SizedBox( height: 10.0,),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: TextField(
-                          controller: budgetName,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: 0),
-                              focusColor: const Color(0xFF2D4B03),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              prefixIcon: const Icon(Icons.list_alt_rounded),
-                              labelText: 'Budget Name',
-                              hintText: 'Name'),
-                        ),
-                      ),
-                      Padding(
-                        // padding: const EdgeInsets.only(
-                        //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: TextField(
-                          controller: budgetActual,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: 0),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              prefixIcon: Icon(Icons.currency_exchange_outlined) ,
-                              labelText: 'Spent Amount',
-                              hintText: 'Spent'),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: TextField(
-                          controller: budgetExpected,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: 0),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              prefixIcon: Icon(Icons.currency_exchange_outlined) ,
-                              labelText: 'Total Amount',
-                              hintText: 'Total'),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: TextField(
-                          controller: budgetStart,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: 0),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              prefixIcon: Icon(Icons.calendar_month) ,
-                              labelText: 'Start Date',
-                              hintText: 'Start'),
-                          readOnly: true,
-                          onTap: () async {
-                            DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.parse(budgetStart.text),
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime(2222)
-                            );
-                            if (pickedDate != null)
-                              {
-                                String formatDate = DateFormat("MM-dd-yyyy").format(pickedDate);
-                                setState(() {
-                                  budgetStart.text = formatDate;
-                                });
-                              }
-                            },
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.symmetric(vertical: 4)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            width: 260.0,
-                            height: 52,
-                            child: DropdownButtonFormField(
-                              // alignment: Alignment.center,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox( height: 10.0,),
+                        const Text('Edit Budget', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                        const SizedBox( height: 10.0,),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: TextField(
+                            controller: budgetName,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(vertical: 0),
                                 focusColor: const Color(0xFF2D4B03),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
@@ -423,90 +324,191 @@ class _DisplayPageState extends State<DisplayPage> {
                                   borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
                                   borderRadius: BorderRadius.circular(50.0),
                                 ),
-                                prefixIcon: Icon(Icons.list),
-                              ),
-                              isDense: false,
-                              // isExpanded: true,
-                              iconSize: 24,
-                              hint: Text('Choose Category'),
-                              borderRadius: BorderRadius.circular(8),
-                              dropdownColor: Color(0xFFE3E9E7),
-                              style: TextStyle(color: Color(0xFF000000), fontSize: 16),
-                              items: getAllCategories.map((item) {
-                                return DropdownMenuItem<MyCategory>(
-                                  child: Text(item.name),
-                                  value: item,
-                                );
-                              }).toList(),
-                              onChanged: (newVal) {
-                                if (newVal != null)
+                                prefixIcon: const Icon(Icons.list_alt_rounded),
+                                labelText: 'Budget Name',
+                                hintText: 'Name'),
+                          ),
+                        ),
+                        Padding(
+                          // padding: const EdgeInsets.only(
+                          //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: TextField(
+                            controller: budgetActual,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                prefixIcon: Icon(Icons.currency_exchange_outlined) ,
+                                labelText: 'Spent Amount',
+                                hintText: 'Spent'),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: TextField(
+                            controller: budgetExpected,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                prefixIcon: Icon(Icons.currency_exchange_outlined) ,
+                                labelText: 'Total Amount',
+                                hintText: 'Total'),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: TextField(
+                            controller: budgetStart,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                prefixIcon: Icon(Icons.calendar_month) ,
+                                labelText: 'Start Date',
+                                hintText: 'Start'),
+                            readOnly: true,
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.parse(budgetStart.text),
+                                  firstDate: DateTime(1900),
+                                  lastDate: DateTime(2222)
+                              );
+                              if (pickedDate != null)
                                 {
+                                  String formatDate = DateFormat("MM-dd-yyyy").format(pickedDate);
                                   setState(() {
-                                    categoryValue = newVal as MyCategory?;
+                                    budgetStart.text = formatDate;
                                   });
                                 }
-                                print(categoryValue?.name);
                               },
-                              value: categoryValue,
-                            ),
                           ),
-                        ],
-                      ),
-                      const SizedBox( height: 8.0,),
-                      Container(
-                        alignment: Alignment.center,
-                        height: 40,
-                        width: 320,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF020100), border: Border.all(width: 2, color: const Color(0xFF2D4B03)), borderRadius: BorderRadius.circular(10),
                         ),
-                        child: TextButton(
-                          style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                        Padding(padding: EdgeInsets.symmetric(vertical: 4)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              width: 260.0,
+                              height: 52,
+                              child: DropdownButtonFormField(
+                                // alignment: Alignment.center,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+                                  focusColor: const Color(0xFF2D4B03),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(width: 2, color: Color(0xFF2D4B03)),
+                                    borderRadius: BorderRadius.circular(50.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(width: 2, color: Color(0xFF000000)),
+                                    borderRadius: BorderRadius.circular(50.0),
+                                  ),
+                                  prefixIcon: Icon(Icons.list),
+                                ),
+                                isDense: false,
+                                // isExpanded: true,
+                                iconSize: 24,
+                                hint: Text('Choose Category'),
+                                borderRadius: BorderRadius.circular(8),
+                                dropdownColor: Color(0xFFE3E9E7),
+                                style: TextStyle(color: Color(0xFF000000), fontSize: 16),
+                                items: getAllCategories.map((item) {
+                                  return DropdownMenuItem<MyCategory>(
+                                    child: Text(item.name),
+                                    value: item,
+                                  );
+                                }).toList(),
+                                onChanged: (newVal) {
+                                  if (newVal != null)
+                                  {
+                                    setState(() {
+                                      categoryValue = newVal as MyCategory?;
+                                    });
+                                  }
+                                  print(categoryValue?.name);
+                                },
+                                value: categoryValue,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox( height: 8.0,),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 40,
+                          width: 320,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF020100), border: Border.all(width: 2, color: const Color(0xFF2D4B03)), borderRadius: BorderRadius.circular(10),
                           ),
-                          onPressed: () async {
-                            //  Add category
-                            id = global.userId;
-                            print(id);
-                            if (budgetName.text == "" || budgetActual.text == "" || budgetExpected.text == "")
-                            {
-                              _showToast("Fill fields", true);
-                            }
-                            else
-                            {
-                              var budget = Budget(
-                                userId: id,
-                                id: getAllBudgets[index].id,
-                                name: budgetName.text,
-                                actualPrice: num.parse(budgetActual.text),
-                                expectedPrice: num.parse(budgetExpected.text),
-                                categoryId: categoryValue?.id,
-                                startDate: budgetStart.text,
-                              );
-                              print("EDIT:::::");
-                              print(budgetToJsonEdit(budget));
-                              var response = await BaseClient().editBudget(budget).catchError((err) {print("Fail");});
-                              if (response == null) {
-                                _showToast("Could not edit budget", true);
-                                print("response null");
+                          child: TextButton(
+                            style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                            ),
+                            onPressed: () async {
+                              //  Add category
+                              id = global.userId;
+                              print(id);
+                              if (budgetName.text == "" || budgetActual.text == "" || budgetExpected.text == "")
+                              {
+                                _showToast("Fill fields", true);
+                              }
+                              else
+                              {
+                                var budget = Budget(
+                                  userId: id,
+                                  id: getAllBudgets[index].id,
+                                  name: budgetName.text,
+                                  actualPrice: num.parse(budgetActual.text),
+                                  expectedPrice: num.parse(budgetExpected.text),
+                                  categoryId: categoryValue?.id,
+                                  startDate: budgetStart.text,
+                                );
+                                print("EDIT:::::");
+                                print(budgetToJsonEdit(budget));
+                                var response = await BaseClient().editBudget(budget).catchError((err) {print("Fail");});
+                                if (response == null) {
+                                  _showToast("Could not edit budget", true);
+                                  print("response null");
+                                }
+
+                                _showToast("Edited", false);
+                                print("success");
                               }
 
-                              _showToast("Edited", false);
-                              print("success");
-                            }
-
-                            getAllCat();
-                            getAllBud();
-                            Navigator.pop(context, true);
-                          },
-                          child: const Text(
-                            'Edit',
-                            style: TextStyle(fontSize: 20, color: Color(0xFFE3E9E7), fontWeight: FontWeight.bold),
+                              getAllCat();
+                              getAllBud();
+                              Navigator.pop(context, true);
+                            },
+                            child: const Text(
+                              'Edit',
+                              style: TextStyle(fontSize: 20, color: Color(0xFFE3E9E7), fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox( height: 10.0,),
-                    ],
+                        const SizedBox( height: 10.0,),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -617,112 +619,24 @@ class _DisplayPageState extends State<DisplayPage> {
                   borderRadius: BorderRadius.circular(20.0)),
               child: Container(
                 height: 400,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 10.0,),
-                      const Text('Edit Extra', style: TextStyle(fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF2D4B03)),),
-                      const SizedBox(height: 10.0,),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: TextField(
-                          controller: extraName,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: 0),
-                              focusColor: const Color(0xFF2D4B03),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    width: 2, color: Color(0xFF2D4B03)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    width: 2, color: Color(0xFF000000)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              prefixIcon: const Icon(Icons.list_alt_rounded),
-                              labelText: 'Extra Name',
-                              hintText: 'Name'),
-                        ),
-                      ),
-                      Padding(
-                        // padding: const EdgeInsets.only(
-                        //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: TextField(
-                          controller: extraPrice,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: 0),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    width: 2, color: Color(0xFF2D4B03)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    width: 2, color: Color(0xFF000000)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              prefixIcon: Icon(
-                                  Icons.currency_exchange_outlined),
-                              labelText: 'Price Amount',
-                              hintText: 'Price'),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: TextField(
-                          controller: extraDate,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: 0),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    width: 2, color: Color(0xFF2D4B03)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    width: 2, color: Color(0xFF000000)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              prefixIcon: Icon(Icons.calendar_month),
-                              labelText: 'Date',
-                              hintText: 'Date'),
-                          readOnly: true,
-                          onTap: () async {
-                            DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.parse(extraDate.text),
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime(2222)
-                            );
-                            if (pickedDate != null) {
-                              String formatDate = DateFormat("MM-dd-yyyy")
-                                  .format(pickedDate);
-                              setState(() {
-                                extraDate.text = formatDate;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.symmetric(vertical: 4)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            width: 260.0,
-                            height: 52,
-                            child: DropdownButtonFormField(
-                              // alignment: Alignment.center,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 4),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10.0,),
+                        const Text('Edit Extra', style: TextStyle(fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF2D4B03)),),
+                        const SizedBox(height: 10.0,),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: TextField(
+                            controller: extraName,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(vertical: 0),
                                 focusColor: const Color(0xFF2D4B03),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(
@@ -734,97 +648,187 @@ class _DisplayPageState extends State<DisplayPage> {
                                       width: 2, color: Color(0xFF000000)),
                                   borderRadius: BorderRadius.circular(50.0),
                                 ),
-                                prefixIcon: Icon(Icons.list),
-                              ),
-                              isDense: false,
-                              // isExpanded: true,
-                              iconSize: 24,
-                              hint: Text('Choose Category'),
-                              borderRadius: BorderRadius.circular(8),
-                              dropdownColor: Color(0xFFE3E9E7),
-                              style: TextStyle(
-                                  color: Color(0xFF000000), fontSize: 16),
-                              items: getAllCategories.map((item) {
-                                return DropdownMenuItem<MyCategory>(
-                                  child: Text(item.name),
-                                  value: item,
-                                );
-                              }).toList(),
-                              onChanged: (newVal) {
-                                if (newVal != null) {
-                                  setState(() {
-                                    categoryValue = newVal as MyCategory?;
-                                  });
-                                }
-                                print(categoryValue?.name);
-                              },
-                              value: categoryValue,
-                            ),
+                                prefixIcon: const Icon(Icons.list_alt_rounded),
+                                labelText: 'Extra Name',
+                                hintText: 'Name'),
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 8.0,),
-                      Container(
-                        alignment: Alignment.center,
-                        height: 40,
-                        width: 320,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF020100),
-                          border: Border.all(width: 2, color: const Color(
-                              0xFF2D4B03)),
-                          borderRadius: BorderRadius.circular(10),
                         ),
-                        child: TextButton(
-                          style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all<Color>(
-                                Colors.black),
+                        Padding(
+                          // padding: const EdgeInsets.only(
+                          //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: TextField(
+                            controller: extraPrice,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 2, color: Color(0xFF2D4B03)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 2, color: Color(0xFF000000)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                prefixIcon: Icon(
+                                    Icons.currency_exchange_outlined),
+                                labelText: 'Price Amount',
+                                hintText: 'Price'),
                           ),
-                          onPressed: () async {
-                            //  Add category
-                            id = global.userId;
-                            print(id);
-                            if (extraDate.text == "" ||
-                                extraName.text == "" ||
-                                extraPrice.text == "") {
-                              _showToast("Fill fields", true);
-                            }
-                            else {
-                              var extra = MyExtra(
-                                userId: id,
-                                id: getAllExtras[index].id,
-                                name: extraName.text,
-                                price: num.parse(extraPrice.text),
-                                categoryId: categoryValue?.id,
-                                date: extraDate.text,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: TextField(
+                            controller: extraDate,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 2, color: Color(0xFF2D4B03)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 2, color: Color(0xFF000000)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                prefixIcon: Icon(Icons.calendar_month),
+                                labelText: 'Date',
+                                hintText: 'Date'),
+                            readOnly: true,
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.parse(extraDate.text),
+                                  firstDate: DateTime(1900),
+                                  lastDate: DateTime(2222)
                               );
-                              print("EDIT:::::");
-                              print(myExtraToJson(extra));
-                              var response = await BaseClient().editExtra(extra).catchError((err) {
-                                print("Fail");
-                              });
-                              if (response == null) {
-                                _showToast("Could not edit extra", true);
-                                print("response null");
+                              if (pickedDate != null) {
+                                String formatDate = DateFormat("MM-dd-yyyy")
+                                    .format(pickedDate);
+                                setState(() {
+                                  extraDate.text = formatDate;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.symmetric(vertical: 4)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              width: 260.0,
+                              height: 52,
+                              child: DropdownButtonFormField(
+                                // alignment: Alignment.center,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 0, horizontal: 4),
+                                  focusColor: const Color(0xFF2D4B03),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        width: 2, color: Color(0xFF2D4B03)),
+                                    borderRadius: BorderRadius.circular(50.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        width: 2, color: Color(0xFF000000)),
+                                    borderRadius: BorderRadius.circular(50.0),
+                                  ),
+                                  prefixIcon: Icon(Icons.list),
+                                ),
+                                isDense: false,
+                                // isExpanded: true,
+                                iconSize: 24,
+                                hint: Text('Choose Category'),
+                                borderRadius: BorderRadius.circular(8),
+                                dropdownColor: Color(0xFFE3E9E7),
+                                style: TextStyle(
+                                    color: Color(0xFF000000), fontSize: 16),
+                                items: getAllCategories.map((item) {
+                                  return DropdownMenuItem<MyCategory>(
+                                    child: Text(item.name),
+                                    value: item,
+                                  );
+                                }).toList(),
+                                onChanged: (newVal) {
+                                  if (newVal != null) {
+                                    setState(() {
+                                      categoryValue = newVal as MyCategory?;
+                                    });
+                                  }
+                                  print(categoryValue?.name);
+                                },
+                                value: categoryValue,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8.0,),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 40,
+                          width: 320,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF020100),
+                            border: Border.all(width: 2, color: const Color(
+                                0xFF2D4B03)),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextButton(
+                            style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.black),
+                            ),
+                            onPressed: () async {
+                              //  Add category
+                              id = global.userId;
+                              print(id);
+                              if (extraDate.text == "" ||
+                                  extraName.text == "" ||
+                                  extraPrice.text == "") {
+                                _showToast("Fill fields", true);
+                              }
+                              else {
+                                var extra = MyExtra(
+                                  userId: id,
+                                  id: getAllExtras[index].id,
+                                  name: extraName.text,
+                                  price: num.parse(extraPrice.text),
+                                  categoryId: categoryValue?.id,
+                                  date: extraDate.text,
+                                );
+                                print("EDIT:::::");
+                                print(myExtraToJson(extra));
+                                var response = await BaseClient().editExtra(extra).catchError((err) {
+                                  print("Fail");
+                                });
+                                if (response == null) {
+                                  _showToast("Could not edit extra", true);
+                                  print("response null");
+                                }
+
+                                _showToast("Edited", false);
+                                print("success");
                               }
 
-                              _showToast("Edited", false);
-                              print("success");
-                            }
-
-                            getAllCat();
-                            getAllExt();
-                            Navigator.pop(context, true);
-                          },
-                          child: const Text(
-                            'Edit',
-                            style: TextStyle(fontSize: 20,
-                                color: Color(0xFFE3E9E7),
-                                fontWeight: FontWeight.bold),
+                              getAllCat();
+                              getAllExt();
+                              Navigator.pop(context, true);
+                            },
+                            child: const Text(
+                              'Edit',
+                              style: TextStyle(fontSize: 20,
+                                  color: Color(0xFFE3E9E7),
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10.0,),
-                    ],
+                        const SizedBox(height: 10.0,),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -936,149 +940,24 @@ class _DisplayPageState extends State<DisplayPage> {
                   borderRadius: BorderRadius.circular(20.0)),
               child: Container(
                 height: 400,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 10.0,),
-                      const Text('Edit Bill', style: TextStyle(fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF2D4B03)),),
-                      const SizedBox(height: 10.0,),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: TextField(
-                          controller: billName,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: 0),
-                              focusColor: const Color(0xFF2D4B03),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    width: 2, color: Color(0xFF2D4B03)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    width: 2, color: Color(0xFF000000)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              prefixIcon: const Icon(Icons.list_alt_rounded),
-                              labelText: 'Extra Name',
-                              hintText: 'Name'),
-                        ),
-                      ),
-                      Padding(
-                        // padding: const EdgeInsets.only(
-                        //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: TextField(
-                          controller: extraPrice,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: 0),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    width: 2, color: Color(0xFF2D4B03)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    width: 2, color: Color(0xFF000000)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              prefixIcon: Icon(
-                                  Icons.currency_exchange_outlined),
-                              labelText: 'Price Amount',
-                              hintText: 'Price'),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: TextField(
-                          controller: _billDateStart,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: 0),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    width: 2, color: Color(0xFF2D4B03)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    width: 2, color: Color(0xFF000000)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              prefixIcon: Icon(Icons.calendar_month),
-                              labelText: 'Start Date',
-                              hintText: 'Start'),
-                          readOnly: true,
-                          onTap: () async {
-                            DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.parse(_billDateStart.text),
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime(2222)
-                            );
-                            if (pickedDate != null) {
-                              String formatDate = DateFormat("MM-dd-yyyy")
-                                  .format(pickedDate);
-                              setState(() {
-                                _billDateStart.text = formatDate;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: TextField(
-                          controller: _billDateEnd,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(vertical: 0),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    width: 2, color: Color(0xFF2D4B03)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    width: 2, color: Color(0xFF000000)),
-                                borderRadius: BorderRadius.circular(50.0),
-                              ),
-                              prefixIcon: Icon(Icons.calendar_month),
-                              labelText: 'End Date',
-                              hintText: 'End'),
-                          readOnly: true,
-                          onTap: () async {
-                            DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.parse(_billDateEnd.text),
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime(2222)
-                            );
-                            if (pickedDate != null) {
-                              String formatDate = DateFormat("MM-dd-yyyy")
-                                  .format(pickedDate);
-                              setState(() {
-                                _billDateEnd.text = formatDate;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.symmetric(vertical: 4)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            width: 260.0,
-                            height: 52,
-                            child: DropdownButtonFormField(
-                              // alignment: Alignment.center,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 4),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10.0,),
+                        const Text('Edit Bill', style: TextStyle(fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF2D4B03)),),
+                        const SizedBox(height: 10.0,),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: TextField(
+                            controller: billName,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(vertical: 0),
                                 focusColor: const Color(0xFF2D4B03),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(
@@ -1090,94 +969,221 @@ class _DisplayPageState extends State<DisplayPage> {
                                       width: 2, color: Color(0xFF000000)),
                                   borderRadius: BorderRadius.circular(50.0),
                                 ),
-                                prefixIcon: Icon(Icons.list),
-                              ),
-                              isDense: false,
-                              // isExpanded: true,
-                              iconSize: 24,
-                              hint: Text('Choose Category'),
-                              borderRadius: BorderRadius.circular(8),
-                              dropdownColor: Color(0xFFE3E9E7),
-                              style: TextStyle(
-                                  color: Color(0xFF000000), fontSize: 16),
-                              items: getAllCategories.map((item) {
-                                return DropdownMenuItem<MyCategory>(
-                                  child: Text(item.name),
-                                  value: item,
-                                );
-                              }).toList(),
-                              onChanged: (newVal) {
-                                if (newVal != null) {
-                                  setState(() {
-                                    categoryValue = newVal as MyCategory?;
-                                  });
-                                }
-                                print(categoryValue?.name);
-                              },
-                              value: categoryValue,
-                            ),
+                                prefixIcon: const Icon(Icons.list_alt_rounded),
+                                labelText: 'Extra Name',
+                                hintText: 'Name'),
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 8.0,),
-                      Container(
-                        alignment: Alignment.center,
-                        height: 40,
-                        width: 320,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF020100),
-                          border: Border.all(width: 2, color: const Color(
-                              0xFF2D4B03)),
-                          borderRadius: BorderRadius.circular(10),
                         ),
-                        child: TextButton(
-                          style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all<Color>(
-                                Colors.black),
+                        Padding(
+                          // padding: const EdgeInsets.only(
+                          //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: TextField(
+                            controller: extraPrice,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 2, color: Color(0xFF2D4B03)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 2, color: Color(0xFF000000)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                prefixIcon: Icon(
+                                    Icons.currency_exchange_outlined),
+                                labelText: 'Price Amount',
+                                hintText: 'Price'),
                           ),
-                          onPressed: () async {
-                            //  Add category
-                            id = global.userId;
-                            print(id);
-                            if (billName.text == "" || billPrice.text == "" || _billDateStart.text == "" || _billDateEnd.text == "") {
-                              _showToast("Fill fields", true);
-                            }
-                            else {
-                              var bill = Bill(
-                                id: getAllBills[index].id,
-                                userId: id,
-                                name: billName.text,
-                                price: num.parse(billPrice.text),
-                                startDate: _billDateStart.text,
-                                endDate: _billDateEnd.text,
-                                color: "#ffffff",
-                                categoryId: categoryValue?.id,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: TextField(
+                            controller: _billDateStart,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 2, color: Color(0xFF2D4B03)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 2, color: Color(0xFF000000)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                prefixIcon: Icon(Icons.calendar_month),
+                                labelText: 'Start Date',
+                                hintText: 'Start'),
+                            readOnly: true,
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.parse(_billDateStart.text),
+                                  firstDate: DateTime(1900),
+                                  lastDate: DateTime(2222)
                               );
-                              print(billToJsonEdit(bill));
-                              var response = await BaseClient().editBill(bill).catchError((err) {print("Fail");});
-                              if (response == null) {
-                                _showToast("Could not edit", true);
-                                print("response null");
+                              if (pickedDate != null) {
+                                String formatDate = DateFormat("MM-dd-yyyy")
+                                    .format(pickedDate);
+                                setState(() {
+                                  _billDateStart.text = formatDate;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: TextField(
+                            controller: _billDateEnd,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(vertical: 0),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 2, color: Color(0xFF2D4B03)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 2, color: Color(0xFF000000)),
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                prefixIcon: Icon(Icons.calendar_month),
+                                labelText: 'End Date',
+                                hintText: 'End'),
+                            readOnly: true,
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.parse(_billDateEnd.text),
+                                  firstDate: DateTime(1900),
+                                  lastDate: DateTime(2222)
+                              );
+                              if (pickedDate != null) {
+                                String formatDate = DateFormat("MM-dd-yyyy")
+                                    .format(pickedDate);
+                                setState(() {
+                                  _billDateEnd.text = formatDate;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.symmetric(vertical: 4)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              width: 260.0,
+                              height: 52,
+                              child: DropdownButtonFormField(
+                                // alignment: Alignment.center,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 0, horizontal: 4),
+                                  focusColor: const Color(0xFF2D4B03),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        width: 2, color: Color(0xFF2D4B03)),
+                                    borderRadius: BorderRadius.circular(50.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        width: 2, color: Color(0xFF000000)),
+                                    borderRadius: BorderRadius.circular(50.0),
+                                  ),
+                                  prefixIcon: Icon(Icons.list),
+                                ),
+                                isDense: false,
+                                // isExpanded: true,
+                                iconSize: 24,
+                                hint: Text('Choose Category'),
+                                borderRadius: BorderRadius.circular(8),
+                                dropdownColor: Color(0xFFE3E9E7),
+                                style: TextStyle(
+                                    color: Color(0xFF000000), fontSize: 16),
+                                items: getAllCategories.map((item) {
+                                  return DropdownMenuItem<MyCategory>(
+                                    child: Text(item.name),
+                                    value: item,
+                                  );
+                                }).toList(),
+                                onChanged: (newVal) {
+                                  if (newVal != null) {
+                                    setState(() {
+                                      categoryValue = newVal as MyCategory?;
+                                    });
+                                  }
+                                  print(categoryValue?.name);
+                                },
+                                value: categoryValue,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8.0,),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 40,
+                          width: 320,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF020100),
+                            border: Border.all(width: 2, color: const Color(
+                                0xFF2D4B03)),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextButton(
+                            style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.black),
+                            ),
+                            onPressed: () async {
+                              //  Add category
+                              id = global.userId;
+                              print(id);
+                              if (billName.text == "" || billPrice.text == "" || _billDateStart.text == "" || _billDateEnd.text == "") {
+                                _showToast("Fill fields", true);
+                              }
+                              else {
+                                var bill = Bill(
+                                  id: getAllBills[index].id,
+                                  userId: id,
+                                  name: billName.text,
+                                  price: num.parse(billPrice.text),
+                                  startDate: _billDateStart.text,
+                                  endDate: _billDateEnd.text,
+                                  color: "#ffffff",
+                                  categoryId: categoryValue?.id,
+                                );
+                                print(billToJsonEdit(bill));
+                                var response = await BaseClient().editBill(bill).catchError((err) {print("Fail");});
+                                if (response == null) {
+                                  _showToast("Could not edit", true);
+                                  print("response null");
+                                }
+
+                                _showToast("Edited", false);
+                                print("success");
                               }
 
-                              _showToast("Edited", false);
-                              print("success");
-                            }
-
-                            getAllCat();
-                            getAllBill();
-                            Navigator.pop(context, true);
-                          },
-                          child: const Text(
-                            'Edit',
-                            style: TextStyle(fontSize: 20,
-                                color: Color(0xFFE3E9E7),
-                                fontWeight: FontWeight.bold),
+                              getAllCat();
+                              getAllBill();
+                              Navigator.pop(context, true);
+                            },
+                            child: const Text(
+                              'Edit',
+                              style: TextStyle(fontSize: 20,
+                                  color: Color(0xFFE3E9E7),
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10.0,),
-                    ],
+                        const SizedBox(height: 10.0,),
+                      ],
+                    ),
                   ),
                 ),
               ),

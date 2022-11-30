@@ -272,16 +272,16 @@ class _LoginPageState extends State<LoginPage> {
                                 foregroundColor: MaterialStateProperty.all<Color>(
                                     Colors.black),
                               ),
-                              onPressed: () {
-                                // sign up btn
-                                _register(_controllerEmail_Reg.text, _controllerPass_Reg.text, _controllerPass_Confirm.text);
-                              },
-                              child: const Text(
-                                'Sign Up',
-                                style: TextStyle(fontSize: 20,
-                                    color: Color(0xFFE3E9E7),
-                                    fontWeight: FontWeight.bold),
-                              ),
+                            onPressed: () {
+                              // sign up btn
+                              _register(_controllerEmail_Reg.text, _controllerPass_Reg.text, _controllerPass_Confirm.text);
+                            },
+                            child: const Text(
+                              'Sign Up',
+                              style: TextStyle(fontSize: 20,
+                                  color: Color(0xFFE3E9E7),
+                                  fontWeight: FontWeight.bold),
+
                             ),
                           ),
                         ],

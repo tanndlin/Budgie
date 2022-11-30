@@ -48,6 +48,7 @@ class Bill {
   String startDate;
   String endDate;
   String? id;
+
   // create instance of empty list
   List<dynamic>? isPaid;
 

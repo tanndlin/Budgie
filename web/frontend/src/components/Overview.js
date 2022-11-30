@@ -3,25 +3,25 @@ import React from 'react';
 function Overview(props) {
     const sumOfBills = () => {
         return props.bills.reduce((acc, bill) => {
-            return acc + bill.price;
+            return acc + +bill.price;
         }, 0);
     };
 
     const sumOfActual = () => {
         return props.budgets.reduce((acc, budget) => {
-            return acc + budget.actualPrice;
+            return acc + +budget.actualPrice;
         }, 0);
     };
 
     const sumOfExpected = () => {
         return props.budgets.reduce((acc, budget) => {
-            return acc + budget.expectedPrice;
+            return acc + +budget.expectedPrice;
         }, 0);
     };
 
     const sumOfOneOffs = () => {
         return props.extras.reduce((acc, oneOff) => {
-            return acc + oneOff.price;
+            return acc + +oneOff.price;
         }, 0);
     };
 

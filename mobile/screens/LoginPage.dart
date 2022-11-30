@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
     msg: result, fontSize: 18, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) :  Colors.green.withOpacity(.9), textColor: Colors.white,);
 
   _register(String userEmail, String userPassword, String confirmPassword) async {
-    if (userPassword == confirmPassword && userPassword.length >= 8){
+    if (userPassword == confirmPassword && userPassword.length >= 6){
       // Passwords match
       try{
         UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(

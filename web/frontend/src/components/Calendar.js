@@ -94,8 +94,7 @@ export function BigCalendar(props) {
         createEdit(bill);
     }
 
-    function deleteBill() {
-        const id = currentBill.id;
+    function deleteBill(id) {
         sendRequest(
             'RemoveBill',
             { id: id, userId: props.user.userId },

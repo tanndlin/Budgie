@@ -36,14 +36,12 @@ const baseURL =
 chai.use(chaiHttp);
 chai.should();
 
-describe('/CreateUserProfile', () => {
+describe('POST /CreateUserProfile', () => {
     const CreateUserProfileReq = {
-        body: {
-            userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
-            firstName: 'sabrina',
-            lastName: 'lopez',
-            expectedIncome: 123456
-        }
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        firstName: 'sabrina',
+        lastName: 'lopez',
+        expectedIncome: 123456
     };
 
     beforeAll(async () => {
@@ -63,11 +61,11 @@ describe('/CreateUserProfile', () => {
             .post('/CreateUserProfile')
             .send(CreateUserProfileReq);
 
-        assert.equal(res.body, {
-            userId: CreateUserProfileReq.body.userId,
-            firstName: CreateUserProfileReq.body.firstName,
-            lastName: CreateUserProfileReq.body.lastName,
-            expectedIncome: CreateUserProfileReq.body.expectedIncome
+        assert.equal(res, {
+            userId: CreateUserProfileReq.userId,
+            firstName: CreateUserProfileReq.firstName,
+            lastName: CreateUserProfileReq.lastName,
+            expectedIncome: CreateUserProfileReq.expectedIncome
         });
         assert.equal(res.error, null);
         assert.equal(res.statusCode, 201);
@@ -76,18 +74,24 @@ describe('/CreateUserProfile', () => {
     it('should return the newly added profile info that is in the database', async () => {
         assert.equal(
             // eslint-disable-next-line prettier/prettier
-            userCollectionRef.doc(`${CreateUserProfileReq.body.userId}`).get('firstName'),
-            CreateUserProfileReq.body.firstName
+            userCollectionRef
+                .doc(`${CreateUserProfileReq.userId}`)
+                .get('firstName'),
+            CreateUserProfileReq.firstName
         );
         assert.equal(
             // eslint-disable-next-line prettier/prettier
-            userCollectionRef.doc(`${CreateUserProfileReq.body.userId}`).get('lastName'),
-            CreateUserProfileReq.body.lastName
+            userCollectionRef
+                .doc(`${CreateUserProfileReq.userId}`)
+                .get('lastName'),
+            CreateUserProfileReq.lastName
         );
         assert.equal(
             // eslint-disable-next-line prettier/prettier
-            userCollectionRef.doc(`${CreateUserProfileReq.body.userId}`).get('expectedIncome'),
-            CreateUserProfileReq.body.expectedIncome
+            userCollectionRef
+                .doc(`${CreateUserProfileReq.userId}`)
+                .get('expectedIncome'),
+            CreateUserProfileReq.expectedIncome
         );
     });
 });

@@ -112,6 +112,7 @@ function BudgetsView(props) {
                             setBudgets={props.setBudgets}
                             categories={props.categories}
                             deleteBudget={deleteBudget}
+                            pushNotification={props.pushNotification}
                         />
                     ))}
             </section>

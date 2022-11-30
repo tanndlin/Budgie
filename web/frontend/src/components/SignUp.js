@@ -79,7 +79,9 @@ function SignUp(props) {
                         value={confirmPassword}
                         type="password"
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        validator={(val) => val === password}
+                        validator={(val) =>
+                            val === password && verifyPassword(val)
+                        }
                     />
 
                     <input

@@ -64,6 +64,7 @@ function SignUp(props) {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         validator={verifyEmail}
+                        tooltip="Please enter a valid email"
                     />
 
                     <VerifiedInput
@@ -72,6 +73,7 @@ function SignUp(props) {
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}
                         validator={verifyPassword}
+                        tooltip="Password must be at least 6 characters long"
                     />
 
                     <VerifiedInput
@@ -82,6 +84,7 @@ function SignUp(props) {
                         validator={(val) =>
                             val === password && verifyPassword(val)
                         }
+                        tooltip="Both passwords must match"
                     />
 
                     <input

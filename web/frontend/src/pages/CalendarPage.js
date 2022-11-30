@@ -142,6 +142,7 @@ function CalendarPage(props) {
                         categories={props.categories}
                         categorySortID={categorySortID}
                         opacity={opacity()}
+                        pushNotification={props.pushNotification}
                     />
                 </div>
             </div>

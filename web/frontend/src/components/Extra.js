@@ -21,6 +21,17 @@ function Extra(props) {
         );
     }
 
+    const pendDelete = () => {
+        props.pushNotification(
+            'Are You Sure?',
+            `Deleting ${props.extra.name} cannot be undone`,
+            true,
+            () => {
+                props.deleteExtra(props.extra);
+            }
+        );
+    };
+
     return (
         <div className="bg-[#b2c6ec] bg-opacity-[.7] rounded-md p-4 flex flex-col relative min-w-[200px] w-min">
             <span className="flex flex-row justify-between">
@@ -39,7 +50,7 @@ function Extra(props) {
                     className="cursor-pointer text-[24px] font-bold hover:text-red-500 ml-8 -mt-4"
                     type="button"
                     value="&times;"
-                    onClick={() => props.deleteExtra(props.extra)}
+                    onClick={pendDelete}
                 />
             </span>
 

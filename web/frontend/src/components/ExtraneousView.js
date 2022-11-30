@@ -77,6 +77,7 @@ function ExtraneousView(props) {
                             setExtras={props.setExtras}
                             categories={props.categories}
                             deleteExtra={deleteExtra}
+                            pushNotification={props.pushNotification}
                         />
                     ))}
             </section>

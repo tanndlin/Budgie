@@ -187,7 +187,7 @@ function CreateBillPopUp(props) {
                         type="submit"
                         id="editButton"
                         className="w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md"
-                        value="Create Bill"
+                        value={props.isEdit ? 'Edit Bill' : 'Create Bill'}
                         onClick={editEvent}
                     />
                     {props.isEdit && (

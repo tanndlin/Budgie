@@ -1,18 +1,23 @@
 import React from 'react';
 import Dropdown from 'react-dropdown';
 import { sendRequest } from '../common/Requests';
+import { adjustDateForTimezone, formatDate } from './Calendar';
 
 function CreateBillPopUp(props) {
     function editEvent(e) {
         e.preventDefault();
+
+        if (!validate({ startDate: props.startDate, endDate: props.endDate })) {
+            return;
+        }
 
         const bill = {
             name: props.name,
             categoryId: props.categoryId,
             color: '#ffffff',
             price: props.price,
-            startDate: props.startDate,
-            endDate: props.endDate,
+            startDate: adjustDateForTimezone(new Date(props.startDate)),
+            endDate: adjustDateForTimezone(new Date(props.endDate)),
             recurrence: 'monthly',
             isPaid: props.isPaid ?? []
         };
@@ -49,6 +54,25 @@ function CreateBillPopUp(props) {
         props.closeModal();
     }
 
+    function validate(bill) {
+        if (
+            bill.startDate !== 'Invalid date' &&
+            bill.endDate !== 'Invalid date'
+        ) {
+            return true;
+        }
+
+        const id = props.pushNotification(
+            'Invalid Date(s)',
+            'Please Enter a valid start and end date'
+        );
+
+        setTimeout(() => {
+            props.removeNotification(id);
+        }, 5000);
+        return false;
+    }
+
     function nameChange(e) {
         props.setName(e.target.value);
     }
@@ -56,11 +80,8 @@ function CreateBillPopUp(props) {
     // Time zones are fucking cringe, the whole world needs to be on UTC
     function startDateChange(e) {
         const date = new Date(e.target.value);
-        const timeZoneOffset = new Date().getTimezoneOffset();
-        const timeZoneAdjusted = new Date(
-            date.getTime() + timeZoneOffset * 60 * 1000
-        );
-        props.setStartDate(timeZoneAdjusted);
+        const timeZoneAdjusted = adjustDateForTimezone(date);
+        props.setStartDate(formatDate(timeZoneAdjusted));
     }
 
     function endDateChange(e) {
@@ -69,7 +90,7 @@ function CreateBillPopUp(props) {
         const timeZoneAdjusted = new Date(
             date.getTime() + timeZoneOffset * 60 * 1000
         );
-        props.setEndDate(timeZoneAdjusted);
+        props.setEndDate(formatDate(timeZoneAdjusted));
     }
 
     function priceChange(e) {
@@ -125,7 +146,7 @@ function CreateBillPopUp(props) {
                             type="date"
                             id="startDateDateInput"
                             onChange={startDateChange}
-                            value={props.startDate.toISOString().split('T')[0]}
+                            value={props.startDate}
                         />
                     </span>
 
@@ -149,7 +170,7 @@ function CreateBillPopUp(props) {
                             type="date"
                             id="endDateInput"
                             onChange={endDateChange}
-                            value={props.endDate.toISOString().split('T')[0]}
+                            value={props.endDate}
                         />
                     </span>
 
@@ -187,7 +208,7 @@ function CreateBillPopUp(props) {
                         type="submit"
                         id="editButton"
                         className="w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md"
-                        value="Create Bill"
+                        value={props.isEdit ? 'Edit Bill' : 'Create Bill'}
                         onClick={editEvent}
                     />
                     {props.isEdit && (

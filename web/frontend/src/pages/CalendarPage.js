@@ -119,6 +119,8 @@ function CalendarPage(props) {
                         setCategorySortID={setCategorySortID}
                         opacity={opacity()}
                         backgroundToggle={props.backgroundToggle}
+                        pushNotification={props.pushNotification}
+                        removeNotification={props.removeNotification}
                     />
                 </div>
                 <div className="snap-end">

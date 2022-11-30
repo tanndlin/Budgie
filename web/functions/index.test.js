@@ -61,13 +61,16 @@ describe('POST /CreateUserProfile', () => {
             .post('/CreateUserProfile')
             .send(CreateUserProfileReq);
 
-        assert.equal(res, {
-            userId: CreateUserProfileReq.userId,
-            firstName: CreateUserProfileReq.firstName,
-            lastName: CreateUserProfileReq.lastName,
-            expectedIncome: CreateUserProfileReq.expectedIncome
-        });
-        assert.equal(res.error, null);
+        assert.equal(
+            res.text,
+            JSON.stringify({
+                userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+                firstName: 'sabrina',
+                lastName: 'lopez',
+                expectedIncome: 123456
+            })
+        );
+        assert.equal(res.error, false);
         assert.equal(res.statusCode, 201);
     });
 

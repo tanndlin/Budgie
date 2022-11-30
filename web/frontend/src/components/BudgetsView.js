@@ -65,6 +65,15 @@ function BudgetsView(props) {
         });
     }
 
+    const pendReset = () => {
+        props.pushNotification(
+            'Are You Sure?',
+            'This will set all budgets price to 0 and cannot be undone',
+            true,
+            resetBudgets
+        );
+    };
+
     return (
         <article
             className={`m-auto container bg-[#BBE9E7] ${props.opacity} p-3 mb-5 rounded-md`}
@@ -127,7 +136,7 @@ function BudgetsView(props) {
                     className="px-2 h-10 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md shadow-md"
                     type="button"
                     value="Reset Budgets"
-                    onClick={resetBudgets}
+                    onClick={pendReset}
                 />
             </footer>
         </article>

@@ -106,6 +106,8 @@ class _LoginPageState extends State<LoginPage> {
 
     if (reg_verification == "Good"){
       clearLogSignFields();
+      result = "Verification Email Sent!";
+      _showToast();
       Navigator.pop(context, true);
     }
   }
@@ -139,17 +141,26 @@ class _LoginPageState extends State<LoginPage> {
       clearLogSignFields();
       _getUser();
       // print(global.userId);
+      _showToast();
       print('Good login');
       Navigator.pushNamed(context, '/MainPage');
       // Navigator.push(context, new MaterialPageRoute(builder: context) => new MainPage(curUser));
     }
     else
       {
-        login_verification = "bad";
-        result = "Please verify your email.";
-        error = true;
+        if(error == true)
+        {
+          _showToast();
+          login_verification = "bad";
+        }
+        else
+        {
+          login_verification = "bad";
+          result = "Please verify your email.";
+          _showToast();
+          error = true;
+        }
       }
-    _showToast();
   }
 
 

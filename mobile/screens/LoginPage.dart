@@ -165,110 +165,113 @@ class _LoginPageState extends State<LoginPage> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0)),
                 child: Container(
-                  height: 400,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('Sign Up', style: TextStyle(fontSize: 35,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF2D4B03)),),
-                        const SizedBox(height: 10.0,),
-                        Form(
-                            key: formKey,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextField(
-                                    controller: _controllerEmail_Reg,
-                                    decoration: InputDecoration(
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(width: 2,
-                                              color: Color(0xFF2D4B03)),
-                                          borderRadius: BorderRadius.circular(
-                                              10.0),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(width: 2,
-                                              color: Color(0xFF000000)),
-                                          borderRadius: BorderRadius.circular(
-                                              10.0),
-                                        ),
-                                        prefixIcon: const Icon(
-                                            Icons.email_rounded),
-                                        labelText: 'Email',
-                                        hintText: 'Enter Email'),
+                  height: 360,
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        // crossAxisAlignment: CrossAxisAlignment.stretch,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 10.0,),
+                          const Text('Sign Up', style: TextStyle(fontSize: 35,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF2D4B03)),),
+                          const SizedBox(height: 10.0,),
+                          Form(
+                              key: formKey,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextField(
+                                      controller: _controllerEmail_Reg,
+                                      decoration: InputDecoration(
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(width: 2,
+                                                color: Color(0xFF2D4B03)),
+                                            borderRadius: BorderRadius.circular(
+                                                10.0),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(width: 2,
+                                                color: Color(0xFF000000)),
+                                            borderRadius: BorderRadius.circular(
+                                                10.0),
+                                          ),
+                                          prefixIcon: const Icon(
+                                              Icons.email_rounded),
+                                          labelText: 'Email',
+                                          hintText: 'Enter Email'),
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextField(
-                                    controller: _controllerPass_Reg,
-                                    obscureText: true,
-                                    decoration: InputDecoration(
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(width: 2,
-                                              color: Color(0xFF2D4B03)),
-                                          borderRadius: BorderRadius.circular(
-                                              10.0),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(width: 2,
-                                              color: Color(0xFF000000)),
-                                          borderRadius: BorderRadius.circular(
-                                              10.0),
-                                        ),
-                                        prefixIcon: const Icon(Icons.lock),
-                                        labelText: 'Password',
-                                        hintText: 'Enter Password'),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextField(
+                                      controller: _controllerPass_Reg,
+                                      obscureText: true,
+                                      decoration: InputDecoration(
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(width: 2,
+                                                color: Color(0xFF2D4B03)),
+                                            borderRadius: BorderRadius.circular(
+                                                10.0),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(width: 2,
+                                                color: Color(0xFF000000)),
+                                            borderRadius: BorderRadius.circular(
+                                                10.0),
+                                          ),
+                                          prefixIcon: const Icon(Icons.lock),
+                                          labelText: 'Password',
+                                          hintText: 'Enter Password'),
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextField(
-                                    controller: _controllerPass_Confirm,
-                                    obscureText: true,
-                                    decoration: InputDecoration(
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(width: 2,
-                                              color: Color(0xFF2D4B03)),
-                                          borderRadius: BorderRadius.circular(
-                                              10.0),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(width: 2,
-                                              color: Color(0xFF000000)),
-                                          borderRadius: BorderRadius.circular(
-                                              10.0),
-                                        ),
-                                        prefixIcon: const Icon(Icons.lock),
-                                        labelText: 'Confirm Password',
-                                        hintText: 'Re-enter Password'),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextField(
+                                      controller: _controllerPass_Confirm,
+                                      obscureText: true,
+                                      decoration: InputDecoration(
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(width: 2,
+                                                color: Color(0xFF2D4B03)),
+                                            borderRadius: BorderRadius.circular(
+                                                10.0),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(width: 2,
+                                                color: Color(0xFF000000)),
+                                            borderRadius: BorderRadius.circular(
+                                                10.0),
+                                          ),
+                                          prefixIcon: const Icon(Icons.lock),
+                                          labelText: 'Confirm Password',
+                                          hintText: 'Re-enter Password'),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )
-                        ),
-                        const SizedBox(height: 10.0,),
-                        Container(
-                          alignment: Alignment.center,
-                          height: 50,
-                          width: 320,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF020100),
-                            border: Border.all(
-                                width: 2, color: const Color(0xFF2D4B03)),
-                            borderRadius: BorderRadius.circular(10),
+                                ],
+                              )
                           ),
-                          child: TextButton(
-                            style: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.black),
+                          const SizedBox(height: 10.0,),
+                          Container(
+                            alignment: Alignment.center,
+                            height: 50,
+                            width: 320,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF020100),
+                              border: Border.all(
+                                  width: 2, color: const Color(0xFF2D4B03)),
+                              borderRadius: BorderRadius.circular(10),
                             ),
+                            child: TextButton(
+                              style: ButtonStyle(
+                                foregroundColor: MaterialStateProperty.all<Color>(
+                                    Colors.black),
+                              ),
                             onPressed: () {
                               // sign up btn
                               _register(_controllerEmail_Reg.text, _controllerPass_Reg.text, _controllerPass_Confirm.text);
@@ -278,10 +281,11 @@ class _LoginPageState extends State<LoginPage> {
                               style: TextStyle(fontSize: 20,
                                   color: Color(0xFFE3E9E7),
                                   fontWeight: FontWeight.bold),
+
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -306,7 +310,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Reset Password', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
+                      const Text('Forgot Password?', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03)),),
                       const SizedBox( height: 10.0,),
                       TextField(
                         controller: _forgotEmail,
@@ -448,17 +452,20 @@ class _LoginPageState extends State<LoginPage> {
                       hintText: 'Enter secure password'),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  MaterialButton(
-                    padding: EdgeInsets.only(right: 20.0),
-                    child: const Text('Forgot Password', style: TextStyle(fontSize: 18, color: Color(0xFF2D4B03), decoration: TextDecoration.underline)),
-                    onPressed: (){
-                        showForgotPassword(context);
-                    },
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    MaterialButton(
+                      padding: EdgeInsets.only(right: 0.0),
+                      child: const Text('Forgot Password', style: TextStyle(fontSize: 18, color: Color(0xFF2D4B03), decoration: TextDecoration.underline)),
+                      onPressed: (){
+                          showForgotPassword(context);
+                      },
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 5,
@@ -466,7 +473,7 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 alignment: Alignment.center,
                 height: 50,
-                width: 180,
+                width: 320,
                 decoration: BoxDecoration(
                   color: const Color(0xFF020100), border: Border.all(width: 2, color: const Color(0xFF2D4B03)), borderRadius: BorderRadius.circular(20),
                 ),
@@ -485,41 +492,20 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(
-                height: 30,
+                height: 20,
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    const Text('Don\'t have an account?', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF2D4B03))),
-                    const SizedBox(height: 10),
-                    Container(
-                      // alignment: Alignment.center,
-                      height: 45,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF020100), border: Border.all(width: 2, color: const Color(0xFF2D4B03)), borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: TextButton(
-                        style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                        ),
-                        onPressed: () {
-                          this.error = false;
-                          this.result = "";
-                          clearLogSignFields();
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: MaterialButton(
+                  // padding: EdgeInsets.only(right: 0.0),
+                  child: Text('Don\'t have an account? Sign Up', style: TextStyle(fontSize: 18, color: Color(0xFF2D4B03), fontWeight: FontWeight.bold, decoration: TextDecoration.underline)),
+                  onPressed: (){
+                    this.error = false;
+                    this.result = "";
+                    clearLogSignFields();
 
-                          showSignUpDialog(context);
-                        },
-                        child: const Text(
-                          'Sign Up',
-                          style: TextStyle(fontSize: 18, color: Color(0xFFE3E9E7), fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ],
+                    showSignUpDialog(context);
+                  },
                 ),
               ),
               const SizedBox(

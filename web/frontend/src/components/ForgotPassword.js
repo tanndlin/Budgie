@@ -52,7 +52,7 @@ function ForgotPassword(props) {
 
                         <span className="flex">
                             <input
-                                className="m-auto mt-4 w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md shadow-md"
+                                className="m-auto mt-4 w-40 h-10 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md shadow-md"
                                 type="submit"
                                 value="Send Reset Link"
                                 onClick={handleSubmit}

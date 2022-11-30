@@ -72,6 +72,10 @@ class _LoginPageState extends State<LoginPage> {
         UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: userEmail,
             password: userPassword);
+
+        User? user = userCredential.user;
+        user?.sendEmailVerification();
+
         reg_verification = "Good";
         result = "Register Success!";
         error = false;
@@ -111,6 +115,7 @@ class _LoginPageState extends State<LoginPage> {
       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
           password: password);
+
       login_verification = "good";
       result = "Logging....";
       error = false;
@@ -128,9 +133,8 @@ class _LoginPageState extends State<LoginPage> {
         error = true;
       }
     }
-    _showToast();
 
-    if(login_verification == "good")
+    if(login_verification == "good" && FirebaseAuth.instance.currentUser?.emailVerified == true)
     {
       clearLogSignFields();
       _getUser();
@@ -139,6 +143,13 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pushNamed(context, '/MainPage');
       // Navigator.push(context, new MaterialPageRoute(builder: context) => new MainPage(curUser));
     }
+    else
+      {
+        login_verification = "bad";
+        result = "Please verify your email.";
+        error = true;
+      }
+    _showToast();
   }
 
 
@@ -261,7 +272,6 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: () {
                               // sign up btn
                               _register(_controllerEmail_Reg.text, _controllerPass_Reg.text, _controllerPass_Confirm.text);
-
                             },
                             child: const Text(
                               'Sign Up',

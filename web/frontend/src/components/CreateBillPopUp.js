@@ -1,6 +1,7 @@
 import React from 'react';
 import Dropdown from 'react-dropdown';
 import { sendRequest } from '../common/Requests';
+import { formatDate } from './Calendar';
 
 function CreateBillPopUp(props) {
     function editEvent(e) {
@@ -16,6 +17,10 @@ function CreateBillPopUp(props) {
             recurrence: 'monthly',
             isPaid: props.isPaid ?? []
         };
+
+        if (!validate(bill)) {
+            return;
+        }
 
         const isNew = !props.id;
         if (isNew) {
@@ -49,6 +54,22 @@ function CreateBillPopUp(props) {
         props.closeModal();
     }
 
+    function validate(bill) {
+        if (
+            bill.startDate === 'Invalid date' ||
+            bill.endDate === 'Invalid date'
+        ) {
+            const id = props.pushNotification(
+                'Invalid Date(s)',
+                'Please Enter a valid start and end date'
+            );
+
+            setTimeout(() => {
+                props.removeNotification(id);
+            }, 5000);
+        }
+    }
+
     function nameChange(e) {
         props.setName(e.target.value);
     }
@@ -60,7 +81,7 @@ function CreateBillPopUp(props) {
         const timeZoneAdjusted = new Date(
             date.getTime() + timeZoneOffset * 60 * 1000
         );
-        props.setStartDate(timeZoneAdjusted);
+        props.setStartDate(formatDate(timeZoneAdjusted));
     }
 
     function endDateChange(e) {
@@ -69,7 +90,7 @@ function CreateBillPopUp(props) {
         const timeZoneAdjusted = new Date(
             date.getTime() + timeZoneOffset * 60 * 1000
         );
-        props.setEndDate(timeZoneAdjusted);
+        props.setEndDate(formatDate(timeZoneAdjusted));
     }
 
     function priceChange(e) {
@@ -125,7 +146,7 @@ function CreateBillPopUp(props) {
                             type="date"
                             id="startDateDateInput"
                             onChange={startDateChange}
-                            value={props.startDate.toISOString().split('T')[0]}
+                            value={props.startDate}
                         />
                     </span>
 
@@ -149,7 +170,7 @@ function CreateBillPopUp(props) {
                             type="date"
                             id="endDateInput"
                             onChange={endDateChange}
-                            value={props.endDate.toISOString().split('T')[0]}
+                            value={props.endDate}
                         />
                     </span>
 

@@ -22,10 +22,6 @@ export function BigCalendar(props) {
     const [currentBill, setCurrentBill] = React.useState(null);
     const [categoryId, setCategoryID] = React.useState(-1);
 
-    function formatDate(date) {
-        return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    }
-
     function handleCalendarClick(e) {
         e.preventDefault();
         if (!e.target.classList.contains('rbc-event-content')) {
@@ -302,7 +298,9 @@ export function BigCalendar(props) {
                             isEdit,
                             categories: props.categories,
                             id: currentBill?.id,
-                            isPaid: currentBill?.isPaid
+                            isPaid: currentBill?.isPaid,
+                            pushNotification: props.pushNotification,
+                            removeNotification: props.removeNotification
                         }}
                     />
                 </div>
@@ -341,4 +339,8 @@ export function getEventsFromBills(bills, categorySortID) {
             return payDates;
         })
         .flat();
+}
+
+export function formatDate(date) {
+    return moment(date).format('YYYY-MM-DD');
 }

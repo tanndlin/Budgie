@@ -107,6 +107,15 @@ export function BigCalendar(props) {
                 const newState = props.bills.filter((b) => b.id !== id);
                 props.setBills(newState);
                 closeModal();
+
+                const notifID = props.pushNotification(
+                    'Bill deleted',
+                    `Bill: ${name} has been deleted`
+                );
+
+                setTimeout(() => {
+                    props.removeNotification(notifID);
+                }, 3000);
             },
             (err) => {
                 console.log('Error deleting bill', err);

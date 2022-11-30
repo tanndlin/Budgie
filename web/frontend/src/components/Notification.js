@@ -12,6 +12,14 @@ function Notification(props) {
         return defaultClassName;
     };
 
+    const callback = (confirm) => {
+        if (props.callback && confirm) {
+            props.callback();
+        }
+
+        props.removeNotification(props.id);
+    };
+
     return (
         <div className={getClassName()}>
             <span className="flex flex-row justify-between w-full border-b-2 border-black">
@@ -19,6 +27,22 @@ function Notification(props) {
                 <span className="loader" />
             </span>
             <p className="m-auto text-lg">{props.message}</p>
+            {props.isConfirmation && (
+                <div className="flex flex-row justify-between w-full">
+                    <span
+                        className="w-5 h-5 valid"
+                        onClick={() => {
+                            callback(true);
+                        }}
+                    />
+                    <span
+                        className="w-5 h-5 invalid"
+                        onClick={() => {
+                            callback(false);
+                        }}
+                    />
+                </div>
+            )}
         </div>
     );
 }

@@ -99,7 +99,7 @@ function App() {
 
     return (
         <BrowserRouter>
-            <NotificationProvider {...{ notifications }} />
+            <NotificationProvider {...{ notifications, removeNotification }} />
             <Routes>
                 <Route
                     path="/"

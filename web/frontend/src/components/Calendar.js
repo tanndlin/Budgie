@@ -344,3 +344,16 @@ export function getEventsFromBills(bills, categorySortID) {
 export function formatDate(date) {
     return moment(date).format('YYYY-MM-DD');
 }
+
+export function stripTimeFromDate(date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+export function adjustDateForTimezone(date) {
+    const timeZoneOffset = new Date().getTimezoneOffset();
+    const timeZoneAdjusted = new Date(
+        date.getTime() + timeZoneOffset * 60 * 1000
+    );
+
+    return timeZoneAdjusted;
+}

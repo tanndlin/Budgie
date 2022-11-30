@@ -1,7 +1,7 @@
 import React from 'react';
 import Dropdown from 'react-dropdown';
 import { sendRequest } from '../common/Requests';
-import { formatDate } from './Calendar';
+import { adjustDateForTimezone, formatDate } from './Calendar';
 
 function CreateBillPopUp(props) {
     function editEvent(e) {
@@ -12,8 +12,8 @@ function CreateBillPopUp(props) {
             categoryId: props.categoryId,
             color: '#ffffff',
             price: props.price,
-            startDate: props.startDate,
-            endDate: props.endDate,
+            startDate: adjustDateForTimezone(new Date(props.startDate)),
+            endDate: adjustDateForTimezone(new Date(props.endDate)),
             recurrence: 'monthly',
             isPaid: props.isPaid ?? []
         };
@@ -56,18 +56,21 @@ function CreateBillPopUp(props) {
 
     function validate(bill) {
         if (
-            bill.startDate === 'Invalid date' ||
-            bill.endDate === 'Invalid date'
+            bill.startDate !== 'Invalid date' &&
+            bill.endDate !== 'Invalid date'
         ) {
-            const id = props.pushNotification(
-                'Invalid Date(s)',
-                'Please Enter a valid start and end date'
-            );
-
-            setTimeout(() => {
-                props.removeNotification(id);
-            }, 5000);
+            return true;
         }
+
+        const id = props.pushNotification(
+            'Invalid Date(s)',
+            'Please Enter a valid start and end date'
+        );
+
+        setTimeout(() => {
+            props.removeNotification(id);
+        }, 5000);
+        return false;
     }
 
     function nameChange(e) {
@@ -77,10 +80,7 @@ function CreateBillPopUp(props) {
     // Time zones are fucking cringe, the whole world needs to be on UTC
     function startDateChange(e) {
         const date = new Date(e.target.value);
-        const timeZoneOffset = new Date().getTimezoneOffset();
-        const timeZoneAdjusted = new Date(
-            date.getTime() + timeZoneOffset * 60 * 1000
-        );
+        const timeZoneAdjusted = adjustDateForTimezone(date);
         props.setStartDate(formatDate(timeZoneAdjusted));
     }
 

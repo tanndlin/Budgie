@@ -3,6 +3,7 @@ import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -20,10 +21,6 @@ import '../base_client.dart';
 import '../models/myCategory.dart';
 
 String id = global.userId;
-
-List<Appointment>? appointmentDetails = <Appointment>[];
-CalendarController? _calendarController = CalendarController();
-MeetingDataSource? _dataSource;
 
 class MyCalendarView extends StatefulWidget {
   const MyCalendarView({super.key});
@@ -53,6 +50,12 @@ class _MyCalendarViewState extends State<MyCalendarView> {
   List<MyCategory> getAllCategories = <MyCategory>[];
 
   MyCategory? categoryValue;
+
+  List<Appointment>? appointmentDetails = <Appointment>[];
+  CalendarController? _calendarController = CalendarController();
+  CalendarDataSource? _dataSource;
+
+  bool isPaid = false;
 
   _showToast(msg, error) => Fluttertoast.showToast(
     msg: msg,
@@ -114,24 +117,86 @@ class _MyCalendarViewState extends State<MyCalendarView> {
       }
     }
 
+    if (allBills.length > 0)
+    {
+        appointmentDetails = getAppointments();
+    }
+
+    for (Appointment a in appointmentDetails!)
+      {
+        print(a.subject);
+        print(a.color.toString());
+      }
+
     return yesData;
   }
 
   @override
   void initState() {
-    super.initState();
     gotData = getAllData();
-    _dataSource = MeetingDataSource(getAppointments(allBills)!);
+    // appointmentDetails = getAppointments();
+    // for (Appointment a in appointmentDetails!)
+    // {
+    //   print(a.subject);
+    //   print(a.color.toString());
+    // }
+    // _dataSource = MeetingDataSource(appointmentDetails!);
+    super.initState();
+  }
+
+  List<Appointment> getAppointments(){
+    List<Appointment> meetings = <Appointment>[];
+
+    for (Bill b in allBills)
+    {
+      final DateTime start = DateFormat("MM-dd-yyyy").parse(b.startDate);
+      final DateTime end = DateFormat("MM-dd-yyyy").parse(b.endDate);
+      print(b.name);
+
+      Period diffP = LocalDate.dateTime(end).periodSince(LocalDate.dateTime(start));
+      var diff = diffP.months;
+      print("diff");
+      print(diff);
+
+      DateTime addDate = start;
+      int counter = 0;
+
+      while (counter <= diff)
+      {
+        print(addDate.toString());
+
+        Color mycolor = Colors.red;
+        // print(b.isPaid);
+        // if (b.isPaid!.contains(DateFormat("MM-dd-yyyy").format(addDate)))
+        // {
+        //   mycolor = Colors.green;
+        // }
+
+        meetings.add(Appointment(
+          startTime: addDate,
+          endTime: addDate,
+          subject: b.name,
+          color: mycolor,
+          isAllDay: true,)
+        );
+        counter += 1;
+        addDate = DateTime(addDate.year, addDate.month + 1, addDate.day);
+      }
+
+    }
+
+    // appointmentDetails = meetings;
+    return meetings;
   }
 
     @override
     Widget build(BuildContext context) {
+
       void onTabTapped(index) {
         print(index);
         selectedIndex = index;
         Navigator.pushNamed(context, routes[index]);
       }
-
 
       void showPaid(CalendarTapDetails details, BuildContext context)
       {
@@ -145,12 +210,14 @@ class _MyCalendarViewState extends State<MyCalendarView> {
 
         if (bColor == Colors.green)
         {
-            newApt.color = Colors.red;
+            isPaid = true;
         }
         else if (bColor == Colors.red)
         {
             newApt.color = Colors.green;
+            isPaid = false;
         }
+
 
         showDialog(
             context: context,
@@ -177,51 +244,48 @@ class _MyCalendarViewState extends State<MyCalendarView> {
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF2D4B03)),),
                         ),
-                        Container(
-                          alignment: Alignment.center,
-                          height: 40,
-                          width: 320,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF020100),
-                            border: Border.all(width: 2, color: const Color(
-                                0xFF2D4B03)),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: TextButton(
-                            style: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.black),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Transform.scale(
+                              scale: 1,
+                              child: Switch(
+                                  value: isPaid,
+                                  onChanged: (value) {
+                                    if (value == true)
+                                    {
+                                      newApt.color = Colors.green;
+                                    }
+                                    else
+                                    {
+                                      newApt.color = Colors.red;
+                                    }
+
+                                    setState(() {
+                                      appointmentDetails?.remove(apt);
+                                      appointmentDetails?.add(newApt);
+                                      for (Appointment a in appointmentDetails!)
+                                      {
+                                        print(a.subject);
+                                        print(a.color);
+                                      }
+
+                                      // _dataSource = MeetingDataSource(appointmentDetails!);
+                                      // _calendarController?.dataSource = _dataSource;
+
+                                      isPaid = value;
+                                      print(isPaid);
+                                    });
+
+                                    Navigator.pop(context);
+                                  }
+                              ),
                             ),
-                            onPressed: () async {
-                              //  Add category
-                              id = global.userId;
-                              print(id);
-                              // setState(() {
-                              //   appointmentDetails.color = Colors.green;
-                              // });
-                              //
-                              // if (details.targetElement == CalendarElement.calendarCell) {
-                              //   SchedulerBinding.instance!.addPostFrameCallback((duration) {
-                              //
-                              //   });
-                              // }
-
-                              setState(() {
-                                appointmentDetails?.remove(apt);
-                                appointmentDetails?.add(apt);
-                              });
-
-                              _dataSource = MeetingDataSource(appointmentDetails!);
-
-                              Navigator.pop(context, true);
-                            },
-                            child: const Text(
-                              'Paid',
-                              style: TextStyle(fontSize: 20,
-                                  color: Color(0xFFE3E9E7),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                            Text("Paid", style: TextStyle(fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF2D4B03)),),
+                          ],
                         ),
                         const SizedBox(height: 10.0,),
                       ],
@@ -324,13 +388,14 @@ class _MyCalendarViewState extends State<MyCalendarView> {
                               const SizedBox(height: 10.0,),
                               SfCalendar(
                                 view: CalendarView.month,
-                                // controller: _calendarController,
-                                dataSource: MeetingDataSource(getAppointments(allBills)),
+                                controller: _calendarController,
+                                dataSource: MeetingDataSource(appointmentDetails!),
                                 // monthViewSettings: MonthViewSettings(showAgenda: true, agendaItemHeight: 35.0),
                                 onTap: (details) {
                                   return showPaid(details, context);
                                 },
-                              )
+                              ),
+                              const SizedBox(height: 20.0,),
                             ],
                           ),
                         ),
@@ -367,7 +432,8 @@ class _MyCalendarViewState extends State<MyCalendarView> {
                               const SizedBox(height: 10.0,),
                               SfCalendar(
                                 view: CalendarView.month,
-                              )
+                              ),
+                              const SizedBox(height: 20.0,),
                             ],
                           ),
                         ),
@@ -412,51 +478,6 @@ class _MyCalendarViewState extends State<MyCalendarView> {
         ),
       );
     }
-}
-
-List<Appointment> getAppointments(List<Bill> bills){
-  List<Appointment> meetings = <Appointment>[];
-
-  for (Bill b in bills)
-  {
-    final DateTime start = DateFormat("MM-dd-yyyy").parse(b.startDate);
-    final DateTime end = DateFormat("MM-dd-yyyy").parse(b.endDate);
-    print(b.name);
-
-    Period diffP = LocalDate.dateTime(end).periodSince(LocalDate.dateTime(start));
-    var diff = diffP.months;
-    print("diff");
-    print(diff);
-
-    DateTime addDate = start;
-    int counter = 0;
-
-    while (counter <= diff)
-    {
-      print(addDate.toString());
-
-      Color mycolor = Colors.red;
-      print(b.isPaid);
-      // if (b.isPaid!.contains(DateFormat("MM-dd-yyyy").format(addDate)))
-      // {
-      //   mycolor = Colors.green;
-      // }
-
-      meetings.add(Appointment(
-        startTime: addDate,
-        endTime: addDate,
-        subject: b.name,
-        color: mycolor,
-        isAllDay: true,)
-      );
-      counter += 1;
-      addDate = DateTime(addDate.year, addDate.month + 1, addDate.day);
-    }
-
-  }
-
-  appointmentDetails = meetings;
-  return meetings;
 }
 
 

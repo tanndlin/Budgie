@@ -84,6 +84,7 @@ class _LoginPageState extends State<LoginPage> {
           print('That email is taken!');
           reg_verification = "Email is already taken!";
           result = "Email is already taken!";
+          _showToast();
           error = true;
         }
       }
@@ -93,12 +94,14 @@ class _LoginPageState extends State<LoginPage> {
         {
           reg_verification = "Passwords do not match";
           result = "Passwords do not match";
+          _showToast();
           error = true;
         }
       else if((userPassword.length < 6))
         {
           reg_verification = "Passwords do not match";
           result = "Password needs to be at least 6 characters!";
+          _showToast();
           error = true;
         }
     }
@@ -106,6 +109,7 @@ class _LoginPageState extends State<LoginPage> {
 
     if (reg_verification == "Good"){
       clearLogSignFields();
+      _showToast();
       Navigator.pop(context, true);
     }
   }
@@ -140,16 +144,20 @@ class _LoginPageState extends State<LoginPage> {
       _getUser();
       // print(global.userId);
       print('Good login');
+      _showToast();
       Navigator.pushNamed(context, '/MainPage');
       // Navigator.push(context, new MaterialPageRoute(builder: context) => new MainPage(curUser));
     }
     else
-      {
-        login_verification = "bad";
-        result = "Please verify your email.";
-        error = true;
-      }
-    _showToast();
+      login_verification = "bad";
+        if(error == true)
+          _showToast();
+        else
+          {
+            result = "Please verify your email.";
+            _showToast();
+            error = true;
+          }
   }
 
 

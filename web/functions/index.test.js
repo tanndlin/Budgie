@@ -37,6 +37,7 @@ const baseURL =
 chai.use(chaiHttp);
 chai.should();
 
+// test CreateUserProfile
 describe('POST /CreateUserProfile', () => {
     const CreateUserProfileReq = {
         userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
@@ -76,32 +77,124 @@ describe('POST /CreateUserProfile', () => {
     });
 
     it('should return the newly added profile info that is in the database', async () => {
-        const res = await request(baseURL)
-            .post('/CreateUserProfile')
-            .send(CreateUserProfileReq);
-
         assert.equal(
             // eslint-disable-next-line prettier/prettier
             userCollectionRef.doc(`${CreateUserProfileReq.userId}`).id,
             CreateUserProfileReq.userId
         );
-        /* assert.equal(
-            // eslint-disable-next-line prettier/prettier
-            userCollectionRef
-                .doc(`${CreateUserProfileReq.userId}`)
-                .get('lastName'),
-            CreateUserProfileReq.lastName
-        );
-        assert.equal(
-            // eslint-disable-next-line prettier/prettier
-            userCollectionRef
-                .doc(`${CreateUserProfileReq.userId}`)
-                .get('expectedIncome'),
-            CreateUserProfileReq.expectedIncome
-        );*/
     });
 });
 
+// test EditUserProfile
+describe('POST /EditUserProfile', () => {
+    const EditUserProfileReq = {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        firstName: 'sabrina',
+        lastName: 'lopez',
+        expectedIncome: 1234567890
+    };
+
+    beforeAll(async () => {
+        // set up the api
+        await request(baseURL)
+            .post('/EditUserProfile')
+            .send(EditUserProfileReq);
+    });
+
+    afterAll(async () => {
+        // clean up test
+        test.cleanup();
+    });
+
+    it('should check that the response from the request is correct', async () => {
+        const res = await request(baseURL)
+            .post('/EditUserProfile')
+            .send(EditUserProfileReq);
+
+        assert.equal(
+            res.text,
+            JSON.stringify({
+                userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+                firstName: 'sabrina',
+                lastName: 'lopez',
+                expectedIncome: 1234567890
+            })
+        );
+        assert.equal(res.error, false);
+        assert.equal(res.statusCode, 201);
+    });
+
+    it('should return the newly added profile info that is in the database', async () => {
+        assert.equal(
+            // eslint-disable-next-line prettier/prettier
+            userCollectionRef.doc(`${EditUserProfileReq.userId}`).id,
+            EditUserProfileReq.userId
+        );
+    });
+});
+
+// test GetUserProfile
+describe('POST /GetUserProfile', () => {
+    const userIdJSON = {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73'
+    };
+
+    beforeAll(async () => {
+        // set up the api
+        await request(baseURL).post('/CreateUserProfile').send(userIdJSON);
+    });
+
+    afterAll(async () => {
+        // clean up test
+        test.cleanup();
+    });
+
+    it('should check that the response from the request is correct', async () => {
+        const res = await request(baseURL)
+            .post('/GetUserProfile')
+            .send(userIdJSON);
+
+        assert.equal(res.error, false);
+        assert.equal(res.statusCode, 201);
+    });
+
+    it('should return the newly added profile info that is in the database', async () => {
+        assert.equal(
+            // eslint-disable-next-line prettier/prettier
+            userCollectionRef.doc(`${userIdJSON.userId}`).id,
+            userIdJSON.userId
+        );
+    });
+});
+
+// test RemoveUserProfile
+describe('POST /RemoveUserProfile', () => {
+    const userIdJSON = {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73'
+    };
+
+    beforeAll(async () => {
+        // set up the api
+        await request(baseURL).post('/CreateUserProfile').send(userIdJSON);
+    });
+
+    afterAll(async () => {
+        // clean up test
+        test.cleanup();
+    });
+
+    it('should check that the response from the request is correct', async () => {
+        const res = await request(baseURL)
+            .post('/RemoveUserProfile')
+            .send(userIdJSON);
+
+        assert.equal(res.text, 'User profile has been deleted');
+        assert.equal(res.error, false);
+        assert.equal(res.statusCode, 201);
+    });
+});
+
+// test CreateBill
 describe('POST /CreateBill', () => {
     const CreateBillReq = {
         userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',

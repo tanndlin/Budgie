@@ -16,7 +16,7 @@ function Settings(props) {
             />
             <span className="flex gap-4 pt-4">
                 <input
-                    className="w-40 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md shadow-md"
+                    className="w-40 h-10 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md shadow-md"
                     type="submit"
                     value="Log Out"
                     onClick={() => {

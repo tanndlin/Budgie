@@ -59,20 +59,16 @@ describe('/CreateUserProfile', () => {
     });
 
     it('should check that the response from the request is correct', async () => {
-        const res = await request(baseURL)
+        const res = await request(baseURL + '')
             .post('/CreateUserProfile')
             .send(CreateUserProfileReq);
 
-        assert.equal(
-            res.body,
-            {
-                userId: CreateUserProfileReq.body.userId,
-                firstName: CreateUserProfileReq.body.firstName,
-                lastName: CreateUserProfileReq.body.lastName,
-                expectedIncome: CreateUserProfileReq.body.expectedIncome
-            },
-            'these userIds are equal'
-        );
+        assert.equal(res.body, {
+            userId: CreateUserProfileReq.body.userId,
+            firstName: CreateUserProfileReq.body.firstName,
+            lastName: CreateUserProfileReq.body.lastName,
+            expectedIncome: CreateUserProfileReq.body.expectedIncome
+        });
         assert.equal(res.error, null);
         assert.equal(res.statusCode, 201);
     });
@@ -80,23 +76,17 @@ describe('/CreateUserProfile', () => {
     it('should return the newly added profile info that is in the database', async () => {
         assert.equal(
             // eslint-disable-next-line prettier/prettier
-            userCollectionRef
-                .doc(`${CreateUserProfileReq.body.userId}`)
-                .get('firstName'),
+            userCollectionRef.doc(`${CreateUserProfileReq.body.userId}`).get('firstName'),
             CreateUserProfileReq.body.firstName
         );
         assert.equal(
             // eslint-disable-next-line prettier/prettier
-            userCollectionRef
-                .doc(`${CreateUserProfileReq.body.userId}`)
-                .get('lastName'),
+            userCollectionRef.doc(`${CreateUserProfileReq.body.userId}`).get('lastName'),
             CreateUserProfileReq.body.lastName
         );
         assert.equal(
             // eslint-disable-next-line prettier/prettier
-            userCollectionRef
-                .doc(`${CreateUserProfileReq.body.userId}`)
-                .get('expectedIncome'),
+            userCollectionRef.doc(`${CreateUserProfileReq.body.userId}`).get('expectedIncome'),
             CreateUserProfileReq.body.expectedIncome
         );
     });

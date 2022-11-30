@@ -30,6 +30,7 @@ const budgetCollection = 'budgets';
 const categoryCollection = 'categories';
 const oneOffCollection = 'oneOffs';
 const userCollectionRef = db.collection(userCollection);
+const billCollectionRef = db.collection(billCollection);
 
 const baseURL =
     'https://us-central1-cop4331-large-project-27.cloudfunctions.net/webApi';
@@ -98,5 +99,50 @@ describe('POST /CreateUserProfile', () => {
                 .get('expectedIncome'),
             CreateUserProfileReq.expectedIncome
         );*/
+    });
+});
+
+describe('POST /CreateBill', () => {
+    const CreateBillReq = {
+        userId: 'I8tTDjJ6rJhUJkzfj7FIdJXxdV73',
+        name: 'Cat Vet',
+        categoryId: 'fEQyVD7Uf2j27wNYqLQG',
+        color: '#ffffff',
+        price: 3000,
+        startDate: '08-31-22',
+        endDate: '07-30-23',
+        recurrence: 'monthly',
+        isPaid: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    };
+
+    beforeAll(async () => {
+        // set up the api
+        await request(baseURL).post('/CreateBill').send(CreateBillReq);
+    });
+
+    afterAll(async () => {
+        // clean up test
+        test.cleanup();
+    });
+
+    it('should check that the response from the request is correct', async () => {
+        const res = await request(baseURL)
+            .post('/CreateBill')
+            .send(CreateBillReq);
+
+        assert.equal(res.error, false);
+        assert.equal(res.statusCode, 201);
+    });
+
+    it('should return the newly added profile info that is in the database', async () => {
+        const res = await request(baseURL)
+            .post('/CreateBill')
+            .send(CreateBillReq);
+
+        assert.equal(
+            // eslint-disable-next-line prettier/prettier
+            billCollectionRef.doc(`${CreateBillReq.userId}`).id,
+            CreateBillReq.userId
+        );
     });
 });

@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
     msg: result, fontSize: 18, gravity: ToastGravity.BOTTOM, backgroundColor: error ? Color(0xFFFF0000).withOpacity(.8) :  Colors.green.withOpacity(.9), textColor: Colors.white,);
 
   _register(String userEmail, String userPassword, String confirmPassword) async {
-    if (userPassword == confirmPassword && userPassword.length >= 6){
+    if (userPassword == confirmPassword && userPassword.length >= 8){
       // Passwords match
       try{
         UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -84,7 +84,6 @@ class _LoginPageState extends State<LoginPage> {
           print('That email is taken!');
           reg_verification = "Email is already taken!";
           result = "Email is already taken!";
-          _showToast();
           error = true;
         }
       }
@@ -94,14 +93,12 @@ class _LoginPageState extends State<LoginPage> {
         {
           reg_verification = "Passwords do not match";
           result = "Passwords do not match";
-          _showToast();
           error = true;
         }
-      else if((userPassword.length < 6))
+      else if((userPassword.length < 8))
         {
           reg_verification = "Passwords do not match";
-          result = "Password needs to be at least 6 characters!";
-          _showToast();
+          result = "Password needs to be at least 8 characters!";
           error = true;
         }
     }
@@ -109,7 +106,6 @@ class _LoginPageState extends State<LoginPage> {
 
     if (reg_verification == "Good"){
       clearLogSignFields();
-      _showToast();
       Navigator.pop(context, true);
     }
   }
@@ -144,20 +140,16 @@ class _LoginPageState extends State<LoginPage> {
       _getUser();
       // print(global.userId);
       print('Good login');
-      _showToast();
       Navigator.pushNamed(context, '/MainPage');
       // Navigator.push(context, new MaterialPageRoute(builder: context) => new MainPage(curUser));
     }
     else
-      login_verification = "bad";
-        if(error == true)
-          _showToast();
-        else
-          {
-            result = "Please verify your email.";
-            _showToast();
-            error = true;
-          }
+      {
+        login_verification = "bad";
+        result = "Please verify your email.";
+        error = true;
+      }
+    _showToast();
   }
 
 
@@ -280,16 +272,16 @@ class _LoginPageState extends State<LoginPage> {
                                 foregroundColor: MaterialStateProperty.all<Color>(
                                     Colors.black),
                               ),
-                            onPressed: () {
-                              // sign up btn
-                              _register(_controllerEmail_Reg.text, _controllerPass_Reg.text, _controllerPass_Confirm.text);
-                            },
-                            child: const Text(
-                              'Sign Up',
-                              style: TextStyle(fontSize: 20,
-                                  color: Color(0xFFE3E9E7),
-                                  fontWeight: FontWeight.bold),
-
+                              onPressed: () {
+                                // sign up btn
+                                _register(_controllerEmail_Reg.text, _controllerPass_Reg.text, _controllerPass_Confirm.text);
+                              },
+                              child: const Text(
+                                'Sign Up',
+                                style: TextStyle(fontSize: 20,
+                                    color: Color(0xFFE3E9E7),
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
                         ],

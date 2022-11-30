@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
@@ -334,6 +335,10 @@ class _DisplayPageState extends State<DisplayPage> {
                           //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
                           padding: EdgeInsets.symmetric(vertical: 5),
                           child: TextField(
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
                             controller: budgetActual,
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(vertical: 0),
@@ -353,6 +358,10 @@ class _DisplayPageState extends State<DisplayPage> {
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 5),
                           child: TextField(
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
                             controller: budgetExpected,
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(vertical: 0),
@@ -618,7 +627,7 @@ class _DisplayPageState extends State<DisplayPage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0)),
               child: Container(
-                height: 400,
+                height: 350,
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10.0, right: 10.0),
@@ -658,6 +667,10 @@ class _DisplayPageState extends State<DisplayPage> {
                           //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
                           padding: EdgeInsets.symmetric(vertical: 5),
                           child: TextField(
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
                             controller: extraPrice,
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(vertical: 0),
@@ -700,13 +713,12 @@ class _DisplayPageState extends State<DisplayPage> {
                             onTap: () async {
                               DateTime? pickedDate = await showDatePicker(
                                   context: context,
-                                  initialDate: DateTime.parse(extraDate.text),
+                                  initialDate: DateFormat("MM-dd-yyyy").parse(extraDate.text),
                                   firstDate: DateTime(1900),
                                   lastDate: DateTime(2222)
                               );
                               if (pickedDate != null) {
-                                String formatDate = DateFormat("MM-dd-yyyy")
-                                    .format(pickedDate);
+                                String formatDate = DateFormat("MM-dd-yyyy").format(pickedDate);
                                 setState(() {
                                   extraDate.text = formatDate;
                                 });
@@ -979,7 +991,11 @@ class _DisplayPageState extends State<DisplayPage> {
                           //     left: 15.0, right: 15.0, top: 15, bottom: 10.0),
                           padding: EdgeInsets.symmetric(vertical: 5),
                           child: TextField(
-                            controller: extraPrice,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            controller: billPrice,
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(vertical: 0),
                                 enabledBorder: OutlineInputBorder(
@@ -1021,13 +1037,12 @@ class _DisplayPageState extends State<DisplayPage> {
                             onTap: () async {
                               DateTime? pickedDate = await showDatePicker(
                                   context: context,
-                                  initialDate: DateTime.parse(_billDateStart.text),
+                                  initialDate: DateFormat("MM-dd-yyyy").parse(_billDateStart.text),
                                   firstDate: DateTime(1900),
                                   lastDate: DateTime(2222)
                               );
                               if (pickedDate != null) {
-                                String formatDate = DateFormat("MM-dd-yyyy")
-                                    .format(pickedDate);
+                                String formatDate = DateFormat("MM-dd-yyyy").format(pickedDate);
                                 setState(() {
                                   _billDateStart.text = formatDate;
                                 });
@@ -1058,13 +1073,12 @@ class _DisplayPageState extends State<DisplayPage> {
                             onTap: () async {
                               DateTime? pickedDate = await showDatePicker(
                                   context: context,
-                                  initialDate: DateTime.parse(_billDateEnd.text),
+                                  initialDate: DateFormat("MM-dd-yyyy").parse(_billDateEnd.text),
                                   firstDate: DateTime(1900),
                                   lastDate: DateTime(2222)
                               );
                               if (pickedDate != null) {
-                                String formatDate = DateFormat("MM-dd-yyyy")
-                                    .format(pickedDate);
+                                String formatDate = DateFormat("MM-dd-yyyy").format(pickedDate);
                                 setState(() {
                                   _billDateEnd.text = formatDate;
                                 });

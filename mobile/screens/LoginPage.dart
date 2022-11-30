@@ -95,10 +95,10 @@ class _LoginPageState extends State<LoginPage> {
           result = "Passwords do not match";
           error = true;
         }
-      else if((userPassword.length < 8))
+      else if((userPassword.length < 6))
         {
           reg_verification = "Passwords do not match";
-          result = "Password needs to be at least 8 characters!";
+          result = "Password needs to be at least 6 characters!";
           error = true;
         }
     }

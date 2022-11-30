@@ -7,6 +7,10 @@ function CreateBillPopUp(props) {
     function editEvent(e) {
         e.preventDefault();
 
+        if (!validate({ startDate: props.startDate, endDate: props.endDate })) {
+            return;
+        }
+
         const bill = {
             name: props.name,
             categoryId: props.categoryId,
@@ -17,10 +21,6 @@ function CreateBillPopUp(props) {
             recurrence: 'monthly',
             isPaid: props.isPaid ?? []
         };
-
-        if (!validate(bill)) {
-            return;
-        }
 
         const isNew = !props.id;
         if (isNew) {

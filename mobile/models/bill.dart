@@ -34,7 +34,6 @@ class Bill {
     required this.price,
     required this.startDate,
     required this.endDate,
-    this.unPaid,
     this.isPaid,
     this.recurrence,
     this.id,
@@ -49,9 +48,9 @@ class Bill {
   String startDate;
   String endDate;
   String? id;
-  List<DateTime>? unPaid = <DateTime>[];
+
   // create instance of empty list
-  List<dynamic>? isPaid = <DateTime>[];
+  List<dynamic>? isPaid;
 
   factory Bill.fromJson(Map<String, dynamic> json) => Bill(
     name: json["name"],

@@ -40,6 +40,31 @@ function ExtraneousView(props) {
         );
     }
 
+    const removeAllExtras = () => {
+        props.setExtras([]);
+        props.extras.forEach((p) => {
+            sendRequest(
+                'RemoveOneOff',
+                { userId: props.user.userId, id: p.id },
+                (res) => {
+                    console.log(res.responseText);
+                },
+                (err) => {
+                    console.log(err);
+                }
+            );
+        });
+    };
+
+    const pendReset = () => {
+        props.pushNotification(
+            'Are You Sure?',
+            'This will delete all one offs and could not be undone',
+            true,
+            removeAllExtras
+        );
+    };
+
     return (
         <article
             className={`m-auto container bg-[#BBE9E7] ${props.opacity} p-3 mb-36 rounded-md`}
@@ -77,6 +102,7 @@ function ExtraneousView(props) {
                             setExtras={props.setExtras}
                             categories={props.categories}
                             deleteExtra={deleteExtra}
+                            pushNotification={props.pushNotification}
                         />
                     ))}
             </section>
@@ -91,21 +117,7 @@ function ExtraneousView(props) {
                     className="px-2 h-10 bg-[#189DFD] text-[#EFEDFE] hover:bg-[#3818FD] rounded-md shadow-md"
                     type="button"
                     value="Remove Extras"
-                    onClick={() => {
-                        props.setExtras([]);
-                        props.extras.forEach((p) => {
-                            sendRequest(
-                                'RemoveOneOff',
-                                { userId: props.user.userId, id: p.id },
-                                (res) => {
-                                    console.log(res.responseText);
-                                },
-                                (err) => {
-                                    console.log(err);
-                                }
-                            );
-                        });
-                    }}
+                    onClick={pendReset}
                 />
             </footer>
         </article>

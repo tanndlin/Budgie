@@ -1,36 +1,20 @@
 import React from 'react';
 
-function Overview(props) {
-    const sumOfBills = () => {
-        return props.bills.reduce((acc, bill) => {
-            return acc + +bill.price;
-        }, 0);
-    };
-
-    const sumOfActual = () => {
-        return props.budgets.reduce((acc, budget) => {
-            return acc + +budget.actualPrice;
-        }, 0);
-    };
-
-    const sumOfExpected = () => {
-        return props.budgets.reduce((acc, budget) => {
-            return acc + +budget.expectedPrice;
-        }, 0);
-    };
-
-    const sumOfOneOffs = () => {
-        return props.extras.reduce((acc, oneOff) => {
-            return acc + +oneOff.price;
-        }, 0);
-    };
-
+export function Overview(props) {
     const total = () => {
-        return sumOfBills() + sumOfActual() + sumOfOneOffs();
+        return (
+            sumKeyOfElement(props.bills, 'price') +
+            sumKeyOfElement(props.budgets, 'actualPrice') +
+            sumKeyOfElement(props.extras, 'price')
+        );
     };
 
     const expectedExpenses = () => {
-        return sumOfBills() + sumOfExpected() + sumOfOneOffs();
+        return (
+            sumKeyOfElement(props.bills, 'price') +
+            sumKeyOfElement(props.budgets, 'expectedPrice') +
+            sumKeyOfElement(props.extras, 'price')
+        );
     };
 
     const getColor = (a, b) => {
@@ -51,27 +35,30 @@ function Overview(props) {
             <h2 className="text-2xl w-full text-center font-bold">Overview</h2>
             <OverviewSection title="Sum Of Bills">
                 <p>
-                    <b>{`$${sumOfBills()}`}</b>
+                    <b>{`$${sumKeyOfElement(props.bills, 'price')}`}</b>
                 </p>
             </OverviewSection>
 
             <OverviewSection title="Sum of Budgets">
                 <p
                     className={`inline ${getColor(
-                        sumOfActual(),
-                        sumOfExpected()
+                        sumKeyOfElement(props.budgets, 'actualPrice'),
+                        sumKeyOfElement(props.budgets, 'expectedPrice')
                     )}`}
                 >
-                    <b>{`$${sumOfActual()}`}</b>
+                    <b>{`$${sumKeyOfElement(props.budgets, 'actualPrice')}`}</b>
                 </p>
                 <p className="inline">
-                    <b>{` / $${sumOfExpected()}`}</b>
+                    <b>{` / $${sumKeyOfElement(
+                        props.budgets,
+                        'expectedPrice'
+                    )}`}</b>
                 </p>
             </OverviewSection>
 
             <OverviewSection title="Sum of One Offs">
                 <p>
-                    <b>{`$${sumOfOneOffs()}`}</b>
+                    <b>{`$${sumKeyOfElement(props.extras, 'price')}`}</b>
                 </p>
             </OverviewSection>
 
@@ -101,4 +88,15 @@ function Overview(props) {
     );
 }
 
-export default Overview;
+export const sumKeyOfElement = (arr, key, categoryId) => {
+    const sum = (arr, key) => {
+        return arr.reduce((sum, item) => sum + +item[key], 0);
+    };
+
+    return sum(
+        arr.filter(
+            (e) => (categoryId && e.categoryId === categoryId) || !categoryId
+        ),
+        key
+    );
+};

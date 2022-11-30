@@ -32,11 +32,13 @@ function App() {
     const [notifications, setNotifications] = React.useState([]);
 
     let notifId = 0;
-    const pushNotification = (title, message) => {
+    const pushNotification = (title, message, isConfirmation, callback) => {
         const notification = {
             id: notifId++,
-            title: title,
-            message: message
+            title,
+            message,
+            isConfirmation,
+            callback
         };
 
         setNotifications((notifications) => [...notifications, notification]);
@@ -99,7 +101,7 @@ function App() {
 
     return (
         <BrowserRouter>
-            <NotificationProvider {...{ notifications }} />
+            <NotificationProvider {...{ notifications, removeNotification }} />
             <Routes>
                 <Route
                     path="/"

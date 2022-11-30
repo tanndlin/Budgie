@@ -57,7 +57,7 @@ describe('POST /CreateUserProfile', () => {
     });
 
     it('should check that the response from the request is correct', async () => {
-        const res = await request(baseURL + '')
+        const res = await request(baseURL)
             .post('/CreateUserProfile')
             .send(CreateUserProfileReq);
 

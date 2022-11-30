@@ -1,5 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
+
+jest.useFakeTimers();
 // import libraries
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
@@ -78,17 +80,23 @@ describe('/CreateUserProfile', () => {
     it('should return the newly added profile info that is in the database', async () => {
         assert.equal(
             // eslint-disable-next-line prettier/prettier
-            userCollectionRef.doc(`${CreateUserProfileReq.body.userId}`).get('firstName'),
+            userCollectionRef
+                .doc(`${CreateUserProfileReq.body.userId}`)
+                .get('firstName'),
             CreateUserProfileReq.body.firstName
         );
         assert.equal(
             // eslint-disable-next-line prettier/prettier
-            userCollectionRef.doc(`${CreateUserProfileReq.body.userId}`).get('lastName'),
+            userCollectionRef
+                .doc(`${CreateUserProfileReq.body.userId}`)
+                .get('lastName'),
             CreateUserProfileReq.body.lastName
         );
         assert.equal(
             // eslint-disable-next-line prettier/prettier
-            userCollectionRef.doc(`${CreateUserProfileReq.body.userId}`).get('expectedIncome'),
+            userCollectionRef
+                .doc(`${CreateUserProfileReq.body.userId}`)
+                .get('expectedIncome'),
             CreateUserProfileReq.body.expectedIncome
         );
     });

@@ -16,7 +16,7 @@ function Category(props) {
     const getSumOfReferences = () => {
         return (
             sumKeyOfElement(props.bills, 'price', category.id) +
-            sumKeyOfElement(props.budgets, 'actualPrice', category.id) +
+            sumKeyOfElement(props.budgets, 'expectedPrice', category.id) +
             sumKeyOfElement(props.extras, 'price', category.id)
         );
     };
